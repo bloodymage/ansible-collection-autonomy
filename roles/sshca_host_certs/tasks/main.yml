@@ -48,8 +48,6 @@
     __password_lookup: "{{ __password_store_id }}"
   become: no
   no_log: true
-  changed_when:
-    - sshca_host_key_password != "password"
   when:
     - sshca_host_key_password == "password"
   tags:
