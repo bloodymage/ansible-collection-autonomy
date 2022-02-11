@@ -218,24 +218,6 @@
     - sshca_host_certs_debug
     - sshca-host-certs-debug
 
-- name: "Debug"
-  ansible.builtin.debug:
-    msg:
-      - "{{ item[0].rc }}"
-      - "{{ item[0].item.path }}"
-      - "{{ item[1].path }}"
-      - "{{ cert1 }}"
-      - "{{ cert2 }}"
-  loop: "{{ __autonomy_certificate_comparison.results | product(__autonomy_ssh_private_keys.files) | list }}"
-  vars:
-    cert1: "{{ item[0].item.path | basename | quote }}"
-    cert2: "{{ item[1].path | basename | quote }}-cert.pub"
-  tags:
-    - sshca_host_certs
-    - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
-
 # ==================================================================================================
 #
 # Tasks:
