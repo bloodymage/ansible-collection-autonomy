@@ -17,6 +17,8 @@
     __password_store_id: "{{ autonomy_passdb }}{{ autonomy_domain }}/hosts/{{ __nameserver }}/bind_dyndns_secret"
     __password_lookup: "{{ __password_store_id }}"
     __key_secret: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+    __dns_servers: "{{ autonomy_zone_name }}_dns_servers"
   delegate_to: "{{ hostvars[item]['ansible_host'] }}"
   when:
     - bind_reverse_zone is defined
+    - groups[__dns_servers] is defined
