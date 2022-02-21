@@ -1,0 +1,31 @@
+---
+# ==================================================================================================
+#
+# These tasks update routeros devices' hostname.
+#
+# RouterOS commands are not idempotent, which adds to the process.
+# First we get the current hostname, and set "changed_when" to false since we are only gathering
+# information.  No actual changes have been made to the system at this time.
+#
+# Then we update the hostname, only if the current hostname and the desired hostname do not match.
+#
+# ==================================================================================================
+- name: "RouterOS: Get Hostname."
+  community.routeros.command:
+    commands:
+      - "/system identity print"
+  become: no
+  register: __autonomy_routeros_identity
+  changed_when: False
+  tags:
+    - hostname
+
+- name: "RouterOS: Set Hostname."
+  community.routeros.command:
+    commands:
+      - "/system identity set name={{ autonomy_hostname }}"
+  become: no
+  when:
+    - __autonomy_routeros_identity.stdout_lines[0][0].split(' ')[1] != autonomy_hostname
+  tags:
+    - hostname
