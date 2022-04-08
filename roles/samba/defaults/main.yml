@@ -14,6 +14,8 @@ autonomy_packages:
   - unison
   - rsync
 
+autonomy_joined_as_domain_member: yes
+
 samba_domain_password_expiration: "{{ __samba_domain_password_expiration }}"
 samba_dns_backend: "BIND9_DLZ"
 

@@ -25,7 +25,7 @@
 
 - name: "Set domain member joined status."
   ansible.builtin.set_fact:
-    __samba_joined_as_domain_member: yes
+    __samba_joined_as_domain_member: "{{ autonomy_joined_as_domain_member }}"
   become: no
   when:
     - not __samba_recreate_realm
