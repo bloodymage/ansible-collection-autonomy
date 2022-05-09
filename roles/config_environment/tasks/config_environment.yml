@@ -1,0 +1,21 @@
+---
+- name: "Include tasks to create groups for all hosts."
+  include_tasks: "all_groups.yml"
+
+- name: "Include RouterOS Tasks."
+  include_tasks: "{{ ansible_network_os.split('.')[2] | lower }}.yml"
+  when:
+    - ansible_network_os is defined
+
+- name: "Include Samba Domain Tasks"
+  include_tasks: "samba_domain.yml"
+  when:
+    - groups['samba_domain_controllers'] is defined
+
+- name: "Include Linux Tasks"
+  include_tasks: "linux.yml"
+  when:
+    - inventory_hostname in groups['linux'] | default([])
+
+- name: "Include tasks for all hosts."
+  include_tasks: "all.yml"
