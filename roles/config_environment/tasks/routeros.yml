@@ -1,8 +1,0 @@
-- name: "Create groups based on the Network OS"
-  ansible.builtin.group_by:
-    key: "{{ ansible_network_os.split('.')[2] | lower }}"
-  when:
-    - ansible_network_os is defined
-  changed_when: False
-  tags:
-    - always
