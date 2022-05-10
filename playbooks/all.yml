@@ -88,12 +88,12 @@
         - ownca-host-certs
         - ownca_host_certificates
         - ownca-host-certificates
-    - role: bloodymage.autonomy.dod_certs
-      when:
-        - autonomy_dod_certs_install
-      tags:
-        - dod-certs
-        - dod_certs
+    # - role: bloodymage.autonomy.dod_certs
+    #   when:
+    #     - autonomy_dod_certs_install
+    #   tags:
+    #     - dod-certs
+    #     - dod_certs
 
 # ==================================================================================================
 #
