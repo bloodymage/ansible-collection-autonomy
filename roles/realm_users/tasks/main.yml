@@ -251,6 +251,7 @@
     attrs:
       - "dn"
   register: ldap_users
+  run_once: yes
 
 - name: "Cleanup dn's of all ldap users."
   ansible.builtin.set_fact:
