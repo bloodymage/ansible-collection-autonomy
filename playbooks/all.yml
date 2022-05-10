@@ -9,8 +9,6 @@
   ignore_unreachable: yes
   roles:
     - role: bloodymage.autonomy.config_environment
-      when:
-        - (not __autonomy_configuration_complete) or (__autonomy_configuration_complete is undefined)
       tags:
         - always
 
@@ -26,9 +24,6 @@
     - role: bloodymage.autonomy.hostname
       tags:
         - hostname
-    - role: bloodymage.autonomy.hosts
-      tags:
-        - hosts
     - role: bloodymage.autonomy.system_upgrade
       tags:
         - system_upgrade
@@ -57,11 +52,18 @@
 # ==================================================================================================
 - name: "Basic host configuration for all hosts."
   hosts: all:!localhost:!wifi_access_points:!printers:!public_zone:!virtual_hosts
-  strategy: linear
   roles:
     - role: bloodymage.autonomy.users
       tags:
         - users
+
+- name: "Basic host configuration for all hosts."
+  hosts: all:!localhost:!wifi_access_points:!printers:!public_zone:!virtual_hosts:!routeros
+  strategy: linear
+  roles:
+    - role: bloodymage.autonomy.hosts
+      tags:
+        - hosts
     - role: bloodymage.autonomy.emacs
       when:
         - autonomy_enable_emacs
@@ -102,6 +104,9 @@
   hosts: linux:!localhost:!routeros:!wifi_access_points:!printers:!public_zone:!virtual_hosts
   strategy: linear
   roles:
+    - role: bloodymage.autonomy.etc_fstab
+      tags:
+        - fstab
     - role: bloodymage.autonomy.nftables
       tags:
         - nftables

@@ -8,7 +8,7 @@
       tags:
         - always
 
-- name: "Configure webservers and websites."
+- name: "Create redis servers."
   hosts: redis_servers
   roles:
     - role: bloodymage.autonomy.redis
@@ -20,13 +20,13 @@
 # We don't run this on the public zone servers, as that would be redundant.
 #
 # ==================================================================================================
-- name: "Configure webservers and websites."
+- name: "Create Apache webservers."
   hosts: apache_servers:!public_zone
   roles:
     - role: bloodymage.autonomy.apache
 
-- name: "Configure webservers and websites."
-  hosts: nginx_servers:!public_zone
+- name: "Create nginx webservers."
+  hosts: nginx_servers
   roles:
     - role: bloodymage.autonomy.nginx
 
@@ -36,7 +36,7 @@
 # depends on an ACME CA working, the next group may depend on an ACME CA working.
 #
 # ==================================================================================================
-- name: "Configure webservers and websites."
+- name: "Configure ACME CA."
   hosts: web_servers:&public_zone
   roles:
     - role: bloodymage.autonomy.config_acmeca_environment
@@ -55,7 +55,7 @@
         - ownca_crl_distribution_points
         - websites
 
-- name: "Configure webservers and websites."
+- name: "Configure PHP"
   hosts: nextcloud_servers:mediawiki_servers:drupal_servers
   roles:
     - role: bloodymage.autonomy.php
@@ -65,7 +65,7 @@
       tags:
         - composer
 
-- name: "Configure webservers and websites."
+- name: "Configure Nextcloud Sites."
   hosts: nextcloud_servers:&public_zone
   roles:
     - role: bloodymage.autonomy.nextcloud
@@ -73,7 +73,7 @@
         - nextcloud
         - websites
 
-# - name: "Configure webservers and websites."
+# - name: "Configure Mediawiki websites."
 #   hosts: mediawiki_servers
 #   roles:
 #     - role: bloodymage.autonomy.mediawiki
@@ -81,7 +81,7 @@
 #         - mediawiki
 #         - websites
 
-- name: "Configure webservers and websites."
+- name: "Configure Drupal websites."
   hosts: drupal_servers
   roles:
     - role: bloodymage.autonomy.drush

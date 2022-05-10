@@ -12,19 +12,18 @@
 #
 # TODO: Find out why 'exclude' doesn't work.
 #
+# TODO: Fix owner and group permissions
+#
 # ==================================================================================================
-- name: "Extract Certs."
+- name: "Extract Certificates."
   ansible.builtin.unarchive:
-    src: "{{ item.source }}"
+    src: "/tmp/{{ item.file }}"
     dest: "{{ dod_certs_dir }}/"
     extra_opts:
       - "-j"
-    exclude:
-      - "README.txt"
-    remote_src: yes
-    owner: root
-    group: root
-    mode: "0644"
+    #owner: root
+    #group: root
+    #mode: "0644"
   loop: "{{ dod_certs_url }}"
   become: yes
   notify:
