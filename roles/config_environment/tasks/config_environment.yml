@@ -117,11 +117,12 @@
   when:
     - groups['samba_domain_controllers'] is defined
 
-- name: "Include Linux Tasks"
+- name: "Include OS Based Tasks"
   include_tasks: "{{ ansible_system | lower }}.yml"
   vars:
     __ansible_system: "{{ ansible_system | lower }}"
   when:
+    - ansible_system is defined
     - inventory_hostname in groups[__ansible_system] | default([])
 
 # ==================================================================================================

@@ -81,3 +81,4 @@ autonomy_parent_groups:
   - name: "tpeap"
     parent: "wifi_access_points"
   - name: "wifi_access_points"
+  - name: "printers"

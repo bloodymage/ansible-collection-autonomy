@@ -88,6 +88,10 @@
         - ownca-host-certs
         - ownca_host_certificates
         - ownca-host-certificates
+
+- name: "Install certificates on all host."
+  hosts: all:!localhost:!public_zone:!routers:!switches:!printers:!wifi_access_points
+  roles:
     - role: bloodymage.autonomy.dod_certs
       when:
         - autonomy_dod_certs_install

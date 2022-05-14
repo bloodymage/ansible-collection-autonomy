@@ -8,8 +8,6 @@
   hosts: localhost
   roles:
     - role: bloodymage.autonomy.config_environment
-      when:
-        - (not __autonomy_configuration_complete) or (__autonomy_configuration_complete is not defined)
       tags:
         - always
     - role: bloodymage.autonomy.gnupg
