@@ -53,5 +53,6 @@
     name: "{{ mail_postfix_user }}"
     groups: "{{ opendkim_group }}"
     append: yes
+  become: yes
   when:
     - inventory_hostname in groups['postfix_servers']
