@@ -271,8 +271,7 @@
     ownca_path: "{{ ownca_ca_certs_directory }}/{{ autonomy_org_name }}-{{ item.ownca }}-ca.crt"
     ownca_privatekey_path: "{{ ownca_ca_private_key_directory }}/{{ autonomy_org_name }}-{{ item.ownca }}-ca.key"
     ownca_privatekey_passphrase: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
-    #ownca_not_after: "{{ ownca_intermediate_not_after }}"
-    ownca_not_after: "+90d"
+    ownca_not_after: "{{ ownca_intermediate_not_after }}"
     ownca_create_authority_key_identifier: yes
     ownca_create_subject_key_identifier: create_if_not_provided
     provider: "{{ item.provider }}"
