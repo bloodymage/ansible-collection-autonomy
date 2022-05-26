@@ -145,7 +145,7 @@ ownca_issuer_not_after: "+3600d"
 ownca_component_not_after: "+825d"
 ownca_identity_not_after: "+3600d"
 ownca_codesign_not_after: "+3600d"
-
+ownca_generate_locally: no
 # ==================================================================================================
 #
 # OIDs

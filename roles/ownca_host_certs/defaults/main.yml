@@ -42,7 +42,6 @@ ownca_objectguid: ""
 # These variables are not designed for user configuration.
 #
 # ==================================================================================================
-ownca_generate_locally: no
 ownca_host_certs_pkcs12_password: "password"
 ownca_private_key_group: "root"
 ownca_private_key_mode: "0600"
