@@ -1,0 +1,17 @@
+- name: "Create acmeca challenge host"
+  ansible.builtin.template:
+    src: "etc/apache/sites-available/apache-site.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ item.name }}.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop: "{{ autonomy_virtual_hosts }}"
+  when:
+    - autonomy_virtual_hosts is defined
+    - item.certificate == "acme"
+    - item.content is not defined
+    - inventory_hostname in groups['apache_servers']
+  tags:
+  tags:
+    - acmeca
+    - acmeca-challenge-site

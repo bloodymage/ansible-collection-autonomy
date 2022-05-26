@@ -37,16 +37,12 @@
 - name: "Configure ACME CA."
   hosts: web_servers:&public_zone
   roles:
-    - role: bloodymage.autonomy.config_acmeca_environment
-    - role: bloodymage.autonomy.acmeca_challenge_site
-      tags:
-        - acmeca-challenge-site
-        - acmeca
-    - role: bloodymage.autonomy.acmeca_host_certs
-      tags:
-        - acmeca_host_certs
-        - acmeca-host-certs
-        - acmeca
+    - role: bloodymage.autonomy.acmeca
+      vars:
+        __acmeca_tasks: "site"
+    - role: bloodymage.autonomy.acmeca
+      vars:
+        __acmeca_tasks: "certs"
     - role: bloodymage.autonomy.ownca_crl_distribution_points
       tags:
         - ownca-crl-distribution-points

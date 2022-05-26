@@ -1,0 +1,73 @@
+---
+# tasks file for acmeca_challenge_site
+- name: Include OS-specific variables.
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: no
+  tags:
+    - acmeca
+    - acmeca-challenge-site
+    - acmeca-host-certs
+
+- name: "Install packages"
+  ansible.builtin.package:
+    name: "{{ autonomy_acmeca_packages }}"
+    state: present
+  become: yes
+  tags:
+    - acmeca
+    - acmeca-challenge-site
+    - acmeca-host-certs
+
+- name: "Determine whether to force account private key regeneration."
+  ansible.builtin.set_fact:
+    __acmeca_regenerate_acme_account_private_key: yes
+  become: no
+  tags:
+    - never
+    - regenerate-account-key
+    - regenerate-keys
+    - acmeca-regenerate-keys
+    - acmeca-regenerate-account-key
+
+- name: "Determine whether to force server private key regeneration."
+  ansible.builtin.set_fact:
+    __acmeca_regenerate_server_private_key: yes
+  become: no
+  tags:
+    - never
+    - regenerate-host-key
+    - regenerate-keys
+    - acmeca-regenerate-keys
+    - acmeca-regenerate-host-key
+
+- name: "Determine whether to use production or staging configuration."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_directory: "{{ __letsencrypt_staging_directory }}"
+    autonomy_acmeca_directory_url: "{{ __letsencrypt_staging_url }}"
+  become: no
+  tags:
+    - never
+    - issue-staging-certs
+    - acmeca-testing
+    - acmeca-test-run
+
+- name: "Create Site for ACME CA Challenges."
+  include_tasks: "challenge_site.yml"
+  when:
+    - __acmeca_tasks == "site"
+  tags:
+    - acmeca
+    - acmeca-challenge-site
+
+- name: "Create / Update Host Certs."
+  include_tasks: "host_certs.yml"
+  when:
+    - __acmeca_tasks == "certs"
+  tags:
+    - acmeca
+    - acmeca-host-certs
