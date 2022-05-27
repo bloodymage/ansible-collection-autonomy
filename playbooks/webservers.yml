@@ -22,11 +22,15 @@
   hosts: apache_servers:!public_zone
   roles:
     - role: bloodymage.autonomy.apache
+      tags:
+        - apache
 
 - name: "Create nginx webservers."
   hosts: nginx_servers
   roles:
     - role: bloodymage.autonomy.nginx
+      tags:
+        - nginx
 
 # ==================================================================================================
 #

@@ -33,18 +33,10 @@
 
 - name: "Install packages"
   ansible.builtin.package:
-    name: "{{ autonomy_autonomy_packages }}"
+    name: "{{ autonomy_apache_packages }}"
     state: present
   become: yes
 
-# ==================================================================================================
-#
-# The conditional needs work.
-#
-# I need it to enable the modules in apache_modules, but only if one of the virtual hosts
-# is a mediawiki website.
-#
-# ==================================================================================================
 - name: "http service state"
   ansible.builtin.service:
     name: apache2
@@ -58,10 +50,10 @@
     name: "{{ item }}"
   loop: "{{ autonomy_apache_modules }}"
   become: yes
+  notify: restart apache
   when:
     - virtual_hosts is defined
     - inventory_hostname in groups['apache_servers']
-  notify: restart apache
 
 # ======================================================================
 #
