@@ -112,7 +112,7 @@ flrs  = flow release start
 fl  = log -u
 l   = log --topo-order --pretty=format:'%C(yellow)%h %C(cyan)%cn %C(blue)%cr%C(reset) %s'
 ld  = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
-ld  = log --topo-order --stat --patch --full-diff --pretty=format:'%C(bold)%C(yellow)Commit:%C(reset) %C(yellow)%H%C(red)%d%n%C(bold)%C(yellow)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)%C(yellow)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'
+ld1  = log --topo-order --stat --patch --full-diff --pretty=format:'%C(bold)%C(yellow)Commit:%C(reset) %C(yellow)%H%C(red)%d%n%C(bold)%C(yellow)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)%C(yellow)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'
 lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
 le  = log --oneline --decorate
 lg  = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
@@ -125,7 +125,7 @@ llf = fsck --lost-found
 lm  = log --topo-order --pretty=format:'%s'
 lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
 ls  = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
-ls  = log --topo-order --stat --pretty=format:'%C(bold)%C(yellow)Commit:%C(reset) %C(yellow)%H%C(red)%d%n%C(bold)%C(yellow)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)%C(yellow)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'
+ls1  = log --topo-order --stat --pretty=format:'%C(bold)%C(yellow)Commit:%C(reset) %C(yellow)%H%C(red)%d%n%C(bold)%C(yellow)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)%C(yellow)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'
 
 # Recent Commit information
 dl = "!git ll -1"
@@ -176,17 +176,9 @@ rom = rebase origin/master
 
 # Commit Aliases
 # commit
-{% if item.gpg_keys[0].sign_keyid is defined -%}
-  c      = commit -S -
-  ca     = !git add -A && git commit -S --all -v
-  cm     = !git add -A && git commit -S --all -v --message
-{%- else -%}
-  c      = commit -
-  ca     = !git add -A && git commit --all -v
-  cm     = !git add -A && git commit --all -v --message
-{%- endif %}
-
-cam    = commit -S --all --message
+c      = commit -
+ca     = !git add -A && git commit --all -v
+cm     = !git add -A && git commit --all -v --message
 camend = commit --amend --reuse-message HEAD
 cundo  = reset --soft "HEAD^"
 cp     = cherry-pick
@@ -221,10 +213,13 @@ rea = remote add
 rex = remote rm
 rem = remote rename
 
-flow-setup = "!git branch --track develop origin/develop 2>/dev/null ; git flow init -fd && git checkout master && git pull origin master && git checkout develop && git pull origin develop"
-
 [push]
 default = matching
 
 [url "git@github.com:"]
 insteadof = github:
+
+{% if item.gpg_keys[0].sign_keyid is defined -%}
+  [config]
+  gpgsign = true
+{%- endif %}
