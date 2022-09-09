@@ -9,7 +9,8 @@
         - "vars"
   become: no
 
-- meta: clear_host_errors
+- name: "Clear host errors."
+  ansible.builtin.meta: clear_host_errors
 
 # ==================================================================================================
 #
