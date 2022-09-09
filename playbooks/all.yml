@@ -56,29 +56,30 @@
     - role: bloodymage.autonomy.users
       tags:
         - users
-
-- name: "Basic host configuration for all hosts."
-  hosts: all:!localhost:!wifi_access_points:!printers:!public_zone:!virtual_hosts:!routeros
-  strategy: linear
-  roles:
     - role: bloodymage.autonomy.hosts
+      when:
+        - ansible_network_os is not defined
       tags:
         - hosts
     - role: bloodymage.autonomy.emacs
       when:
         - autonomy_enable_emacs
+        - ansible_network_os is not defined
       tags:
         - emacs
     - role: bloodymage.autonomy.git
+      when:
+        - ansible_network_os is not defined
       tags:
         - git
     - role: bloodymage.autonomy.unzip
       when:
         - (autonomy_dod_certs_install or autonomy_enable_unzip)
+        - ansible_network_os is not defined
       tags:
         - unzip
 
-- name: "Install certificates on all host."
+- name: "Install certificates on all hosts."
   hosts: all:!localhost:!public_zone
   roles:
     - role: bloodymage.autonomy.ownca_host_certs
@@ -88,10 +89,6 @@
         - ownca-host-certs
         - ownca_host_certificates
         - ownca-host-certificates
-
-- name: "Install certificates on all host."
-  hosts: all:!localhost:!public_zone:!routers:!switches:!printers:!wifi_access_points
-  roles:
     - role: bloodymage.autonomy.dod_certs
       when:
         - autonomy_dod_certs_install
@@ -105,37 +102,63 @@
 #
 # ==================================================================================================
 - name: "Basic settings for all Linux hosts."
-  hosts: linux:!localhost:!routeros:!wifi_access_points:!printers:!public_zone:!virtual_hosts
+  hosts: linux:!localhost:!wifi_access_points:!printers
   strategy: linear
   roles:
     - role: bloodymage.autonomy.etc_fstab
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - fstab
     - role: bloodymage.autonomy.nftables
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - nftables
     - role: bloodymage.autonomy.fail2ban
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - fail2ban
     - role: bloodymage.autonomy.ntp
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - ntp
     - role: bloodymage.autonomy.unattended_upgrades
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - unattended-upgrades
     - role: bloodymage.autonomy.sudo
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - sudo
     - role: bloodymage.autonomy.skel
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - skel
     - role: bloodymage.autonomy.user_dotfiles
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - dotfiles
         - user-dotfiles
         - user_dotfiles
     - role: bloodymage.autonomy.etckeeper
       when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
         - autonomy_enable_etckeeper
       tags:
         - etckeeper
@@ -144,64 +167,104 @@
     #    - polkit
     - role: bloodymage.autonomy.screen
       when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
         - autonomy_enable_screen
       tags:
         - screen
     - role: bloodymage.autonomy.global
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - global
     - role: bloodymage.autonomy.rsync
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - rsync
     - role: bloodymage.autonomy.curl
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - curl
     - role: bloodymage.autonomy.keychain
       when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
         - autonomy_enable_keychain
       tags:
         - keychain
     - role: bloodymage.autonomy.man
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - man
     - role: bloodymage.autonomy.rename
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - rename
     - role: bloodymage.autonomy.members
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - members
     - role: bloodymage.autonomy.bash_completion
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - bash-completion
     - role: bloodymage.autonomy.ispell
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - ispell
     - role: bloodymage.autonomy.make
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - make
     - role: bloodymage.autonomy.uptimed
       when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
         - autonomy_enable_uptimed
       tags:
         - uptimed
     - role: bloodymage.autonomy.htop
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - htop
     - role: bloodymage.autonomy.python
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - python
     - role: bloodymage.autonomy.cron
+      when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
       tags:
         - cron
     - role: bloodymage.autonomy.trash_cli
       when:
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
         - autonomy_enable_trash_cli
       tags:
         - trash-cli
-
-- name: "Basic settings for all linux hosts (including virtual hosts and public zone hosts)."
-  hosts: linux:!localhost:!routeros:!wifi_access_points:!printers
-  roles:
     - role: bloodymage.autonomy.ownca_host_dhparams
       tags:
         - ownca-host-dhparams
@@ -223,8 +286,11 @@
 #
 # ==================================================================================================
 - name: "Basic settings for Debian Family Hosts."
-  hosts: debian:!localhost:!routeros:!wifi_access_points:!printers:!public_zone:!virtual_hosts
+  hosts: debian:!localhost:!wifi_access_points:!printers
   roles:
     - role: bloodymage.autonomy.aptitude
+      when:
+        - autonomy_virtual_host is falsy
+        - ansible_network_os is not defined
       tags:
         - aptitude
