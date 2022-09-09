@@ -26,9 +26,6 @@
 
 - name: "Ensure services are in proper state after package installation."
   ansible.builtin.meta: flush_handlers
-  when:
-    - autonomy_fqdn == __samba_schema_master
-    - __samba_recreate_realm
 
 - name: "Create Reverse Zone."
   ansible.builtin.command:
@@ -91,7 +88,7 @@
     - autonomy_fqdn == __samba_schema_master
 
 - name: "(Tests) KDC get ticket."
-  expect:
+  ansible.builtin.expect:
     command: kinit administrator
     responses:
       (?i)password: "{{ samba_administrator_password }}"
