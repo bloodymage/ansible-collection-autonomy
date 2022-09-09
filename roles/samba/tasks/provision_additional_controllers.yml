@@ -99,6 +99,3 @@
 
 - name: "Ensure services are in proper state after package installation."
   ansible.builtin.meta: flush_handlers
-  when:
-    - autonomy_fqdn != __samba_schema_master
-    - __samba_recreate_realm
