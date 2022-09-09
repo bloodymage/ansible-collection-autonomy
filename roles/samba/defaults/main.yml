@@ -1,18 +1,19 @@
 autonomy_packages:
   - acl
   - attr
+  - dnsutils
+  - krb5-config
+  - krb5-user
+  - libnss-winbind
+  - libpam-krb5
+  - libpam-winbind
+  - rsync
   - samba
   - samba-dsdb-modules
   - samba-vfs-modules
-  - winbind
-  - libpam-winbind
-  - libnss-winbind
-  - libpam-krb5
-  - krb5-config
-  - krb5-user
-  - dnsutils
+  - smbclient
   - unison
-  - rsync
+  - winbind
 
 autonomy_joined_as_domain_member: yes
 
