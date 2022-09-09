@@ -19,6 +19,7 @@
   include_tasks: "{{ ansible_os_family | lower }}.yml"
   when:
     - ansible_network_os is not defined
+    - autonomy_virtual_host is falsy
 
 - name: Include NetworkOS tasks
   include_tasks: "{{ ansible_network_os.split('.')[2] | lower }}.yml"
