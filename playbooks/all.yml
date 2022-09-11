@@ -74,7 +74,7 @@
         - git
     - role: bloodymage.autonomy.unzip
       when:
-        - (autonomy_dod_certs_install or autonomy_enable_unzip)
+        - (autonomy_dodca_install or autonomy_enable_unzip)
         - ansible_network_os is not defined
       tags:
         - unzip
@@ -89,12 +89,11 @@
         - ownca-host-certs
         - ownca_host_certificates
         - ownca-host-certificates
-    - role: bloodymage.autonomy.dod_certs
+    - role: bloodymage.autonomy.dodca
       when:
-        - autonomy_dod_certs_install
+        - autonomy_dodca
       tags:
-        - dod-certs
-        - dod_certs
+        - dodca
 
 # ==================================================================================================
 #
