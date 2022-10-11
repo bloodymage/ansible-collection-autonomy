@@ -18,7 +18,7 @@ autonomy_use_source_code_repos: no
 autonomy_password_length: "42"
 autonomy_virtual_host: no
 autonomy_dodca_install: no
-autonomy_passdb: "ansible/autonomy/"
+autonomy_passdb: "ansible"
 
 # Zone Information
 autonomy_root_domain: "example.com"
@@ -45,7 +45,7 @@ autonomy_tld: "{{ autonomy_domain.split('.')[-1] }}"
 autonomy_hostname: "{{ inventory_hostname_short }}"
 autonomy_fqdn: "{{ autonomy_hostname }}.{{ autonomy_domain }}"
 autonomy_ipv4_address: "{{ ansible_host }}"
-autonomy_ipv6_address: "{{ ansible_default_ipv6.address | default('') }}"
+autonomy_ipv6_address: "{{ ansible_default_ipv6.address | default(None) }}"
 
 # Organization Info
 autonomy_org_name: "{{ autonomy_domain.split('.')[-2] }}"
