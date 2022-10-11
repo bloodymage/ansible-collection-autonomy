@@ -268,10 +268,22 @@
   listen:
     - "restart all"
     - "restart ntp"
+    - "restart timesync"
   when:
-    - ntp_enabled is defined
-    - ntp_enabled
-    - inventory_hostname in groups['ntp'] | default([])
+    - inventory_hostname in groups['ntp_servers'] | default([])
+    - inventory_hostname in groups['samba_domain_controllers'] | default([])
+
+- name: "Restart systemd-timesyncd."
+  ansible.builtin.service:
+    name: "systemd-timesyncd"
+    state: restarted
+  listen:
+    - "restart all"
+    - "restart systemd-timesyncd"
+    - "restart timesync"
+  when:
+    - inventory_hostname not in groups['ntp_servers'] | default([])
+    - inventory_hostname not in groups['samba_domain_controllers'] | default([])
 
 - name: "Restart OpenDKIM."
   ansible.builtin.service:
