@@ -22,9 +22,13 @@
   strategy: linear
   roles:
     - role: bloodymage.autonomy.hostname
+      when:
+        - autonomy_virtual_host is falsy
       tags:
         - hostname
     - role: bloodymage.autonomy.system_upgrade
+      when:
+        - autonomy_virtual_host is falsy
       tags:
         - system_upgrade
         - system-upgrade
@@ -54,6 +58,8 @@
   hosts: all:!localhost:!wifi_access_points:!printers:!public_zone:!virtual_hosts
   roles:
     - role: bloodymage.autonomy.users
+      when:
+        - autonomy_users is defined
       tags:
         - users
     - role: bloodymage.autonomy.hosts
@@ -91,7 +97,7 @@
         - ownca-host-certificates
     - role: bloodymage.autonomy.dodca
       when:
-        - autonomy_dodca
+        - autonomy_dodca_install
       tags:
         - dodca
 
@@ -107,7 +113,7 @@
     - role: bloodymage.autonomy.etc_fstab
       when:
         - ansible_network_os is not defined
-        - autonomy_virtual_host is falsy
+        - autonomy_fstab is truthy
       tags:
         - fstab
     - role: bloodymage.autonomy.nftables
@@ -122,12 +128,12 @@
         - autonomy_virtual_host is falsy
       tags:
         - fail2ban
-    - role: bloodymage.autonomy.ntp
+    - role: bloodymage.autonomy.etc_timezone
       when:
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
-        - ntp
+        - timezone
     - role: bloodymage.autonomy.unattended_upgrades
       when:
         - ansible_network_os is not defined
