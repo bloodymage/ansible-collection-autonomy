@@ -7,7 +7,7 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: "0644"
-  loop: "{{ dodca_url }}"
+  loop: "{{ autonomy_dodca_url }}"
   become: yes
   delegate_to: localhost
   run_once: yes
@@ -23,7 +23,7 @@
   ansible.builtin.file:
     path: "/tmp/{{ item.file }}"
     state: absent
-  loop: "{{ dodca_url }}"
+  loop: "{{ autonomy_dodca_url }}"
   become: yes
   delegate_to: localhost
   run_once: yes

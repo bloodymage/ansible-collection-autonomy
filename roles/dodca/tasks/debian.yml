@@ -1,7 +1,7 @@
 ---
 - name: "Ensure cert directory exists."
   ansible.builtin.file:
-    path: "{{ dodca_dir }}"
+    path: "{{ autonomy_dodca_dir }}"
     state: directory
     owner: root
     group: root
@@ -18,35 +18,35 @@
 - name: "Extract Certificates."
   ansible.builtin.unarchive:
     src: "/tmp/{{ item.file }}"
-    dest: "{{ dodca_dir }}/"
+    dest: "{{ autonomy_dodca_dir }}/"
     extra_opts:
       - "-j"
     #owner: root
     #group: root
     #mode: "0644"
-  loop: "{{ dodca_url }}"
+  loop: "{{ autonomy_dodca_url }}"
   become: yes
   notify:
     - "update ca-certificates"
 
 - name: "Cleanup extra files."
   ansible.builtin.file:
-    path: "{{ dodca_dir }}/{{ item }}"
+    path: "{{ autonomy_dodca_dir }}/{{ item }}"
     state: absent
-  loop: "{{ dodca_exclude }}"
+  loop: "{{ autonomy_dodca_exclude }}"
   become: yes
   notify:
     - "update ca-certificates"
 
 - name: "Rename pem files."
   ansible.builtin.copy:
-    src: "{{ dodca_dir }}/{{ item }}.pem"
-    dest: "{{ dodca_dir }}/{{ item }}.crt"
+    src: "{{ autonomy_dodca_dir }}/{{ item }}.pem"
+    dest: "{{ autonomy_dodca_dir }}/{{ item }}.crt"
     owner: root
     group: root
     mode: "0644"
     remote_src: yes
-  loop: "{{ dodca_pem_files }}"
+  loop: "{{ autonomy_dodca_pem_files }}"
   become: yes
   notify:
     - "update ca-certificates"
