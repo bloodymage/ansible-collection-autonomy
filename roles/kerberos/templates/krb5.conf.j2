@@ -7,7 +7,7 @@
 {# - https://web.mit.edu/kerberos/krb5-1.18/doc/admin/conf_files/krb5_conf.html                   #}
 {#                                                                                                #}
 {# ============================================================================================== #}
-{% if krb5_config_logging %}
+{% if autonomy_kerberos_logging %}
 [logging] 
   default = FILE:/var/log/krb5.log 
   default = SYSLOG:INFO:DAEMON 
@@ -74,7 +74,7 @@
 {# -                                                                                              #}
 {#                                                                                                #}
 {# ============================================================================================== #}
-{% if krb5_config_domain_realm %}
+{% if autonomy_kerberos_domain_realm %}
 [domain_realm]
   {{ autonomy_domain }} = {{ autonomy_domain | upper }}
   .{{ autonomy_domain }} = {{ autonomy_domain | upper }}
