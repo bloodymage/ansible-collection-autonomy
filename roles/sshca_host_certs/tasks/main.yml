@@ -119,6 +119,8 @@
 #        the certificate doesn't exist, we don't want to fail the host and end the play for it.  We
 #        want to finish the play, so that the certificate will be created.
 #
+# FIXME: This still breaks when the certificates don't exist.
+#
 # ==================================================================================================
 - name: Fetch existing certificates.
   ansible.builtin.fetch:
