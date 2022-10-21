@@ -22,6 +22,19 @@
     - "start samba-ad-dc"
   when:
     - __samba_recreate_realm
+
+- name: "Configure smb.conf file."
+  ansible.builtin.template:
+    src: "smb.conf.j2"
+    dest: "/etc/samba/smb.conf"
+    owner: root
+    group: root
+    mode: 0644
+    validate: "/usr/bin/testparm -s %s"
+  become: yes
+  notify: restart samba
+  when:
+    - __samba_recreate_realm
     - autonomy_fqdn == __samba_schema_master
 
 - name: "Ensure services are in proper state after package installation."
