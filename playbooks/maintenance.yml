@@ -15,4 +15,11 @@
 
 - import_playbook: maintenance_daily.yml
 
+- import_playbook: maintenance_weekly.yml
+  when:
+    - ansible_date_time.weekday == "Monday"
+
+- import_playbook: maintenance_monthly.yml
+  when:
+    - ansible_date_time.day == "01"
 
