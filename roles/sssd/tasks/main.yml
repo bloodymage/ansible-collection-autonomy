@@ -139,7 +139,7 @@
 
 - name: "Install sssd.conf."
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/sssd.conf.j2"
+    src: "sssd.conf.j2"
     dest: "/etc/sssd/sssd.conf"
     owner: root
     group: root
