@@ -128,7 +128,7 @@
 # Restart Service Handlers
 #
 # ==================================================================================================
-- name: "Restart Apache"
+- name: "Restart Apache."
   ansible.builtin.service:
     name: apache2
     state: restarted
@@ -142,7 +142,7 @@
     - inventory_hostname in groups['apache_servers'] | default([])
 
 # TODO: Check if this needs 'restart tls'
-- name: "Restart Bind9"
+- name: "Restart Bind9."
   ansible.builtin.service:
     name: named
     state: restarted
