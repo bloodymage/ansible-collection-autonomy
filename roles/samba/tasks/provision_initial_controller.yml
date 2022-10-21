@@ -6,7 +6,7 @@
 # TODO: This also needs to happen if the realm does not exist
 #
 # ==================================================================================================
-- name: "Provision First Active Directory Domain Controller"
+- name: "Provision First Active Directory Domain Controller."
   ansible.builtin.command:
     cmd: >
       samba-tool domain provision
