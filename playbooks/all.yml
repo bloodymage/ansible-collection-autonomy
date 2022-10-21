@@ -24,11 +24,13 @@
     - role: bloodymage.autonomy.hostname
       when:
         - autonomy_virtual_host is falsy
+        - ansible_connection != "local"
       tags:
         - hostname
     - role: bloodymage.autonomy.system_upgrade
       when:
         - autonomy_virtual_host is falsy
+        - ansible_connection != "local"
       tags:
         - system_upgrade
         - system-upgrade
@@ -45,7 +47,11 @@
   strategy: linear
   roles:
     - role: bloodymage.autonomy.sshca_host_certs
+      when:
+        - ansible_connection != "local"
     - role: bloodymage.autonomy.openssh
+      when:
+        - ansible_connection != "local"
       tags:
         - openssh
 
@@ -59,27 +65,32 @@
   roles:
     - role: bloodymage.autonomy.users
       when:
-        - autonomy_users is defined
+        - autonomy_virtual_host is falsy
+        - ansible_connection != "local"
       tags:
         - users
     - role: bloodymage.autonomy.hosts
       when:
         - ansible_network_os is not defined
+        - ansible_connection != "local"
       tags:
         - hosts
     - role: bloodymage.autonomy.emacs
       when:
         - autonomy_enable_emacs
+        - ansible_connection != "local"
         - ansible_network_os is not defined
       tags:
         - emacs
     - role: bloodymage.autonomy.git
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
       tags:
         - git
     - role: bloodymage.autonomy.unzip
       when:
+        - ansible_connection != "local"
         - (autonomy_dodca_install or autonomy_enable_unzip)
         - ansible_network_os is not defined
       tags:
@@ -97,6 +108,7 @@
         - ownca-host-certificates
     - role: bloodymage.autonomy.dodca
       when:
+        - ansible_connection != "local"
         - autonomy_dodca_install
       tags:
         - dodca
@@ -112,48 +124,57 @@
   roles:
     - role: bloodymage.autonomy.etc_fstab
       when:
+        - ansible_connection != "local"
+        - autonomy_virtual_host is falsy
         - ansible_network_os is not defined
         - autonomy_fstab is truthy
       tags:
         - fstab
     - role: bloodymage.autonomy.nftables
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - nftables
     - role: bloodymage.autonomy.fail2ban
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - fail2ban
     - role: bloodymage.autonomy.etc_timezone
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - timezone
     - role: bloodymage.autonomy.unattended_upgrades
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - unattended-upgrades
     - role: bloodymage.autonomy.sudo
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - sudo
     - role: bloodymage.autonomy.skel
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - skel
     - role: bloodymage.autonomy.user_dotfiles
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
@@ -162,6 +183,7 @@
         - user_dotfiles
     - role: bloodymage.autonomy.etckeeper
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
         - autonomy_enable_etckeeper
@@ -172,6 +194,7 @@
     #    - polkit
     - role: bloodymage.autonomy.screen
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
         - autonomy_enable_screen
@@ -179,24 +202,28 @@
         - screen
     - role: bloodymage.autonomy.global
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - global
     - role: bloodymage.autonomy.rsync
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - rsync
     - role: bloodymage.autonomy.curl
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - curl
     - role: bloodymage.autonomy.keychain
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
         - autonomy_enable_keychain
@@ -204,42 +231,49 @@
         - keychain
     - role: bloodymage.autonomy.man
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - man
     - role: bloodymage.autonomy.rename
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - rename
     - role: bloodymage.autonomy.members
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - members
     - role: bloodymage.autonomy.bash_completion
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - bash-completion
     - role: bloodymage.autonomy.ispell
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - ispell
     - role: bloodymage.autonomy.make
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - make
     - role: bloodymage.autonomy.uptimed
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
         - autonomy_enable_uptimed
@@ -247,30 +281,36 @@
         - uptimed
     - role: bloodymage.autonomy.htop
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - htop
     - role: bloodymage.autonomy.python
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - python
     - role: bloodymage.autonomy.cron
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - cron
     - role: bloodymage.autonomy.trash_cli
       when:
+        - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
         - autonomy_enable_trash_cli
       tags:
         - trash-cli
     - role: bloodymage.autonomy.ownca_host_dhparams
+      when:
+        - ansible_connection != "local"
       tags:
         - ownca-host-dhparams
 
@@ -295,6 +335,7 @@
   roles:
     - role: bloodymage.autonomy.aptitude
       when:
+        - ansible_connection != "local"
         - autonomy_virtual_host is falsy
         - ansible_network_os is not defined
       tags:
