@@ -70,14 +70,14 @@
       cut -d: -f2 |
       tr -s "[:blank:]"
     executable: "/bin/bash"
-  register: config_file
+  register: __config_file
   become: no
   when:
     - __samba_recreate_realm
 
 - name: "Remove config file."
   ansible.builtin.file:
-    path: "{{ config_file }}"
+    path: "{{ __config_file }}"
     state: absent
   when:
     - __samba_recreate_realm
