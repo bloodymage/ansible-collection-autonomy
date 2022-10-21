@@ -17,13 +17,13 @@
 
     - name: "Check if we need ldap related packages."
       ansible.builtin.set_fact:
-        autonomy_packages: "{{ autonomy_packages }} + ['postfix-ldap']"
+        autonomy_packages: "{{ autonomy_packages + ['postfix-ldap'] }}"
       when:
         - autonomy_realm_identity_management_system is truthy
 
     - name: "Check if we need mysql related packages."
       ansible.builtin.set_fact:
-        autonomy_packages: "{{ autonomy_packages }} + ['postfix-mysql']"
+        autonomy_packages: "{{ autonomy_packages + ['postfix-mysql'] }}"
       when:
         - postfix_use_mysql_backend
 
