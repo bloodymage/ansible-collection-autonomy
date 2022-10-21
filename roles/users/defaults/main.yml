@@ -1,8 +1,8 @@
 ---
 # defaults file for users
-autonomy_packages: []
+autonomy_user_packages: []
 
-users:
+autonomy_users:
   - username: pi
     name: 'Pi'
     groups:
@@ -39,12 +39,13 @@ users:
     ssh_cert:
       - None
 
-user_groups:
+autonomy_user_groups:
   - name: ssl-cert
     system: yes
 
-user_group_ansible_managed: "ansiblemanaged"
-
+autonomy_user_group_ansible_managed: "ansiblemanaged"
+autonomy_user_password_min_id: 1000
+autonomy_user_password_max_id: 1001
 
 users_sudoers_options:
   - application: "screen"
@@ -64,6 +65,8 @@ __user_groups:
     system: yes
   - name: wheel
     system: yes
+
+__users: "{{ autonomy_users }}"
 
 __user_root:
   username: root
