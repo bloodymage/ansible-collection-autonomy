@@ -109,14 +109,12 @@
 
 - name: "Ensure DB directory exists and has the proper permissions."
   ansible.builtin.file:
-    path: "/var/lib/sss/{{ item }}"
+    path: "/var/lib/sss/{{ item.name }}"
     state: directory
-    owner: sssd
-    group: sssd
-    mode: "0755"
-  loop:
-    - db
-    - mc
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ autonomy_sssd_db_directories }}"
   become: yes
 
 - name: "Test Kerberos Logon to Active Directory Domain Controller."
