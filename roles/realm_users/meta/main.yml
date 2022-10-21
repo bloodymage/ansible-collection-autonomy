@@ -26,5 +26,6 @@ galaxy_info:
     - domain
 
 dependencies:
+  - role: bloodymage.autonomy.config_defaults
   - role: bloodymage.autonomy.collection_handlers
   #- role: bloodymage.autonomy.samba_domain_controller
