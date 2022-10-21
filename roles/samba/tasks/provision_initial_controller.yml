@@ -23,6 +23,7 @@
     - "start samba-ad-dc"
   when:
     - __samba_recreate_realm
+    - autonomy_fqdn == __samba_schema_master
 
 - name: "Configure smb.conf file."
   ansible.builtin.template:
