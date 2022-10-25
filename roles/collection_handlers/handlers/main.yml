@@ -120,6 +120,8 @@
     - sssd-nss
     - sssd
   become: yes
+  listen:
+    - "enable sssd"
   when:
     - inventory_hostname in groups['sssd'] | default([])
 
