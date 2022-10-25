@@ -285,6 +285,23 @@
 
 # ==================================================================================================
 #
+# Logging Configuration
+#
+# ==================================================================================================
+- name: "Create logging directories."
+  ansible.builtin.file:
+    path: "{{ autonomy_dovecot_log_dir }}"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+    state: directory
+  become: yes
+  when:
+    - autonomy_dovecot_log_dir is truthy
+    - (autonomy_dovecot_info_log_path is truthy or autonomy_dovecot_debug_log_path is truthy)
+
+# ==================================================================================================
+#
 # Email Migration
 #
 # I am considering changing this to a template that creates a script to do this.  Then setup cron to

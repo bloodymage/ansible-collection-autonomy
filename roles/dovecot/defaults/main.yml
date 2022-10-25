@@ -16,10 +16,13 @@ dovecot_etc: "/etc/dovecot"
 dovecot_confd: "{{ dovecot_etc }}/conf.d"
 dovecot_sieve_dir: "{{ dovecot_etc }}/sieve"
 dovecot_sieve_global_dir: "{{ dovecot_sieve_dir }}/global"
-
 dovecot_sieve_pipe_bin_dir: "/usr/lib/dovecot/sieve"
-
 dovecot_use_inboxzero_namespace: no
+
+autonomy_dovecot_log_path: syslog
+autonomy_dovecot_log_dir: ""
+autonomy_dovecot_info_log_path: ""
+autonomy_dovecot_debug_log_path: ""
 
 # ==================================================================================================
 #
@@ -390,6 +393,8 @@ dovecot_imapsieve_mailboxes:
     causes: "COPY"
     timing: "before"
     type: "ham"
+
+autonomy_dovecot_mail_debug: "no"
 
 # ==================================================================================================
 #
