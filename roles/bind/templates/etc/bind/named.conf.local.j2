@@ -45,6 +45,7 @@ include "/etc/bind/rndc.key";
 #
 # ==================================================================================================
 {% for localzone in autonomy_bind_reversezones -%}
+{% if localzone['type'] == "primary" %}
 zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }}.in-addr.arpa" {
   type {{ bind_primary_zone }};
   notify no;
@@ -52,17 +53,18 @@ zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }
   allow-transfer { trusteddns; };
   allow-update { key {{ localzone['update_key'] }}; };
   file "{{ bind_zone_dir }}/db.{{ localzone['name'] }}"; # zone file path
-};
+  };
+{% endif %}
 
 {% endfor %}
 {% endif %}
 
-{% if autonomy_bind_forwardzones is defined %}
 # ==================================================================================================
 #
 # Secondary Zone Definitions
 #
 # ==================================================================================================
+{% if autonomy_bind_forwardzones is defined %}
 {% for localzone in autonomy_bind_forwardzones -%}
 {% if localzone['type'] == "secondary" %}
 zone "{{ localzone['domain'] }}" {
@@ -75,6 +77,25 @@ zone "{{ localzone['domain'] }}" {
   {% endfor %}
 };
   file "{{ bind_cache_dir }}/db.{{ localzone.domain }}"; # zone file path
+};
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% if autonomy_bind_reversezones is defined %}
+{% for localzone in autonomy_bind_reversezones -%}
+{% if localzone['type'] == "secondary" -%}
+  zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }}.in-addr.arpa" {
+  type secondary;
+  notify no;
+  allow-query { trusted; };
+  primaries {
+  {% for ns in localzone['nameservers'] %}
+    {{ ns }};
+  {% endfor %}
+};
+  file "{{ bind_cache_dir }}/db.{{ localzone['name'] }}"; # zone file path
 };
 {% endif %}
 
