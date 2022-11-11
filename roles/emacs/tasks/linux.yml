@@ -1,7 +1,7 @@
 ---
 - name: "Install packages"
   ansible.builtin.package:
-    name: "{{ autonomy_packages }}"
+    name: "{{ autonomy_emacs_packages }}"
     state: present
   become: yes
 
@@ -36,6 +36,3 @@
     group: root
     mode: "0644"
   become: yes
-  tags:
-    - global-packages
-    - global-packages
