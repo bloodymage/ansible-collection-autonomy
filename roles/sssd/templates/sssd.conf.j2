@@ -36,9 +36,13 @@ pam_cert_db_path = {{ ownca_identity_ca_chain_file_path }}
   pam_verbosity = {{ sssd_pam_verbosity }}
 {% endif %}
 
-[domain/{{ autonomy_domain }}]
+[domain/{{ autonomy_domain | upper }}]
 ad_domain = {{ autonomy_domain }}
-ad_server = dc.{{ autonomy_domain }}
+ad_server =
+{%- for server in groups['samba_domain_controllers'] -%}
+  {{ server }}{{ "," if not loop.last else "" }}
+{%- endfor %}
+
 krb5_realm = {{ autonomy_domain | upper }}
 id_provider = ad
 access_provider = ad
