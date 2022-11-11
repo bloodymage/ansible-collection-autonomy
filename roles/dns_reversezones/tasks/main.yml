@@ -25,4 +25,4 @@
   delegate_to: "{{ hostvars[item]['ansible_host'] }}"
   when:
     - groups[__dns_servers] is defined
-    - hostvars[item]['inventory_hostname'] not in groups['samba_domain_controllers'] | default([])
+    - not samba_domain
