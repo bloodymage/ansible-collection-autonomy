@@ -28,7 +28,7 @@
     group: root
     mode: 0644
   become: yes
-  notify: restart all
+  notify: restart krb5
   tags:
     - krb5-client-config
     - krb5_client_config
