@@ -201,13 +201,6 @@
         - autonomy_enable_screen
       tags:
         - screen
-    - role: bloodymage.autonomy.global
-      when:
-        - ansible_connection != "local"
-        - ansible_network_os is not defined
-        - autonomy_virtual_host is falsy
-      tags:
-        - global
     - role: bloodymage.autonomy.rsync
       when:
         - ansible_connection != "local"
