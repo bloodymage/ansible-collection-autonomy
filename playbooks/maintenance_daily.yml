@@ -24,7 +24,7 @@
     # TODO: Find out why routeros fails on reverse zones.
     - role: bloodymage.autonomy.dns_reversezones
       when:
-        - ansible_network_os != "RouterOS"
+        - ansible_network_os is not defined
       tags:
         - dns
 
