@@ -23,3 +23,4 @@
   when:
     - ansible_date_time.day == "01"
 
+- import_playbook: maintenance_misc.yml
