@@ -205,6 +205,8 @@ __domain_system_users: []
 # ==================================================================================================
 __distribution: "{{ ansible_distribution | default(none) }}"
 __distribution_short: "{{ __distribution.split(' ')[0] }}"
+__distribution_release: "{{ ansible_distribution_release | default(none) }}"
+__major_version: "{{ ansible_distribution_major_version | default(none) }}"
 __lsb_id: "{{ ansible_lsb.id | default(none) }}"
 __network_os: "{{ ansible_network_os | default(none) }}"
 __os_family: "{{ ansible_os_family | default(none) }}"
@@ -212,8 +214,11 @@ __system: "{{ ansible_system | default(none) }}"
 
 __os_variables_files:
   - "{{ __network_os }}.yml"
+  - "{{ __lsb_id | lower }}_{{ __major_version }}.yml"
   - "{{ __lsb_id | lower }}.yml"
+  - "{{ __distribution | lower }}_{{ __major_version}}.yml"
   - "{{ __distribution | lower }}.yml"
+  - "{{ __distribution_short | lower }}_{{ __major_version}}.yml"
   - "{{ __distribution_short | lower }}.yml"
   - "{{ __os_family | lower }}_family.yml"
   - "{{ __system | lower }}.yml"
