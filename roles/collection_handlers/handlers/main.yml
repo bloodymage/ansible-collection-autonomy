@@ -5,6 +5,41 @@
 # Misc Handlers
 #
 # ==================================================================================================
+- name: "PAM Auth Update."
+  ansible.builtin.command:
+    cmd: "/usr/sbin/pam-auth-update --package"
+  become: yes
+  listen:
+    - "update pam"
+  when:
+    - inventory_hostname in groups['linux'] | default([])
+
+- name: "Reset Samba ACLs on Sysvol for New Controller."
+  ansible.builtin.command:
+    cmd: "samba-tool ntacl sysvolreset"
+  become: yes
+  listen:
+    - "sysvolreset"
+  when:
+    - inventory_hostname in groups['samba_domain_controllers'] | default([])
+    - autonomy_samba_package in ansible_facts.packages
+
+- name: "Force systemd to reread configs."
+  ansible.builtin.systemd:
+    scope: system
+    daemon_reload: yes
+  become: yes
+  listen:
+    - "daemon reload"
+  when:
+    - inventory_hostname in groups['linux'] | default([])
+
+# ==================================================================================================
+#
+#
+#
+# ==================================================================================================
+
 # ==================================================================================================
 #
 # Update System CA Certificates
@@ -36,30 +71,6 @@
 
 # ==================================================================================================
 #
-#
-#
-# ==================================================================================================
-# TODO: Update this command to update pam config.
-- name: Update PAM
-  ansible.builtin.command:
-    cmd: "update-ca-certificates"
-  become: yes
-  listen:
-    - "update pam"
-  when:
-    - inventory_hostname in groups['linux'] | default([])
-
-- name: "Reset Samba ACLs on Sysvol for New Controller."
-  ansible.builtin.command:
-    cmd: "samba-tool ntacl sysvolreset"
-  become: yes
-  listen:
-    - "sysvolreset"
-  when:
-    - inventory_hostname in groups['samba_domain_controllers'] | default([])
-
-# ==================================================================================================
-#
 # Disable for now.  This may no longer be needed.
 # Disabled because '/var/spool/postfix/etc/ssl' directory no longer exists.
 #
@@ -83,16 +94,6 @@
 #     - "reload tls"
 #   when:
 #     - inventory_hostname in groups['postfix_servers'] | default([])
-
-- name: "Force systemd to reread configs."
-  ansible.builtin.systemd:
-    scope: system
-    daemon_reload: yes
-  become: yes
-  listen:
-    - "daemon reload"
-  when:
-    - inventory_hostname in groups['linux'] | default([])
 
 # ==================================================================================================
 #
@@ -124,6 +125,69 @@
     - "enable sssd"
   when:
     - inventory_hostname in groups['sssd'] | default([])
+    - autonomy_sssd_package in ansible_facts.packages
+
+# ==================================================================================================
+#
+# Reload Handlers
+#
+# ==================================================================================================
+- name: "Reload Apache."
+  ansible.builtin.service:
+    name: apache2
+    state: reloaded
+  become: yes
+  listen:
+    - "reload all"
+    - "reload tls"
+    - "reload apache"
+  when:
+    - inventory_hostname in groups['apache_servers'] | default([])
+
+# - name: reload bind
+#   service:
+#     name: bind9
+#     state: reloaded
+#   become: yes
+
+- name: "reload nginx"
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+  become: yes
+  listen:
+    - "reload all"
+    - "reload tls"
+    - "reload nginx"
+  when:
+    - inventory_hostname in groups['nginx_servers'] | default([])
+    - autonomy_nginx_package in ansible_facts.packages
+
+- name: "Reload Postfix."
+  ansible.builtin.service:
+    name: postfix
+    state: reloaded
+  become: yes
+  listen:
+    - "reload all"
+    - "reload tls"
+    - "reload postfix"
+  when:
+    - inventory_hostname in groups['postfix_servers'] | default([])
+    - autonomy_postfix_package in ansible_facts.packages
+
+- name: "Reload Samba Domain Controller"
+  ansible.builtin.service:
+    name: samba-ad-dc
+    state: reloaded
+  become: yes
+  listen:
+    - "reload all"
+    - "reload tls"
+    - "reload samba-ad-dc"
+  when:
+    - inventory_hostname in groups['samba_domain_controllers'] | default([])
+    - autonomy_samba_package in ansible_facts.packages
 
 # ==================================================================================================
 #
@@ -138,15 +202,25 @@
   listen:
     - "restart all"
     - "restart tls"
+    - "restart krb5"
     - "restart apache"
     - "restart keytab"
   when:
     - inventory_hostname in groups['apache_servers'] | default([])
+    - autonomy_apache_package in ansible_facts.packages
 
+# ==================================================================================================
+#
 # TODO: Check if this needs 'restart tls'
+#
+# Currently, the bind role does not need 'restart tls'
+#
+# However, bind can be configured to use tls at which point this will be needed.
+#
+# ==================================================================================================
 - name: "Restart Bind9."
   ansible.builtin.service:
-    name: named
+    name: "{{ autonomy_bind9_daemon }}"
     state: restarted
   become: yes
   listen:
@@ -157,21 +231,22 @@
     - "restart named"
   when:
     - inventory_hostname in groups['bind9_servers'] | default([])
+    - autonomy_bind9_package in ansible_facts.packages
 
 - name: "Restart cron."
   ansible.builtin.service:
-    name: "{{ ntp_cron_daemon }}"
+    name: "{{ autonomy_cron_daemon }}"
     state: restarted
   listen:
     - "restart cron"
   when:
-    - ntp_cron_handler_enabled is defined
-    - ntp_cron_handler_enabled
+    - cron_daemon is defined
+    - cron_daemon
     - inventory_hostname in groups['linux'] | default([])
 
 - name: "Restart DDclient."
   service:
-    name: ddclient
+    name: "{{ autonomy_ddclient_daemon }}"
     state: restarted
   become: yes
   listen:
@@ -179,15 +254,17 @@
     - "restart ddclient"
   when:
     - inventory_hostname in groups['ddclient_hosts'] | default([])
+    - autonomy_ddclient_package in ansible_facts.packages
 
 - name: "Restart Dovecot."
   ansible.builtin.service:
-    name: dovecot
+    name: "{{ autonomy_dovecot_daemon }}"
     state: restarted
   become: yes
   listen:
     - "restart all"
     - "restart tls"
+    - "restart krb5"
     - "restart keytab"
     - "restart dovecot"
   when:
@@ -201,6 +278,9 @@
   listen:
     - "restart all"
     - "restart etckeeper"
+  when:
+    - inventory_hostname in groups['linux'] | default([])
+    - autonomy_etckeeper_package in ansible_facts.packages
 
 - name: "Restart Freeradius."
   ansible.builtin.service:
@@ -265,7 +345,7 @@
 
 - name: "Restart NTP."
   ansible.builtin.service:
-    name: "{{ ntp_daemon }}"
+    name: "{{ autonomy_ntp_daemon }}"
     state: restarted
   listen:
     - "restart all"
@@ -306,6 +386,7 @@
   listen:
     - "restart all"
     - "restart tls"
+    - "restart krb5"
     - "restart keytab"
     - "restart postfix"
   when:
@@ -319,6 +400,7 @@
   listen:
     - "restart all"
     - "restart tls"
+    - "restart krb5"
     - "restart samba-ad-dc"
     - "restart samba"
   when:
@@ -332,6 +414,7 @@
   listen:
     - "restart all"
     - "restart tls"
+    - "restart krb5"
     - "restart samba file server"
     - "restart samba"
   when:
@@ -345,6 +428,7 @@
   listen:
     - "restart all"
     - "restart tls"
+    - "restart krb5"
     - "restart samba file server"
     - "restart samba"
   when:
@@ -358,6 +442,7 @@
   listen:
     - "restart all"
     - "restart ssh"
+    - "restart krb5"
   when:
     - inventory_hostname in groups['linux'] | default([])
 
@@ -369,6 +454,7 @@
   listen:
     - "restart all"
     - "restart tls"
+    - "restart krb5"
     - "restart samba file server"
     - "restart samba"
     - "restart winbind"
@@ -383,6 +469,7 @@
   listen:
     - "restart all"
     - "restart tls"
+    - "restart krb5"
     - "restart sssd"
   when:
     - inventory_hostname in groups['sssd'] | default([])
@@ -400,7 +487,7 @@
 
 - name: "Restart Spamassassin."
   ansible.builtin.service:
-    name: spamassassin
+    name: "{{ autonomy_spamassassin_daemon }}"
     state: restarted
   become: yes
   listen:
@@ -431,59 +518,6 @@
     - "restart uptimed"
   when:
     - inventory_hostname in groups['linux'] | default([])
-
-# ==================================================================================================
-#
-# Reload Handlers
-#
-# ==================================================================================================
-- name: "Reload Apache."
-  ansible.builtin.service:
-    name: apache2
-    state: reloaded
-  become: yes
-  listen:
-    - "reload all"
-    - "reload tls"
-    - "reload apache"
-  when:
-    - inventory_hostname in groups['apache_servers'] | default([])
-
-- name: "reload nginx"
-  ansible.builtin.service:
-    name: nginx
-    state: reloaded
-  become: yes
-  listen:
-    - "reload all"
-    - "reload tls"
-    - "reload nginx"
-  when:
-    - inventory_hostname in groups['nginx_servers'] | default([])
-
-- name: "Reload Postfix."
-  ansible.builtin.service:
-    name: postfix
-    state: reloaded
-  become: yes
-  listen:
-    - "reload all"
-    - "reload tls"
-    - "reload postfix"
-  when:
-    - inventory_hostname in groups['postfix_servers'] | default([])
-
-- name: "Reload Samba Domain Controller"
-  ansible.builtin.service:
-    name: samba-ad-dc
-    state: reloaded
-  become: yes
-  listen:
-    - "reload all"
-    - "reload tls"
-    - "reload samba-ad-dc"
-  when:
-    - inventory_hostname in groups['samba_domain_controllers'] | default([])
 
 # ==================================================================================================
 #
@@ -545,7 +579,7 @@
 # ==================================================================================================
 # ==================================================================================================
 #
-# I really want to have this reboot the system is necessary.  I haven't convinced myself to actually
+# I really want to have this reboot the system if necessary.  I haven't convinced myself to actually
 # try it yet.
 #
 # TODO: Change become from 'no' to 'yes' when I change this from debug to reboot modules.
@@ -597,18 +631,6 @@
   listen:
     - "regenerate certificates"
     - "regenerate host certificates"
-
-# - name: reload bind
-#   service:
-#     name: bind9
-#     state: reloaded
-#   become: yes
-
-# - name: restart bind
-#   service:
-#     name: bind9
-#     state: restarted
-#   become: yes
 
 # - name: start samba-ad-dc
 #   service:
