@@ -1,8 +1,9 @@
 ---
-# tasks file for ownca_host_dhparms
 # ==================================================================================================
 #
-# This takes forever on a RPi
+# Creates dh params for individual hosts.
+#
+# This takes forever on a RPi.
 #
 # Are there security implications for generating elsewhere and transferring to the RPi server later?
 #
@@ -19,5 +20,7 @@
     backup: yes
     #force: "{{ __ownca_regenerate_csr }}"
   become: yes
+  notify:
+    - restart tls
   when:
     - ownca_privatekey_type in ['DSA','RSA']
