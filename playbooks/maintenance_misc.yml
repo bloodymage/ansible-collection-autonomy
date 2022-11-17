@@ -5,9 +5,18 @@
       tags:
         - always
 
+
 - hosts: all
   roles:
     - role: bloodymage.autonomy.maintenance_service_restart
       tags:
         - never
         - restart-services
+
+- hosts: all
+  serial: 1
+  roles:
+    - role: bloodymage.autonomy.maintenance_reboot
+      tags:
+        - never
+        - reboot
