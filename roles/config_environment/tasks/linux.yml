@@ -1,3 +1,4 @@
+---
 - name: "Get package facts."
   ansible.builtin.package_facts:
     manager: auto
