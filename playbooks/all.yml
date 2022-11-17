@@ -302,11 +302,14 @@
         - autonomy_enable_trash_cli
       tags:
         - trash-cli
-    - role: bloodymage.autonomy.ownca_host_dhparams
+    - role: bloodymage.autonomy.ownca
+      vars:
+        __ownca_tasks: "dhparams"
       when:
         - ansible_connection != "local"
       tags:
         - ownca-host-dhparams
+        - ownca-dhparams
 
 # ==================================================================================================
 #
