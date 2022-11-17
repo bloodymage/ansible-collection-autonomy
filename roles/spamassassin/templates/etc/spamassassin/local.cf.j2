@@ -1,18 +1,22 @@
-# This is the right place to customize your installation of SpamAssassin.
-#
-# See 'perldoc Mail::SpamAssassin::Conf' for details of what can be
-# tweaked.
-#
-# Only a small subset of options are listed below
-#
-###########################################################################
-## Force global Bayesian databases instead of per-user
-bayes_path /var/lib/spamassassin/.spamassassin/bayes
-bayes_file_mode 0777
+# {{ ansible_managed }}
 
-## Ensure non-English e-mails are treated as spam
-ok_languages en
-ok_locales en
+{# # This is the right place to customize your installation of SpamAssassin. #}
+{# # #}
+{# # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be #}
+{# # tweaked. #}
+{# # #}
+{# # Only a small subset of options are listed below #}
+{# # #}
+{# ########################################################################### #}
+{% if autonomy_spamassassin_bayes_path is truthy %}
+# Force global Bayesian databases instead of per-user
+bayes_path {{ autonomy_spamassassin_bayes_path }}
+{% endif %}
+bayes_file_mode {{ autonomy_spamassassin_bayes_file_mod }} 
+
+{% if autonomy_spamassassin_ok_locales != __autonomy_spamassassin_ok_locales %}
+ok_locales {{ autonomy_spamassassin_ok_locales }}
+{% endif %}
 
 #   Add *****SPAM***** to the Subject header of spam e-mails
 #
