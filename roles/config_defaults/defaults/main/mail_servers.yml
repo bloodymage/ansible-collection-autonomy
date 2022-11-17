@@ -8,6 +8,7 @@ mail_recipient_delimiter: "+"
 mail_user: vmail
 mail_group: "{{ mail_user }}"
 mail_postfix_user: "postfix"
+mail_postfix_group: "{{ mail_postfix_user }}"
 
 mail_spamassassin_sock_loc_name: "spamass"
 mail_spamassassin_socket_name: "spamass"
@@ -27,6 +28,8 @@ autonomy_dmz_www_host: "{{ groups['dmz_web_servers'][0] }}"
 autonomy_internal_keycloak_host: "{{ groups['internal_keycloak_servers'][0] }}"
 autonomy_dmz_keycloak_host: "{{ groups['dmz_keycloak_servers'][0] }}"
 
+spamassassin_spamass_milter_user: "spamass-milter"
+spamassassin_spamd_user: "debian-spamd"
 
 mail_aliases_local_user_maps:
   - username: abuse
