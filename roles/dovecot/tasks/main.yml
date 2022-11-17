@@ -80,7 +80,7 @@
     - dovecot.conf
     #- "{{ dovecot_password_file }}"
   become: yes
-  notify: restart dovecot
+  notify: "restart dovecot"
 
 - name: "Install auth config files to /etc/dovecot."
   ansible.builtin.template:
@@ -91,7 +91,7 @@
     mode: "0644"
   loop: "{{ dovecot_auth_conf }}"
   become: yes
-  notify: restart dovecot
+  notify: "restart dovecot"
   when:
     - item.name != "system"
     - item.name != "deny"
@@ -127,7 +127,7 @@
     - auth-master.conf.ext
     - auth-static.conf.ext
     - auth-vpopmail.conf.ext
-  notify: restart dovecot
+  notify: "restart dovecot"
 
 - name: "Install authorization configuration files to /etc/dovecot/conf.d."
   ansible.builtin.template:
@@ -138,7 +138,7 @@
     mode: "0644"
   become: yes
   loop: "{{ dovecot_auth_conf }}"
-  notify: restart dovecot
+  notify: "restart dovecot"
 
 # ==================================================================================================
 #
@@ -208,7 +208,7 @@
 # ==================================================================================================
 - name: "Ensure Dovecot Sieve Directories exists."
   ansible.builtin.file:
-    path: "{{ dovecot_etc }}/sieve/{{ item }}"
+    path: "{{ dovecot_sieve_dir }}/{{ item }}"
     owner: "{{ mail_user }}"
     group: "{{ mail_user }}"
     mode: "0755"
@@ -223,23 +223,25 @@
   ansible.builtin.template:
     src: "etc/dovecot/sieve/report-sieve.j2"
     dest: "{{ dovecot_etc }}/sieve/global/report-{{ item.type }}.sieve"
-    owner: root
-    group: root
+    owner: "{{ mail_user }}"
+    group: "{{ mail_user }}"
     mode: "0644"
   become: yes
   loop: "{{ dovecot_imapsieve_mailboxes }}"
+  notify: "restart dovecot"
   tags:
     - sieve-filters
 
 - name: "Install Sieve rules."
   ansible.builtin.template:
     src: "etc/dovecot/sieve/{{ item.name }}.sieve.j2"
-    dest: "{{ dovecot_etc }}/sieve/{{ item.type }}/{{ item.priority }}-{{ item.name }}.sieve"
+    dest: "{{ dovecot_sieve_dir }}/{{ item.type }}/{{ item.priority }}-{{ item.name }}.sieve"
     owner: "{{ mail_user }}"
     group: "{{ mail_user }}"
     mode: "0644"
   become: yes
   loop: "{{ dovecot_sieve_files }}"
+  notify: "recompile sieve"
   vars:
     __main_folder: "Inbox"
   when:
@@ -266,7 +268,7 @@
 
 - name: "Ensure Sieve Pipe Bin Dir exists."
   ansible.builtin.file:
-    path: "{{ dovecot_sieve_pipe_bin_dir }}"
+    path: "{{ autonomy_dovecot_sieve_pipe_bin_dir }}"
     owner: "{{ mail_user }}"
     group: "{{ mail_user }}"
     mode: "0755"
@@ -276,7 +278,7 @@
 - name: "Install IMAPSieve Spam Update Filters."
   ansible.builtin.template:
     src: "usr/lib/dovecot/sieve/sa-learn.j2"
-    dest: "{{ dovecot_sieve_pipe_bin_dir }}/sa-learn-{{ item.type }}.sh"
+    dest: "{{ autonomy_dovecot_sieve_pipe_bin_dir }}/sa-learn-{{ item.type }}.sh"
     owner: "root"
     group: "root"
     mode: "0755"

@@ -23,11 +23,16 @@
 {% endif %}
 smtpd_helo_required = {{ postfix_smtpd_helo_required }}
 
+{% if postfix_maillog_file != __postfix_maillog_file -%}
+  maillog_file = {{ postfix_maillog_file }}
+{% endif %}
+
 # TLS parameters
 {% if postfix_smtpd_tls_chain_files != __postfix_smtpd_tls_chain_files -%}
 smtpd_tls_chain_files =
 {% for file in postfix_smtpd_tls_chain_files %}
   {{ file }}{{ "," if not loop.last else "" }}
+  
 {% endfor %}
 {% else %}
 {% if postfix_smtpd_tls_cert_file != __postfix_smtpd_tls_cert_file -%}

@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-require ["variables", "mailbox"];
+require ["include", "variables", "mailbox"];
 global ["level1", "level2", "level3", "level4", "level5", "level6", "level7"];
 
 if header :contains "Subject" [

@@ -62,7 +62,7 @@ postfix_biff: "no"
 postfix_canonical_maps:
   - "hash:/etc/postfix/canonical"
 
-postfix_compatibility_level: "2"
+postfix_compatibility_level: "3.6"
 
 postfix_disable_vrfy_command: "yes"
 
@@ -125,6 +125,7 @@ postfix_inet_interfaces: "{{ __postfix_inet_interfaces }}"
 postfix_inet_protocols: "{{ __postfix_inet_interfaces }}"
 postfix_local_recipient_maps: "{{ __postfix_local_recipient_maps }}"
 postfix_mailbox_transport: "{{ __postfix_mailbox_transport }}"
+postfix_maillog_file: "{{ __postfix_maillog_file }}"
 postfix_mynetworks: "{{ __postfix_mynetworks }}"
 postfix_mynetworks_style: "{{ __postfix_mynetworks_style }}"
 postfix_myorigin: "{{ __postfix_myorigin }}"
@@ -217,6 +218,7 @@ __postfix_local_recipient_maps:
   - "proxy:unix:passwd.byname $alias_maps"
 __postfix_mailbox_size_limit: 0
 __postfix_mailbox_transport: ""
+__postfix_maillog_file: ""
 __postfix_message_size_limit: "10240000"
 __postfix_milter_connect_macros: "j {daemon_name} {daemon_addr} v"
 __postfix_milter_default_action: "tempfail"

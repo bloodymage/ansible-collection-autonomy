@@ -1,6 +1,10 @@
 # {{ ansible_managed }}
 
-{{ 'server_host'.ljust(28) }}= dc.{{ autonomy_domain }}
+{{ 'server_host'.ljust(28) }}=
+{%- for server in groups['samba_domain_controllers'] -%}
+  {{ " " }}ldap://{{ server }}{{ "," if not loop.last else "" }}
+{%- endfor %}
+
 {{ 'server_port'.ljust(28) }}= 389
 {{ 'version'.ljust(28) }}= 3
 {{ 'bind'.ljust(28) }}= yes

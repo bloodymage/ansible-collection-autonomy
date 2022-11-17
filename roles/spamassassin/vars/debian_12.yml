@@ -1,0 +1,6 @@
+---
+autonomy_packages:
+  - spamassassin
+  - spamass-milter
+  - spamc
+  - spamd
