@@ -1,3 +1,4 @@
+---
 # ==================================================================================================
 #
 # This playbook configures the ansible control node, the host you are running asible from, aka
@@ -7,6 +8,10 @@
 - name: "Configure the control node."
   hosts: localhost
   roles:
+    - role: bloodymage.autonomy.ansible
+      tags:
+        - never
+        - ansible
     - role: bloodymage.autonomy.config_environment
       tags:
         - always

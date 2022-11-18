@@ -1,0 +1,7 @@
+---
+- name: "Configure the Ansible control node."
+  hosts: localhost
+  roles:
+    - role: bloodymage.autonomy.ansible
+      tags:
+        - ansible

@@ -71,6 +71,20 @@ For example, your internal network will be internal.example.com, and a dmz zone 
 dmz.example.com, and each host will be named host.internal.example.com.  See [docs/INVENTORY.md](docs/INVENTORY.md) 
 for more information.
 
+First run:
+
+```
+ansible-playbook bloodymage/autonomy/playbooks/ansible.yml
+```
+
+Or
+```
+ansible-playbook bloodymage/autonomy/playbooks/control.yml --tags ansible
+```
+
+Both of the above will install all the necessary dependencies that this collection requires to run ansible.  It will also configure your ~/.ansible.cfg.  If you wish to reconfigure your ~/.ansible.cfg you can run either of the above again.
+
+After ansible is configured, from then on you run:
 ```
 ansible-playbook bloodymage/autonomy/playbooks/site.yml
 ```
