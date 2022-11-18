@@ -44,6 +44,16 @@ domain_user_nextcloud:
       host: "{{ autonomy_dmz_www_host }}"
   account_expire: "--noexpiry"
 
+domain_mail_user_spns:
+  - spn: "imap"
+    keytab_file: "/etc/dovecot/dovecot.keytab"
+  - spn: "smtp"
+    keytab_file: "/etc/dovecot/dovecot.keytab"
+
+# ==================================================================================================
+#
+#
+# ==================================================================================================
 __realm_users: []
 
 __default_domain_system_users:
@@ -56,8 +66,10 @@ __default_domain_system_users:
   - name: "dmz_www_servers"
     user: "{{ domain_user_nextcloud }}"
 
-domain_mail_user_spns:
-  - spn: "imap"
-    keytab_file: "/etc/dovecot/dovecot.keytab"
-  - spn: "smtp"
-    keytab_file: "/etc/dovecot/dovecot.keytab"
+__domain_system_users:
+  - "{{ domain_user_vmail }}"
+  - "{{ domain_user_mediawiki }}"
+  - "{{ domain_user_keycloak }}"
+  - "{{ domain_user_nextcloud }}"
+
+__domain_mail_user_spns: []
