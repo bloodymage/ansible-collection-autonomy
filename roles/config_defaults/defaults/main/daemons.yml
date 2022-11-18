@@ -4,7 +4,7 @@ autonomy_bind9_daemon: "bind9"
 autonomy_cron_daemon: "cron"
 autonomy_ddclient_daemon: "ddclient"
 autonomy_dovecot_daemon: "dovecot"
-autonomy_ntp_daemon: "ntp"
+autonomy_ntp_daemon: "ntpsec"
 autonomy_spamassassin_daemon: "spamd"
 
 autonomy_apache_package: "apache2"
