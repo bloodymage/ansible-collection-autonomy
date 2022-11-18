@@ -1,0 +1,5 @@
+---
+# defaults file for ldapaccountmanager
+autonomy_ldapaccountmanager_packages:
+  - ldap-account-manager
+

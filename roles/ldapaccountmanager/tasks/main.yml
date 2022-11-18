@@ -1,0 +1,16 @@
+---
+# tasks file for ldapaccountmanager
+- name: "Include OS-specific variables."
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: no
+
+- name: "Install packages."
+  ansible.builtin.packages:
+    name: "{{ autonomy_ldapaccountmanager_packages }}"
+    state: present
+  become: yes
