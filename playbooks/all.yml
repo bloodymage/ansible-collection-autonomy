@@ -15,13 +15,13 @@
 - name: "Upgrade All hosts."
   hosts: all:!localhost:!wifi_access_points:!printers:!public_zone:!virtual_hosts
   roles:
-    - role: bloodymage.autonomy.system_upgrade
+    - role: bloodymage.autonomy.maintenance_upgrade
       when:
         - autonomy_virtual_host is falsy
         - ansible_connection != "local"
       tags:
-        - system_upgrade
-        - system-upgrade
+        - maintenance_upgrade
+        - maintenance-upgrade
 
 
 - import_playbook: "all_linux.yml"

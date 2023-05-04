@@ -36,14 +36,14 @@
       when:
         - ansible_os_family == "Debian"
       tags:
-        - system-upgrade
-        - system_upgrade
+        - maintenance-upgrade
+        - maintenance_upgrade
         - aptitude
 
-    - role: bloodymage.autonomy.system_upgrade
+    - role: bloodymage.autonomy.maintenance_upgrade
       tags:
-        - system-upgrade
-        - system_upgrade
+        - maintenance-upgrade
+        - maintenance_upgrade
 
 - name: "Update User dotfiles."
   hosts: all:!localhost:!public_zone:!routeros:!virtual_hosts:!printers
