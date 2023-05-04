@@ -2,11 +2,14 @@
 # defaults file for systemd_networkd
 autonomy_packages:
   - libnss-resolve
+  - systemd-resolved
 
-remove_autonomy_packages:
+autonomy_packages_remove:
+  - libnss-mdns
   - avahi-daemon
   - ifupdown
   - dhcpcd5
+  - network-manager
   - isc-dhcp-client
   - isc-dhcp-common
-  - rsyslog
+  - openresolv

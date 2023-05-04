@@ -128,7 +128,7 @@
   register: bind_ddns_keys
   changed_when: false
   when:
-    - (__bind_ddns_zones['keyfile_status'] is not defined or (__bind_ddns_zones is defind and not __bind_ddns_zones['keyfile_status']) or __bind_ddns_zones['existing_algorithm'] != autonomy_ddns_key_algorithm)
+    - (__bind_ddns_zones['keyfile_status'] is not defined or (__bind_ddns_zones is defined and not __bind_ddns_zones['keyfile_status']) or __bind_ddns_zones['existing_algorithm'] != autonomy_ddns_key_algorithm)
     - inventory_hostname not in groups['samba_domain_controllers'] | default([])
 
 - name: "Print dynamic key information."

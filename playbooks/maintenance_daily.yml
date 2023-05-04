@@ -1,3 +1,4 @@
+---
 # ==================================================================================================
 #
 # This playbook is a small selection of tasks for daily execution.  Ensuring systems are up to date.
@@ -13,7 +14,7 @@
     - role: bloodymage.autonomy.config_environment
       tags:
         - dns
-        
+
 - name: "Set DNS."
   hosts: all:!localhost
   ignore_unreachable: true

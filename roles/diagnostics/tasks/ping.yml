@@ -1,0 +1,4 @@
+---
+- name: "Ping from host {{ source_host }}."
+  delegate_to: "{{ source_host }}"
+  ignore_errors: true

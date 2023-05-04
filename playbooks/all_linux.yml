@@ -1,0 +1,200 @@
+---
+# ==================================================================================================
+#
+# Common Linux configuration
+#
+# ==================================================================================================
+- name: "Basic Linux Host Configuration."
+  hosts: linux:!localhost:!routeros:!wifi_access_points:!printers:!public_zone:!virtual_hosts
+  roles:
+    - role: bloodymage.autonomy.etckeeper
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+        - autonomy_enable_etckeeper
+      tags:
+        - etckeeper
+    # - role: bloodymage.autonomy.sshca_host_certs
+    #   when:
+    #     - ansible_connection != "local"
+    # - role: bloodymage.autonomy.openssh
+    #   when:
+    #     - ansible_connection != "local"
+    #   tags:
+    #     - openssh
+    - role: bloodymage.autonomy.systemdnetworkd
+      when:
+        - (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined) or (autonomy_systemd_link is defined)
+      tags:
+        - systemd-networkd
+    - role: bloodymage.autonomy.etc_fstab
+      when:
+        - ansible_connection != "local"
+        - autonomy_virtual_host is falsy
+        - ansible_network_os is not defined
+        - autonomy_fstab is truthy
+      tags:
+        - fstab
+    - role: bloodymage.autonomy.nftables
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - nftables
+    - role: bloodymage.autonomy.fail2ban
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - fail2ban
+    - role: bloodymage.autonomy.etc_timezone
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - timezone
+    - role: bloodymage.autonomy.unattended_upgrades
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - unattended-upgrades
+    - role: bloodymage.autonomy.sudo
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - sudo
+    - role: bloodymage.autonomy.skel
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - skel
+    #- role: bloodymage.autonomy.polkit
+    #  tags:
+    #    - polkit
+    - role: bloodymage.autonomy.screen
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+        - autonomy_enable_screen
+      tags:
+        - screen
+    - role: bloodymage.autonomy.rsync
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - rsync
+    - role: bloodymage.autonomy.curl
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - curl
+    - role: bloodymage.autonomy.keychain
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+        - autonomy_enable_keychain
+      tags:
+        - keychain
+    - role: bloodymage.autonomy.man
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - man
+    - role: bloodymage.autonomy.rename
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - rename
+    - role: bloodymage.autonomy.members
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - members
+    - role: bloodymage.autonomy.bash_completion
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - bash-completion
+    - role: bloodymage.autonomy.ispell
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - ispell
+    - role: bloodymage.autonomy.make
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - make
+    - role: bloodymage.autonomy.uptimed
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+        - autonomy_enable_uptimed
+      tags:
+        - uptimed
+    - role: bloodymage.autonomy.htop
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - htop
+    - role: bloodymage.autonomy.python
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - python
+    - role: bloodymage.autonomy.cron
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - cron
+    - role: bloodymage.autonomy.trash_cli
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+        - autonomy_enable_trash_cli
+      tags:
+        - trash-cli
+    - role: bloodymage.autonomy.ownca
+      vars:
+        __ownca_tasks: "dhparams"
+      when:
+        - ansible_connection != "local"
+      tags:
+        - ownca-host-dhparams
+        - ownca-dhparams
