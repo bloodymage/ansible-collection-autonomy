@@ -24,7 +24,7 @@
         - maintenance-upgrade
 
 
-- import_playbook: "all_linux.yml"
+- import_playbook: "all_linux_init.yml"
 
 # ==================================================================================================
 #
@@ -60,12 +60,6 @@
         - ansible_network_os is not defined
       tags:
         - emacs
-    - role: bloodymage.autonomy.git
-      when:
-        - ansible_connection != "local"
-        - ansible_network_os is not defined
-      tags:
-        - git
     - role: bloodymage.autonomy.unzip
       when:
         - ansible_connection != "local"
@@ -92,6 +86,7 @@
       tags:
         - dodca
 
+- import_playbook: "all_linux.yml"
 # ==================================================================================================
 #
 # Finally, we configure settings based on OS Distribution Family:

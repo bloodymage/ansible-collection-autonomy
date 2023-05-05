@@ -7,27 +7,6 @@
 - name: "Basic Linux Host Configuration."
   hosts: linux:!localhost:!routeros:!wifi_access_points:!printers:!public_zone:!virtual_hosts
   roles:
-    - role: bloodymage.autonomy.etckeeper
-      when:
-        - ansible_connection != "local"
-        - ansible_network_os is not defined
-        - autonomy_virtual_host is falsy
-        - autonomy_enable_etckeeper
-      tags:
-        - etckeeper
-    # - role: bloodymage.autonomy.sshca_host_certs
-    #   when:
-    #     - ansible_connection != "local"
-    # - role: bloodymage.autonomy.openssh
-    #   when:
-    #     - ansible_connection != "local"
-    #   tags:
-    #     - openssh
-    - role: bloodymage.autonomy.systemdnetworkd
-      when:
-        - (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined) or (autonomy_systemd_link is defined)
-      tags:
-        - systemd-networkd
     - role: bloodymage.autonomy.etc_fstab
       when:
         - ansible_connection != "local"
