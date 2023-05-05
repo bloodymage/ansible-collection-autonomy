@@ -50,7 +50,7 @@
 # ==================================================================================================
 - name: "Update System CA Certificates."
   ansible.builtin.command:
-    cmd: "update-ca-certificates"
+    cmd: "/usr/sbin/update-ca-certificates"
   become: yes
   listen:
     - "update system ca certificates"
