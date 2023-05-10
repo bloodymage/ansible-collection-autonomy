@@ -5,39 +5,37 @@
 #  
 #
 # ==================================================================================================
-- name: "Pre-tasks"
-  block:
-    - name: "Include OS-specific variables."
-      include_vars: "{{ lookup('first_found', params) }}"
-      vars:
-        params:
-          files: "{{ __os_variables_files }}"
-          paths:
-            - "vars"
-      become: no
-      tags:
-        - sshca_host_certs
-        - sshca-host-certs
-        - sshca_host_certs_debug
-        - sshca-host-certs-debug
-        - install-packages
+- name: "Include OS-specific variables."
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: no
+  tags:
+    - sshca_host_certs
+    - sshca-host-certs
+    - sshca_host_certs_debug
+    - sshca-host-certs-debug
+    - install-packages
 
-    - name: "Install packages."
-      ansible.builtin.package:
-        name: "{{ autonomy_packages }}"
-        state: present
-      become: yes
-      tags:
-        - sshca_host_certs
-        - sshca-host-certs
-        - sshca_host_certs_debug
-        - sshca-host-certs-debug
-        - install-packages
+- name: "Install packages."
+  ansible.builtin.package:
+    name: "{{ autonomy_sshca_host_certs_packages }}"
+    state: present
+  become: yes
+  tags:
+    - sshca_host_certs
+    - sshca-host-certs
+    - sshca_host_certs_debug
+    - sshca-host-certs-debug
+    - install-packages
 
 # ==================================================================================================
 #
 # Tasks:
-#  
+#
 #
 # ==================================================================================================
 - name: "Ensure we have a password for the Host CA Key"
@@ -76,7 +74,8 @@
   changed_when: false
   register: __autonomy_temporary_directory
   delegate_to: localhost
-  run_once: yes
+  become: false
+  run_once: true
   tags:
     - sshca_host_certs
     - sshca-host-certs
@@ -90,7 +89,7 @@
     group: "{{ __autonomy_user }}"
     mode: "0755"
     state: directory
-  become: no
+  become: false
   delegate_to: localhost
   run_once: true
   tags:
@@ -119,7 +118,7 @@
 #        the certificate doesn't exist, we don't want to fail the host and end the play for it.  We
 #        want to finish the play, so that the certificate will be created.
 #
-# FIXME: This still breaks when the certificates don't exist.
+# FIXME: This still breaks when the certificates don't exist.  Therefore set ignore_errors: true
 #
 # ==================================================================================================
 - name: Fetch existing certificates.
@@ -129,6 +128,7 @@
     failed_on_missing: false
     flat: yes
   loop: "{{ __autonomy_ssh_private_keys.files }}"
+  ignore_errors: true
   tags:
     - sshca_host_certs
     - sshca-host-certs
