@@ -153,7 +153,7 @@ autonomy_zones:
   - name: "internal"
     type: "internal"
     domain: "internal.{{ autonomy_root_domain }}"
-    samba_domain: yes                                         
+    samba_domain: yes
   - name: "dmz"
     type: "dmz"
     domain: "dmz.{{ autonomy_root_domain }}"
@@ -251,10 +251,10 @@ For sites that are publicly available, the site will use an acme ca  (Let's encr
   By default, all passwords default variables are set to "password."  When a password is encountered that is set to "password," a password will be generated using password_store, and the generated password will be used.  This creates the following advantages:
   1. You do not need to generate your passwords yourself.
   2. You can create backups, and distribute the passwords via git/gpg (Add specific user gpg keys to any folder you wish to grant access. )
-  
+
 Not yet implemented advantages:
   3. If you believe multiple passwords may be compromised, you can easily force a regeneration of all passwords.  Plan is to add a tags for password regeneration.  Currently, you can use the password store itself to modify the password(s).
-  
+
 ### Role structure
 
 Each role is built with the idea of do one thing, and do it well.  So there will be many more roles than other projects might have.  The advantage is that you don't have to run every role every time.  Each role can be selected individually by using '--tag' with the role's name, for example '--tag dovecot' will run the dovecot role.  If you wish to run all roles related to email servers, you would run the playbook 'mailservers.yml'
