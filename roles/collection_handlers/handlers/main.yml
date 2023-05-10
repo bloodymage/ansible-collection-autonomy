@@ -60,6 +60,7 @@
     - "reload tls"
   when:
     - ansible_network_os is not defined
+    - autonomy_virtual_host is falsy
     - inventory_hostname in groups['linux'] | default([])
 
 - name: "Update nextcloud certificates."
@@ -207,6 +208,7 @@
     - "restart keytab"
   when:
     - inventory_hostname in groups['apache_servers'] | default([])
+    - ansible_facts.packages is defined
     - autonomy_apache_package in ansible_facts.packages
 
 # ==================================================================================================
