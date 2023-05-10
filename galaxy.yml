@@ -20,6 +20,7 @@ dependencies:
   - ansible.netcommon
   - community.crypto
   - community.network
+  - bloodymage.systemd
 
 repository: https://github.com/bloodymage/ansible-collection-autonomy
 documentation: http://docs.bloodymage.org
