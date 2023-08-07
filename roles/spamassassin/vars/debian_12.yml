@@ -1,5 +1,5 @@
 ---
-autonomy_packages:
+autonomy_spamassassin_packages:
   - spamassassin
   - spamass-milter
   - spamc

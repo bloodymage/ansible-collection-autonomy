@@ -43,6 +43,7 @@
 - name: "Ensure spamassassin logging directory exists with proper permissions."
   ansible.builtin.file:
     path: "{{ autonomy_spamassassin_syslog_dir }}"
+    state: directory
     owner: "{{ spamassassin_spamd_user }}"
     group: "{{ spamassassin_spamd_user }}"
     mode: "0750"
