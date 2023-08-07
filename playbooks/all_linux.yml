@@ -43,6 +43,15 @@
         - autonomy_virtual_host is falsy
       tags:
         - unattended-upgrades
+    - role: bloodymage.autonomy.user_dotfiles
+      when:
+        - ansible_connection != "local"
+        - ansible_network_os is not defined
+        - autonomy_virtual_host is falsy
+      tags:
+        - dotfiles
+        - user-dotfiles
+        - user_dotfiles
     - role: bloodymage.autonomy.sudo
       when:
         - ansible_connection != "local"
@@ -172,8 +181,34 @@
     - role: bloodymage.autonomy.ownca
       vars:
         __ownca_tasks: "dhparams"
-      when:
-        - ansible_connection != "local"
       tags:
         - ownca-host-dhparams
         - ownca-dhparams
+
+
+# ==================================================================================================
+#
+# Finally, we configure settings based on OS Distribution Family:
+#
+# - Debian
+#
+# Planned edition:
+#   - arch
+#   - gentoo
+#   - redhat
+#
+# Note:
+#  - "!routeros" is included because otherwise Mikrotik routers are included.
+#  - "!wifi_access_points" is included because otherwise TP-Link EAP devices are included.
+#
+# ==================================================================================================
+- name: "Basic settings for Debian Family Hosts."
+  hosts: debian:!localhost:!wifi_access_points:!printers
+  roles:
+    - role: bloodymage.autonomy.aptitude
+      when:
+        - ansible_connection != "local"
+        - autonomy_virtual_host is falsy
+        - ansible_network_os is not defined
+      tags:
+        - aptitude

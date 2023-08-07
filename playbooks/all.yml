@@ -78,11 +78,11 @@
         - ownca-host-certs
         - ownca_host_certificates
         - ownca-host-certificates
-    - role: bloodymage.autonomy.dodca
-      when:
-        - ansible_connection != "local"
-        - autonomy_dodca_install
-      tags:
-        - dodca
+    # - role: bloodymage.autonomy.dodca
+    #   when:
+    #     - ansible_connection != "local"
+    #     - autonomy_dodca_install
+    #   tags:
+    #     - dodca
 
 - import_playbook: "all_linux.yml"
