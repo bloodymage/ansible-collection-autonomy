@@ -13,6 +13,7 @@
 include "/etc/bind/rndc.key";
 {% endif %}
 
+{% if inventory_hostname not in groups['samba_domain_controllers'] %}
 {% if autonomy_bind_forwardzones is defined %}
 # ==================================================================================================
 #
@@ -100,4 +101,5 @@ zone "{{ localzone['domain'] }}" {
 {% endif %}
 
 {% endfor %}
+{% endif %}
 {% endif %}
