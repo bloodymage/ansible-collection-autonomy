@@ -2,6 +2,7 @@
 # roles/bind/defaults/main.yml
 autonomy_packages:
   - python3-netaddr
+  - python3-dnspython
   - bind9
   - bind9utils
 
