@@ -128,8 +128,8 @@
   when:
     - bind_dyndns_secret is defined
     - inventory_hostname not in groups['public_zone'] | default([])
-    - autonomy_virtual_host is falsy
-    - (autonomy_bind_forwardzones is defined or inventory_hostname in groups['samba_domain_controllers'])
+    #- autonomy_virtual_host is falsy
+    - (autonomy_bind_forwardzones is defined or inventory_hostname in groups['samba_domain_controllers'] | default([]))
     - groups['dmz_dns_servers'] is defined # Temporary fix for #534
   notify: restart bind
 
