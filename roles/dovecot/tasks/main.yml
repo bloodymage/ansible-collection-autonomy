@@ -5,23 +5,30 @@
 # Task: Install apps
 #
 # ==================================================================================================
-- name: "Pretasks"
-  block:
-    - name: "Include OS-specific variables."
-      include_vars: "{{ lookup('first_found', params) }}"
-      vars:
-        params:
-          files: "{{ __os_variables_files }}"
-          paths:
-            - "vars"
-      become: no
- 
-    - name: "Install packages."
-      ansible.builtin.package:
-        name: "{{ autonomy_packages }}"
-        state: present
-      become: yes
- 
+- name: "Include OS-specific variables."
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: no
+
+- name: "Check if we need ldap related packages."
+  ansible.builtin.set_fact:
+    autonomy_dovecot_packages: "{{ autonomy_dovecot_packages + [item] }}"
+  loop:
+    - "dovecot-ldap"
+    - "dovecot-gssapi"
+  when:
+    - autonomy_realm_identity_management_system is truthy
+
+- name: "Install packages."
+  ansible.builtin.package:
+    name: "{{ autonomy_dovecot_packages }}"
+    state: present
+  become: yes
+
 - name: "Update password and auth mechanims."
   ansible.builtin.set_fact:
     dovecot_password_databases: "{{ dovecot_password_databases + ['ldap'] }}"
