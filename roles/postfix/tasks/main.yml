@@ -159,6 +159,15 @@
     - autonomy_zone_type == "dmz"
     - item.type == "public"
 
+- name: "Ensure log directory exists."
+  ansible.builtin.file:
+    path: "/var/log/postfix"
+    owner: root
+    group: root
+    mode: "0755"
+    state: directory
+  become: true
+
 - name: "Install configuration files"
   ansible.builtin.template:
     src: "{{ item }}.j2"
@@ -189,7 +198,7 @@
   loop: "{{ postfix_ldap_maps }}"
   become: yes
   when:
-    - inventory_hostname in groups['samba_domain']
+    #- inventory_hostname in groups['samba_domain']
     - __mail_user_password is defined
     - postfix_ldap_maps is defined
   notify: restart postfix
