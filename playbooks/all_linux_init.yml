@@ -3,6 +3,9 @@
 #
 # Initial Linux configuration
 #
+# We install git first since etckeeper depends on git.
+# We want etckeeper as early as possible so we can track all changes made by these playbooks.
+#
 # ==================================================================================================
 - name: "Initialize Linux Host Configuration."
   hosts: linux:!localhost:!routeros:!wifi_access_points:!printers:!public_zone:!virtual_hosts
@@ -21,15 +24,23 @@
         - autonomy_enable_etckeeper
       tags:
         - etckeeper
+    # ==============================================================================================
+    #
+    #                                      WARNING
+    #
+    # Do not set the sshca_host_cert role to ignore local connections.
+    #
+    # This will cause the temporary directory to not be created leading to a failure to fetch host
+    # public keys and existing certs.
+    #
+    # ==============================================================================================
     - role: bloodymage.autonomy.sshca_host_certs
-      when:
-        - ansible_connection != "local"
     - role: bloodymage.autonomy.openssh
-      when:
-        - ansible_connection != "local"
+      # when:
+      #   - ansible_connection != "local"
       tags:
         - openssh
-    - role: bloodymage.autonomy.systemdnetworkd
+    - role: bloodymage.systemd.networkd
       when:
         - (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined) or (autonomy_systemd_link is defined)
       tags:
