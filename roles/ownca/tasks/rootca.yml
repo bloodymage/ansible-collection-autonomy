@@ -16,7 +16,7 @@
 
 - name: "Install packages."
   ansible.builtin.package:
-    pkg: "{{ autonomy_packages }}"
+    pkg: "{{ autonomy_ownca_packages }}"
     state: present
   become: yes
   register: result
@@ -77,7 +77,7 @@
 #
 # Tasks: Create Directories
 #
-# 
+#
 #
 # ==================================================================================================
 - name: "Create PKI Directory."

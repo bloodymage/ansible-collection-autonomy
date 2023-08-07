@@ -8,7 +8,7 @@
 - name: "Create OwnCA: Root CA."
   include_tasks: "rootca.yml"
   when:
-    - __ownca_tasks == "ownca" 
+    - __ownca_tasks == "ownca"
   tags:
     - ownca
     - ownca-root
