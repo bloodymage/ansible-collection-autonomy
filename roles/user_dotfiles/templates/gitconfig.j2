@@ -20,10 +20,16 @@ signingkey = "{{ item.gpg_keys[0].sign_keyid }}"
 defaultBranch = {{ dotfiles_default_git_branch }}
 
 [core]
-editor = emacsclient -t
+editor = emacs
 pager = delta
 whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 excludesfile = ~/.gitignore # Creates a global git ignore
+
+{% if item.gpg_keys[0].sign_keyid is defined -%}
+  [config]
+  gpgsign = true
+{%- endif %}
+
 
 [github]
 {% if item.github_user is defined -%}
@@ -71,6 +77,7 @@ branch = magenta
 
 [diff]
 tool = vimdiff
+colorMoved = default
 
 [difftool]
 prompt = false
@@ -152,7 +159,7 @@ co0 = checkout HEAD --
 cob = checkout -b
 cod = checkout develop
 coh = checkout hotfix
-com = checkout master
+com = checkout {{ dotfiles_default_git_branch }}
 cor = checkout release
 
 # fetch
@@ -172,22 +179,31 @@ ra  = rebase --abort
 rc  = rebase --continue
 ri  = rebase --interactive
 rs  = rebase --skip
-rom = rebase origin/master
+rom = rebase origin/{{ dotfiles_default_git_branch }}
 
 # Commit Aliases
 # commit
 c      = commit -
-ca     = !git add -A && git commit --all -v
-cm     = !git add -A && git commit --all -v --message
+ca     = !git add --all && git commit --all --verbose
+cm     = !git add --all && git commit --all --verbose --message
 camend = commit --amend --reuse-message HEAD
-cundo  = reset --soft "HEAD^"
-cp     = cherry-pick
+cdate = !git add --all && git commit --message \"Commit for $(date -I)\"
+cdatetime = !git add --all && git commit --message \"Commit for $(date -Iseconds)\"
+cyolo = !git add --all && git commit --message \"$(fortune -n 72 -s)\" && git push --force
+cyolo2 = !git add --all && git commit --message \"$(curl -s https://whatthecommit.com/index.txt)\" && git push --force
+cidk = !git add --all && git commit --message '¯\\_(ツ)_/¯'
+cidk2 = !git add --all && git commit --message '¯\\(°_o)/¯'
 save = !git add -A && git commit -m 'SAVEPOINT'
 wip = !git add -u && git commit -m "WIP"
+wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+
+cundo  = reset --soft "HEAD^"
+cp     = cherry-pick
 undo = reset HEAD~1 --mixed
 amend = commit -a --amend
-wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
-bclean = "!f() { git branch --merged ${1-master} | grep -v " ${1-master}$" | xargs -r git branch -d; }; f"
+
+
+bclean = "!f() { git branch --merged ${1-{{ dotfiles_default_git_branch }}} | grep -v " ${1-{{ dotfiles_default_git_branch }}}$" | xargs -r git branch -d; }; f"
 bdone = "!f() { git checkout ${1-master} && git up && git bclean ${1-master}; }; f"
 untrack = rm --cache --
 o = !git push origin --all && git push --prune
@@ -219,11 +235,6 @@ default = matching
 [url "git@github.com:"]
 insteadof = github:
 
-{% if item.gpg_keys[0].sign_keyid is defined -%}
-  [config]
-  gpgsign = true
-{%- endif %}
-
 [interactive]
 diffFilter = delta --color-only
 [add.interactive]
@@ -237,5 +248,3 @@ line-numbers=true
 [merge]
 conflictstyle = diff3
 
-[diff]
-colorMoved = default
