@@ -8,6 +8,8 @@
   hosts: localhost
   roles:
     - role: bloodymage.autonomy.diagnostics
+      tags:
+        - localhost
 
 - name: "Run Diagnostics"
   hosts: all:!localhost
@@ -16,3 +18,5 @@
     - role: bloodymage.autonomy.diagnostics
       when:
         - ansible_connection != "local"
+      tags:
+        - remotehost
