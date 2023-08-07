@@ -233,6 +233,7 @@
     - "restart named"
   when:
     - inventory_hostname in groups['bind9_servers'] | default([])
+    - ansible_facts.packages is defined
     - autonomy_bind9_package in ansible_facts.packages
 
 - name: "Restart cron."
@@ -392,6 +393,8 @@
     - "restart postfix"
   when:
     - inventory_hostname in groups['postfix_servers'] | default([])
+    - ansible_facts.packages is defined
+    - autonomy_postfix_package in ansible_facts.packages
 
 - name: "Restart Samba Domain Controller."
   ansible.builtin.service:
