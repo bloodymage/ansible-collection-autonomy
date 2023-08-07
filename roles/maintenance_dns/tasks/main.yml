@@ -1,0 +1,16 @@
+---
+# tasks file for dns-update
+- name: "Update DNS records using nsupdate protocol."
+  include_tasks: "nsupdate.yml"
+  tags:
+    - nsupdate-dns
+    - dns
+
+- name: "Update DNS records using google domains protocol."
+  include_tasks: "googledomains.yml"
+  when:
+    - autonomy_dns_protocol is defined
+    - autonomy_dns_protocol == "googledomains"
+  tags:
+    - googledomains-dns
+    - dns

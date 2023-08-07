@@ -14,25 +14,10 @@
         - bind
         - bind9
 
-- name: "Set Forward Zone information."
+- name: "Update DNS Records."
   hosts: all:!localhost
   ignore_unreachable: yes
   roles:
-    - role: bloodymage.autonomy.dns_forwardzones
+    - role: bloodymage.autonomy.maintenance_dns
       tags:
-        - dns_forwardzones
-        - dns-forwardzones
-        - dns-forwardzone
-        - dns-update
-
-# TODO: Configure RouterOS reversezones
-- name: "Set Reverse Zone information."
-  hosts: all:!localhost:!routeros:!public_zone
-  ignore_unreachable: yes
-  roles:
-    - role: bloodymage.autonomy.dns_reversezones
-      tags:
-        - dns_reversezones
-        - dns-reversezones
-        - dns-reversezone
-        - dns-update
+        - dns

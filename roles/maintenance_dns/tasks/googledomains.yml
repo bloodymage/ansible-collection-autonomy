@@ -1,0 +1,43 @@
+---
+- name: "Get public IP."
+  community.general.ipify_facts:
+  tags:
+    - googledomains-dns
+    - dns
+
+- name: "Update Google Domains DNS Records for host."
+  ansible.builtin.uri:
+    url: "https://domains.google.com/nic/update"
+    user: "{{ autonomy_dns_googledomains_user }}"
+    password: "{{ autonomy_dns_googledomains_password }}"
+    method: POST
+    body:
+      hostname: "{{ inventory_hostname }}"
+      myip: "{{ autonomy_dns_ipv6_addresses | default(autonomy_ipv6_address) }}"
+    body_format: "form-urlencoded"
+  when:
+    - autonomy_dns_googledomains_user is defined
+    - autonomy_dns_googledomains_password is defined
+  tags:
+    - googledomains-dns
+    - dns
+
+- name: "Update Google Domains DNS Records for host."
+  ansible.builtin.uri:
+    url: "https://domains.google.com/nic/update"
+    user: "{{ item.username }}"
+    password: "{{ item.password }}"
+    method: POST
+    body:
+      hostname: "{{ item.name }}"
+      myip: "{{ item.ipv4 }}"
+    body_format: "form-urlencoded"
+  loop: "{{ autonomy_domain_level_records }}"
+  run_once: true
+  delegate_to: localhost
+  when:
+    - autonomy_dns_googledomains_user is defined
+    - autonomy_dns_googledomains_password is defined
+  tags:
+    - googledomains-dns
+    - dns
