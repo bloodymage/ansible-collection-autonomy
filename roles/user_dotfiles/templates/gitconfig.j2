@@ -75,6 +75,11 @@ changed = green
 untracked = cyan
 branch = magenta
 
+[delta]
+navigate = true    # use n and N to move between diff sections
+light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+line-numbers=true
+
 [diff]
 tool = vimdiff
 colorMoved = default
@@ -84,6 +89,7 @@ prompt = false
 
 [merge]
 tool = vimdiff
+conflictstyle = diff3
 
 [alias]
 # branch
@@ -104,16 +110,27 @@ cl = clone
 ec = config --global -e
 
 # Git Flow
-fi    = flow init
+fli   = flow init
+flb   = flow bugfix
+flbf  = flow bugfix finish -s -S
+flbr  = flow bugfix rebase
+flbs  = flow bugfix start
 flf   = flow feature
-flff  = flow feature finish
+flff  = flow feature finish -s -S
+flfr  = flow feature rebase
 flfs  = flow feature start
 flh   = flow hotfix
-flhf  = flow hotfix finish
+flhf  = flow hotfix finish -s -S
+flhr  = flow hotfix rebase
 flhs  = flow hotfix start
 flr   = flow release
-flrf  = flow release finish -s
+flrf  = flow release finish -s -S
+flrr  = flow release rebase
 flrs  = flow release start
+fls   = flow support
+flsf  = flow support finish -s -S
+flsr  = flow support rebase
+flss  = flow support start
 
 # Logging Aliases
 fl  = log -u
@@ -190,7 +207,9 @@ camend = commit --amend --reuse-message HEAD
 cdate = !git add --all && git commit --message \"Commit for $(date -I)\"
 cdatetime = !git add --all && git commit --message \"Commit for $(date -Iseconds)\"
 cyolo = !git add --all && git commit --message \"$(fortune -n 72 -s)\" && git push --force
-cyolo2 = !git add --all && git commit --message \"$(curl -s https://whatthecommit.com/index.txt)\" && git push --force
+cyolo2 = !git commit --message \"$(fortune -n 72 -s)\"
+cyolo3 = !git add --all && git commit --message \"$(curl -s https://whatthecommit.com/index.txt)\" && git push --force
+cyolo4 = !git commit --message \"$(curl -s https://whatthecommit.com/index.txt)\"
 cidk = !git add --all && git commit --message '¯\\_(ツ)_/¯'
 cidk2 = !git add --all && git commit --message '¯\\(°_o)/¯'
 save = !git add -A && git commit -m 'SAVEPOINT'
@@ -213,8 +232,6 @@ d    = diff          # Diff working dir to index
 ds   = diff --staged # Diff index to HEAD
 dc   = diff --staged # Diff index to HEAD
 dh   = diff HEAD     # Diff working dir and index to HEAD
-hub  = browse
-hubd = compare
 
 # index
 s  = status
@@ -239,12 +256,4 @@ insteadof = github:
 diffFilter = delta --color-only
 [add.interactive]
 useBuiltin = false # required for git 2.37.0
-
-[delta]
-navigate = true    # use n and N to move between diff sections
-light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
-line-numbers=true
-
-[merge]
-conflictstyle = diff3
 
