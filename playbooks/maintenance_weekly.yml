@@ -1,6 +1,0 @@
----
-- hosts: all
-  roles:
-    - role: bloodymage.autonomy.config_environment
-      tags:
-        - always

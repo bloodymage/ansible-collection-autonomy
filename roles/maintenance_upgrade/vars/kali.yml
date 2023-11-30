@@ -1,3 +1,0 @@
----
-deb_repo_url: "https://http.kali.org/kali"
-deb_repos: "main non-free contrib"
