@@ -25,7 +25,7 @@
     - role: bloodymage.autonomy.user_password_store
       vars:
         user_password_store_users:
-          - username: "{{ __autonomy_user }}"
+          - username: "{{ autonomy_user }}"
       tags:
         - user-password-store
         - user_password_store
