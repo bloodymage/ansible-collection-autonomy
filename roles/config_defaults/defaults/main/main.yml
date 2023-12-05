@@ -11,6 +11,9 @@
 #   - Ideally, these would be the only variables that anyone would need to define in their inventoy.
 #
 # ==================================================================================================
+autonomy_user: "ansible_autonomy"
+autonomy_group: "{{ autonomy_user }}"
+
 autonomy_realm_identity_management_system: ""
 autonomy_smart_card_login: no
 autonomy_overwrite_password: no

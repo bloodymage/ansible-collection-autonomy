@@ -42,8 +42,8 @@
   ansible.builtin.file:
     path: "{{ ownca_directory }}/users/{{ item.name }}"
     state: directory
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "{{ item.mode }}"
   loop: "{{ ownca_user_directories }}"
   become: no
@@ -241,8 +241,8 @@
     ownca_privatekey_passphrase: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
     provider: ownca
     backup: yes
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0644"
     state: present
     force: "{{ __user_cert_force_regeneration }}"

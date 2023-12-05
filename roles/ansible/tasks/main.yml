@@ -10,8 +10,8 @@
   ansible.builtin.template:
     src: "ansible.cfg.j2"
     dest: ~/.ansible.cfg
-    owner: pecan
-    group: pecan
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: '0644'
   become: no
 

@@ -37,8 +37,8 @@
   ansible.builtin.file:
     path: '{{ ownca_hosts_directory }}/{{ item.name }}'
     state: directory
-    owner: pecan
-    group: pecan
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "{{ item.mode }}"
   become: no
   loop: "{{ ownca_host_certs_directories }}"
@@ -56,8 +56,8 @@
     path: "{{ ownca_hosts_directory }}/private/{{ autonomy_fqdn }}.key"
     type: "{{ ownca_privatekey_type }}"
     size: 4096
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0640"
     force: no
   become: no
@@ -72,8 +72,8 @@
 - name: "Generate Host CSR."
   community.crypto.openssl_csr:
     path: "{{ ownca_hosts_directory }}/csr/{{ autonomy_fqdn }}.csr"
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0644"
     country_name: "{{ ownca_country_code | default(none) }}"
     state_or_province_name: "{{ autonomy_region | default(none) }}"

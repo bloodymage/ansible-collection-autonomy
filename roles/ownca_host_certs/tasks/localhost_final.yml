@@ -38,8 +38,8 @@
     iter_size: 0
     maciter_size: 0
     mode: '0600'
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     #force: yes
   become: no
   delegate_to: localhost

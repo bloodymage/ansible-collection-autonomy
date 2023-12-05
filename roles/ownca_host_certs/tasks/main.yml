@@ -14,8 +14,8 @@
   ansible.builtin.file:
     path: "{{ ownca_hosts_directory }}/{{ item.name }}"
     state: directory
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "{{ item.mode }}"
   loop: "{{ ownca_host_certs_directories }}"
   become: no
@@ -280,8 +280,8 @@
   ansible.builtin.copy:
     dest: "{{ ownca_hosts_directory }}/certs/{{ autonomy_fqdn }}-chain.crt"
     content: "{{ ''.join(parent_cert_authorities.complete_chain) }}"
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0600"
   become: no
   delegate_to: localhost

@@ -3,26 +3,6 @@
 #
 #
 # ==================================================================================================
-- name: "Include OS-specific variables."
-  include_vars: "{{ lookup('first_found', params) }}"
-  vars:
-    params:
-      files: "{{ __os_variables_files }}"
-      paths:
-        - "vars"
-  become: no
-  delegate_to: localhost
-  run_once: yes
-
-- name: "Install packages."
-  ansible.builtin.package:
-    pkg: "{{ autonomy_ownca_packages }}"
-    state: present
-  become: yes
-  register: result
-  delegate_to: localhost
-  run_once: yes
-
 - name: "Add intermediate Certificate Authorities."
   ansible.builtin.set_fact:
     ownca_certificate_authorities: "{{ ownca_certificate_authorities + [__certificate_authority] }}"
@@ -84,8 +64,8 @@
   ansible.builtin.file:
     path: '{{ ownca_ca_directory }}/{{ item }}'
     state: directory
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: '0700'
   loop:
     - private
@@ -102,8 +82,8 @@
   ansible.builtin.template:
     src: "serial.j2"
     dest: "{{ ownca_ca_directory }}/db/{{ autonomy_org_name }}-{{ item.name }}-ca.crl.srl"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0600"
     force: no
   loop: "{{ ownca_certificate_authorities }}"
@@ -122,8 +102,8 @@
     type: "{{ ownca_privatekey_type }}"
     size: "{{ ownca_privatekey_size }}"
     cipher: "auto"
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0400"
   loop: "{{ ownca_certificate_authorities }}"
   delegate_to: localhost
@@ -165,8 +145,8 @@
           - certificate_hold
           - privilege_withdrawn
           - aa_compromise
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     backup: yes
     state: present
   loop: "{{ ownca_certificate_authorities }}"
@@ -188,8 +168,8 @@
     csr_path: "{{ ownca_ca_directory }}/csr/{{ autonomy_org_name }}-{{ item.name }}-ca.csr"
     ownca_not_after: "{{ ownca_root_not_after }}"
     provider: "{{ item.provider }}"
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0644"
     backup: yes
     state: present
@@ -246,8 +226,8 @@
           - certificate_hold
           - privilege_withdrawn
           - aa_compromise
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     backup: yes
     state: present
   loop: "{{ ownca_certificate_authorities }}"
@@ -274,8 +254,8 @@
     ownca_create_subject_key_identifier: create_if_not_provided
     provider: "{{ item.provider }}"
     backup: yes
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0644"
     force: "{{ __ownca_force_regenerate_intermediate_ca }}"
     state: present
@@ -356,8 +336,8 @@
           - certificate_hold
           - privilege_withdrawn
           - aa_compromise
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     backup: yes
     state: present
   loop: "{{ ownca_certificate_authorities | product(intermediate_cert_info.results) }}"
@@ -387,8 +367,8 @@
     ownca_privatekey_passphrase: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
     provider: "{{ item.provider }}"
     backup: yes
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     force: "{{ __ownca_force_regenerate_issuing_ca }}"
   loop: "{{ ownca_certificate_authorities }}"
   delegate_to: localhost
@@ -447,8 +427,8 @@
   ansible.builtin.copy:
     dest: "{{ ownca_ca_certs_directory }}/{{ autonomy_org_name }}-{{ item.item.name }}-ca-chain.crt"
     content: "{{ ''.join(item.complete_chain) }}"
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0644"
   loop: "{{ parent_cert_authorities.results }}"
   delegate_to: localhost
@@ -460,8 +440,8 @@
   ansible.builtin.copy:
     dest: "{{ ownca_ca_certs_directory }}/{{ autonomy_org_name }}-{{ item.item.name }}-ca-chain.crt"
     content: "{{ ''.join(item.complete_chain) }}"
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0644"
   loop: "{{ root_cert_authorities.results }}"
   delegate_to: localhost

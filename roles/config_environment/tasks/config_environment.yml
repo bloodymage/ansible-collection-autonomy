@@ -134,9 +134,11 @@
 # ==================================================================================================
 - name: "Identify User running ansible."
   ansible.builtin.set_fact:
-    __autonomy_user: "{{ lookup('env','USER') }}"
+    autonomy_user: "{{ lookup('env','USER') }}"
   run_once: true
   delegate_to: localhost
+  when:
+    - autonomy_user == "ansible_autonomy"
 
 #     - name: Check if we are using debug mode
 #       ansible.builtin.set_fact:
@@ -169,4 +171,4 @@
 
 - name: "Set environment configuration complete flag."
   ansible.builtin.set_fact:
-    __autonomy_configuration_complete: yes
+    __autonomy_configuration_complete: true
