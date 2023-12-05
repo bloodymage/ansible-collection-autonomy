@@ -1,25 +1,4 @@
 ---
-# ==================================================================================================
-#
-# Tasks:
-#  
-#
-# ==================================================================================================
-- name: "Include OS-specific variables."
-  include_vars: "{{ lookup('first_found', params) }}"
-  vars:
-    params:
-      files: "{{ __os_variables_files }}"
-      paths:
-        - "vars"
-  become: no
-  tags:
-    - sshca_host_certs
-    - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
-    - install-packages
-
 - name: "Install packages."
   ansible.builtin.package:
     name: "{{ autonomy_sshca_host_certs_packages }}"
@@ -54,7 +33,7 @@
     - sshca_host_certs_debug
     - sshca-host-certs-debug
 
-- name: Find SSH host keys.
+- name: "Find SSH host keys."
   ansible.builtin.find:
     path: "{{ ssh_config_dir }}"
     pattern: "ssh_host_*_key"
@@ -67,7 +46,7 @@
     - sshca_host_certs_debug
     - sshca-host-certs-debug
 
-- name: Create local temporary directory.
+- name: "Create local temporary directory."
   ansible.builtin.tempfile:
     suffix: ansible-ssh-host-signer
     state: directory
@@ -85,8 +64,8 @@
 - name: "Create persistant host certificate directory."
   ansible.builtin.file:
     path: "{{ ownca_directory }}/hosts/ssh"
-    owner: "{{ __autonomy_user }}"
-    group: "{{ __autonomy_user }}"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
     mode: "0755"
     state: directory
   become: false
@@ -98,7 +77,7 @@
     - sshca_host_certs_debug
     - sshca-host-certs-debug
 
-- name: Fetch public keys.
+- name: "Fetch public keys."
   ansible.builtin.fetch:
     src: "{{ item.path }}.pub"
     dest: "{{ __autonomy_temporary_directory.path }}/public_keys/"
@@ -121,7 +100,7 @@
 # FIXME: This still breaks when the certificates don't exist.  Therefore set ignore_errors: true
 #
 # ==================================================================================================
-- name: Fetch existing certificates.
+- name: "Fetch existing certificates."
   ansible.builtin.fetch:
     src: "{{ item.path }}-cert.pub"
     dest: "{{ ownca_directory }}/hosts/ssh/{{ autonomy_fqdn }}/"
@@ -172,7 +151,7 @@
 #  
 #
 # ==================================================================================================
-- name: Find certificates.
+- name: "Find certificates."
   ansible.builtin.find:
     path: "{{ __autonomy_temporary_directory.path }}/public_keys/{{ autonomy_fqdn }}{{ ssh_config_dir }}/"
     pattern: ssh_host_*_key-cert.pub
@@ -194,7 +173,7 @@
 # There has got to be a better way.
 # 
 # ==================================================================================================
-- name: Compare certificates.
+- name: "Compare certificates."
   ansible.builtin.shell:
     cmd: >-
       set -o pipefail &&
@@ -224,7 +203,7 @@
 #  
 #
 # ==================================================================================================
-- name: Copy certificates back to server.
+- name: "Copy certificates back to server."
   ansible.builtin.copy:
     src: "{{ item[0].item.path }}"
     dest: "{{ item[1].path }}-cert.pub"
@@ -246,7 +225,7 @@
     - sshca_host_certs_debug
     - sshca-host-certs-debug
 
-- name: Remove local temporary directory.
+- name: "Remove local temporary directory."
   ansible.builtin.file:
     path: "{{ __autonomy_temporary_directory.path }}"
     state: absent

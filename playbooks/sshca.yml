@@ -6,5 +6,7 @@
       tags:
         - always
     - role: bloodymage.autonomy.sshca
+      vars:
+        __sshca_tasks: "sshca"
       tags:
         - sshca

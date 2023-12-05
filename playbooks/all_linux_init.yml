@@ -28,13 +28,15 @@
     #
     #                                      WARNING
     #
-    # Do not set the sshca_host_cert role to ignore local connections.
+    # Do not set the sshca role to ignore local connections.
     #
     # This will cause the temporary directory to not be created leading to a failure to fetch host
     # public keys and existing certs.
     #
     # ==============================================================================================
-    - role: bloodymage.autonomy.sshca_host_certs
+    - role: bloodymage.autonomy.sshca
+      vars:
+        __sshca_tasks: "hostcerts"
     - role: bloodymage.autonomy.openssh
       # when:
       #   - ansible_connection != "local"

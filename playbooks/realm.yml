@@ -65,7 +65,9 @@
   hosts: samba_schema_master
   roles:
     - role: bloodymage.autonomy.config_ownca_environment
-    - role: bloodymage.autonomy.realm_users
+    - role: bloodymage.autonomy.users
+      vars:
+        __user_tasks: "realm_users"
       tags:
         - realm_users
         - realm-users
@@ -79,8 +81,9 @@
 - name: "Create realm users dotfiles."
   hosts: samba_ownca_user_hosts:workstations:&linux:!mythfrontend:!localhost
   roles:
-    - role: bloodymage.autonomy.user_dotfiles
+    - role: bloodymage.autonomy.users
       vars:
+        __user_tasks: "dotfiles"
         dotfiles_users: "{{ __realm_users }}"
         dotfiles_home: "/home/{{ autonomy_org_unit_name | upper }}"
       tags:
@@ -102,7 +105,9 @@
 - name: "Create realm users ssh certificates."
   hosts: samba_ownca_user_hosts:workstations:&linux:!mythfrontend:!localhost
   roles:
-    - role: bloodymage.autonomy.sshca_user_certs
+    - role: bloodymage.autonomy.sshca
+      vars:
+        __sshca_tasks: "usercerts"
       tags:
         - sshca-user-certs
         - recreate-realm
