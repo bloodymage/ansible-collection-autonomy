@@ -26,7 +26,7 @@ whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 excludesfile = ~/.gitignore # Creates a global git ignore
 
 {% if item.gpg_keys[0].sign_keyid is defined -%}
-  [config]
+  [commit]
   gpgsign = true
 {%- endif %}
 
@@ -76,8 +76,10 @@ untracked = cyan
 branch = magenta
 
 [delta]
-navigate = true    # use n and N to move between diff sections
-light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+{# use n and N to move between diff sections #}
+navigate = true
+{# set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal) #}
+light = false
 line-numbers=true
 
 [diff]
@@ -107,7 +109,7 @@ bS  = show-branch -a
 cl = clone
 
 # Config files
-ec = config --global -e
+ec = config --global --edit
 
 # Git Flow
 fli   = flow init
@@ -166,9 +168,6 @@ f = "!git ls-files | grep -i"
 grep = "!git ls-files | grep -Ii"
 gr = "!git ls-files | grep -Ii"
 
-# List Aliases
-la = "!git config -l | grep alias | cut -c 7-"
-
 # checkout/fetch/merge/push/rebase
 # Checkout Aliases
 co  = checkout
@@ -212,11 +211,11 @@ cyolo3 = !git add --all && git commit --message \"$(curl -s https://whatthecommi
 cyolo4 = !git commit --message \"$(curl -s https://whatthecommit.com/index.txt)\"
 cidk = !git add --all && git commit --message '¯\\_(ツ)_/¯'
 cidk2 = !git add --all && git commit --message '¯\\(°_o)/¯'
+cundo  = reset --soft HEAD~
 save = !git add -A && git commit -m 'SAVEPOINT'
 wip = !git add -u && git commit -m "WIP"
 wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
 
-cundo  = reset --soft "HEAD^"
 cp     = cherry-pick
 undo = reset HEAD~1 --mixed
 amend = commit -a --amend
@@ -248,6 +247,14 @@ rem = remote rename
 
 [push]
 default = matching
+{% if item.gpg_keys[0].sign_keyid is defined -%}
+  gpgsign = True
+{% endif %}
+
+{% if item.gpg_keys[0].sign_keyid is defined -%}
+  [tag]
+  gpgsign = true
+{%- endif %}
 
 [url "git@github.com:"]
 insteadof = github:
