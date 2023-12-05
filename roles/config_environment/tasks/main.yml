@@ -3,4 +3,4 @@
 - name: "Configure the playbook environment."
   include_tasks: "config_environment.yml"
   when:
-    - (not __autonomy_configuration_complete) or (__autonomy_configuration_complete is undefined)
+    - __autonomy_configuration_complete is false
