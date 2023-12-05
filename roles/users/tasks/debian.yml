@@ -95,7 +95,7 @@
     __password_symbols: "nosymbols=true"
     __password_lookup: "{{ __password_store_id }} {{ __password_create }} {{ __password_length }} {{ __password_symbols }} {{ __password_overwrite }}"
     __password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
-    __password_hash: "{{ __password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string ) }}" 
+    __password_hash: "{{ __password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string ) }}"
   loop_control:
     index_var: index
   become: yes
@@ -110,9 +110,9 @@
     name: "{{ item['username'] }}"
     groups: "{{ item['groups'] + [autonomy_user_group_ansible_managed] | default([autonomy_user_group_ansible_managed]) }}"
     state: present
-    shell: "{{ item['shell'] | default('/bin/bash') }}"  # Defaults to /bin/bash
-    system: "{{ item['system'] | default('no') }}"          # Defaults to no
-    create_home: yes                                     # Defaults to yes
+    shell: "{{ item['shell'] | default('/bin/bash') }}"
+    system: "{{ item['system'] | default('no') }}"
+    create_home: true
     comment: "{{ item['name'] | default(none) }}"
     home: "{{ item['unix_home'] | default('/nonexistent') }}"
     move_home: yes
@@ -124,7 +124,7 @@
   when:
     - __users is defined
     - user_password_list.results[index].ansible_facts.password is not defined
-    - item.username != "root"
+    - item.create_user is not defined or item.create_user is true
 
 # ==================================================================================================
 #

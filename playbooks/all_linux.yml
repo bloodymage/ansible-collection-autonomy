@@ -43,7 +43,9 @@
         - autonomy_virtual_host is falsy
       tags:
         - unattended-upgrades
-    - role: bloodymage.autonomy.user_dotfiles
+    - role: bloodymage.autonomy.users
+      vars:
+        __user_tasks: "dotfiles"
       when:
         - ansible_connection != "local"
         - ansible_network_os is not defined

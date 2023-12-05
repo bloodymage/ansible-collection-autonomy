@@ -41,6 +41,8 @@
       tags:
         - hostname
     - role: bloodymage.autonomy.users
+      vars:
+        __user_tasks: "sysusers"
       when:
         - autonomy_users is defined
         - ansible_connection != "local"

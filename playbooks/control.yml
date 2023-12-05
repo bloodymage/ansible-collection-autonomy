@@ -22,10 +22,11 @@
       tags:
         - password_store
         - password-store
-    - role: bloodymage.autonomy.user_password_store
+    - role: bloodymage.autonomy.users
       vars:
         user_password_store_users:
           - username: "{{ autonomy_user }}"
+        __user_tasks: "passwordstore"
       tags:
         - user-password-store
         - user_password_store
