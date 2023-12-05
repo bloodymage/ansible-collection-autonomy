@@ -2,10 +2,6 @@
 
 [![Ansile-Lint](https://github.com/bloodymage/ansible-collection-autonomy/workflows/Ansible%20Lint/badge.svg?event=push)](https://github.com/bloodymage/ansible-collection-autonomy/actions?query=workflow%3A%22Ansible+Lint%22)
 
-# Help Wanted
-
-Looking for help.  Let me know if you are interested.
-
 - [Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -27,7 +23,7 @@ Initial services are:
 7. Cloud Storage (Nextcloud)
 8. File server (Samba / NFS)
 
-For access to these services, a focus on centralized user management with a goal of single sign on across all services.  Eventually I will add smart card capabilities to minimize password requirements. 
+For access to these services, a focus on centralized user management with a goal of single sign on across all services.  Eventually I will add smart card capabilities to minimize password requirements.
 
 For single signon, I use native SSO capabilities where possible, keycloak Identity Provider native SSO doesn't work.
 
@@ -38,9 +34,15 @@ There are three reasons I had with creating this with this project.
 
 So far, each server is configured without using docker containers or any other group packages, for example: dovecot and postfix vs iRedMail.  I chose this route to learn as much as possible about each service and it's requirements.
 
-Some smaller goals that I have for this project is minimizing the variables I have to define in my inventory.  For each role, having sensible defaults which can be modified at runtime based on other configuration settings.  For example if you are using smart cards, enable smart card required settings.  These basic options can be set via inventories.  In addition, I have set it up to simplify password management for various services by using ansible's passwordstore lookup to generate and save any passwords necessary.
+Some smaller goals that I have for this project is minimizing the variables I have to define in my
+inventory.  For each role, having sensible defaults which can be modified at runtime based on other
+configuration settings.  For example if you are using smart cards, enable smart card required
+settings.  These basic options can be set via inventories.  In addition, I have set it up to
+simplify password management for various services by using ansible's passwordstore lookup to
+generate and save any passwords necessary.
 
-Another overall goal, is minimizing impact to the complete system if one piece fails.  This is why Samba uses Bind9 as it's DNS server rather than it's own internal DNS server.
+Another overall goal, is minimizing impact to the complete system if one piece fails.  This is why
+Samba uses Bind9 as it's DNS server rather than it's own internal DNS server.
 
 ## Installation
 ### Ansible Galaxy
@@ -63,12 +65,9 @@ Create a GPG key for the user that will be using ansible and the collection play
 
 ### Create your [inventory](docs/INVENTORY.md).
 
-Create your inventory.  Set variables according to [Variables](#Variables).  Again, most variables 
-are designed to be optional.  For the network zone it expects a naming scheme along the lines of: 
-"zone.example.com"
+Create your inventory.  Set variables according to [Variables](#Variables).  Again, most variables are designed to be optional.  For the network zone it expects a naming scheme along the lines of: "zone.example.com"
 
-For example, your internal network will be internal.example.com, and a dmz zone would be 
-dmz.example.com, and each host will be named host.internal.example.com.  See [docs/INVENTORY.md](docs/INVENTORY.md) 
+For example, your internal network will be internal.example.com, and a dmz zone would be dmz.example.com, and each host will be named host.internal.example.com.  See [docs/INVENTORY.md](docs/INVENTORY.md) 
 for more information.
 
 First run:
@@ -91,8 +90,7 @@ ansible-playbook bloodymage/autonomy/playbooks/site.yml
 
 This will create your site.
 
-Any host that you wish to be accessible from the outside world, will use letsencrypt for certs, 
-otherwise it will use internal certificate authority certs.
+Any host that you wish to be accessible from the outside world, will use letsencrypt for certs, otherwise it will use internal certificate authority certs.
 
 ### Roles ([Full list](docs/ROLES.md))
 
@@ -345,5 +343,5 @@ The Hearthminion ansible collection expands on this collection adding in new fea
 [MIT](LICENSE.md)
 
 ## Author Information
-G Derber 
+G Derber
 gd.github@bloodymage.org
