@@ -5,6 +5,26 @@
 #
 #
 # ==================================================================================================
+- name: "Include OS-specific variables."
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: no
+  delegate_to: localhost
+  run_once: yes
+
+- name: "Install packages."
+  ansible.builtin.package:
+    pkg: "{{ autonomy_ownca_packages }}"
+    state: present
+  become: yes
+  register: result
+  delegate_to: localhost
+  run_once: yes
+
 - name: "Create OwnCA: Root CA."
   include_tasks: "rootca.yml"
   when:
