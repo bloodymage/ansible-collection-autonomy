@@ -20,8 +20,7 @@
         - autonomy_virtual_host is falsy
         - ansible_connection != "local"
       tags:
-        - maintenance_upgrade
-        - maintenance-upgrade
+        - upgrade
 
 - import_playbook: "all_linux_init.yml"
 
@@ -72,13 +71,13 @@
 - name: "Install certificates on all hosts."
   hosts: all:!localhost:!public_zone
   roles:
-    - role: bloodymage.autonomy.ownca_host_certs
+    - role: bloodymage.autonomy.ownca
+      vars:
+        __ownca_tasks: "hostcerts"
       tags:
         - regenerate-ownca
         - ownca
-        - ownca_host_certs
         - ownca-host-certs
-        - ownca_host_certificates
         - ownca-host-certificates
     # - role: bloodymage.autonomy.dodca
     #   when:

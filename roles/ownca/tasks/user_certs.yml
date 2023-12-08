@@ -22,22 +22,6 @@
 #   ...
 #
 # ==================================================================================================
-- name: "Include OS-specific variables."
-  include_vars: "{{ lookup('first_found', params) }}"
-  vars:
-    params:
-      files: "{{ __os_variables_files }}"
-      paths:
-        - "vars"
-  become: no
-
-- name: "Install packages"
-  ansible.builtin.package:
-    pkg: "{{ autonomy_packages }}"
-    state: present
-  become: yes
-  register: result
-
 - name: "Create SSL Directories."
   ansible.builtin.file:
     path: "{{ ownca_directory }}/users/{{ item.name }}"
@@ -71,11 +55,11 @@
   ansible.builtin.file:
     path: "{{ __user_pki_dir }}/{{ item[1].name }}"
     state: directory
-    owner: "root"
-    group: "root"
+    owner: "{{ item[0].username }}"
+    group: "{{ item[0].username }}_g"
     #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
     #mode: "{{ item[1].mode }}"
-    mode: "0770"
+    mode: "0750"
   become: yes
   loop: "{{ __realm_users | product(ownca_user_pki_dirs) | list }}"
   vars:
@@ -99,10 +83,10 @@
     size: "{{ __size }}"
     cipher: auto
     passphrase: "{{ lookup('community.general.passwordstore', __password_store_id) }}"
-    owner: "root"
-    group: "root"
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}_g"
     #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
-    mode: "0660"
+    mode: "0640"
     state: present
     force: no
     backup: yes
@@ -153,10 +137,10 @@
           - privilege_withdrawn
           - aa_compromise
     path: "{{ __user_csr_dir }}/{{ __username }}_{{ item[1].name }}.csr"
-    owner: "root"
-    group: "root"
+    owner: "{{ item[0].username }}"
+    group: "{{ item[0].username }}_g"
     #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
-    mode: "0660"
+    mode: "0640"
     state: present
     backup: yes
     force: "{{ __user_cert_force_regeneration }}"
@@ -288,10 +272,10 @@
   ansible.builtin.copy:
     src: "{{ ownca_directory }}/users/certs/{{ __username }}_{{ item[1].name }}.crt"
     dest: "{{ __user_cert_dir }}/{{ __username }}_{{ item[1].name }}.crt"
-    owner: "root"
-    group: "root"
+    owner: "{{ item[0].username }}"
+    group: "{{ item[0].username }}_g"
     #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
-    mode: "0660"
+    mode: "0640"
   become: yes
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
   vars:
@@ -316,10 +300,10 @@
       - "/usr/local/share/ca-certificates/{{ autonomy_org_name }}-{{ autonomy_org_unit_name }}-ca.crt"
       - "/usr/local/share/ca-certificates/{{ autonomy_org_name }}-root-ca.crt"
     state: present
-    owner: "root"
-    group: "root"
+    owner: "{{ item[0].username }}"
+    group: "{{ item[0].username }}_g"
     #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
-    mode: "0660"
+    mode: "0640"
     backup: yes
     force: no
   become: yes

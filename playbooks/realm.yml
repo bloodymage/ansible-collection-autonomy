@@ -94,12 +94,13 @@
 - name: "Configure realm users certificates."
   hosts: samba_ownca_user_hosts:!localhost
   roles:
-    - role: bloodymage.autonomy.ownca_user_certs
+    - role: bloodymage.autonomy.ownca
+      vars:
+        __ownca_tasks: "usercerts"
       tags:
-        - ownca_user_certs
+        - ownca
         - ownca-user-certs
-        - ownca_user_certs_debug
-        - ownca-user-certs-debug
+        - user-certs
         - recreate-realm
 
 - name: "Create realm users ssh certificates."
@@ -110,6 +111,8 @@
         __sshca_tasks: "usercerts"
       tags:
         - sshca-user-certs
+        - user-certs
+        - sshca
         - recreate-realm
 
 - hosts: samba_schema_master

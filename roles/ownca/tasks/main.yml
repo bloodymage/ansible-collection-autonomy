@@ -40,6 +40,23 @@
 #   tags:
 #     - ownca
 
+- name: "Create Host Certificates."
+  include_tasks: "host_certs.yml"
+  when:
+    - __ownca_tasks == "hostcerts"
+  tags:
+    - ownca
+    - ownca-host-certs
+
+
+- name: "Create User Certificates."
+  include_tasks: "user_certs.yml"
+  when:
+    - __ownca_tasks == "usercerts"
+  tags:
+    - ownca
+    - ownca-user-certs
+
 - name: "Create OwnCA: CRLs."
   include_tasks: "crls.yml"
   when:
