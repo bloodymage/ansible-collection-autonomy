@@ -53,7 +53,9 @@
     #pkinit_principal_in_certificate = yes
     #pkinit_win2k = no
     #pkinit_win2k_require_binding = yes
-    pkinit_kdc_hostname = dc.{{ autonomy_domain }}
+{% for server in groups['samba_domain_controllers'] %}
+    pkinit_kdc_hostname = {{ server }}
+{% endfor %}
     canonicalize = True
     #default_ccache_name = KEYRING:persistent:%{uid}
   {% endif %}

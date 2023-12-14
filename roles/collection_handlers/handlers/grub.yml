@@ -1,0 +1,45 @@
+---
+# - name: "Create temporary directory for grub image."
+#   ansible.builtin.tempfile:
+#     state: directory
+#     suffix: grub
+#   register: __autonomy_temporary_directory
+#   become: true
+
+# - name: "Create memdisk.tar file."
+#   ansible.builtin.archive:
+#     path: "/boot/grub/"
+#     dest: "{{ __autonomy_temporary_directory }}/memdisk.tar"
+#     format: "tar"
+#   become: true
+
+# - name: "Create Grub Image."
+#   ansible.builtin.shell: >-
+#     	grub-mkimage
+#       --verbose
+#       --directory "/usr/lib/grub/{{ autonomy_grub_platform }}"
+#       --output "/boot/efi/EFI/{{ autonomy_grub_efi_entry }}/grubx64.efi"
+#       --format "{{ autonomy_grub_platform }}"
+#       --compression 'auto'
+#       --memdisk "{{ __autonomy_temporary_directory}}/memdisk.tar"
+#       --prefix '(memdisk)/grub'
+#       {{ autonomy_grub_modules }}
+#   become: true
+
+# - name: "Sign Grub Image."
+#   ansible.builtin.shell: >-
+#     sbsign --key ${EFI_KEY_LOC}/${KEY}.key \
+#     --cert ${EFI_KEY_LOC}/${KEY}.crt \
+#     --output /boot/efi/EFI/{{ autonomy_grub_efi_entry }}/grubx64.efi
+#     /boot/efi/EFI/{{ autonomy_grub_efi_entry }}/grubx64.efi
+#   become: true
+
+# - name: "Verify Grub Signature."
+#   ansible.builtin.shell: >-
+#     sbverify --cert ${EFI_KEY_LOC}/${KEY}.crt /boot/efi/EFI/{{ autonomy_grub_efi_entry }}/grubx64.efi
+#   become: true
+
+# - name: "Gen Locales."
+#   ansible.builtin.command:
+#     cmd: "locale-gen --purge --no-archive"
+#   become: true

@@ -1,5 +1,5 @@
 ---
-# tasks file for etc_crontab
+# tasks file for grub
 - name: Include OS-specific variables.
   include_vars: "{{ lookup('first_found', params) }}"
   vars:
@@ -13,14 +13,4 @@
   ansible.builtin.package:
     name: "{{ autonomy_packages }}"
     state: present
-  become: yes
-
-- name: "Install Configuration files"
-  ansible.builtin.template:
-    src: "etc/crontab.j2"
-    dest: "/etc/crontab"
-    owner: root
-    group: root
-    mode: "0644"
-    backup: yes
   become: yes

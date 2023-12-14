@@ -15,6 +15,14 @@
         - autonomy_fstab is truthy
       tags:
         - fstab
+    - role: bloodymage.autonomy.grub
+      when:
+        - ansible_connection != "local"
+        - autonomy_virtual_host is falsy
+        - ansible_network_os is not defined
+        - ansible_architecture == "x86_64"
+      tags:
+        - grub
     - role: bloodymage.autonomy.nftables
       when:
         - ansible_connection != "local"

@@ -1,0 +1,3 @@
+---
+autonomy_grub_packages:
+  - grub-x86_efi

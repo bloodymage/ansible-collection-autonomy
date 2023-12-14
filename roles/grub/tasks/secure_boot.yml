@@ -1,0 +1,134 @@
+---
+- name: "Create Secure Boot Key Directory."
+  ansible.builtin.file:
+    path: "{{ item.name }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  become: true
+  loop: "{{ autonomy_grub_secureboot_directories }}"
+
+- name: "Backup System Keys."
+  ansible.builtin.command:
+    cmd: "efi-readvar -v {{ item }} -o {{ item }}.orig.esl"
+    chdir: "{{ autonomy_grub_secureboot_key_backup_dir }}"
+    creates: "{{ item }}.orig.esl"
+  become: true
+  loop: "{{ autonomy_grub_secureboot_keys }}"
+
+# ==================================================================================================
+#
+# All documentation found so far seems to indicate that the keys need to be RSA 2048 size.
+# I'd prefer to make this ed25519, or at least a 4096 RSA key.  Debian wiki checked on 2023-12-11
+# States:
+#
+# "NOTE It seems (2022-06-21) that shim won't support adding a 4096 RSA key to the ?MokList (it
+# might freezes when loading and verifying the grubx64.efi binary), so make sure you use a 2048 key
+# for now."
+#
+# https://wiki.debian.org/SecureBoot#Generating_a_new_key
+#
+# This should rarely (almost never regenerate).  Create backups in case something goes wrong and we
+# do regenerate accidentally.  Also, set force to false.  NOTE: Those are default settings, I wanted
+# to be explicit about it.
+#
+# ==================================================================================================
+- name: "Generate Machine Owner Keys."
+  community.crypto.openssl_privatekey:
+    path: "{{ item.path }}.key"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+    size: 2048
+    type: "RSA"
+    regenerate: "full_idempotence"
+    state: "present"
+    backup: true
+    force: false
+  become: true
+  loop: "{{ autonomy_grub_secureboot_machine_owner_keys }}"
+
+- name: "Create CSRs."
+  community.crypto.openssl_csr:
+    path: "{{ item.path }}.csr"
+    privatekey_path: "{{ item.path }}.key"
+    common_name: "{{ item.common_name }}"
+    country_name: "{{ item.country_name | default(omit) }}"
+    email_address: "{{ item.email_address | default(omit) }}"
+    organization_name: "{{ item.organization_name | default(autonomy_org_name | title ) }}"
+    organizational_unit_name: "{{ item.org_unit_name | default(omit) | title }}"
+    state_or_province_name: "{{ item.region_name | default(omit) }}"
+    #key_usage: "{{ item.keyusage | default(omit) }}"
+    #key_usage_critical: "{{ item.keyusage_critical | default('no') }}"
+    extended_key_usage: "{{ item.extended_key_usage | default(omit) }}"
+    extended_key_usage_critical: "{{ item.extended_key_usage_critical | default(false) }}"
+    basic_constraints: "{{ item.basic_constraints | default(omit) }}"
+    basic_constraints_critical: "{{ item.basic_constraints_critical | default('no') }}"
+    create_subject_key_identifier: yes
+    owner: "root"
+    group: "root"
+    mode: "0640"
+    state: "present"
+    backup: true
+    force: false
+  become: true
+  loop: "{{ autonomy_grub_secureboot_machine_owner_keys }}"
+
+- name: "Create Self Signed Platform Key Certificate."
+  community.crypto.x509_certificate:
+    path: "{{ item.path }}.crt"
+    csr_path: "{{ item.path }}.csr"
+    platform: "selfsigned"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+    state: "present"
+    backup: true
+    force: false
+  become: true
+  loop: "{{ autonomy_grub_secureboot_machine_owner_keys }}"
+  when:
+    - item.path == "{{ autonomy_grub_secureboot_key_pk_dir }}/pk"
+
+- name: "Create Certificates."
+  community.crypto.x509_certificate:
+    path: "{{ item.path }}.crt"
+    csr_path: "{{ item.path }}.csr"
+    platform: "ownca"
+    owner: "root"
+    group: "root"
+    mode: "0640"
+    state: "present"
+    backup: true
+    force: false
+  become: true
+  loop: "{{ autonomy_grub_secureboot_machine_owner_keys }}"
+  when:
+    - item.path != "{{ autonomy_grub_secureboot_key_pk_dir }}/pk"
+
+- name: "Convert CA Certificates to DER format."
+  ansible.builtin.command:
+    cmd: >
+      openssl x509
+      -in {{ item.path }}.crt -inform PEM
+      -out {{ item.path }}.der -outform DER
+    creates: "{{ item.path }}.der"
+  become: true
+  loop: "{{ autonomy_grub_secureboot_machine_owner_keys }}"
+
+# ==================================================================================================
+#
+# We use the inventory_hostname as the seed for to_uuid to ensure consistency across multiple runs
+# with the generated UUID.
+#
+# ==================================================================================================
+- name: "Convert Cert to EFI Signature List."
+  ansible.builtin.command:
+    cmd: >
+      cert-to-efi-sig-list -g {{ inventory_hostname | to_uuid }}
+      {{ item.path }}.crt
+      {{ item.path }}.esl
+    creates: "{{ item.path }}.esl"
+  become: true
+  loop: "{{ autonomy_grub_secureboot_machine_owner_keys }}"
