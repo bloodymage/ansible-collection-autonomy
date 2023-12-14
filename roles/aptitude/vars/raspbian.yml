@@ -2,3 +2,11 @@
 deb_repo_url: "http://archive.raspbian.org/raspbian/"
 #deb_src_repo_url: "http://archive.raspbian.org/raspbian/"
 deb_repos: "main contrib firmware non-free rpi"
+debian_target_release: "{{ __debian_stable_release }}"
+
+# ==================================================================================================
+#
+# Do NOT use these variables.
+#
+# ==================================================================================================
+__debian_stable_release: bookworm

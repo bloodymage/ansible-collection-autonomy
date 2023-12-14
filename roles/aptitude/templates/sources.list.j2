@@ -1,17 +1,24 @@
 # {{ ansible_managed }}
 
 deb {{ deb_repo_url }} {{ system_upgrade_distribution_release }} {{ deb_repos }}
-
 {% if autonomy_use_source_code_repos -%}
   deb-src {{ deb_repo_url }} {{ system_upgrade_distribution_release }} {{ deb_repos }}
 {% endif %}
 
-{% if debian_security_upgrades_repo_url is defined %}
+{% if debian_target_release == __debian_stable_release %}
+{% if debian_security_upgrades_repo_url is defined -%}
   deb {{ debian_security_updates_repo_url }} {{ system_upgrade_distribution_release }}/updates {{ deb_repos }}
 {% if autonomy_use_source_code_repos -%}
   deb-src {{ debian_security_updates_repo_url }} {{ system_upgrade_distribution_release }}/updates {{ deb_repos }}
 {% endif %}
 {% endif %}
+deb {{ debian_repo_url }} {{ debian_target_release }}-backports {{ deb_repos }}
+{% if autonomy_use_source_code_repos -%}
+  deb-src {{ debian_security_updates_repo_url }} {{ system_upgrade_distribution_release }}/updates {{ deb_repos }}
+{% endif %}
+{% endif %}
+
+
 {% if ubuntu_updates_repo_url is defined %}
   deb {{ ubuntu_updates_repo_url }} {{ system_upgrade_distribution_release }}-updates {{ deb_repos }}
 {% if autonomy_use_source_code_repos -%}
