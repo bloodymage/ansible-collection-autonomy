@@ -73,9 +73,9 @@
   excludesfile = ~/.gitignore # Creates a global git ignore
 
 [delta]
-navigate = true
-light = false
-line-numbers=true
+  navigate = true
+  light = false
+  line-numbers=true
 
 [diff]
   tool = vimdiff
@@ -134,6 +134,9 @@ bmv = branch -m
 bM  = branch -M
 bs  = show-branch
 bS  = show-branch -a
+bclean = "!f() { git branch --merged ${1-master} | grep -v " ${1-master}$" | xargs -r git branch -d; }; f"
+bdone = "!f() { git checkout ${1-master} && git up && git bclean ${1-master}; }; f"
+
 
 # Checkout Aliases
 co  = checkout
@@ -162,13 +165,11 @@ cidk      = !git add --all && git commit --message '¯\\_(ツ)_/¯' && git push 
 cidk2     = !git add --all && git commit --message '¯\\(°_o)/¯'
 save      = !git add --all && git commit --message "SAVEPOINT"
 wip       = !git add --update && git commit --message "WIP"
-wipe      = !git add --all && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+wipe      = !git add --all && git commit -qm 'WIPE SAVEPOINT' && git reset --hard HEAD~1
 
 cundo = reset HEAD~
-bclean = "!f() { git branch --merged ${1-master} | grep -v " ${1-master}$" | xargs -r git branch -d; }; f"
-bdone = "!f() { git checkout ${1-master} && git up && git bclean ${1-master}; }; f"
 untrack = rm --cache --
-o = !git push origin --all && git push --prune
+
 
 # Config files
 ec = config --global --edit
@@ -281,6 +282,7 @@ m   = merge
 mom = merge origin/{{ autonomy_user_gitconfig_default_branch }}
 
 # push
+o = !git push origin --all && git push --prune
 p   = push
 pa  = push --all
 pt  = push --tags
