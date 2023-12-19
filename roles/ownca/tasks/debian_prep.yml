@@ -1,7 +1,7 @@
 ---
 - name: "Install packages."
   ansible.builtin.apt:
-    name: "{{ autonomy_packages }}"
+    name: "{{ autonomy_ownca_packages }}"
     state: present
   become: yes
   when:
