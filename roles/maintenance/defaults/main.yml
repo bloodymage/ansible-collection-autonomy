@@ -1,0 +1,15 @@
+---
+# defaults file for dns_forwardzones
+autonomy_maintenance_dns_packages:
+  - python3-dnspython
+
+system_upgrade_deb_src: false
+system_upgrade_distribution_release: "{{ ansible_distribution_release }}"
+system_upgrade_raspberrypi_distribution_release: "{{ ansible_distribution_release }}"
+
+autonomy_bind_ipv4_address: "{{ ansible_host }}"
+autonomy_bind_ipv4_ptr_record: "{{ autonomy_bind_ipv4_address.split('.')[3] }}.{{ autonomy_bind_ipv4_address.split('.')[2] }}.{{ autonomy_bind_ipv4_address.split('.')[1] }}.{{ autonomy_bind_ipv4_address.split('.')[0] }}.in-addr.arpa."
+
+
+autonomy_dns_cname_record: ""
+autonomy_domain_level_records: []

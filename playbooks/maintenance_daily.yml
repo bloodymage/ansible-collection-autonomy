@@ -1,0 +1,9 @@
+---
+# ==================================================================================================
+#
+# This playbook is a small selection of tasks for daily execution.  Ensuring systems are up to date.
+# DNS is up to date with any possible changes.  User's dotfiles are updated.
+#
+# NOTE: This should only be run after everything is setup (site.yml)
+#
+# ==================================================================================================

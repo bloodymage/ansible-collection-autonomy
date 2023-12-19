@@ -15,7 +15,9 @@
 - name: "Upgrade All hosts."
   hosts: all:!localhost:!wifi_access_points:!printers:!public_zone:!virtual_hosts
   roles:
-    - role: bloodymage.maintenance.upgrade
+    - role: bloodymage.autonomy.maintenance
+      vars:
+        __maintenance_tasks: "upgrade"
       when:
         - autonomy_virtual_host is falsy
         - ansible_connection != "local"

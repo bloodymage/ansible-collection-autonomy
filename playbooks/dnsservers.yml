@@ -18,6 +18,8 @@
   hosts: all:!localhost
   ignore_unreachable: yes
   roles:
-    - role: bloodymage.maintenance.dns
+    - role: bloodymage.autonomy.maintenance
+      vars:
+        __maintenance_tasks: "dns"
       tags:
         - dns
