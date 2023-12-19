@@ -24,3 +24,4 @@
     - restart tls
   when:
     - ownca_privatekey_type in ['DSA','RSA']
+    - ansible_connection != "local"
