@@ -62,6 +62,7 @@
     - ansible_network_os is not defined
     - autonomy_virtual_host is falsy
     - inventory_hostname in groups['linux'] | default([])
+    - ansible_connection != "local"
 
 - name: "Update nextcloud certificates."
   include_tasks: nextcloud_certificates.yml
