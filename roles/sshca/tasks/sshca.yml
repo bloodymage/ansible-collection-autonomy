@@ -94,7 +94,11 @@
     passphrase: "{{ sshca_host_key_password }}"
     owner: "{{ autonomy_sshca_user }}"
     group: "{{ autonomy_sshca_group }}"
-  become: no
+    mode: "0600"
+    state: "present"
+    regenerate: "full_idempotence"
+    force: false
+  become: false
 
 - name: "Generate User CA keys."
   community.crypto.openssh_keypair:
@@ -104,3 +108,8 @@
     passphrase: "{{ sshca_user_key_password }}"
     owner: "{{ autonomy_sshca_user }}"
     group: "{{ autonomy_sshca_group }}"
+    state: "present"
+    regenerate: "full_idempotence"
+    mode: "0600"
+    force: false
+  become: false

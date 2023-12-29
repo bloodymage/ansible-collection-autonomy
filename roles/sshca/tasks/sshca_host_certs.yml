@@ -11,103 +11,26 @@
     - sshca-host-certs-debug
     - install-packages
 
-# ==================================================================================================
-#
-# Tasks:
-#
-#
-# ==================================================================================================
-- name: "Ensure we have a password for the Host CA Key"
-  ansible.builtin.set_fact:
-    sshca_host_key_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
-  vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_root_domain }}/sshca/sshca_host_key_password"
-    __password_lookup: "{{ __password_store_id }}"
-  become: no
-  no_log: true
-  when:
-    - sshca_host_key_password == "password"
-  tags:
-    - sshca_host_certs
-    - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
-
-- name: "Find SSH host keys."
-  ansible.builtin.find:
-    path: "{{ ssh_config_dir }}"
-    pattern: "ssh_host_*_key"
-  register: __autonomy_ssh_private_keys
-  failed_when: "\"matched\" not in __autonomy_ssh_private_keys or __autonomy_ssh_private_keys.matched == 0"
-  become: yes
-  tags:
-    - sshca_host_certs
-    - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
-
-- name: "Create local temporary directory."
-  ansible.builtin.tempfile:
-    suffix: ansible-ssh-host-signer
-    state: directory
-  changed_when: false
-  register: __autonomy_temporary_directory
-  delegate_to: localhost
-  become: false
-  run_once: true
-  tags:
-    - sshca_host_certs
-    - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
-
 - name: "Create persistant host certificate directory."
   ansible.builtin.file:
-    path: "{{ ownca_directory }}/hosts/ssh"
+    path: "{{ ownca_directory }}/hosts/ssh/{{ inventory_hostname }}"
     owner: "{{ autonomy_user }}"
     group: "{{ autonomy_group }}"
     mode: "0755"
     state: directory
   become: false
   delegate_to: localhost
-  run_once: true
   tags:
-    - sshca_host_certs
     - sshca-host-certs
-    - sshca_host_certs_debug
     - sshca-host-certs-debug
 
 - name: "Fetch public keys."
   ansible.builtin.fetch:
-    src: "{{ item.path }}.pub"
-    dest: "{{ __autonomy_temporary_directory.path }}/public_keys/"
-  loop: "{{ __autonomy_ssh_private_keys.files }}"
+    src: "{{ ssh_config_dir }}/ssh_host_{{ item }}_key.pub"
+    dest: "{{ ownca_directory }}/hosts/ssh/{{ inventory_hostname }}/ssh_host_{{ item }}_key.pub"
+    flat: true
+  loop: "{{ autonomy_sshca_host_key_types }}"
   changed_when: false
-  tags:
-    - sshca_host_certs
-    - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
-
-# ==================================================================================================
-#
-#
-#
-# Notes: Failed on missing is set to false because the certificate may not actually exist yet.  If
-#        the certificate doesn't exist, we don't want to fail the host and end the play for it.  We
-#        want to finish the play, so that the certificate will be created.
-#
-# FIXME: This still breaks when the certificates don't exist.  Therefore set ignore_errors: true
-#
-# ==================================================================================================
-- name: "Fetch existing certificates."
-  ansible.builtin.fetch:
-    src: "{{ item.path }}-cert.pub"
-    dest: "{{ ownca_directory }}/hosts/ssh/{{ autonomy_fqdn }}/"
-    failed_on_missing: false
-    flat: yes
-  loop: "{{ __autonomy_ssh_private_keys.files }}"
-  ignore_errors: true
   tags:
     - sshca_host_certs
     - sshca-host-certs
@@ -119,25 +42,31 @@
 # Sign SSH Keys
 #
 # TODO: Add serial number
-# TODO: Add expiration
-# DONE: Use expect module for password from ansible vault
-#       https://docs.ansible.com/ansible/latest/modules/expect_module.html
+#
+# Set 'use_agent' to true, to enable use of passwords for signing keys.
 #
 # ==================================================================================================
 - name: "Sign SSH Public Keys."
-  ansible.builtin.expect:
-    command: >-
-      ssh-keygen -s "{{ sshca_host_signer_key }}"
-             -I "{{ sshca_host_signer_id }}"
-             -h -n "{{ sshca_host_signer_hostnames }}"
-             "{{ __autonomy_temporary_directory.path }}/public_keys/{{ autonomy_fqdn }}{{ item.path | quote }}.pub"
-    responses:
-      (?i)passphrase: "{{ sshca_host_key_password }}"
-    echo: no
+  community.crypto.openssh_cert:
+    signing_key: "{{ sshca_host_signer_key }}"
+    public_key: "{{ ownca_directory }}/hosts/ssh/{{ autonomy_fqdn }}/ssh_host_{{ item }}_key.pub"
+    path: "{{ ownca_directory }}/hosts/ssh/{{ autonomy_fqdn }}/ssh_host_{{ item }}_key-cert.pub"
+    identifier: "{{ sshca_host_signer_id }}"
+    type: "host"
+    principals: "{{ sshca_host_signer_hostnames }}"
+    #serial_number:
+    valid_at: "+2w"
+    valid_from: "+0s"
+    valid_to: "+52w"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
+    mode: "0644"
+    ignore_timestamps: true
+    regenerate: "full_idempotence"
+    state: "present"
+    use_agent: "true"
   become: no
-  #no_log: yes
-  loop: "{{ __autonomy_ssh_private_keys.files }}"
-  #changed_when: false
+  loop: "{{ autonomy_sshca_host_key_types }}"
   delegate_to: localhost
   tags:
     - sshca_host_certs
@@ -145,94 +74,16 @@
     - sshca_host_certs_debug
     - sshca-host-certs-debug
 
-# ==================================================================================================
-#
-# Tasks:
-#  
-#
-# ==================================================================================================
-- name: "Find certificates."
-  ansible.builtin.find:
-    path: "{{ __autonomy_temporary_directory.path }}/public_keys/{{ autonomy_fqdn }}{{ ssh_config_dir }}/"
-    pattern: ssh_host_*_key-cert.pub
-  register: __autonomy_certificates
-  delegate_to: localhost
-  tags:
-    - sshca_host_certs
-    - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
-
-# ==================================================================================================
-#
-# Compare certificates
-#
-# This fails unless the 'shell' module is used.  In addition, if the file path variables are quoted,
-# diff return code will always be non-zero because the files won't be found.
-#
-# There has got to be a better way.
-# 
-# ==================================================================================================
-- name: "Compare certificates."
-  ansible.builtin.shell:
-    cmd: >-
-      set -o pipefail &&
-      diff <(ssh-keygen -L -f {{ item.path }} |
-      tail -n +2) <(ssh-keygen -L -f {{ __existing_cert_path }} |
-      tail -n +2)
-  args:
-    executable: "/bin/bash"
-  vars:
-    __existing_cert_dir: "{{ ownca_directory }}/hosts/ssh/{{ autonomy_fqdn }}"
-    __existing_cert: "{{ item.path | basename | quote }}"
-    __existing_cert_path: "{{ __existing_cert_dir }}/{{ __existing_cert }}"
-  loop: "{{ __autonomy_certificates.files }}"
-  changed_when: __autonomy_certificate_comparison.rc != 0
-  failed_when: false
-  register: __autonomy_certificate_comparison
-  delegate_to: localhost
-  tags:
-    - sshca_host_certs
-    - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
-
-# ==================================================================================================
-#
-# Tasks:
-#  
-#
-# ==================================================================================================
-- name: "Copy certificates back to server."
+- name: "Copy certificates to server."
   ansible.builtin.copy:
-    src: "{{ item[0].item.path }}"
-    dest: "{{ item[1].path }}-cert.pub"
+    src: "{{ ownca_directory }}/hosts/ssh/{{ autonomy_fqdn }}/ssh_host_{{ item }}_key-cert.pub"
+    dest: "{{ ssh_config_dir }}/ssh_host_{{ item }}_key-cert.pub"
     owner: "root"
     group: "root"
     mode: "0644"
-  loop: "{{ __autonomy_certificate_comparison.results | product(__autonomy_ssh_private_keys.files) | list }}"
+  loop: "{{ autonomy_sshca_host_key_types }}"
   notify: restart ssh
   become: yes
-  vars:
-    cert1: "{{ item[0].item.path | basename | quote }}"
-    cert2: "{{ item[1].path | basename | quote }}-cert.pub"
-  when:
-    - item[0].rc != 0
-    - cert1 == cert2
-  tags:
-    - sshca_host_certs
-    - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
-
-- name: "Remove local temporary directory."
-  ansible.builtin.file:
-    path: "{{ __autonomy_temporary_directory.path }}"
-    state: absent
-  become: yes
-  changed_when: false
-  delegate_to: localhost
-  run_once: true
   tags:
     - sshca_host_certs
     - sshca-host-certs

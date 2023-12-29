@@ -17,6 +17,8 @@ sshca_host_signer_hostnames: "{{ ansible_fqdn }},{{ ansible_hostname }}"
 sshca_host_signer_id: "{{ sshca_domain }}"
 sshca_host_signer_key: "{{ sshca_key_directory }}/{{ sshca_host_keyfile }}"
 
+autonomy_sshca_host_key_types:
+  - "{{ sshca_host_key_type }}"
 
 # User CA
 sshca_user_key_comment: "{{ sshca_domain }} User CA"
@@ -24,6 +26,10 @@ sshca_user_keyfile: "{{ sshca_domain }}_user_key"
 sshca_user_signer_hostnames: "{{ ansible_fqdn }},{{ ansible_hostname }}"
 sshca_user_signer_id: "{{ sshca_domain }}"
 sshca_user_signer_key: "{{ sshca_key_directory }}/{{ sshca_user_keyfile }}"
+sshca_home_dir: "/home/{{ autonomy_org_unit_name | upper }}"
+
+ownca_user_pki_dir: ".pki"
+ownca_user_private_dir: "{{ ownca_user_pki_dir }}/private"
 
 sshca_user_pki_dirs:
   - name: "ssh"

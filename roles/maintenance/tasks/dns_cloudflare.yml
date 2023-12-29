@@ -142,16 +142,16 @@
     type: "TXT"
     state: "present"
     solo: true
-    value: "{{ dkim_public_key }}"
+    value: "{{ autonomy_dns_dkim_record }}"
     timeout: "{{ autonomy_dns_cloudflare_timeout }}"
     ttl: "{{ autonomy_dns_cloudflare_ttl }}"
   become: false
   vars:
     __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/dns/dkim"
-    __password_lookup_dkim: "{{ __password_store_id }}, missing=empty"
-    dkim_public_key: "{{ lookup('community.general.passwordstore', __password_lookup_dkim) }}"
+    #__password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/dns/dkim"
+    #__password_lookup_dkim: "{{ __password_store_id }}, missing=empty"
+    #dkim_public_key: "{{ lookup('community.general.passwordstore', __password_lookup_dkim) }}"
   when:
     - inventory_hostname in groups['mail_servers'] | default([])
     - dkim_public_key is truthy

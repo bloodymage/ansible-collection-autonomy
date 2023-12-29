@@ -7,7 +7,8 @@
 # SSH
 
 ssh_config_dir: "{{ sysconf_dir }}/ssh"
-sshca_key_directory: "~/.ssh/ca"
+sshca_key_short_directory: ".ssh/ca"
+sshca_key_directory: "~/{{ sshca_key_short_directory }}"
 sshca_cert_directory: "{{ ssh_config_dir }}/ca"
 sshca_authorized_principals_dir: "{{ ssh_config_dir }}/auth_principals"
 
