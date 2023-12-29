@@ -120,20 +120,20 @@
 # will have their ssh public key copied to github.
 #
 # ==================================================================================================
-# - name: "Authorize key with GitHub."
-#   community.general.github_key:
-#     name: "{{ item.username | title }}"
-#     pubkey: "{{ lookup('file', __ssh_pubkey) }}"
-#     token: '{{ autonomy_github_oauth_token }}'
-#     state: present
-#     force: true
-#   loop: "{{ __realm_users }}"
-#   delegate_to: localhost
-#   become: false
-#   vars:
-#     __ssh_pubkey: "{{ ownca_directory }}/users/ssh/{{ item.username }}.pub"
-#   when:
-#     - autonomy_github_users is truthy
-#     - autonomy_github_oauth_token is truthy
-#     - item.id_number is defined
-#     - item.username in autonomy_github_users
+- name: "Authorize key with GitHub."
+  community.general.github_key:
+    name: "{{ item.username | title }}"
+    pubkey: "{{ lookup('file', __ssh_pubkey) }}"
+    token: '{{ autonomy_github_oauth_token }}'
+    state: present
+    force: true
+  loop: "{{ __realm_users }}"
+  delegate_to: localhost
+  become: false
+  vars:
+    __ssh_pubkey: "{{ ownca_directory }}/users/ssh/{{ item.username }}.pub"
+  when:
+    - autonomy_github_users is truthy
+    - autonomy_github_oauth_token is truthy
+    - item.id_number is defined
+    - item.username in autonomy_github_users
