@@ -1,3 +1,4 @@
+---
 - name: "Check for RouterOS updates."
   community.routeros.command:
     commands:

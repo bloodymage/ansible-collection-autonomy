@@ -24,3 +24,4 @@
   include_tasks: "{{ ansible_network_os.split('.')[2] | lower }}.yml"
   when:
     - ansible_network_os is defined
+

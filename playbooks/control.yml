@@ -8,19 +8,18 @@
 - name: "Configure the control node."
   hosts: localhost
   roles:
+    - role: bloodymage.autonomy.config_environment
+      tags:
+        - always
     - role: bloodymage.autonomy.ansible
       tags:
         - never
         - ansible
-    - role: bloodymage.autonomy.config_environment
-      tags:
-        - always
     - role: bloodymage.autonomy.gnupg
       tags:
         - gnupg
     - role: bloodymage.autonomy.password_store
       tags:
-        - password_store
         - password-store
     - role: bloodymage.autonomy.users
       vars:
@@ -29,4 +28,3 @@
         __user_tasks: "passwordstore"
       tags:
         - user-password-store
-        - user_password_store

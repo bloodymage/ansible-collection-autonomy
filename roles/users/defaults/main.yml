@@ -87,3 +87,8 @@ __user_root:
 __default_mikrotik_device_user: "admin"
 
 __username_list: []
+
+__samba_domain_groups:
+  - groupname: ansiblemanaged
+
+__realm_user_dn_list: []

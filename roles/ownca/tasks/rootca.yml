@@ -27,6 +27,7 @@
       domain: "{{ item.domain }}"
   when:
     - item.type != "public"
+    - item.type != "overlay"
 
 - name: "Add issuing Certificate Authorities."
   ansible.builtin.set_fact:
@@ -52,6 +53,7 @@
       domain: "{{ item[0].domain }}"
   when:
     - item[0].type != "public"
+    - item[0].type != "overlay"
 
 # ==================================================================================================
 #
@@ -147,6 +149,7 @@
           - aa_compromise
     owner: "{{ autonomy_user }}"
     group: "{{ autonomy_group }}"
+    mode: "0400"
     backup: yes
     state: present
   loop: "{{ ownca_certificate_authorities }}"

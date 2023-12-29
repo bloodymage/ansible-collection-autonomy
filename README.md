@@ -16,7 +16,7 @@ This collection is a set of ansible playbooks that you can use to build and main
 Initial services are:
 1. [Certificate Authorities](docs/CERTIFICATE_AUTHORITIES.md) (Internal and ACME)
 2. An SSH Certificate Authority
-3. DNS (Bind9)
+3. DNS (Bind9 / CloudFlare)
 4. Identity Management (Samba Active Directory)
 5. Email (Postfix and Dovecot)
 6. Address Book and Calendars (Nextcloud)
@@ -127,7 +127,7 @@ Options:
  - samba
  - openldap (planned for the future)
  - freeipa (planned for the future)
- 
+
 So far, this collection has really only been tested with this variable set to ```samba```.  You must set it yourself.  Things can, and most likely will go wrong if it's not set to ```samba```.
 
 ##### Network structure
@@ -169,6 +169,11 @@ autonomy_zone_name: "internal"
 
 These are required to match the 'name' and 'type' set in the autonomy_zones listing.
 
+For Public Zones it's recommended you also add:
+```
+autonomy_root_domain: "{{ autonomy_zone_name }}.com" or .net, .org, etc
+autonomy_domain: "{{ autonomy_root_domain }}"
+```
 
 ##### Users
 ```
@@ -252,6 +257,12 @@ For sites that are publicly available, the site will use an acme ca  (Let's encr
 
 Not yet implemented advantages:
   3. If you believe multiple passwords may be compromised, you can easily force a regeneration of all passwords.  Plan is to add a tags for password regeneration.  Currently, you can use the password store itself to modify the password(s).
+
+### DNS
+
+This collection uses bind9 for internal dns, including internal access of public zones.
+
+For public access of public zones, it uses cloudflare dns.  Cloudflare DNS can configure MX, SPF (TXT), DMARC, and DKIM records for mail services, and will update them automatically.
 
 ### Role structure
 

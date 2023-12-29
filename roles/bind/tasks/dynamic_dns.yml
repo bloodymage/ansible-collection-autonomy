@@ -73,7 +73,7 @@
 #       - "Algorithm: {{ item['stdout'] }}"
 #     verbosity: 1
 #   loop: "{{ algorithms }}"
-    
+
 - name: "Print complete existing algorithm information."
   ansible.builtin.debug:
     msg:
