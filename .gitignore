@@ -5,6 +5,8 @@ ansible/releases/
 
 # Sphinx documentation
 docs/build/
+
+# GTAGs
 GPATH
 GRTAGS
 GTAGS
