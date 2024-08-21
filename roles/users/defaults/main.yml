@@ -1,51 +1,19 @@
 ---
 # defaults file for users
-autonomy_user_packages: []
+autonomy_users_packages: []
 
 autonomy_users:
-  - username: pi
-    name: 'Pi'
-    groups:
-      - users
-    id_number: 1000
-    unix_home: /home/pi
-    password: "password"
-    ssh_key_password: "password"
-    ssh_access_cert:
-      - principal_name
-    ssh_cert:
-      - None
-  - username: ansible_user_1
-    groups:
-      - users
-      - sudo
-    id_number: 1001
-    unix_home: /home/ansible_user_1
-    password: "password"
-    ssh_key_password: "password"
-    ssh_access_cert:
-      - ansible
-    ssh_cert:
-      - None
-  - username: ansible_user_2
-    groups:
-      - users
-      - wheel
-    id_number: 1002
-    unix_home: /home/ansible_user_2
-    ssh_key_password: "password"
-    ssh_access_cert:
-      - ansible
-    ssh_cert:
-      - None
+  - "{{ autonomy_user1 }}"
+  - "{{ autonomy_user2 }}"
+  - "{{ autonomy_user3 }}"
 
 autonomy_user_groups:
   - name: ssl-cert
     system: yes
 
 autonomy_user_group_ansible_managed: "ansiblemanaged"
-autonomy_user_password_min_id: 1000
-autonomy_user_password_max_id: 1001
+autonomy_user_managed_min_id: 1000
+autonomy_user_managed_max_id: 10000
 
 users_sudoers_options:
   - application: "screen"
@@ -53,16 +21,24 @@ users_sudoers_options:
       - entity: "Default"
         value: "env_keep += WINDOW"
 
+autonomy_user_home_dir: "/home"
+autonomy_users_password_hash_seed: "{{ inventory_hostname }}"
+
 # ==================================================================================================
 #
 # User Dotfiles settings
 #
 # ==================================================================================================
 # .gitconfig
-autonomy_user_gitconfig_use_config_only: false
-autonomy_user_gitconfig_editor: "emacs"
-autonomy_user_gitconfig_pager: "delta"
-autonomy_user_gitconfig_default_branch: "main"
+autonomy_user_gitconfig_user_use_config_only: "{{ autonomy_gitconfig_user_use_config_only }}"
+autonomy_user_gitconfig_core_editor: "{{ autonomy_gitconfig_core_editor }}"
+autonomy_user_gitconfig_core_pager: "{{ autonomy_gitconfig_core_pager }}"
+autonomy_user_gitconfig_core_excludes_file: ""
+autonomy_user_gitconfig_init_default_branch: "{{ autonomy_gitconfig_init_default_branch }}"
+autonomy_user_gitconfig_init_template_dir: "{{ autonomy_gitconfig_init_template_dir }}"
+
+# .gitignore
+autonomy_users_gitignore: []
 
 # .gnupg/gpg.conf
 autonomy_user_dotfiles_gpg_pinentry_mode: "{{ autonomy_gnupg_pinentry_mode }}"
@@ -107,8 +83,8 @@ autonomy_user_dotfiles_gpg_pcsc_shared: false
 autonomy_user_dotfiles_gpg_reader_port: []
 
 # Misc
-autonomy_user_dotfiles_users: "{{ autonomy_users }}"
-autonomy_user_dotfiles_home: "/home"
+autonomy_users_dotfiles_users: "{{ autonomy_users }}"
+autonomy_users_dotfiles_home: "/home"
 autonomy_user_dotfiles_mode: "0700"
 
 # ===================================================================================================
@@ -134,12 +110,6 @@ __user_groups:
     system: yes
 
 __users: "{{ autonomy_users }}"
-
-__user_root:
-  username: root
-  unix_home: /root
-  ssh_access_cert:
-    - root-everywhere
 
 __default_mikrotik_device_user: "admin"
 
