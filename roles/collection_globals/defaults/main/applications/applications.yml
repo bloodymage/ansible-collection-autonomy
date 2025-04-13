@@ -9,4 +9,4 @@ autonomy_enable_screen: no
 autonomy_enable_keychain: no
 autonomy_enable_uptimed: no
 autonomy_enable_trash_cli: no
-autonomy_enable_unzip: "{{ autonomy_unzip_enable }}"
+autonomy_enable_unzip: "{{ autonomy_unzip_enabled }}"

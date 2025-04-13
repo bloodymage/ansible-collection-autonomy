@@ -66,7 +66,6 @@ autonomy_min_domain_id_number: "{{ autonomy_realm_min_id_number }}" # Keep until
 autonomy_smart_card_login: false
 autonomy_overwrite_password: false
 autonomy_password_length: "42"
-autonomy_dodca_install: false
 autonomy_passdb: "ansible"
 
 # Organization Info

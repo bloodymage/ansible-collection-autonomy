@@ -7,3 +7,5 @@ autonomy_emacs_packages: []
 
 autonomy_emacs_daemon_enabled: false
 autonomy_emacs_daemon_graphical: false
+
+autonomy_emacs_environment_variables: []

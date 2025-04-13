@@ -8,8 +8,6 @@
   hosts: localhost
   roles:
     - role: bloodymage.autonomy.diagnostics
-      tags:
-        - localhost
 
 - name: "Run Diagnostics"
   hosts: all:!localhost

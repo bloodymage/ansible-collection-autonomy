@@ -4,6 +4,7 @@
   include_tasks: "ping.yml"
   tags:
     - connectivity
+    - ping
 
 - name: "Get host facts."
   include_tasks: "host_facts.yml"

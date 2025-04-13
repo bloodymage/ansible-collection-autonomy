@@ -9,8 +9,11 @@ Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
 Type=forking
 ExecStart=/usr/bin/emacs --fg-daemon
 ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
-Environment=SSH_AUTH_SOCK=%t/keyring/ssh
 Restart=on-failure
 
 [Install]
-WantedBy=default.target
+{% if autonomy_emacs_daemon_graphical -%}
+  WantedBy=graphical-session.target
+{% else %}
+  WantedBy=default.target
+{% endif %}
