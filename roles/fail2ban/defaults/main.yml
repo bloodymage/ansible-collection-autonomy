@@ -1,4 +1,6 @@
 ---
 # defaults file for fail2ban
-autonomy_packages:
+autonomy_fail2ban_packages:
   - fail2ban
+
+autonomy_fail2ban_allowipv6: "auto"

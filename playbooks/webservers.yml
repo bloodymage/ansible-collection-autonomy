@@ -1,17 +1,17 @@
 ---
 - name: "Configure webservers and websites."
-  hosts: all:!wifi_access_points:!routers:!switches:!printers
+  hosts: webservers:!vendor_managed
   roles:
     - role: bloodymage.autonomy.config_environment
       tags:
         - always
 
-- name: "Create redis servers."
-  hosts: redis_servers
-  roles:
-    - role: bloodymage.autonomy.redis
-      tags:
-        - redis
+# - name: "Create redis servers."
+#   hosts: redis_servers
+#   roles:
+#     - role: bloodymage.autonomy.redis
+#       tags:
+#         - redis
 
 # ==================================================================================================
 #
@@ -19,14 +19,14 @@
 #
 # ==================================================================================================
 - name: "Create Apache webservers."
-  hosts: apache_servers:!public_zone
+  hosts: apache_servers:!public_zone:!virtual_hosts
   roles:
     - role: bloodymage.autonomy.apache
       tags:
         - apache
 
 - name: "Create nginx webservers."
-  hosts: nginx_servers:!public_zone
+  hosts: nginx_servers:!public_zone:!virtual_hosts
   roles:
     - role: bloodymage.autonomy.nginx
       tags:
@@ -47,29 +47,31 @@
     - role: bloodymage.autonomy.acmeca
       vars:
         __acmeca_tasks: "certs"
-    - role: bloodymage.autonomy.ownca_crl_distribution_points
+    - role: bloodymage.autonomy.ownca
+      vars:
+        __ownca_tasks: "crl_distribution"
       tags:
         - ownca-crl-distribution-points
         - ownca_crl_distribution_points
         - websites
 
-- name: "Configure PHP"
-  hosts: nextcloud_sites:mediawiki_sites:drupal_sites
-  roles:
-    - role: bloodymage.autonomy.php
-      tags:
-        - php
-    - role: bloodymage.autonomy.composer
-      tags:
-        - composer
+# - name: "Configure PHP"
+#   hosts: nextcloud_sites:mediawiki_sites:drupal_sites
+#   roles:
+#     - role: bloodymage.autonomy.php
+#       tags:
+#         - php
+#     - role: bloodymage.autonomy.composer
+#       tags:
+#         - composer
 
-- name: "Configure Nextcloud Sites."
-  hosts: nextcloud_sites:&public_zone
-  roles:
-    - role: bloodymage.autonomy.nextcloud
-      tags:
-        - nextcloud
-        - websites
+# - name: "Configure Nextcloud Sites."
+#   hosts: nextcloud_sites:&public_zone
+#   roles:
+#     - role: bloodymage.autonomy.nextcloud
+#       tags:
+#         - nextcloud
+#         - websites
 
 # - name: "Configure Mediawiki websites."
 #   hosts: mediawiki_sites
@@ -79,13 +81,13 @@
 #         - mediawiki
 #         - websites
 
-- name: "Configure Drupal websites."
-  hosts: drupal_sites
-  roles:
-    - role: bloodymage.autonomy.drush
-      tags:
-        - drush
-    - role: bloodymage.autonomy.drupal
-      tags:
-        - drupal
-        - websites
+# - name: "Configure Drupal websites."
+#   hosts: drupal_sites
+#   roles:
+#     - role: bloodymage.autonomy.drush
+#       tags:
+#         - drush
+#     - role: bloodymage.autonomy.drupal
+#       tags:
+#         - drupal
+#         - websites

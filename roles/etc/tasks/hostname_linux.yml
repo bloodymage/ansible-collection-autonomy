@@ -1,0 +1,16 @@
+---
+# ==================================================================================================
+#
+# Task: "Set Hostname"
+#
+# Allows changing a hostname simply by updating the hosts IP address
+#
+# ==================================================================================================
+- name: "Set Hostname"
+  ansible.builtin.hostname:
+    name: "{{ autonomy_hostname }}"
+  become: yes
+  when:
+    - inventory_hostname != "localhost"
+  tags:
+    - hostname

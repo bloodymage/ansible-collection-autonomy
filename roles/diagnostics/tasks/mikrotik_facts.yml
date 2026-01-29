@@ -1,0 +1,46 @@
+---
+- name: "Retrieve facts"
+  community.routeros.facts:
+    gather_subset: all
+  tags:
+    - host-info
+    - host-facts
+
+- name: "Display all variables/facts known for a host"
+  ansible.builtin.debug:
+    msg:
+      - "All facts for {{ inventory_hostname }}"
+      - "    I. Hostname:  {{ inventory_hostname_short }}"
+      - "    Hostname:     {{ ansible_net_hostname }}"
+      - "    FQDN:         {{ ansible_fqdn | default(inventory_hostname) }}"
+      - "    Domain:       {{ ansible_domain | default(none) }}"
+      - "    Network OS:   {{ ansible_network_os | default(none) }}"
+  tags:
+    - host-info
+    - host-facts
+
+- name: "Print Host Network Information (IPv4)."
+  ansible.builtin.debug:
+    msg:
+      - "System {{ inventory_hostname }}"
+      - "    IPv4 Addr:    {{ ansible_net_all_ipv4_addresses }}"
+  tags:
+    - host-info
+    - host-ipv4
+
+- name: "Print Host Network Information (IPv6)."
+  ansible.builtin.debug:
+    msg:
+      - "System {{ inventory_hostname }}"
+      - "    IPv6 Addr:    {{ ansible_net_all_ipv6_addresses | default(none) }}"
+  tags:
+    - host-info
+    - host-ipv6
+
+- name: "Print Config"
+  ansible.builtin.debug:
+    msg:
+      - "System {{ inventory_hostname }}"
+      - "    Config:    {{ ansible_net_config | default(none) }}"
+  tags:
+    - host-info

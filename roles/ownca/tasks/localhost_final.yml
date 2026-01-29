@@ -36,7 +36,6 @@
       - "{{ ownca_ca_directory }}/certs/{{ autonomy_org_name }}-root-ca.crt"
     state: present
     iter_size: 0
-    maciter_size: 0
     mode: '0600'
     owner: "{{ autonomy_user }}"
     group: "{{ autonomy_group }}"

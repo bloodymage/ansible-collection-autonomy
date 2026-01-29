@@ -27,5 +27,5 @@
   become: true
   register: results
   failed_when:
-    - results["results"][item]["failed"] is true
-    - '"Failed to find package" not in results["results"][item]["msg"]'
+    - results["failed"] is true
+    - "'Failed to find package' not in results['msg']"

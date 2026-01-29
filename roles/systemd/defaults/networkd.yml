@@ -1,0 +1,25 @@
+---
+autonomy_systemd_networkd_packages:
+  - libnss-resolve
+  - systemd-resolved
+
+autonomy_systemd_networkd_packages_remove:
+  - libnss-mdns
+  - avahi-daemon
+  - ifupdown
+  - dhcpcd
+  - network-manager
+  - isc-dhcp-client
+  - isc-dhcp-common
+  - openresolv
+
+# Options include '--interfaces=eth0,bond0, etc'
+autonomy_systemd_networkd_interfaces: ""
+autonomy_systemd_networkd_any: "--any"
+
+autonomy_systemd_old_networking_services:
+  - NetworkManager
+  - ModemManager
+  - avahi-daemon
+  - networking
+  - dhcpcd

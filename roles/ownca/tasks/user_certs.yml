@@ -196,7 +196,7 @@
 
 - name: "Check if user cert exists."
   ansible.builtin.stat:
-    path: "{{ ownca_directory }}/users/certs/{{ __username }}_{{ item[1].name }}.crt"
+    path: "{{ ownca_directory }}/users/certs/{{ __username}}/{{ __username }}_{{ item[1].name }}.crt"
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
   delegate_to: localhost
   become: no
@@ -218,7 +218,7 @@
 
 - name: "Generate User Certificates."
   community.crypto.x509_certificate:
-    path: "{{ ownca_directory }}/users/certs/{{ __username }}_{{ item[1].name }}.crt"
+    path: "{{ ownca_directory }}/users/certs/{{ __username }}/{{ __username }}_{{ item[1].name }}.crt"
     csr_path: "{{ ownca_directory }}/users/csr/{{ __username }}_{{ item[1].name }}.csr"
     ownca_path: "{{ ownca_identity_ca_cert_path }}"
     ownca_privatekey_path: "{{ ownca_identity_ca_key_path }}"
@@ -270,7 +270,7 @@
 
 - name: Copy User Certificates to workstation.
   ansible.builtin.copy:
-    src: "{{ ownca_directory }}/users/certs/{{ __username }}_{{ item[1].name }}.crt"
+    src: "{{ ownca_directory }}/users/certs/{{ __username }}/{{ __username }}_{{ item[1].name }}.crt"
     dest: "{{ __user_cert_dir }}/{{ __username }}_{{ item[1].name }}.crt"
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}_g"
@@ -327,22 +327,21 @@
   tags:
     - user-pkcs11
 
-- name: "Convert User Certificates to DER"
-  ansible.builtin.command:
-    cmd: >
-      openssl x509 -in "{{ item[0].username }}_{{ __cert_purpose }}.crt"
-      -inform PEM
-      -out "{{ item[0].username }}_{{ __cert_purpose }}.der"
-      -outform DER
-    chdir: "{{ __pki_cert_dir }}"
-    #creates: "{{ item[0].username }}_{{ __cert_purpose }}.der"
+- name: "Convert CA Certificates to DER format."
+  community.crypto.x509_certificate_convert:
+    src_path: "{{ __pki_cert_dir }}/{{ item[0].username }}_{{ __cert_purpose }}-ca.crt"
+    dest_path: "{{ __pki_cert_dir }}/{{ item[0].username }}_{{ __cert_purpose }}-ca.der"
+    owner: "{{ autonomy_user }}"
+    group: "{{ autonomy_group }}"
+    mode: "0644"
+    format: "der"
+    backup: true
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
   vars:
-    __pki_cert_dir: "{{ ownca_directory }}/users/certs"
+    __pki_cert_dir: "{{ ownca_directory }}/users/certs/{{ item[0].username }}"
     __cert_purpose: "{{ item[1].name }}"
+  become: false
   delegate_to: localhost
   when:
     - item[0].id_number is defined
     - item[0].spns is not defined
-  tags:
-    - der

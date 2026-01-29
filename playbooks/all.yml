@@ -4,8 +4,24 @@
 # Gather some information.  This is always done, as it'll create groups used later in this playbook.
 #
 # ==================================================================================================
+- name: "Gather facts for Mikrotik devices."
+  gather_facts: false
+  hosts: mikrotik
+  tasks:
+    - name: "Retrieve facts"
+      community.routeros.facts:
+        gather_subset: all
+
+# - name: "Configure the environment for basic host configuration."
+#   hosts: vendor_managed
+#   ignore_unreachable: yes
+#   roles:
+#     - role: bloodymage.autonomy.config_environment
+#       tags:
+#         - always
+
 - name: "Configure the environment for basic host configuration."
-  hosts: all:!localhost
+  hosts: all:!localhost:!vendor_managed:!dns_only
   ignore_unreachable: yes
   roles:
     - role: bloodymage.autonomy.config_environment
@@ -13,7 +29,7 @@
         - always
 
 - name: "Upgrade All hosts."
-  hosts: all:!localhost:!wifi_access_points:!printers:!public_zone:!virtual_hosts
+  hosts: all:!localhost:!public_zone:!virtual_hosts:!dns_only
   roles:
     - role: bloodymage.autonomy.maintenance
       vars:
@@ -32,13 +48,16 @@
 #
 # ==================================================================================================
 - name: "Basic host configuration for all hosts."
-  hosts: all:!localhost:!wifi_access_points:!printers:!public_zone:!virtual_hosts
+  hosts: all:!localhost:!public_zone:!virtual_hosts:!dns_only
   strategy: linear
   roles:
-    - role: bloodymage.autonomy.hostname
+    - role: bloodymage.autonomy.etc
+      vars:
+        __etc_tasks: "hostname"
       when:
         - autonomy_virtual_host is falsy
         - ansible_connection != "local"
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
         - hostname
     - role: bloodymage.autonomy.users
@@ -52,10 +71,13 @@
         - ansible_connection != "local"
       tags:
         - users
-    - role: bloodymage.autonomy.hosts
+    - role: bloodymage.autonomy.etc
+      vars:
+        __etc_tasks: "hosts"
       when:
         - ansible_network_os is not defined
         - ansible_connection != "local"
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
         - hosts
     - role: bloodymage.autonomy.emacs
@@ -63,6 +85,7 @@
         - autonomy_emacs_enabled
         - ansible_connection != "local"
         - ansible_network_os is not defined
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
         - emacs
     - role: bloodymage.autonomy.unzip
@@ -70,11 +93,12 @@
         - ansible_connection != "local"
         - (autonomy_dodca_enabled or autonomy_unzip_enabled)
         - ansible_network_os is not defined
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
         - unzip
 
 - name: "Install certificates on all hosts."
-  hosts: all:!localhost:!public_zone
+  hosts: all:!localhost:!public_zone:!dns_only
   roles:
     - role: bloodymage.autonomy.ownca
       vars:
@@ -88,6 +112,7 @@
       when:
         - ansible_connection != "local"
         - autonomy_dodca_enabled
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
         - dodca
 

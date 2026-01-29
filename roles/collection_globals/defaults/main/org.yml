@@ -1,0 +1,8 @@
+---
+# Organization Info
+autonomy_org_name: "{{ autonomy_root_zone_name }}"
+autonomy_org_unit_name: "{{ autonomy_zone_name }}"
+autonomy_country: ""
+autonomy_region: ""
+autonomy_state: "{{ autonomy_region }}"
+autonomy_city: ""

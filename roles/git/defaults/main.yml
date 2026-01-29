@@ -1,5 +1,3 @@
 ---
 autonomy_git_packages:
-  - git
-  - git-flow
-
+  - "git"

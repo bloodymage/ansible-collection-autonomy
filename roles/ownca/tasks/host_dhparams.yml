@@ -17,11 +17,12 @@
     owner: "root"
     group: "root"
     mode: "0644"
-    backup: yes
+    backup: true
     #force: "{{ __ownca_regenerate_csr }}"
-  become: yes
+  become: true
   notify:
     - restart tls
   when:
     - ownca_privatekey_type in ['DSA','RSA']
     - ansible_connection != "local"
+    - inventory_hostname not in groups["vendor_managed"]

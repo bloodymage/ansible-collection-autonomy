@@ -8,12 +8,13 @@
 #
 # ==================================================================================================
 - name: "Initialize Linux Host Configuration."
-  hosts: linux:!localhost:!routeros:!wifi_access_points:!printers:!public_zone:!virtual_hosts
+  hosts: linux:!localhost:!public_zone:!virtual_hosts:!vendor_managed:!dns_only
   roles:
     - role: bloodymage.autonomy.git
       when:
         - ansible_connection != "local"
         - ansible_network_os is not defined
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
         - git
     - role: bloodymage.autonomy.etckeeper
@@ -22,8 +23,10 @@
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
         - autonomy_enable_etckeeper
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
         - etckeeper
+
     # ==============================================================================================
     #
     #                                      WARNING
@@ -35,11 +38,13 @@
     #
     # ==============================================================================================
     - role: bloodymage.autonomy.sshca
+      when:
+        - inventory_hostname not in groups["vendor_managed"]
       vars:
         __sshca_tasks: "hostcerts"
     - role: bloodymage.autonomy.openssh
-      # when:
-      #   - ansible_connection != "local"
+      when:
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
         - openssh
     - role: bloodymage.autonomy.systemd
@@ -47,6 +52,7 @@
         __systemd_tasks: "networkd"
       when:
         - (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined) or (autonomy_systemd_link is defined)
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
         - systemd
         - systemd-networkd

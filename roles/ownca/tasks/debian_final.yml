@@ -68,7 +68,7 @@
   when:
     - item.name != "root"
 
-- name: Copy CRLs to server.
+- name: "Copy CRLs to server."
   ansible.builtin.copy:
     src: "{{ ownca_ca_directory }}/crl/{{ autonomy_org_name }}-{{ item.name }}-ca.crl"
     dest: "{{ ownca_etc }}/crls/{{ autonomy_org_name }}-{{ item.name }}-ca.crl"
@@ -78,7 +78,7 @@
   loop: "{{ ownca_certificate_authorities }}"
   become: yes
 
-- name: "Ensure we have a PKCS12 password for the Host"
+- name: "Ensure we have a PKCS12 password for the Host."
   ansible.builtin.set_fact:
     ownca_host_certs_pkcs12_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   vars:
@@ -92,7 +92,7 @@
   when:
     - ownca_host_certs_pkcs12_password == "password"
 
-- name: Generate PKCS#12 file
+- name: "Generate PKCS#12 file."
   community.crypto.openssl_pkcs12:
     action: export
     backup: yes
@@ -107,7 +107,6 @@
       - "/usr/local/share/ca-certificates/{{ autonomy_org_name }}-root-ca.crt"
     state: present
     iter_size: 0
-    maciter_size: 0
     owner: root
     group: root
     mode: '0600'

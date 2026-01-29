@@ -22,6 +22,16 @@
         - never
         - reboot
 
+- name: "Gather facts for Mikrotik devices."
+  gather_facts: false
+  hosts: mikrotik
+  tasks:
+    - name: "Retrieve facts"
+      community.routeros.facts:
+        gather_subset: all
+      tags:
+        - always
+
 - hosts: all
   ignore_unreachable: true
   roles:
@@ -38,16 +48,19 @@
         __maintenance_tasks: "dns"
       tags:
         - dns
+        - dns-nsupdate
+        - dns-cloudflare
 
 - name: "System Maintenance."
   hosts: all:!localhost:!public_zone:!virtual_hosts:!printers
   roles:
-    - role: bloodymage.autonomy.aptitude
+    - role: bloodymage.autonomy.apt
       when:
         - ansible_os_family == "Debian"
+        - ansible_network_os is not defined
       tags:
         - maintenance-upgrade
-        - aptitude
+        - apt
         - upgrade
 
     - role: bloodymage.autonomy.maintenance

@@ -4,6 +4,10 @@
   include_tasks: "dns.yml"
   when:
     __maintenance_tasks == "dns"
+  tags:
+    - dns
+    - dns-nsupdate
+    - dns-cloudflare
 
 - name: "Include Reboot Tasks."
   include_tasks: "reboot.yml"

@@ -11,6 +11,7 @@ autonomy_ansible_packages:
   - python3-packaging
   - python3-passlib
   - python3-resolvelib
+  - python3-apt
 
 autonomy_ansible_default_host_list:
   - "/etc/ansible/hosts"

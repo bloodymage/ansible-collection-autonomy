@@ -1,4 +1,0 @@
----
-# defaults file for drupal
-autonomy_packages:
-  - composer

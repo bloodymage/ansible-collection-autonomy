@@ -1,0 +1,60 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for etc
+- name: Include OS-specific variables.
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: no
+  tags:
+    - aliases
+    - fstab
+    - hostname
+    - hosts
+    - skel
+    - timezone
+
+- name: "Include Aliases tasks."
+  include_tasks: "aliases.yml"
+  when:
+    - __etc_tasks == "aliases"
+  tags:
+    - aliases
+
+- name: "Include Fstab Tasks."
+  include_tasks: "fstab.yml"
+  when:
+    - __etc_tasks == "fstab"
+  tags:
+    - fstab
+
+- name: "Include Hostname Tasks."
+  include_tasks: "hostname.yml"
+  when:
+    - __etc_tasks == "hostname"
+  tags:
+    - hostname
+
+- name: "Include Hosts Tasks."
+  include_tasks: "hosts.yml"
+  when:
+    - __etc_tasks == "hosts"
+  tags:
+    - hosts
+
+- name: "Include Skel file tasks."
+  include_tasks: "skel.yml"
+  when:
+    - __etc_tasks == "skel"
+  tags:
+    - skel
+
+- name: "Include Timezone Tasks."
+  include_tasks: "timezone.yml"
+  when:
+    - __etc_tasks == "timezone"
+  tags:
+    - timezone

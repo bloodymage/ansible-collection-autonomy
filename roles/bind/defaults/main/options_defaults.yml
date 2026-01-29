@@ -1,0 +1,9 @@
+---
+__autonomy_bind_max_stale_ttl: 86400
+__autonomy_bind_max_cache_ttl: 604800
+__autonomy_bind_stale_answer_ttl: 30
+__autonomy_bind_stale_cache_enable: "no"
+__autonomy_bind_stale_answer_enable: "no"
+__autonomy_bind_listen_on: "any"
+__autonomy_bind_listen_on_v6: "any"
+__autonomy_bind_auth_nxdomain: "false"

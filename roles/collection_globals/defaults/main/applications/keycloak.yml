@@ -1,0 +1,3 @@
+---
+autonomy_keycloak_name: "keycloak"
+autonomy_keycloak_home: "/opt/{{ autonomy_keycloak_name }}"

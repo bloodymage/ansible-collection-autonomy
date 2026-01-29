@@ -60,7 +60,7 @@
 # Create CRLs
 #
 # ==================================================================================================
-- name: Generate a CRL
+- name: "Generate a CRL."
   community.crypto.x509_crl:
     path: "{{ ownca_directory }}/certificate_authorities/crl/{{ autonomy_org_name }}-{{ item.name }}-ca.crl"
     privatekey_path: "{{ ownca_directory }}/certificate_authorities/private/{{ autonomy_org_name }}-{{ item.name }}-ca.key"
@@ -82,5 +82,3 @@
     - ownca-crl
     - ownca_crl_debug
     - ownca-crl-debug
-
-

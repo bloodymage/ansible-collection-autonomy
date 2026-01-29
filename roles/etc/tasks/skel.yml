@@ -1,0 +1,23 @@
+---
+# ==================================================================================================
+#
+# Task:
+#
+#
+# ==================================================================================================
+- name: "Create config files"
+  ansible.builtin.template:
+    src: "etc/skel/{{ item }}.j2"
+    dest: /etc/skel/{{ item }}
+    owner: root
+    group: root
+    mode: '0644'
+  become: yes
+  loop:
+    - profile
+  when:
+    - inventory_hostname != 'localhost'
+  tags:
+    - skel
+    - skel_debug
+    - skel-debug

@@ -16,7 +16,7 @@
 - name: "Include Family Tasks."
   include_tasks: "upgrade_{{ ansible_os_family | lower }}.yml"
   when:
-    - ansible_network_os is not defined
+    - inventory_hostname not in groups["vendor_managed"]
     - autonomy_virtual_host is falsy
     - ansible_connection != "local"
 
@@ -24,4 +24,3 @@
   include_tasks: "upgrade_{{ ansible_network_os.split('.')[2] | lower }}.yml"
   when:
     - ansible_network_os is defined
-

@@ -1,9 +1,11 @@
 # {{ ansible_managed }}
+
 [client]
 host     = localhost
 user     = {{ mysql_system_maintenance_user }}
 password = {{ mysql_system_maintenance_user_password }}
 socket   = /var/run/mysqld/mysqld.sock
+
 [mysql_upgrade]
 host     = localhost
 user     = {{ mysql_system_maintenance_user }}

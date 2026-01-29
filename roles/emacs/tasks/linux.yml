@@ -3,7 +3,7 @@
   ansible.builtin.package:
     name: "{{ autonomy_emacs_base_packages + autonomy_emacs_packages }}"
     state: present
-  become: yes
+  become: true
 
 - name: "Install Modified emacs.service file"
   ansible.builtin.template:
@@ -37,4 +37,4 @@
     owner: root
     group: root
     mode: "0644"
-  become: yes
+  become: true

@@ -70,6 +70,8 @@ ownca_objectguid: ""
 
 ownca_revoked_certificates: []
 
+ownca_crl_distribution_points:
+  - "{{ autonomy_org_name }}-root-ca"
 
 # ==================================================================================================
 #
@@ -83,3 +85,8 @@ __ownca_private_key_dir_group: "root"
 __host_cert_force_regeneration: no
 __ownca_force_regeneration: no
 __user_cert_force_regeneration: no
+
+__ownca_certificate_authorities_id:
+  - "ca"
+  - "component-ca"
+  - "identity-ca"

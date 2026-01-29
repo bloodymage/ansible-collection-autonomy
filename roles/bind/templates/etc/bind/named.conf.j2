@@ -1,4 +1,4 @@
-{{ ansible_managed | comment }}
+# {{ ansible_managed }}
 
 // This is the primary configuration file for the BIND DNS server named.
 //
@@ -11,7 +11,9 @@
 include "{{ bind_options_file }}";
 include "{{ autonomy_bind_logging_file }}";
 include "{{ bind_local_file }}";
+{% if autonomy_bind_forwarders is falsy or autonomy_bind_forward == "first" %}
 include "{{ bind_default_zone_file }}";
+{% endif %}
 {% if groups['samba_domain_controllers'] is defined %}
 {% if inventory_hostname in groups['samba_domain_controllers'] -%}
   include "/var/lib/samba/bind-dns/named.conf";

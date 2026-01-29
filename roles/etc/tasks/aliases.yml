@@ -1,0 +1,42 @@
+---
+# tasks file for aliases
+- name: "Install packages."
+  ansible.builtin.package:
+    name: "{{ autonomy_packages }}"
+    state: present
+  become: yes
+
+- name: "Ensure we have users required by host role."
+  ansible.builtin.set_fact:
+    autonomy_users: "{{ autonomy_users + [ item.user ] }}"
+  loop:
+    - name: "mythtv"
+      user: "{{ user_mythtv }}"
+    - name: "file_servers"
+      user: "{{ user_mythtv }}"
+    - name: "file_servers"
+      user: "{{ user_git }}"
+    - name: "minidlna_servers"
+      user: "{{ user_minidlna }}"
+    - name: "git_servers"
+      user: "{{ user_git }}"
+    - name: "homeassistant"
+      user: "{{ user_homeassistant }}"
+    - name: "mail_servers"
+      user: "{{ user_vmail }}"
+  when:
+    - inventory_hostname in groups[item.name] | default([])
+  become: no
+
+- name: "Install /etc configuration files."
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  become: yes
+  loop:
+    - aliases
+  when:
+    - autonomy_users is defined

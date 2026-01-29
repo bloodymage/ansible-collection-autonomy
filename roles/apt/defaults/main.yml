@@ -1,0 +1,18 @@
+---
+autonomy_apt_packages:
+  - apt
+  - apt-file
+  - python3-apt
+  - debian-archive-keyring
+
+system_upgrade_deb_src: false
+system_upgrade_distribution_release: "{{ ansible_distribution_release }}"
+system_upgrade_raspberrypi_distribution_release: "{{ ansible_distribution_release }}"
+
+autonomy_apt_debian_repo_backports: false
+autonomy_apt_debian_repo_security_upgrades: false
+autonomy_apt_use_source_code_repos: false
+
+# Linux Repo Settings
+autonomy_use_source_code_repos: false
+autonomy_raspberrypi_distribution_release: "{{ ansible_distribution_release }}"

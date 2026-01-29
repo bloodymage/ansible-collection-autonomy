@@ -1,0 +1,9 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for etc
+autonomy_etc_packages: []
+
+autonomy_fstab: []
+
+autonomy_hosts_ipv4: []
+autonomy_hosts_ipv6: []

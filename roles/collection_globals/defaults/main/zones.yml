@@ -1,0 +1,37 @@
+---
+# Zone Definitions
+autonomy_tld: "com"
+
+autonomy_root_zone_name: "{{ autonomy_org_name }}"
+autonomy_root_domain: "{{ autonomy_root_zone_name }}.{{ autonomy_tld }}"
+
+autonomy_internal_zone_name: "internal"
+autonomy_internal_zone_domain: "{{ autonomy_internal_zone_name }}.{{ autonomy_root_domain }}"
+
+autonomy_dmz_zone_name: "dmz"
+autonomy_dmz_zone_domain: "{{ autonomy_dmz_zone_name }}.{{ autonomy_root_domain }}"
+
+autonomy_zone_name: "{{ autonomy_org_unit_name }}"
+autonomy_zone_type: "internal"
+
+autonomy_domain: "{{ autonomy_zone_name }}.{{ autonomy_root_domain }}"
+
+autonomy_zones:
+  - name: "{{ autonomy_internal_zone_name }}"
+    type: internal
+    domain: "{{ autonomy_internal_zone_domain }}"
+  - name: "{{ autonomy_dmz_zone_name }}"
+    type: dmz
+    domain: "{{ autonomy_dmz_zone_domain }}"
+  - name: "{{ autonomy_root_zone_name }}"
+    type: public
+    domain: "{{ autonomy_root_domain }}"
+
+autonomy_virtual_domain: false
+autonomy_dns_only: false
+
+# __autonomy_zones:
+#   - name: "{{ autonomy_internal_zone_name }}"
+#     zone: internal
+#   - name: "{{ autonomy_dmz_zone_name }}"
+#     zone: dmz

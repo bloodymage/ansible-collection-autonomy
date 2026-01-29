@@ -1,0 +1,7 @@
+---
+# Host Definitions
+autonomy_hostname: "{{ inventory_hostname_short }}"
+autonomy_fqdn: "{{ autonomy_hostname }}.{{ autonomy_domain }}"
+autonomy_ipv4_address: "{{ ansible_host }}"
+autonomy_ipv6_address: "{{ ansible_default_ipv6.address | default(None) }}"
+autonomy_virtual_host: false

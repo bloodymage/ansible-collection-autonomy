@@ -2,6 +2,7 @@
 # defaults file for dns_forwardzones
 autonomy_maintenance_dns_packages:
   - python3-dnspython
+  - python3-apt
 
 system_upgrade_deb_src: false
 system_upgrade_distribution_release: "{{ ansible_distribution_release }}"
@@ -24,6 +25,12 @@ autonomy_domain_level_records: []
 
 autonomy_dns_public_host: "{{ inventory_hostname_short }}"
 
+autonomy_dns_primary_server: ""
+autonomy_dns_forwardzone_primary_server: "{{ autonomy_dns_primary_server }}"
+autonomy_dns_reversezone_primary_server: "{{ autonomy_dns_primary_server }}"
+
+autonomy_dns_reversezone_primary_server_ip: "{{ autonomy_dns_primary_server_ip }}"
+
 autonomy_dns_spf_mail_servers: "mx"
 autonomy_dns_spf_record_includes: ""
 autonomy_dns_spf_record_fail: "-all"
@@ -45,6 +52,9 @@ autonomy_dns_cloudflare_solo: true
 autonomy_dns_cloudflare_solo_mx: true
 autonomy_dns_cloudflare_timeout: 30
 autonomy_dns_cloudflare_ttl: 1
+autonomy_dns_cloudflare_cname_records: []
+autonomy_dns_cloudflare_mx_records: []
+autonomy_dns_cloudflare_txt_records: []
 autonomy_dns_dmarc_cloudflare_email: ""
 
 

@@ -1,9 +1,0 @@
-[Unit]
-Description=XScreenSaver
-
-[Service]
-ExecStartPre=/bin/sleep {{ xscreensaver_service_sleep_time }}
-ExecStart=xscreensaver
-
-[Install]
-WantedBy=default.target

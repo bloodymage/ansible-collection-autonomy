@@ -40,7 +40,7 @@
     owner: "{{ item.owner | default(ownca_etc_owner) }}"
     group: "{{ item.group | default(ownca_etc_group) }}"
     mode: "{{ item.mode }}"
-  become: yes
+  become: true
   loop: "{{ ownca_host_certs_directories }}"
 
 - name: "Generate Host Private Key."

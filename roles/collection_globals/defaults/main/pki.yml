@@ -1,0 +1,6 @@
+---
+# PKI: These settings are the defaults, overwriten by acmeca, ownca, and sshca
+autonomy_default_key_type: "ed25519"
+autonomy_default_key_size: 4096
+
+autonomy_user_pki_dir: "{{ autonomy_user_home_dir }}/.pki"

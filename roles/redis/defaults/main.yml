@@ -1,4 +1,0 @@
----
-# defaults file for redis
-autonomy_packages:
-  - redis

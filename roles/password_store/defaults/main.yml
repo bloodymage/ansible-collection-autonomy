@@ -1,4 +1,4 @@
 ---
 # defaults file for password_store
-autonomy_packages:
+autonomy_passwordstore_packages:
   - pass

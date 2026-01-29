@@ -44,20 +44,20 @@
 - name: "Configure DNS Servers."
   import_playbook: dnsservers.yml
 
-- name: "Configure Realm Identity Management."
-  import_playbook: realm.yml
+# - name: "Configure Realm Identity Management."
+#   import_playbook: realm.yml
 
-- name: "Configure File Servers."
-  import_playbook: fileservers.yml
+# - name: "Configure File Servers."
+#   import_playbook: fileservers.yml
 
-- name: "Configure Database Servers."
-  import_playbook: dbservers.yml
+# - name: "Configure Database Servers."
+#   import_playbook: dbservers.yml
 
-- name: "Configure Web Servers."
-  import_playbook: webservers.yml
+# - name: "Configure Web Servers."
+#   import_playbook: webservers.yml
 
-- name: "Configure Mail Servers."
-  import_playbook: mailservers.yml
+# - name: "Configure Mail Servers."
+#   import_playbook: mailservers.yml
 
-- name: "Configure Workstations."
-  import_playbook: workstations.yml
+# - name: "Configure Workstations."
+#   import_playbook: workstations.yml

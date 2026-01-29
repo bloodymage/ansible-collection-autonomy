@@ -25,8 +25,8 @@ include "/etc/bind/rndc.key";
   zone "{{ localzone['domain'] }}" {
   type primary;
   notify no;
-  allow-query { trusted; };
-  allow-transfer { trusteddns; };
+  allow-query { {{ localzone['allow_query'] }}; };
+  allow-transfer { any; };
 {% if localzone['file'] is defined %}
   file "{{ localzone['file'] }}";
 {% else %}
@@ -39,19 +39,21 @@ include "/etc/bind/rndc.key";
 {% endfor %}
 {% endif %}
 
-{% if autonomy_bind_reversezones is defined %}
+{% if autonomy_bind_reversezones is defined or autonomy_bind_ipv6_reversezones is defined %}
 # ==================================================================================================
 #
 # Reverse Zone Definitions
 #
 # ==================================================================================================
+{% endif %}
+{% if autonomy_bind_reversezones is defined %}
 {% for localzone in autonomy_bind_reversezones -%}
 {% if localzone['type'] == "primary" %}
 zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }}.in-addr.arpa" {
   type {{ bind_primary_zone }};
   notify no;
-  allow-query { trusted; };
-  allow-transfer { trusteddns; };
+  allow-query { any; };
+  allow-transfer { any; };
   allow-update { key {{ localzone['update_key'] }}; };
   file "{{ bind_zone_dir }}/db.{{ localzone['name'] }}"; # zone file path
   };
@@ -59,6 +61,23 @@ zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }
 
 {% endfor %}
 {% endif %}
+
+{% if autonomy_bind_reversezones is defined %}
+{% for localzone in autonomy_bind_ipv6_reversezones -%}
+{% if localzone['type'] == "primary" %}
+zone "{{ localzone['name'] | community.dns.reverse_pointer | replace('0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.', '') }}" {
+  type {{ bind_primary_zone }};
+  notify no;
+  allow-query { any; };
+  allow-transfer { any; };
+  allow-update { key {{ localzone['update_key'] }}; };
+  file "{{ bind_zone_dir }}/db.{{ localzone['name'] | replace(':', '') }}"; # zone file path
+  };
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
 
 # ==================================================================================================
 #
@@ -71,13 +90,13 @@ zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }
 zone "{{ localzone['domain'] }}" {
   type secondary;
   notify no;
-  allow-query { trusted; };
+  allow-query { any; };
   primaries {
   {% for ns in localzone['nameservers'] %}
     {{ ns }};
   {% endfor %}
 };
-  file "{{ bind_cache_dir }}/db.{{ localzone.domain }}"; # zone file path
+  file "{{ autonomy_bind_cache_dir }}/db.{{ localzone.domain }}"; # zone file path
 };
 {% endif %}
 
@@ -90,13 +109,32 @@ zone "{{ localzone['domain'] }}" {
   zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }}.in-addr.arpa" {
   type secondary;
   notify no;
-  allow-query { trusted; };
+  allow-query { any; };
   primaries {
   {% for ns in localzone['nameservers'] %}
     {{ ns }};
   {% endfor %}
 };
-  file "{{ bind_cache_dir }}/db.{{ localzone['name'] }}"; # zone file path
+  file "{{ autonomy_bind_cache_dir }}/db.{{ localzone['name'] }}"; # zone file path
+};
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% if autonomy_bind_ipv6_reversezones is defined %}
+{% for localzone in autonomy_bind_ipv6_reversezones -%}
+{% if localzone['type'] == "secondary" -%}
+zone "{{ localzone['name'] | community.dns.reverse_pointer | replace('0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.', '') }}" {
+  type secondary;
+  notify no;
+  allow-query { any; };
+  primaries {
+  {% for ns in localzone['nameservers'] %}
+    {{ ns }};
+  {% endfor %}
+};
+  file "{{ autonomy_bind_cache_dir }}/db.{{ localzone['name'] | replace(':', '') }}";
 };
 {% endif %}
 

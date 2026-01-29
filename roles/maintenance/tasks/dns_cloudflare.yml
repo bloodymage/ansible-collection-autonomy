@@ -4,26 +4,26 @@
 # We remove CNAME records to ensure they don't interfere with the creation of A or AAAA records.
 #
 # ==================================================================================================
-- name: "Cloudflare: Identify CNAME records."
-  ansible.builtin.set_fact:
-    autonomy_dns_cname_records: "{{ autonomy_dns_cname_records + [inventory_hostname_short] }}"
-  when:
-    - inventory_hostname_short != autonomy_dns_public_host
+# - name: "Cloudflare: Identify CNAME records."
+#   ansible.builtin.set_fact:
+#     autonomy_dns_cname_records: "{{ autonomy_dns_cname_records + [inventory_hostname_short] }}"
+#   when:
+#     - inventory_hostname_short != autonomy_dns_public_host
 
-- name: "Cloudflare: Remove old CNAME Records."
-  community.general.cloudflare_dns:
-    #account_email: "{{ autonomy_dns_cloudflare_email }}"
-    api_token: "{{ __cloudflare_key }}"
-    zone: "{{ autonomy_domain }}"
-    record: "{{ inventory_hostname_short }}"
-    type: "CNAME"
-    state: "absent"
-  become: false
-  vars:
-    __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
-    __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
-  when:
-    - autonomy_dns_cname_records is falsy
+# - name: "Cloudflare: Remove old CNAME Records."
+#   community.general.cloudflare_dns:
+#     #account_email: "{{ autonomy_dns_cloudflare_email }}"
+#     api_token: "{{ __cloudflare_key }}"
+#     zone: "{{ autonomy_domain }}"
+#     record: "{{ inventory_hostname_short }}"
+#     type: "CNAME"
+#     state: "absent"
+#   become: false
+#   vars:
+#     __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
+#     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+#   when:
+#     - autonomy_dns_cname_records is falsy
 
 - name: "Cloudflare: Get public IPv4 Address."
   community.general.ipify_facts:
@@ -76,62 +76,62 @@
   community.general.cloudflare_dns:
     #account_email: "{{ autonomy_dns_cloudflare_email }}"
     api_token: "{{ __cloudflare_key }}"
-    zone: "{{ autonomy_domain }}"
-    record: "{{ item }}"
+    zone: "{{ item['zone'] | default(autonomy_domain) }}"
+    record: "{{ item['record'] }}"
     type: "CNAME"
-    value: "{{ autonomy_dns_public_host }}"
+    value: "{{ item['value'] }}"
     state: "present"
-    proxied: "{{ autonomy_dns_cloudflare_proxied }}"
+    proxied: "{{ item['proxied'] | default(autonomy_dns_cloudflare_proxied) }}"
     solo: "{{ autonomy_dns_cloudflare_solo }}"
     timeout: "{{ autonomy_dns_cloudflare_timeout }}"
     ttl: "{{ autonomy_dns_cloudflare_ttl }}"
-  loop: "{{ autonomy_dns_cname_records }}"
+  loop: "{{ autonomy_dns_cloudflare_cname_records }}"
   become: false
   vars:
     __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+  when:
+    - autonomy_dns_cloudflare_cname_records is truthy
 
 - name: "Cloudflare: Add or modify MX records."
   community.general.cloudflare_dns:
     #account_email: "{{ autonomy_dns_cloudflare_email }}"
     api_token: "{{ __cloudflare_key }}"
-    zone: "{{ autonomy_domain }}"
-    record: "@"
+    zone: "{{ item['zone'] | default(autonomy_domain) }}"
+    record: "{{ item['record'] }}"
     type: "MX"
-    value: "{{ item }}"
-    priority: "{{ autonomy_dns_mx_record_priority | default(host_index) }}"
+    value: "{{ item['value'] }}"
+    priority: "{{ item['priority'] | default(autonomy_dns_mx_record_priority) }}"
     state: "present"
-    solo: "{{ autonomy_dns_cloudflare_solo_mx }}"
+    solo: "{{ item['solo'] }}"
     timeout: "{{ autonomy_dns_cloudflare_timeout }}"
     ttl: "{{ autonomy_dns_cloudflare_ttl }}"
-  loop: "{{ groups['mail_servers'] }}"
-  loop_control:
-    index_var: host_index
-  run_once: true
+  loop: "{{ autonomy_dns_cloudflare_mx_records }}"
   become: false
   vars:
     __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   when:
-    - inventory_hostname in groups['mail_servers'] | default([])
+    - autonomy_dns_cloudflare_mx_records is truthy
 
-- name: "Cloudflare: Add or modify SPF records."
+- name: "Cloudflare: Add or modify TXT records."
   community.general.cloudflare_dns:
     #account_email: "{{ autonomy_dns_cloudflare_email }}"
     api_token: "{{ __cloudflare_key }}"
-    zone: "{{ autonomy_domain }}"
+    zone: "{{ item['zone'] | default(autonomy_domain) }}"
+    record: "{{ item['record'] }}"
     type: "TXT"
     state: "present"
-    solo: true
-    value: "v=spf1 {{ autonomy_dns_spf_mail_servers }}{% if autonomy_dns_spf_record_includes %} include:{{ autonomy_dns_spf_record_includes }}{% endif %} {{ autonomy_dns_spf_record_fail }}"
+    value: "{{ item['value'] }}"
     timeout: "{{ autonomy_dns_cloudflare_timeout }}"
     ttl: "{{ autonomy_dns_cloudflare_ttl }}"
+  loop: "{{ autonomy_dns_cloudflare_txt_records }}"
   become: false
   vars:
     __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   when:
-    - inventory_hostname in groups['mail_servers'] | default([])
+    - autonomy_dns_cloudflare_txt_records is truthy
 
 # - name: "Cloudflare: Add or modify DKIM TXT records."
 #   community.general.cloudflare_dns:

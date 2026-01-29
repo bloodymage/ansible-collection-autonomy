@@ -1,4 +1,0 @@
-autonomy_chromium_packages:
-  - chromium-browser
-
-autonomy_chromium_snap: true

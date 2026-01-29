@@ -5,9 +5,11 @@
 #
 # ==================================================================================================
 - name: "Basic Linux Host Configuration."
-  hosts: linux:!localhost:!routeros:!wifi_access_points:!printers:!public_zone:!virtual_hosts
+  hosts: linux:!localhost:!vendor_managed:!public_zone:!virtual_hosts:!dns_only
   roles:
-    - role: bloodymage.autonomy.etc_fstab
+    - role: bloodymage.autonomy.etc
+      vars:
+        __etc_tasks: "fstab"
       when:
         - ansible_connection != "local"
         - autonomy_virtual_host is falsy
@@ -15,13 +17,6 @@
         - autonomy_fstab is truthy
       tags:
         - fstab
-    - role: bloodymage.autonomy.nftables
-      when:
-        - ansible_connection != "local"
-        - ansible_network_os is not defined
-        - autonomy_virtual_host is falsy
-      tags:
-        - nftables
     - role: bloodymage.autonomy.fail2ban
       when:
         - ansible_connection != "local"
@@ -29,7 +24,9 @@
         - autonomy_virtual_host is falsy
       tags:
         - fail2ban
-    - role: bloodymage.autonomy.etc_timezone
+    - role: bloodymage.autonomy.etc
+      vars:
+        __etc_tasks: "timezone"
       when:
         - ansible_connection != "local"
         - ansible_network_os is not defined
@@ -61,16 +58,15 @@
         - autonomy_virtual_host is falsy
       tags:
         - sudo
-    - role: bloodymage.autonomy.skel
+    - role: bloodymage.autonomy.etc
+      vars:
+        __etc_tasks: "skel"
       when:
         - ansible_connection != "local"
         - ansible_network_os is not defined
         - autonomy_virtual_host is falsy
       tags:
         - skel
-    #- role: bloodymage.autonomy.polkit
-    #  tags:
-    #    - polkit
     - role: bloodymage.autonomy.screen
       when:
         - ansible_connection != "local"
@@ -200,17 +196,18 @@
 #   - redhat
 #
 # Note:
-#  - "!routeros" is included because otherwise Mikrotik routers are included.
-#  - "!wifi_access_points" is included because otherwise TP-Link EAP devices are included.
+# - !vendor_managed is included to exclude devices that are detected as debian family, while also
+#   being managed by vendor specific update process (Ubiquity, Mikrotik, TP-Link, etc)
 #
 # ==================================================================================================
 - name: "Basic settings for Debian Family Hosts."
-  hosts: debian:!localhost:!wifi_access_points:!printers
+  hosts: debian:!localhost:!vendor_managed:!dns_only
   roles:
-    - role: bloodymage.autonomy.aptitude
+    - role: bloodymage.autonomy.apt
       when:
         - ansible_connection != "local"
         - autonomy_virtual_host is falsy
         - ansible_network_os is not defined
+        - inventory_hostname not in groups["vendor_managed"]
       tags:
-        - aptitude
+        - apt

@@ -25,7 +25,6 @@
   vars:
     __alt_name: "IP:{{ autonomy_ipv6_address }}"
   when:
-    - autonomy_ipv6_address is defined
     - autonomy_ipv6_address is truthy
 
 # - name: "Add subject alt names based on role."
@@ -173,11 +172,13 @@
     - ansible_network_os is not defined
     - ansible_os_family is defined
     - not ownca_generate_locally
+    - inventory_hostname not in groups["vendor_managed"]
 
 - name: "Include Localhost Preparation Tasks."
   include_tasks: "localhost_prep.yml"
   when:
     - ansible_network_os is defined or ownca_generate_locally
+    - inventory_hostname in groups["vendor_managed"]
 
 - name: "Ensure we have a password for the Component Issuing CA."
   ansible.builtin.set_fact:
@@ -185,8 +186,10 @@
   vars:
     __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/ownca/ownca_component_password"
     __password_lookup: "{{ __password_store_id }}"
-  become: no
+  become: false
   delegate_to: localhost
+  when:
+    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
 
 # ==================================================================================================
 #
@@ -197,21 +200,25 @@
 - name: "Get component CA certificate information."
   community.crypto.x509_certificate_info:
     path: "{{ ownca_component_ca_cert_path }}"
-  become: no
+  become: false
   register: component_cert
   delegate_to: localhost
+  when:
+    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
 
 - name: "Check if host cert exists."
   ansible.builtin.stat:
     path: "{{ ownca_hosts_directory }}/certs/{{ autonomy_fqdn }}.crt"
   delegate_to: localhost
-  become: no
+  become: false
   register: cert_file
+  when:
+    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
 
 - name: "Get host certificate information."
   community.crypto.x509_certificate_info:
     path: "{{ cert_file.stat.path }}"
-  become: no
+  become: false
   delegate_to: localhost
   register: host_cert
   when:
@@ -252,9 +259,11 @@
     ownca_privatekey_passphrase: "{{ ownca_component_password }}"
     provider: ownca
     backup: yes
-    force: "{{ __host_cert_force_regeneration }}"
+    #force: "{{ __host_cert_force_regeneration }}"
   become: no
   delegate_to: localhost
+  when:
+    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
 
 - name: "Identify Certificate Complete Chain."
   community.crypto.certificate_complete_chain:
@@ -267,6 +276,8 @@
   register: parent_cert_authorities
   become: no
   delegate_to: localhost
+  when:
+    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
 
 # ==================================================================================================
 #
@@ -291,6 +302,7 @@
     - ansible_network_os is not defined
     - ansible_os_family is defined
     - not ownca_generate_locally
+    - inventory_hostname not in groups["vendor_managed"]
 
 - name: "Include NetworkOS Tasks."
   include_tasks: "{{ ansible_network_os.split('.')[2] | lower }}_final.yml"
@@ -302,6 +314,7 @@
   include_tasks: "localhost_final.yml"
   when:
     - ownca_generate_locally
+    - inventory_hostname in groups["vendor_managed"]
 
 - name: "Copy to Samba File Server."
   include_tasks: "copy_to_samba.yml"

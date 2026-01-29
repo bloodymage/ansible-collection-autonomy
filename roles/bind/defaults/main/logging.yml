@@ -1,0 +1,763 @@
+---
+autonomy_bind_logging_channels:
+  - "{{ autonomy_bind_logging_channel_default_syslog }}"
+  - "{{ autonomy_bind_logging_channel_default_logfile }}"
+  - "{{ autonomy_bind_logging_channel_security }}"
+  - "{{ autonomy_bind_logging_channel_null }}"
+
+autonomy_bind_logging_categories:
+  - "{{ autonomy_bind_logging_category_default }}"
+  - "{{ autonomy_bind_logging_category_security }}"
+
+# Category Channels
+autonomy_bind_logging_client_channels:
+  - "client_logfile"
+
+autonomy_bind_logging_cname_channels:
+  - "cname_logfile"
+
+autonomy_bind_logging_config_channels:
+  - "config_logfile"
+
+autonomy_bind_logging_database_channels:
+  - "database_logfile"
+
+autonomy_bind_logging_default_channels:
+  - "default_syslog"
+  - "default_logfile"
+
+autonomy_bind_logging_dispatch_channels:
+  - "dispatch_logfile"
+
+autonomy_bind_logging_dnssec_channels:
+  - "dnssec_logfile"
+
+autonomy_bind_logging_dnstap_channels:
+  - "dnstap_logfile"
+
+autonomy_bind_logging_edns_disabled_channels:
+  - "edns_disabled_logfile"
+
+autonomy_bind_logging_general_channels:
+  - "general_logfile"
+
+autonomy_bind_logging_dns_reporting_agent_channels:
+  - "dns_reporting_agent_logfile"
+
+autonomy_bind_logging_lame_servers_channels:
+  - "lame_servers_logfile"
+
+autonomy_bind_logging_network_channels:
+  - "network_logfile"
+
+autonomy_bind_logging_notify_channels:
+  - "notify_logfile"
+
+autonomy_bind_logging_nsid_channels:
+  - "nsid_logfile"
+
+autonomy_bind_logging_queries_channels:
+  - "query_logfile"
+
+autonomy_bind_logging_query_error_channels:
+  - "query_errors_logfile"
+
+autonomy_bind_logging_rate_limit_channels:
+  - "rate_limit_logfile"
+
+autonomy_bind_logging_resolver_channels:
+  - "resolver_logfile"
+
+autonomy_bind_logging_responses_channels:
+  - "responses_logfile"
+
+autonomy_bind_logging_rpz_channels:
+  - "rpz_logfile"
+
+autonomy_bind_logging_rpz_passthru_channels:
+  - "rpz_passthru_logfile"
+
+autonomy_bind_logging_security_channels:
+  - "security_logfile"
+
+autonomy_bind_logging_serve_stale_channels:
+  - "serve_stale_logfile"
+
+autonomy_bind_logging_spill_channels:
+  - "spill_logfile"
+
+autonomy_bind_logging_sslkeylog_channels:
+  - "sslkeylog_logfile"
+
+autonomy_bind_logging_trust_anchor_telemetry_channels:
+  - "trust_anchor_telemetry_logfile"
+
+autonomy_bind_logging_unmatched_channels:
+  - "unmatched_logfile"
+
+autonomy_bind_logging_update_channels:
+  - "update_logfile"
+
+autonomy_bind_logging_update_policy_channels:
+  - "update_policy_logfile"
+
+autonomy_bind_logging_update_security_channels:
+  - "update_security_logfile"
+
+autonomy_bind_logging_xfer_channels:
+  - "xfer_logfile"
+
+autonomy_bind_logging_xfer_in_channels:
+  - "xfer_in_logfile"
+
+autonomy_bind_logging_xfer_out_channels:
+  - "xfer_out_logfile"
+
+autonomy_bind_logging_zoneload_channels:
+  - "zoneload_logfile"
+
+autonomy_bind_logging_zoneversion_channels:
+  - "zoneversion_logfile"
+
+# Categories
+autonomy_bind_logging_category_client:
+  name: "client"
+  channels: "{{ autonomy_bind_logging_client_channels }}"
+
+autonomy_bind_logging_category_cname:
+  name: "cname"
+  channels: "{{ autonomy_bind_logging_cname_channels }}"
+
+autonomy_bind_logging_category_config:
+  name: "config"
+  channels: "{{ autonomy_bind_logging_config_channels }}"
+
+autonomy_bind_logging_category_database:
+  name: "database"
+  channels: "{{ autonomy_bind_logging_database_channels }}"
+
+autonomy_bind_logging_category_default:
+  name: "default"
+  channels: "{{ autonomy_bind_logging_default_channels }}"
+
+autonomy_bind_logging_category_dispatch:
+  name: "dispatch"
+  channels: "{{ autonomy_bind_logging_dispatch_channels }}"
+
+autonomy_bind_logging_category_dnssec:
+  name: "dnssec"
+  channels: "{{ autonomy_bind_logging_dnssec_channels }}"
+
+autonomy_bind_logging_category_dnstap:
+  name: "dnstap"
+  channels: "{{ autonomy_bind_logging_dnstap_channels }}"
+
+autonomy_bind_logging_category_edns_disabled:
+  name: "edns-disabled"
+  channels: "{{ autonomy_bind_logging_edns_disabled_channels }}"
+
+autonomy_bind_logging_category_general:
+  name: "general"
+  channels: "{{ autonomy_bind_logging_general_channels }}"
+
+autonomy_bind_logging_category_dns_reporting_agent:
+  name: "dns-reporting-agent"
+  channels: "{{ autonomy_bind_logging_dns_reporting_agent_channels }}"
+
+autonomy_bind_logging_category_lame_servers:
+  name: "lame-servers"
+  channels: "{{ autonomy_bind_logging_lame_servers_channels }}"
+
+autonomy_bind_logging_category_network:
+  name: "network"
+  channels: "{{ autonomy_bind_logging_network_channels }}"
+
+autonomy_bind_logging_category_notify:
+  name: "notify"
+  channels: "{{ autonomy_bind_logging_notify_channels }}"
+
+autonomy_bind_logging_category_nsid:
+  name: "nsid"
+  channels: "{{ autonomy_bind_logging_nsid_channels }}"
+
+autonomy_bind_logging_category_queries:
+  name: "queries"
+  channels: "{{ autonomy_bind_logging_queries_channels }}"
+
+autonomy_bind_logging_category_query_errors:
+  name: "query-errors"
+  channels: "{{ autonomy_bind_logging_query_error_channels }}"
+
+autonomy_bind_logging_category_rate_limit:
+  name: "rate-limit"
+  channels: "{{ autonomy_bind_logging_rate_limit_channels }}"
+
+autonomy_bind_logging_category_resolver:
+  name: "resolver"
+  channels: "{{ autonomy_bind_logging_resolver_channels }}"
+
+autonomy_bind_logging_category_responses:
+  name: "responses"
+  channels: "{{ autonomy_bind_logging_responses_channels }}"
+
+autonomy_bind_logging_category_rpz:
+  name: "rpz"
+  channels: "{{ autonomy_bind_logging_rpz_channels }}"
+
+autonomy_bind_logging_category_rpz_passthru:
+  name: "rpz-passthru"
+  channels: "{{ autonomy_bind_logging_rpz_passthru_channels }}"
+
+autonomy_bind_logging_category_security:
+  name: "security"
+  channels: "{{ autonomy_bind_logging_security_channels }}"
+
+autonomy_bind_logging_category_serve_stale:
+  name: "serve-stale"
+  channels: "{{ autonomy_bind_logging_serve_stale_channels }}"
+
+autonomy_bind_logging_category_spill:
+  name: "spill"
+  channels: "{{ autonomy_bind_logging_spill_channels }}"
+
+autonomy_bind_logging_category_sslkeylog:
+  name: "sslkeylog"
+  channels: "{{ autonomy_bind_logging_sslkeylog_channels }}"
+
+autonomy_bind_logging_category_trust_anchor_telemetry:
+  name: "trust-anchor-telemetry"
+  channels: "{{ autonomy_bind_logging_trust_anchor_telemetry_channels }}"
+
+autonomy_bind_logging_category_unmatched:
+  name: "unmatched"
+  channels: "{{ autonomy_bind_logging_unmatched_channels }}"
+
+autonomy_bind_logging_category_update:
+  name: "update"
+  channels: "{{ autonomy_bind_logging_update_channels }}"
+
+autonomy_bind_logging_category_update_policy:
+  name: "update-policy"
+  channels: "{{ autonomy_bind_logging_update_policy_channels }}"
+
+autonomy_bind_logging_category_update_security:
+  name: "update-security"
+  channels: "{{ autonomy_bind_logging_update_security_channels }}"
+
+autonomy_bind_logging_category_xfer_in:
+  name: "xfer-in"
+  channels: "{{ autonomy_bind_logging_xfer_in_channels }}"
+
+autonomy_bind_logging_category_xfer_out:
+  name: "xfer-out"
+  channels: "{{ autonomy_bind_logging_xfer_out_channels }}"
+
+autonomy_bind_logging_category_zoneload:
+  name: "zoneload"
+  channels: "{{ autonomy_bind_logging_zoneload_channels }}"
+
+autonomy_bind_logging_category_zoneversion:
+  name: "zoneversion"
+  channels: "{{ autonomy_bind_logging_zoneversion_channels }}"
+
+# Default Log Level
+autonomy_bind_logging_severity: "info"
+
+# Channel Log Levels
+autonomy_bind_logging_client_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_cname_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_config_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_database_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_default_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_dispatch_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_dnssec_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_dnstap_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_edns_disabled_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_general_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_dns_reporting_agent_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_lame_servers_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_network_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_notify_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_nsid_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_queries_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_query_errors_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_rate_limit_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_resolver_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_responses_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_rpz_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_rpz_passthru_severity: "{{ autonomy_bind_logging_rpz_severity }}"
+autonomy_bind_logging_security_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_serve_stale_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_spill_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_sslkeylog_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_trust_anchor_telemetry_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_unmatched_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_update_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_update_policy_severity: "{{ autonomy_bind_logging_update_severity }}"
+autonomy_bind_logging_update_security_severity: "{{ autonomy_bind_logging_update_severity }}"
+autonomy_bind_logging_xfer_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_xfer_in_severity: "{{ autonomy_bind_logging_xfer_severity }}"
+autonomy_bind_logging_xfer_out_severity: "{{ autonomy_bind_logging_xfer_severity }}"
+autonomy_bind_logging_zoneload_severity: "{{ autonomy_bind_logging_severity }}"
+autonomy_bind_logging_zoneversion_severity: "{{ autonomy_bind_logging_severity }}"
+
+# Logfile Size
+autonomy_bind_logging_size: "100k"
+
+# Channel Logfile Size
+autonomy_bind_logging_client_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_cname_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_config_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_database_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_default_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_dispatch_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_dnssec_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_dnstap_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_edns_disabled_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_general_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_dns_reporting_agent_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_lame_servers_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_network_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_notify_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_nsid_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_queries_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_query_errors_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_rate_limit_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_resolver_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_responses_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_rpz_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_rpz_passthru_size: "{{ autonomy_bind_logging_rpz_size }}"
+autonomy_bind_logging_security_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_serve_stale_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_spill_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_sslkeylog_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_trust_anchor_telemetry_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_unmatched_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_update_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_update_policy_size: "{{ autonomy_bind_logging_update_size }}"
+autonomy_bind_logging_update_security_size: "{{ autonomy_bind_logging_update_size }}"
+autonomy_bind_logging_xfer_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_xfer_in_size: "{{ autonomy_bind_logging_xfer_size }}"
+autonomy_bind_logging_xfer_out_size: "{{ autonomy_bind_logging_xfer_size }}"
+autonomy_bind_logging_zoneload_size: "{{ autonomy_bind_logging_size }}"
+autonomy_bind_logging_zoneversion_size: "{{ autonomy_bind_logging_size }}"
+
+# Logfile Versions
+autonomy_bind_logging_versions: 7
+
+# Category Logfile Versions
+autonomy_bind_logging_client_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_cname_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_config_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_database_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_default_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_dispatch_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_dnssec_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_dnstap_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_edns_disabled_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_general_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_dns_reporting_agent_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_lame_servers_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_network_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_notify_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_nsid_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_queries_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_query_errors_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_rate_limit_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_resolver_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_responses_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_rpz_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_rpz_passthru_versions: "{{ autonomy_bind_logging_rpz_versions }}"
+autonomy_bind_logging_security_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_serve_stale_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_spill_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_sslkeylog_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_trust_anchor_telemetry_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_unmatched_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_update_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_update_policy_versions: "{{ autonomy_bind_logging_update_versions }}"
+autonomy_bind_logging_update_security_versions: "{{ autonomy_bind_logging_update_versions }}"
+autonomy_bind_logging_xfer_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_xfer_in_versions: "{{ autonomy_bind_logging_xfer_versions }}"
+autonomy_bind_logging_xfer_out_versions: "{{ autonomy_bind_logging_xfer_versions }}"
+autonomy_bind_logging_zoneload_versions: "{{ autonomy_bind_logging_versions }}"
+autonomy_bind_logging_zoneversion_versions: "{{ autonomy_bind_logging_versions }}"
+
+# Channels
+autonomy_bind_logging_channel_client_logfile:
+  name: "client_logfile"
+  file: "{{ autonomy_bind_log_dir }}/client.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_client_severity }}"
+  size: "{{ autonomy_bind_logging_client_size }}"
+  versions: "{{ autonomy_bind_logging_client_versions }}"
+
+autonomy_bind_logging_channel_cname_logfile:
+  name: "cname_logfile"
+  file: "{{ autonomy_bind_log_dir }}/cname.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_cname_severity }}"
+  size: "{{ autonomy_bind_logging_cname_size }}"
+  versions: "{{ autonomy_bind_logging_cname_versions }}"
+
+autonomy_bind_logging_channel_config_logfile:
+  name: "config_logfile"
+  file: "{{ autonomy_bind_log_dir }}/config.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_config_severity }}"
+  size: "{{ autonomy_bind_logging_config_size }}"
+  versions: "{{ autonomy_bind_logging_config_versions }}"
+
+autonomy_bind_logging_channel_database_logfile:
+  name: "database_logfile"
+  file: "{{ autonomy_bind_log_dir }}/database.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_database_severity }}"
+  size: "{{ autonomy_bind_logging_database_size }}"
+  versions: "{{ autonomy_bind_logging_database_versions }}"
+
+autonomy_bind_logging_channel_default_logfile:
+  name: "default_logfile"
+  file: "{{ autonomy_bind_log_dir }}/default.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_default_severity }}"
+  size: "{{ autonomy_bind_logging_default_size }}"
+  versions: "{{ autonomy_bind_logging_default_versions }}"
+
+autonomy_bind_logging_channel_dispatch_logfile:
+  name: "dispatch_logfile"
+  file: "{{ autonomy_bind_log_dir }}/dispatch.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_dispatch_severity }}"
+  size: "{{ autonomy_bind_logging_dispatch_size }}"
+  versions: "{{ autonomy_bind_logging_dispatch_versions }}"
+
+autonomy_bind_logging_channel_dnssec_logfile:
+  name: "dnssec_logfile"
+  file: "{{ autonomy_bind_log_dir }}/dnssec.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_dnssec_severity }}"
+  size: "{{ autonomy_bind_logging_dnssec_size }}"
+  versions: "{{ autonomy_bind_logging_dnssec_versions }}"
+
+autonomy_bind_logging_channel_dnstap_logfile:
+  name: "dnstap_logfile"
+  file: "{{ autonomy_bind_log_dir }}/dnstap.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_dnstap_severity }}"
+  size: "{{ autonomy_bind_logging_dnstap_size }}"
+  versions: "{{ autonomy_bind_logging_dnstap_versions }}"
+
+autonomy_bind_logging_channel_edns_disabled_logfile:
+  name: "edns_disabled_logfile"
+  file: "{{ autonomy_bind_log_dir }}/edns_disabled.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_edns_disabled_severity }}"
+  size: "{{ autonomy_bind_logging_edns_disabled_size }}"
+  versions: "{{ autonomy_bind_logging_edns_disabled_versions }}"
+
+autonomy_bind_logging_channel_general_logfile:
+  name: "general_logfile"
+  file: "{{ autonomy_bind_log_dir }}/general.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_general_severity }}"
+  size: "{{ autonomy_bind_logging_general_size }}"
+  versions: "{{ autonomy_bind_logging_general_versions }}"
+
+autonomy_bind_logging_channel_dns_reporting_agent_logfile:
+  name: "dns_reporting_agent_logfile"
+  file: "{{ autonomy_bind_log_dir }}/dns_reporting_agent.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_dns_reporting_agent_severity }}"
+  size: "{{ autonomy_bind_logging_dns_reporting_agent_size }}"
+  versions: "{{ autonomy_bind_logging_dns_reporting_agent_versions }}"
+
+autonomy_bind_logging_channel_lame_servers_logfile:
+  name: "lame_servers_logfile"
+  file: "{{ autonomy_bind_log_dir }}/lame_servers.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_lame_servers_severity }}"
+  size: "{{ autonomy_bind_logging_lame_servers_size }}"
+  versions: "{{ autonomy_bind_logging_lame_servers_versions }}"
+
+autonomy_bind_logging_channel_network_logfile:
+  name: "network_logfile"
+  file: "{{ autonomy_bind_log_dir }}/network.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_network_severity }}"
+  size: "{{ autonomy_bind_logging_network_size }}"
+  versions: "{{ autonomy_bind_logging_network_versions }}"
+
+autonomy_bind_logging_channel_notify_logfile:
+  name: "notify_logfile"
+  file: "{{ autonomy_bind_log_dir }}/notify.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_notify_severity }}"
+  size: "{{ autonomy_bind_logging_notify_size }}"
+  versions: "{{ autonomy_bind_logging_notify_versions }}"
+
+autonomy_bind_logging_channel_nsid_logfile:
+  name: "nsid_logfile"
+  file: "{{ autonomy_bind_log_dir }}/nsid.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_nsid_severity }}"
+  size: "{{ autonomy_bind_logging_nsid_size }}"
+  versions: "{{ autonomy_bind_logging_nsid_versions }}"
+
+autonomy_bind_logging_channel_query_logfile:
+  name: "query_logfile"
+  file: "{{ autonomy_bind_log_dir }}/query.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_query_severity }}"
+  size: "{{ autonomy_bind_logging_query_size }}"
+  versions: "{{ autonomy_bind_logging_query_versions }}"
+
+autonomy_bind_logging_channel_query_errors_logfile:
+  name: "query_errors_logfile"
+  file: "{{ autonomy_bind_log_dir }}/query_errors.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_query_errors_severity }}"
+  size: "{{ autonomy_bind_logging_query_errors_size }}"
+  versions: "{{ autonomy_bind_logging_query_errors_versions }}"
+
+autonomy_bind_logging_channel_rate_limit_logfile:
+  name: "rate_limit_logfile"
+  file: "{{ autonomy_bind_log_dir }}/rate_limit.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_rate_limit_severity }}"
+  size: "{{ autonomy_bind_logging_rate_limit_size }}"
+  versions: "{{ autonomy_bind_logging_rate_limit_versions }}"
+
+autonomy_bind_logging_channel_resolver_logfile:
+  name: "resolver_logfile"
+  file: "{{ autonomy_bind_log_dir }}/resolver.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_resolver_severity }}"
+  size: "{{ autonomy_bind_logging_resolver_size }}"
+  versions: "{{ autonomy_bind_logging_resolver_versions }}"
+
+autonomy_bind_logging_channel_responses_logfile:
+  name: "responses_logfile"
+  file: "{{ autonomy_bind_log_dir }}/responses.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_responses_severity }}"
+  size: "{{ autonomy_bind_logging_responses_size }}"
+  versions: "{{ autonomy_bind_logging_responses_versions }}"
+
+autonomy_bind_logging_channel_rpz_logfile:
+  name: "rpz_logfile"
+  file: "{{ autonomy_bind_log_dir }}/rpz.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_rpz_severity }}"
+  size: "{{ autonomy_bind_logging_rpz_size }}"
+  versions: "{{ autonomy_bind_logging_rpz_versions }}"
+
+autonomy_bind_logging_channel_rpz_passthru_logfile:
+  name: "rpz_passthru_logfile"
+  file: "{{ autonomy_bind_log_dir }}/rpz_passthru.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_rpz_passthru_severity }}"
+  size: "{{ autonomy_bind_logging_rpz_passthru_size }}"
+  versions: "{{ autonomy_bind_logging_rpz_passthru_versions }}"
+
+autonomy_bind_logging_channel_security_logfile:
+  name: "security_logfile"
+  file: "{{ autonomy_bind_log_dir }}/security.log"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_security_severity }}"
+  size: "{{ autonomy_bind_logging_security_size }}"
+  versions: "{{ autonomy_bind_logging_security_versions }}"
+
+autonomy_bind_logging_channel_serve_stale_logfile:
+  name: "serve_stale_logfile"
+  file: "{{ autonomy_bind_log_dir }}/serve_stale.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_serve_stale_severity }}"
+  size: "{{ autonomy_bind_logging_serve_stale_size }}"
+  versions: "{{ autonomy_bind_logging_serve_stale_versions }}"
+
+autonomy_bind_logging_channel_spill_logfile:
+  name: "spill_logfile"
+  file: "{{ autonomy_bind_log_dir }}/spill.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_spill_severity }}"
+  size: "{{ autonomy_bind_logging_spill_size }}"
+  versions: "{{ autonomy_bind_logging_spill_versions }}"
+
+autonomy_bind_logging_channel_sslkeylog_logfile:
+  name: "sslkeylog_logfile"
+  file: "{{ autonomy_bind_log_dir }}/sslkeylog.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_sslkeylog_severity }}"
+  size: "{{ autonomy_bind_logging_sslkeylog_size }}"
+  versions: "{{ autonomy_bind_logging_sslkeylog_versions }}"
+
+autonomy_bind_logging_channel_trust_anchor_telemetry_logfile:
+  name: "trust_anchor_telemetry_logfile"
+  file: "{{ autonomy_bind_log_dir }}/trust_anchor_telemetry.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_trust_anchor_telemety_severity }}"
+  size: "{{ autonomy_bind_logging_trust_anchor_telemety_size }}"
+  versions: "{{ autonomy_bind_logging_trust_anchor_telemety_versions }}"
+
+autonomy_bind_logging_channel_unmatched_logfile:
+  name: "unmatched_logfile"
+  file: "{{ autonomy_bind_log_dir }}/unmatched.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_unmatched_severity }}"
+  size: "{{ autonomy_bind_logging_unmatched_size }}"
+  versions: "{{ autonomy_bind_logging_unmatched_versions }}"
+
+autonomy_bind_logging_channel_update_logfile:
+  name: "update_logfile"
+  file: "{{ autonomy_bind_log_dir }}/update.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_update_severity }}"
+  size: "{{ autonomy_bind_logging_update_size }}"
+  versions: "{{ autonomy_bind_logging_update_versions }}"
+
+autonomy_bind_logging_channel_update_policy_logfile:
+  name: "update_policy_logfile"
+  file: "{{ autonomy_bind_log_dir }}/update_policy.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_update_severity }}"
+  size: "{{ autonomy_bind_logging_update_size }}"
+  versions: "{{ autonomy_bind_logging_update_versions }}"
+
+autonomy_bind_logging_channel_update_security_logfile:
+  name: "update_security_logfile"
+  file: "{{ autonomy_bind_log_dir }}/update_security.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_update_security_severity }}"
+  size: "{{ autonomy_bind_logging_update_security_size }}"
+  versions: "{{ autonomy_bind_logging_update_security_versions }}"
+
+autonomy_bind_logging_channel_xfer_logfile:
+  name: "xfer_logfile"
+  file: "{{ autonomy_bind_log_dir }}/xfer.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_xfer_severity }}"
+  size: "{{ autonomy_bind_logging_xfer_size }}"
+  versions: "{{ autonomy_bind_logging_xfer_versions }}"
+
+autonomy_bind_logging_channel_xfer_in_logfile:
+  name: "xfer_in_logfile"
+  file: "{{ autonomy_bind_log_dir }}/xfer_in.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_xfer_in_severity }}"
+  size: "{{ autonomy_bind_logging_xfer_in_size }}"
+  versions: "{{ autonomy_bind_logging_xfer_in_versions }}"
+
+autonomy_bind_logging_channel_xfer_out_logfile:
+  name: "xfer_out_logfile"
+  file: "{{ autonomy_bind_log_dir }}/xfer_out.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_xfer_out_severity }}"
+  size: "{{ autonomy_bind_logging_xfer_out_size }}"
+  versions: "{{ autonomy_bind_logging_xfer_out_versions }}"
+
+autonomy_bind_logging_channel_zoneload_logfile:
+  name: "zoneload_logfile"
+  file: "{{ autonomy_bind_log_dir }}/zoneload.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_zoneload_severity }}"
+  size: "{{ autonomy_bind_logging_zoneload_size }}"
+  versions: "{{ autonomy_bind_logging_zoneload_versions }}"
+
+autonomy_bind_logging_channel_zoneversion_logfile:
+  name: "zoneversion_logfile"
+  file: "{{ autonomy_bind_log_dir }}/zoneversion.log"
+  print_category: "yes"
+  print_severity: "yes"
+  print_time: "yes"
+  severity: "{{ autonomy_bind_logging_zoneversion_severity }}"
+  size: "{{ autonomy_bind_logging_zoneversion_size }}"
+  versions: "{{ autonomy_bind_logging_zoneversion_versions }}"
+
+autonomy_bind_logging_channel_default_syslog:
+  name: "default_syslog"
+  target: "syslog daemon"
+  severity: "{{ autonomy_bind_logging_default_severity }}"
+
+autonomy_bind_logging_channel_general_syslog:
+  name: "general_syslog"
+  target: "syslog daemon"
+  severity: "{{ autonomy_bind_logging_general_severity }}"
+
+autonomy_bind_logging_channel_stderr:
+  name: "stderr"
+  target: "stderr"
+  severity: "{{ autonomy_bind_logging_stderr_severity }}"
+
+autonomy_bind_logging_channel_null:
+  name: "null"
+  target: "null"

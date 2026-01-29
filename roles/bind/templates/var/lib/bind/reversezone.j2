@@ -12,7 +12,7 @@ $TTL	{{ bind_zone_ttl }}
 {{ bind_zone_retry.ljust(20) }}  ; Retry
 {{ bind_zone_expire.ljust(20) }}  ; Expire
 {{ bind_zone_negative_cache_ttl.ljust(20) }}  ; Negative Cache TTL
-)  
+)
 
 {% for ns in groups[autonomy_zone_name + '_dns_servers'] -%}
   {{ item['name'].split('.')[1] }}.{{ item['name'].split('.')[0] }}.in-addr.arpa.  {{ 'IN NS'.ljust(6) }}{{ hostvars[ns]['inventory_hostname_short'] }}.{{ item['domain'] }}.

@@ -14,15 +14,13 @@ autonomy_systemd_networkd_packages_remove:
   - isc-dhcp-common
   - openresolv
 
+# Options include '--interfaces=eth0,bond0, etc'
+autonomy_systemd_networkd_interfaces: ""
+autonomy_systemd_networkd_any: "--any"
+
 autonomy_systemd_old_networking_services:
   - NetworkManager
   - ModemManager
   - avahi-daemon
   - networking
   - dhcpcd
-
-autonomy_systemd_timesyncd_packages:
-  - systemd-timesyncd
-
-autonomy_systemd_timesyncd_conflicts:
-  - ntpsec

@@ -1,0 +1,5 @@
+// prime the server with knowledge of the root servers
+zone "." {
+        type hint;
+        file "{{ autonomy_bind_root_hints_path }}";
+};

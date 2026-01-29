@@ -1,54 +1,74 @@
-{{ ansible_managed | comment }}
+# {{ ansible_managed }}
 
 {% if inventory_hostname not in groups['samba_domain_controllers'] %}
-{% if bind_acls is defined -%}
-  {% for acl in bind_acls -%}
-    acl {{ acl['name'] }} {
-    {% if acl['networks'] is defined %}
-      {% for net in acl['networks'] %}
-        {{ net }};
-      {% endfor %}
-    {% endif %}
-    {% if acl['servers'] is defined %}
-      {% for srv in acl['servers'] %}
-        {{ srv }};
-      {% endfor %}
-    {% endif %}
-    };
-  {% endfor %}
+{% if autonomy_bind_acls is defined %}
+{% for acl in autonomy_bind_acls %}
+acl {{ acl['name'] }} {
+{% if acl['networks'] is defined %}
+{% for net in acl['networks'] %}
+  {{ net }};
+{% endfor %}
 {% endif %}
+{% if acl['servers'] is defined -%}
+{% for srv in acl['servers'] %}
+  {{ srv }};
+{% endfor %}
 {% endif %}
+};
 
+{% endfor %}
+{% endif %}
+{% endif %}
 options {
-  directory "/var/cache/bind";
-
-  // version statement for security to avoid hacking known weaknesses
-  // if the real version number is revealed
-  version "not currently available";
-
-  dnssec-validation {{ bind_dnssec_validation }};
-
-  listen-on { any; };
-  listen-on-v6 { any; };
-
+  directory "{{ autonomy_bind_directory }}";
+{# version statement for security to avoid hacking known weaknesses #}
+{# if the real version number is revealed #}
+  version "{{ autonomy_bind_version }}";
+  dnssec-validation {{ autonomy_bind_dnssec_validation }};
+  listen-on { {{ autonomy_bind_listen_on }}; };
+  listen-on-v6 { {{ autonomy_bind_listen_on_v6 }}; };
 {% if inventory_hostname in groups['samba_domain_controllers'] %}
   tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
 {% else %}
   allow-query { {{ autonomy_bind_allow_query }}; };
   allow-transfer { {{ autonomy_bind_allow_transfer }}; };
-  recursion yes; #enable recursive queries
-
-  auth-nxdomain no;    # conform to RFC1035
-
-  {# TODO: Ensure eligibility is at least 6 seconds longer than the trigger #}
+{# enable recursive queries #}
+  recursion {{ autonomy_bind_recursion }};
+  allow-recursion { {{ autonomy_bind_allow_recursion }}; };
+{% if autonomy_bind_auth_nxdomain != __autonomy_bind_auth_nxdomain %}
+  auth-nxdomain {{ autonomy_bind_auth_nxdomain }};
+{% endif %}
+{% if autonomy_bind_max_cache_ttl != __autonomy_bind_max_cache_ttl %}
+  max-cache-ttl {{ autonomy_bind_max_cache_ttl }};
+{% endif %}
+{% if autonomy_bind_stale_answer_enable != __autonomy_bind_stale_answer_enable %}
+  stale-answer-enable {{ autonomy_bind_stale_answer_enable }};
+{% endif %}
+{% if autonomy_bind_stale_cache_enable != __autonomy_bind_stale_cache_enable %}
+  stale-cache-enable {{ autonomy_bind_stale_cache_enable }};
+{% endif %}
+{% if autonomy_bind_max_stale_ttl != __autonomy_bind_max_stale_ttl %}
+  max-stale-ttl {{ autonomy_bind_max_stale_ttl }};
+{% endif %}
+{% if autonomy_bind_stale_answer_ttl != __autonomy_bind_stale_answer_ttl %}
+  stale-answer-ttl {{ autonomy_bind_stale_answer_ttl }};
+{% endif %}
+{# TODO: Ensure eligibility is at least 6 seconds longer than the trigger #}
   prefetch {{ autonomy_bind_prefetch_trigger }} {{ autonomy_bind_prefetch_eligibility }};
+{% endif %}
+
+{% if autonomy_bind_forwarders is truthy %}
+  forwarders {
+  {% for item in autonomy_bind_forwarders %}
+    {{ item }};
+  {% endfor %}
+  };
+  forward {{ autonomy_bind_forward }};
+{% endif %}
+
 {# if bind_rpz_zones length > 0 #}
 {# response-policy { #}
 {# }; #}
 {# endif #}
-
-{% endif %}
-
-
 
 };

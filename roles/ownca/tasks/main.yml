@@ -12,18 +12,23 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
-  delegate_to: localhost
-  run_once: yes
+  become: false
+  tags:
+    - ownca
+    - ownca-crls
+    - ownca-host-certs
+    - ownca-host-dhparams
+    - ownca-root
+    - ownca-user-certs
 
 - name: "Install packages."
   ansible.builtin.package:
     pkg: "{{ autonomy_ownca_packages }}"
     state: present
-  become: yes
+  become: true
   register: result
   delegate_to: localhost
-  run_once: yes
+  run_once: true
 
 - name: "Create OwnCA: Root CA."
   include_tasks: "rootca.yml"
@@ -69,7 +74,7 @@
   include_tasks: "host_dhparams.yml"
   when:
     - __ownca_tasks == "dhparams"
+    - inventory_hostname not in groups["vendor_managed"]
   tags:
     - ownca
-    - ownca-dhparams
     - ownca-host-dhparams

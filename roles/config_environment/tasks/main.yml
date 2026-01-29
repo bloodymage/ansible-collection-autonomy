@@ -4,3 +4,17 @@
   include_tasks: "config_environment.yml"
   when:
     - __autonomy_configuration_complete is false
+    - __env_tasks is falsy
+    - not autonomy_dns_only
+
+- name: "Configure OwnCA Environment."
+  include_tasks: "ownca.yml"
+  when:
+    - __env_tasks == "ownca"
+    - not autonomy_dns_only
+
+- name: "Configure Realm Environment."
+  include_tasks: "realm.yml"
+  when:
+    - __env_tasks == "realm"
+    - not autonomy_dns_only

@@ -7,7 +7,7 @@
 # Installs a set of common apps for all systems on the network
 #
 # ==================================================================================================
-- name: "Check if MySQL is already installed."
+- name: "Check if MariaDB is already installed."
   ansible.builtin.stat: path=/etc/init.d/mysql
   register: mysql_installed
   become: false

@@ -1,5 +1,5 @@
 ---
-- name: Set Host Status
+- name: "Set Host Status."
   ansible.builtin.set_fact:
     autonomy_diagnostics_host_status: "Unreachable"
   when:
@@ -7,6 +7,12 @@
   tags:
     - host-info
     - host-system
+
+- name: "Print Host Distribution Version"
+  ansible.builtin.debug:
+    msg: "Version: {{ ansible_distribution_release }}"
+  tags:
+    - host-version
 
 - name: "Print System Information."
   ansible.builtin.debug:
@@ -18,7 +24,6 @@
       - "    Domain:       {{ ansible_domain | default(none) }}"
       - "    System:       {{ ansible_system | default(none) }}"
       - "    OS:           {{ ansible_os | default(none) }}"
-      - "    Network OS:   {{ ansible_network_os | default(none) }}"
       - "    OS Family:    {{ ansible_os_family | default(none) }}"
       - "    Distro:       {{ ansible_distribution | default(none) }}"
       - "    Distro ID:    {{ ansible_lsb.id | default(none) }}"
@@ -51,7 +56,9 @@
   ansible.builtin.debug:
     msg:
       - "System {{ inventory_hostname }}"
-      - "    IPv6 Addr:    {{ ansible_default_ipv6.address | default(none) }}"
+      - "    IPv6 Addr:    {{ autonomy_ipv6_address | default(none) }}"
+      - "    PTR      :    {{ autonomy_ipv6_address | ansible.utils.ipaddr('revdns') }}"
+      - "    IPv6 Zone:    {{ autonomy_ipv6_address | ansible.utils.ipcut(64) }}"
   tags:
     - host-info
     - host-ipv6
@@ -67,23 +74,33 @@
 #   tags:
 #     - host-info
 #     - host-domain
-- name: "Get package information."
-  ansible.builtin.package_facts:
-    manager: auto
-  when:
-    - ansible_connection != "local"
-  tags:
-    - host-info
-    - host-packages
+# - name: "Get package information."
+#   ansible.builtin.package_facts:
+#     manager: auto
+#   when:
+#     - ansible_connection != "local"
+#   tags:
+#     - host-info
+#     - host-packages
 
-- name: "Print Host Network Information (IPv6)."
+# - name: "Print Host Network Information (IPv6)."
+#   ansible.builtin.debug:
+#     msg:
+#       - "System {{ inventory_hostname }}"
+#       - "  Packages:    {{ ansible_facts['packages'] | default(none) }}"
+#   tags:
+#     - host-info
+#     - host-packages
+
+- name: "Display all variables/facts known for a host"
   ansible.builtin.debug:
     msg:
-      - "System {{ inventory_hostname }}"
-      - "  Packages:    {{ ansible_facts['packages'] | default(none) }}"
+      - "All facts for {{ inventory_hostname }}"
+      - "{{ ansible_facts }}"
   tags:
     - host-info
-    - host-packages
+    - host-facts
+
 
 - name: "Display all variables/facts known for a host"
   ansible.builtin.debug:
@@ -92,5 +109,4 @@
       - "{{ hostvars[inventory_hostname] }}"
   tags:
     - host-info
-    - host-facts
-
+    - host-vars

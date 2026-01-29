@@ -1,6 +1,6 @@
 ---
 autonomy_apache_daemon: "apache2"
-autonomy_bind9_daemon: "bind9"
+autonomy_bind9_daemon: "named"
 autonomy_cron_daemon: "cron"
 autonomy_ddclient_daemon: "ddclient"
 autonomy_dovecot_daemon: "dovecot"

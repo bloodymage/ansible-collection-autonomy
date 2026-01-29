@@ -13,7 +13,16 @@
 - name: "Print RouterOS updates."
   ansible.builtin.debug:
     msg:
-      - "{{ routeros_resources }}"
+      - "Current Version 1: {{ ansible_net_version }}"
+      - "Current Version 2: {{ installed_version }}"
+      - "Available Version: {{ available_version }}"
+      - "Status:            {{ status }}"
+  vars:
+    __lines: "{{ routeros_resources['stdout_lines'] }}"
+    installed_version: "{{ __lines[0][5].split(':')[1].split(' ')[1] | trim }}"
+    available_version: "{{ __lines[0][6].split(':')[1].split(' ')[1] | trim }}"
+    status: "{{ __lines[0][7].split(':')[1] | trim }}"
   become: no
   tags:
+    - system-upgrade
     - system_upgrade

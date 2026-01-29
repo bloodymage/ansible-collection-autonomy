@@ -62,7 +62,7 @@
   ansible.builtin.group:
     name: "{{ item['name'] }}"
     state: present
-    system: "{{ item['system'] | default('no') }}"
+    system: "{{ item['system'] | default('false') }}"
     gid: "{{ item['gid'] | default(omit) }}"
   loop: "{{ __user_groups }}"
   become: yes
@@ -93,28 +93,24 @@
     move_home: true
   loop: "{{ __users }}"
   vars:
-    __groups: >-
-      {% if item['groups'] is defined %}
-      {{ item['groups'] + [autonomy_user_group_ansible_managed]
-      {% else %}
-      {{ [autonomy_user_group_ansible_managed] }}
-      {% endif %}
+    __groups: "{% if item['groups'] is defined %}{{ item['groups'] + [autonomy_user_group_ansible_managed] }}{% else %}{{ [autonomy_user_group_ansible_managed] }}{% endif %}"
     __password_store_base_dir: "{{ autonomy_passdb }}/{{ autonomy_domain }}/hosts/"
     __password_store_host_dir: "{{ __password_store_base_dir }}/{{ inventory_hostname_short }}"
     __password_store_dir: "{{ __password_store_host_dir }}/{{ item['username'] }}"
     __password_store_id: "{{ __password_store_dir }}/password"
-    __password_length: "length={{ item['password_legnth'] | default(autonomy_password_length) }}"
-    __password_overwrite: "overwrite={{ autonomy_overwrite_password }} backup=true"
-    __password_create_bool: >-
-      {% if item['password'] is defined and item['password'] in ['!', '*'] %}
-      false
-      {% elif item['password'] is defined and item['password'] != 'password' %}
-      false
-      {% else %}
-      true
-      {% endif %}
-    __password_create: "create={{ __password_create_bool }}"
-    __password_symbols: "nosymbols={{ autonomy_password_no_symbols }}"
+    __password_length: " length={{ item['password_legnth'] | default(autonomy_password_length) }}"
+    __password_overwrite: " overwrite={{ autonomy_overwrite_password }} backup=true"
+    # __password_create_bool: >-
+    #   {% if item['password'] is defined and item['password'] in ['!', '*'] %}
+    #   false
+    #   {% elif item['password'] is defined and item['password'] != 'password' %}
+    #   false
+    #   {% else %}
+    #   true
+    #   {% endif %}
+    __password_create_bool: false
+    __password_create: " create={{ __password_create_bool }}"
+    __password_symbols: " nosymbols={{ autonomy_password_no_symbols }}"
     __password_lookup: >-
       {{ __password_store_id }}
       {{ __password_create }}
@@ -182,9 +178,10 @@
 - name: "Create User SSH Keys."
   ansible.builtin.user:
     name: "{{ item['username'] }}"
-    generate_ssh_key: yes
+    generate_ssh_key: true
     ssh_key_type: "{{ item['ssh_keytype'] | default('ed25519') }}"
     ssh_key_passphrase: "{{ item.ssh_key_password | default(lookup('community.general.passwordstore', __password_lookup)) }}"
+    force: false
   loop: "{{ __users }}"
   loop_control:
     index_var: index

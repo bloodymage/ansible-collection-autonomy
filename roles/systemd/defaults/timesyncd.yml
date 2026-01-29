@@ -1,0 +1,6 @@
+---
+autonomy_systemd_timesyncd_packages:
+  - systemd-timesyncd
+
+autonomy_systemd_timesyncd_conflicts:
+  - ntpsec

@@ -1,4 +1,25 @@
 ---
+autonomy_default_sysadmin_user: "admin"
+autonomy_default_sysadmin_email_address: "{{ autonomy_default_sysadmin_user }}@{{ autonomy_root_domain }}"
+autonomy_sysadmin_email_userid: "{{ autonomy_default_sysadmin_email_userid }}"
+autonomy_sysadmin_email_address: "{{ autonomy_default_sysadmin_email_address }}"
+
+
+# System User Names
+autonomy_user_mythtv_username: "mythtv"
+autonomy_user_minidlna_username: "minidlna"
+
+# System User Id Numbers
+autonomy_user_mythtv_id_number: 500
+autonomy_user_minidlna_id_number: 501
+autonomy_user_git_id_number: 502
+autonomy_user_homeassistant_id_number: 503
+autonomy_user_vmail_id_number:  504
+autonomy_user_odoo_id_number: 505
+autonomy_user_keycloak_id_number: 506
+
+autonomy_user_default_base_home: "/home"
+
 # ==================================================================================================
 #
 # User 1
@@ -87,9 +108,7 @@ autonomy_user3:
 # Mythtv
 #
 # ==================================================================================================
-autonomy_user_mythtv_username: "mythtv"
 autonomy_user_mythtv_groupname: "{{ autonomy_user_mythtv_username }}"
-user_mythtv_id_number: 500
 user_mythtv_groups: []
 user_mythtv_sudoers: []
 user_mythtv_gpg_name: ""
@@ -103,14 +122,14 @@ user_mythtv_ssh_cert:
 
 user_mythtv_group:
   name: "{{ autonomy_user_mythtv_groupname }}"
-  gid: "{{ user_mythtv_id_number }}"
+  gid: "{{ autonomy_user_mythtv_id_number }}"
 
 
 user_mythtv:
   username: "{{ autonomy_user_mythtv_username }}"
   groups: "{{ user_mythtv_groups }}"
-  id_number: "{{ user_mythtv_id_number }}"
-  unix_home: /home/mythtv
+  id_number: "{{ autonomy_user_mythtv_id_number }}"
+  unix_home: "{{ autonomy_user_default_base_home }}/{{ autonomy_user_mythtv_username }}"
   ssh_access_cert: "{{ user_mythtv_access_cert }}"
   ssh_cert: "{{ user_mythtv_ssh_cert }}"
   sudoers: "{{ user_mythtv_sudoers }}"
@@ -123,50 +142,43 @@ user_mythtv:
 # MiniDLNA
 #
 # ==================================================================================================
-user_minidlna_id_number: 501
-
 user_minidlna:
-  username: minidlna
+  username: "{{ autonomy_user_minidlna_username }}"
   name: MiniDLNA Server
   groups: []
-  id_number: "{{ user_minidlna_id_number }}"
+  id_number: "{{ autonomy_user_minidlna_id_number }}"
   unix_home: /var/lib/minidlna
   shell: /usr/sbin/nologin
 
 user_minidlna_group:
   name: minidlna
-  gid: "{{ user_minidlna_id_number }}"
+  gid: "{{ autonomy_user_minidlna_id_number }}"
 
 # ==================================================================================================
 #
 # Git
 #
 # ==================================================================================================
-
-user_git_id_number: 502
-
 user_git:
   username: git
   groups: []
-  uid_number: "{{ user_git_id_number }}"
+  uid_number: "{{ autonomy_user_git_id_number }}"
   unix_home: /srv/git
 
 user_git_group:
   name: git
-  gid: "{{ user_git_id_number }}"
+  gid: "{{ autonomy_user_git_id_number }}"
 
 # ==================================================================================================
 #
 # Home Assistant
 #
 # ==================================================================================================
-user_homeassistant_id_number: 503
-
 user_homeassistant:
   username: homeassistant
   name: "Home Assistant"
   groups: []
-  id_number: "{{ user_homeassistant_id_number }}"
+  id_number: "{{ autonomy_user_homeassistant_id_number }}"
   unix_home: /home/homeassistant
   ssh_access_cert:
     - homeassistant
@@ -175,7 +187,7 @@ user_homeassistant:
 
 user_homeassistant_group:
   name: homeassistant
-  gid: "{{ user_homeassistant_id_number }}"
+  gid: "{{ autonomy_user_homeassistant_id_number }}"
 
 # ==================================================================================================
 #
@@ -187,7 +199,7 @@ user_vmail_id_number:  504
 user_vmail:
   username: vmail
   groups: []
-  id_number: "{{ user_vmail_id_number }}"
+  id_number: "{{ autonomy_user_vmail_id_number }}"
   unix_home: "/var/mail/vmail"
   ssh_access_cert: []
   ssh_cert:
@@ -195,19 +207,17 @@ user_vmail:
 
 user_vmail_group:
   name: vmail
-  gid: "{{ user_vmail_id_number }}"
+  gid: "{{ autonomy_user_vmail_id_number }}"
 
 # ==================================================================================================
 #
 # odoo
 #
 # ==================================================================================================
-user_odoo_id_number: 505
-
 user_odoo:
   username: odoo
   groups: []
-  id_number: "{{ user_odoo_id_number }}"
+  id_number: "{{ autonomy_user_odoo_id_number }}"
   unix_home: /home/odoo
   ssh_access_cert:
     - odoo
@@ -217,9 +227,8 @@ user_odoo:
 # Keycloak
 #
 # ==================================================================================================
-autonomy_user_keycloak_username: "keycloak"
+autonomy_user_keycloak_username: "{{ autonomy_keycloak_name }}" # Set in keycloak.yml
 autonomy_user_keycloak_groupname: "{{ autonomy_user_keycloak_username }}"
-autonomy_user_keycloak_id_number: 506
 
 autonomy_user_keycloak:
   username: "{{ autonomy_user_keycloak_username }}"

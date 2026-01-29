@@ -1,3 +1,24 @@
 ---
 # defaults file for config_environment
+autonomy_config_environment_packages:
+  - python3-apt
+
 __autonomy_configuration_complete: false
+__env_tasks: ""
+__realm_users: []
+
+__default_domain_system_users:
+  - name: "internal_mail_servers"
+    user: "{{ domain_user_vmail }}"
+  - name: "internal_web_servers"
+    user: "{{ domain_user_mediawiki }}"
+  - name: "keycloak_servers"
+    user: "{{ domain_user_keycloak }}"
+  - name: "dmz_www_servers"
+    user: "{{ domain_user_nextcloud }}"
+
+domain_mail_user_spns:
+  - spn: "imap"
+    keytab_file: "/etc/dovecot/dovecot.keytab"
+  - spn: "smtp"
+    keytab_file: "/etc/dovecot/dovecot.keytab"

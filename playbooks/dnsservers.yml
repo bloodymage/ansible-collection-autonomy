@@ -1,6 +1,6 @@
 ---
 - name: "Configure the environment for DNS configuration."
-  hosts: all
+  hosts: all:!dns_only
   roles:
     - role: bloodymage.autonomy.config_environment
       tags:
@@ -23,3 +23,5 @@
         __maintenance_tasks: "dns"
       tags:
         - dns
+        - dns-nsupdate
+        - dns-cloudflare

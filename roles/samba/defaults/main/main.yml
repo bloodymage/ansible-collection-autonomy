@@ -1,5 +1,5 @@
 ---
-autonomy_packages:
+autonomy_samba_packages:
   - acl
   - attr
   - dnsutils
@@ -93,3 +93,4 @@ __dc_samba_shares:
 #
 # ==================================================================================================
 __samba_domain_password_expiration: 90
+__samba_tasks: ""

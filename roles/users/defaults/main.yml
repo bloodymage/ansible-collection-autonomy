@@ -102,7 +102,7 @@ autonomy_user_dotfiles_emacsd_repo_version: "main"
 #
 # ==================================================================================================
 __user_groups:
-  - name: ansiblemanaged
+  - name: "{{ autonomy_user_group_ansible_managed }}"
     system: yes
   - name: users
     system: yes

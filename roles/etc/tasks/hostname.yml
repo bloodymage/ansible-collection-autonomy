@@ -1,0 +1,15 @@
+---
+- name: "Include OS Family Tasks."
+  include_tasks: "hostname_{{ ansible_system | lower }}.yml"
+  when:
+    - ansible_network_os is not defined
+  tags:
+    - hostname
+
+- name: "Include NetworkOS Tasks."
+  include_tasks: "hostname_{{ ansible_network_os.split('.')[2] | lower }}.yml"
+  when:
+    - ansible_network_os is defined
+  tags:
+    - hostname
+

@@ -1,0 +1,10 @@
+---
+- name: "RouterOS: Set Hostname."
+  community.routeros.command:
+    commands:
+      - "/system identity set name={{ inventory_hostname_short }}"
+  become: no
+  when:
+    - ansible_net_hostname != inventory_hostname_short
+  tags:
+    - hostname

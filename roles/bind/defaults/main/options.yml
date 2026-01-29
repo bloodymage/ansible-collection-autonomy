@@ -1,0 +1,300 @@
+---
+# defaults file for ansible-bind
+# Define acls for defining ip addresses or networks allowed to query bind
+autonomy_bind_acls: []
+
+# Directories
+autonomy_bind_directory: "/var/cache/bind"
+autonomy_bind_cache_dir: "{{ autonomy_bind_directory }}"
+# autonomy_bind_geoip-directory ( <quoted_string> | none );
+# autonomy_bind_key-directory <quoted_string>;
+# autonomy_bind_managed-keys-directory <quoted_string>;
+# autonomy_bind_new-zones-directory <quoted_string>;
+
+# Files
+autonomy_bind_pid_file: "/run/named/named.pid"
+autonomy_bind_bindkeys_file: "/etc/named.iscdlv.key"
+# autonomy_bind_dump-file <quoted_string>;
+# autonomy_bind_memstatistics-file <quoted_string>;
+# autonomy_bind_statistics-file <quoted_string>;
+# autonomy_bind_secroots-file <quoted_string>;
+# autonomy_bind_recursing-file <quoted_string>;
+# autonomy_bind_session-keyfile ( <quoted_string> | none );
+
+# Server
+#  [ port <integer> ] [ proxy <string> ] [ tls <string> ] [ http <string> ] { <address_match_element>; ... }; // may occur multiple times
+autonomy_bind_listen_on: "any"
+autonomy_bind_listen_on_v6: "any"
+autonomy_bind_version: "not currently available"
+# autonomy_bind_memstatistics <boolean>;
+# autonomy_bind_port <integer>;
+# autonomy_bind_v6-bias <integer>;
+autonomy_bind_auth_nxdomain: "false"
+
+# DNSSEC
+autonomy_bind_dnssec_validation: "auto"
+# autonomy_bind_dnssec-accept-expired <boolean>;
+# autonomy_bind_dnssec-loadkeys-interval <integer>;
+# autonomy_bind_dnssec-policy <string>;
+
+# Query
+# autonomy_bind_allow-query { <address_match_element>; ... };
+# autonomy_bind_allow-query-cache { <address_match_element>; ... };
+# autonomy_bind_allow-query-cache-on { <address_match_element>; ... };
+# autonomy_bind_allow-query-on { <address_match_element>; ... };
+# autonomy_bind_max-query-count <integer>;
+# autonomy_bind_max-query-restarts <integer>;
+
+# Forwards
+# autonomy_bind_forwarders [ port <integer> ] [ tls <string> ] { ( <ipv4_address> | <ipv6_address> ) [ port <integer> ] [ tls <string> ]; ... };
+autonomy_bind_forwarders: []
+autonomy_bind_forward: "first"
+
+# Recursion
+autonomy_bind_recursion: "yes"
+autonomy_bind_allow_recursion: "any"
+# autonomy_bind_allow-recursion-on { <address_match_element>; ... };
+# autonomy_bind_recursive-clients <integer>;
+
+# Transfer
+# autonomy_bind_allow-transfer [ port <integer> ] [ transport <string> ] { <address_match_element>; ... };
+
+# Update
+# autonomy_bind_allow-update { <address_match_element>; ... };
+# autonomy_bind_allow-update-forwarding { <address_match_element>; ... };
+# autonomy_bind_also-notify [ port <integer> ] [ source ( <ipv4_address> | * ) ] [ source-v6 ( <ipv6_address> | * ) ] { ( <server-list> | <ipv4_address> [ port <integer> ] | <ipv6_address> [ port <integer> ] ) [ key <string> ] [ tls <string> ]; ... };
+# autonomy_bind_allow-notify { <address_match_element>; ... };
+
+
+# Cache
+# autonomy_bind_attach-cache <string>;
+# autonomy_bind_max-cache-size ( default | unlimited | <sizeval> | <percentage> );
+autonomy_bind_max_cache_ttl: 604800
+# autonomy_bind_max-ncache-ttl <duration>;
+# autonomy_bind_max-refresh-time <integer>;
+# autonomy_bind_max-retry-time <integer>;
+autonomy_bind_max_stale_ttl: 86400
+# autonomy_bind_min-cache-ttl <duration>;
+# autonomy_bind_min-ncache-ttl <duration>;
+# autonomy_bind_min-refresh-time <integer>;
+# autonomy_bind_min-retry-time <integer>;
+# autonomy_bind_min-transfer-rate-in <integer> <integer>;
+autonomy_bind_stale_answer_enable: "no"
+autonomy_bind_stale_answer_ttl: 30
+autonomy_bind_stale_cache_enable: "no"
+# autonomy_bind_stale-refresh-time <duration>;
+# autonomy_bind_max-zone-ttl ( unlimited | <duration> ); // deprecated
+# autonomy_bind_stale-answer-client-timeout ( disabled | off | <integer> );
+
+
+# autonomy_bind_allow-new-zones <boolean>;
+
+# autonomy_bind_allow-proxy { <address_match_element>; ... }; // experimental
+# autonomy_bind_allow-proxy-on { <address_match_element>; ... }; // experimental
+
+# autonomy_bind_answer-cookie <boolean>;
+
+
+# autonomy_bind_automatic-interface-scan <boolean>;
+# autonomy_bind_blackhole { <address_match_element>; ... };
+# autonomy_bind_catalog-zones { zone <string> [ default-primaries [ port <integer> ] [ source ( <ipv4_address> | * ) ] [ source-v6 ( <ipv6_address> | * ) ] { ( <server-list> | <ipv4_address> [ port <integer> ] | <ipv6_address> [ port <integer> ] ) [ key <string> ] [ tls <string> ]; ... } ] [ zone-directory <quoted_string> ] [ in-memory <boolean> ] [ min-update-interval <duration> ]; ... };
+# autonomy_bind_check-dup-records ( fail | warn | ignore );
+# autonomy_bind_check-integrity <boolean>;
+# autonomy_bind_check-mx ( fail | warn | ignore );
+# autonomy_bind_check-mx-cname ( fail | warn | ignore );
+# autonomy_bind_check-names ( primary | master | secondary | slave | response ) ( fail | warn | ignore ); // may occur multiple times
+# autonomy_bind_check-sibling <boolean>;
+# autonomy_bind_check-spf ( warn | ignore );
+# autonomy_bind_check-srv-cname ( fail | warn | ignore );
+# autonomy_bind_check-svcb <boolean>;
+# autonomy_bind_check-wildcard <boolean>;
+# autonomy_bind_clients-per-query <integer>;
+# autonomy_bind_cookie-algorithm ( siphash24 );
+# autonomy_bind_cookie-secret <string>; // may occur multiple times
+# autonomy_bind_deny-answer-addresses { <address_match_element>; ... } [ except-from { <string>; ... } ];
+# autonomy_bind_deny-answer-aliases { <string>; ... } [ except-from { <string>; ... } ];
+
+# autonomy_bind_disable-algorithms <string> { <string>; ... }; // may occur multiple times
+# autonomy_bind_disable-ds-digests <string> { <string>; ... }; // may occur multiple times
+# autonomy_bind_disable-empty-zone <string>; // may occur multiple times
+# autonomy_bind_dns64 <netprefix>
+# autonomy_bind_dns64_break-dnssec <boolean>;
+# autonomy_bind_dns64_clients { <address_match_element>; ... };
+# autonomy_bind_dns64_exclude { <address_match_element>; ... };
+# autonomy_bind_dns64_mapped { <address_match_element>; ... };
+# autonomy_bind_dns64_recursive-only <boolean>;
+# autonomy_bind_dns64_suffix <ipv6_address>;
+
+# autonomy_bind_dns64-contact <string>;
+# autonomy_bind_dns64-server <string>;
+# autonomy_bind_dnstap { ( all | auth | client | forwarder | resolver | update ) [ ( query | response ) ]; ... };
+# autonomy_bind_dnstap-identity ( <quoted_string> | none | hostname );
+# autonomy_bind_dnstap-output ( file | unix ) <quoted_string> [ size ( unlimited | <size> ) ] [ versions ( unlimited | <integer> ) ] [ suffix ( increment | timestamp ) ];
+# autonomy_bind_dnstap-version ( <quoted_string> | none );
+# autonomy_bind_dual-stack-servers [ port <integer> ] { ( <quoted_string> [ port <integer> ] | <ipv4_address> [ port <integer> ] | <ipv6_address> [ port <integer> ] ); ... };
+
+# autonomy_bind_edns-udp-size <integer>;
+# autonomy_bind_empty-contact <string>;
+# autonomy_bind_empty-server <string>;
+# autonomy_bind_empty-zones-enable <boolean>;
+# autonomy_bind_fetch-quota-params <integer> <fixedpoint> <fixedpoint> <fixedpoint>;
+# autonomy_bind_fetches-per-server <integer> [ ( drop | fail ) ];
+# autonomy_bind_fetches-per-zone <integer> [ ( drop | fail ) ];
+# autonomy_bind_flush-zones-on-shutdown <boolean>;
+
+
+# autonomy_bind_fstrm-set-buffer-hint <integer>;
+# autonomy_bind_fstrm-set-flush-timeout <integer>;
+# autonomy_bind_fstrm-set-input-queue-size <integer>;
+# autonomy_bind_fstrm-set-output-notify-threshold <integer>;
+# autonomy_bind_fstrm-set-output-queue-model ( mpsc | spsc );
+# autonomy_bind_fstrm-set-output-queue-size <integer>;
+# autonomy_bind_fstrm-set-reopen-interval <duration>;
+
+# autonomy_bind_hostname ( <quoted_string> | none );
+# autonomy_bind_http-listener-clients <integer>;
+# autonomy_bind_http-port <integer>;
+# autonomy_bind_http-streams-per-connection <integer>;
+# autonomy_bind_https-port <integer>;
+# autonomy_bind_interface-interval <duration>;
+# autonomy_bind_ipv4only-contact <string>;
+# autonomy_bind_ipv4only-enable <boolean>;
+# autonomy_bind_ipv4only-server <string>;
+# autonomy_bind_ixfr-from-differences ( primary | master | secondary | slave | <boolean> );
+# autonomy_bind_keep-response-order { <address_match_element>; ... }; // obsolete
+
+# autonomy_bind_lame-ttl <duration>;
+# autonomy_bind_lmdb-mapsize <sizeval>;
+
+# autonomy_bind_masterfile-format ( raw | text );
+# autonomy_bind_masterfile-style ( full | relative );
+# autonomy_bind_match-mapped-addresses <boolean>;
+# autonomy_bind_max-clients-per-query <integer>;
+# autonomy_bind_max-ixfr-ratio ( unlimited | <percentage> );
+# autonomy_bind_max-journal-size ( default | unlimited | <sizeval> );
+
+# autonomy_bind_max-records <integer>;
+# autonomy_bind_max-records-per-type <integer>;
+# autonomy_bind_max-recursion-depth <integer>;
+# autonomy_bind_max-recursion-queries <integer>;
+# autonomy_bind_max-rsa-exponent-size <integer>;
+# autonomy_bind_max-transfer-idle-in <integer>;
+# autonomy_bind_max-transfer-idle-out <integer>;
+# autonomy_bind_max-transfer-time-in <integer>;
+# autonomy_bind_max-transfer-time-out <integer>;
+# autonomy_bind_max-types-per-name <integer>;
+# autonomy_bind_max-udp-size <integer>;
+# autonomy_bind_max-validation-failures-per-fetch <integer>; // experimentalOA
+# autonomy_bind_max-validations-per-fetch <integer>; // experimental
+
+# autonomy_bind_message-compression <boolean>;
+# autonomy_bind_minimal-any <boolean>;
+# autonomy_bind_minimal-responses ( no-auth | no-auth-recursive | <boolean> );
+# autonomy_bind_multi-master <boolean>;
+
+# autonomy_bind_no-case-compress { <address_match_element>; ... };
+# autonomy_bind_nocookie-udp-size <integer>;
+# autonomy_bind_notify ( explicit | master-only | primary-only | <boolean> );
+# autonomy_bind_notify-defer <integer>;
+# autonomy_bind_notify-delay <integer>;
+# autonomy_bind_notify-rate <integer>;
+# autonomy_bind_notify-source ( <ipv4_address> | * );
+# autonomy_bind_notify-source-v6 ( <ipv6_address> | * );
+# autonomy_bind_notify-to-soa <boolean>;
+# autonomy_bind_nsec3-test-zone <boolean>; // test only
+# autonomy_bind_nta-lifetime <duration>;
+# autonomy_bind_nta-recheck <duration>;
+# autonomy_bind_nxdomain-redirect <string>;
+# autonomy_bind_parental-source ( <ipv4_address> | * );
+# autonomy_bind_parental-source-v6 ( <ipv6_address> | * );
+
+
+# autonomy_bind_preferred-glue <string>;
+# autonomy_bind_prefetch <integer> [ <integer> ];
+# autonomy_bind_provide-ixfr <boolean>;
+# autonomy_bind_provide-zoneversion <boolean>;
+# autonomy_bind_qname-minimization ( strict | relaxed | disabled | off );
+# autonomy_bind_query-source [ address ] ( <ipv4_address> | * | none );
+# autonomy_bind_query-source-v6 [ address ] ( <ipv6_address> | * | none );
+# autonomy_bind_querylog <boolean>;
+# autonomy_bind_rate_limit {
+# autonomy_bind_rate_limit_all-per-second <integer>;
+# autonomy_bind_rate_limit_errors-per-second <integer>;
+# autonomy_bind_rate_limit_exempt-clients { <address_match_element>; ... };
+# autonomy_bind_rate_limit_ipv4-prefix-length <integer>;
+# autonomy_bind_rate_limit_ipv6-prefix-length <integer>;
+# autonomy_bind_rate_limit_log-only <boolean>;
+# autonomy_bind_rate_limit_max-table-size <integer>;
+# autonomy_bind_rate_limit_min-table-size <integer>;
+# autonomy_bind_rate_limit_nodata-per-second <integer>;
+# autonomy_bind_rate_limit_nxdomains-per-second <integer>;
+# autonomy_bind_rate_limit_qps-scale <integer>;
+# autonomy_bind_rate_limit_referrals-per-second <integer>;
+# autonomy_bind_rate_limit_responses-per-second <integer>;
+# autonomy_bind_rate_limit_slip <integer>;
+# autonomy_bind_rate_limit_window <integer>;
+
+# autonomy_bind_request-expire <boolean>;
+# autonomy_bind_request-ixfr <boolean>;
+# autonomy_bind_request-ixfr-max-diffs <integer>;
+# autonomy_bind_request-nsid <boolean>;
+# autonomy_bind_request-zoneversion <boolean>;
+# autonomy_bind_require-server-cookie <boolean>;
+# autonomy_bind_resolver-query-timeout <integer>;
+# autonomy_bind_resolver-use-dns64 <boolean>;
+# autonomy_bind_response-padding { <address_match_element>; ... } block-size <integer>;
+
+# autonomy_bind_responselog <boolean>;
+# autonomy_bind_reuseport <boolean>;
+# autonomy_bind_root-key-sentinel <boolean>;
+# autonomy_bind_rrset-order { [ class <string> ] [ type <string> ] [ name <quoted_string> ] <string> <string>; ... };
+
+# autonomy_bind_send-cookie <boolean>;
+# autonomy_bind_send-report-channel <string>;
+# autonomy_bind_serial-query-rate <integer>;
+# autonomy_bind_serial-update-method ( date | increment | unixtime );
+# autonomy_bind_server-id ( <quoted_string> | none | hostname );
+# autonomy_bind_servfail-ttl <duration>;
+# autonomy_bind_session-keyalg <string>;
+
+# autonomy_bind_session-keyname <string>;
+# autonomy_bind_sig-signing-nodes <integer>;
+# autonomy_bind_sig-signing-signatures <integer>;
+# autonomy_bind_sig-signing-type <integer>;
+# autonomy_bind_sig0checks-quota <integer>; // experimental
+# autonomy_bind_sig0checks-quota-exempt { <address_match_element>; ... }; // experimental
+# autonomy_bind_sig0key-checks-limit <integer>;
+# autonomy_bind_sig0message-checks-limit <integer>;
+
+# autonomy_bind_startup-notify-rate <integer>;
+
+# autonomy_bind_synth-from-dnssec <boolean>;
+# autonomy_bind_tcp-advertised-timeout <integer>;
+# autonomy_bind_tcp-clients <integer>;
+# autonomy_bind_tcp-idle-timeout <integer>;
+# autonomy_bind_tcp-initial-timeout <integer>;
+# autonomy_bind_tcp-keepalive-timeout <integer>;
+# autonomy_bind_tcp-listen-queue <integer>;
+# autonomy_bind_tcp-primaries-timeout <integer>;
+# autonomy_bind_tcp-receive-buffer <integer>;
+# autonomy_bind_tcp-send-buffer <integer>;
+# autonomy_bind_tkey-gssapi-keytab <quoted_string>;
+# autonomy_bind_tls-port <integer>;
+# autonomy_bind_transfer-format ( many-answers | one-answer );
+# autonomy_bind_transfer-message-size <integer>;
+# autonomy_bind_transfer-source ( <ipv4_address> | * );
+# autonomy_bind_transfer-source-v6 ( <ipv6_address> | * );
+# autonomy_bind_transfers-in <integer>;
+# autonomy_bind_transfers-out <integer>;
+# autonomy_bind_transfers-per-ns <integer>;
+# autonomy_bind_trust-anchor-telemetry <boolean>;
+# autonomy_bind_try-tcp-refresh <boolean>;
+# autonomy_bind_udp-receive-buffer <integer>;
+# autonomy_bind_udp-send-buffer <integer>;
+# autonomy_bind_update-quota <integer>;
+
+# autonomy_bind_validate-except { <string>; ... };
+
+# autonomy_bind_zero-no-soa-ttl <boolean>;
+# autonomy_bind_zero-no-soa-ttl-cache <boolean>;
+# autonomy_bind_zone-statistics ( full | terse | none | <boolean> );

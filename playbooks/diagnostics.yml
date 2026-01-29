@@ -9,7 +9,14 @@
   roles:
     - role: bloodymage.autonomy.diagnostics
 
-- name: "Run Diagnostics"
+- name: "Run Diagnostics: Normal"
+  hosts: all:!localhost
+  roles:
+    - role: bloodymage.autonomy.diagnostics
+      when:
+        - ansible_connection != "local"
+
+- name: "Run Diagnostics: Sequentially"
   hosts: all:!localhost
   serial: 1
   roles:

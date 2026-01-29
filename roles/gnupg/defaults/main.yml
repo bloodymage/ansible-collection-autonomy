@@ -8,4 +8,3 @@ autonomy_gnupg_packages:
 autonomy_gnupg_config_files:
   - gpg
   - dirmngr
-
