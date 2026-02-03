@@ -1,0 +1,23 @@
+---
+autonomy_systemd_timesyncd_packages:
+  - systemd-timesyncd
+
+autonomy_systemd_timesyncd_conflicts:
+  - ntpsec
+  - ntp
+
+autonomy_systemd_timesyncd_server_addresses: []
+autonomy_systemd_timesyncd_fallback_server_addresses: "{{ autonomy_common_ntp_server_addresses }}"
+
+autonomy_systemd_timesyncd_root_distance_max_sec: "{{ __autonomy_systemd_timesyncd_root_distance_max_sec }}"
+autonomy_systemd_timesyncd_poll_interval_min_sec: "{{ __autonomy_systemd_timesyncd_poll_interval_min_sec }}"
+autonomy_systemd_timesyncd_poll_interval_max_sec: "{{ __autonomy_systemd_timesyncd_poll_interval_max_sec }}"
+autonomy_systemd_timesyncd_connection_retry_sec: "{{ __autonomy_systemd_timesyncd_connection_retry_sec }}"
+autonomy_systemd_timesyncd_save_interval_sec: "{{ __autonomy_systemd_timesyncd_save_interval_sec }}"
+
+# Default values
+__autonomy_systemd_timesyncd_root_distance_max_sec: 5
+__autonomy_systemd_timesyncd_poll_interval_min_sec: 32
+__autonomy_systemd_timesyncd_poll_interval_max_sec: 2048
+__autonomy_systemd_timesyncd_connection_retry_sec: 30
+__autonomy_systemd_timesyncd_save_interval_sec: 60

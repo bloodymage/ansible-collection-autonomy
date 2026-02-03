@@ -26,14 +26,6 @@
         - kerberos
         - recreate-realm
 
-- name: "Configure NTP Servers."
-  hosts: samba_domain_controllers:ntp_servers
-  roles:
-    - role: bloodymage.autonomy.ntpsec
-      tags:
-        - ntp
-        - ntpsec
-
 # ==================================================================================================
 #
 # Create the realm.

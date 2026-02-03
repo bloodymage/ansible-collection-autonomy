@@ -44,6 +44,9 @@
 - name: "Configure DNS Servers."
   import_playbook: dnsservers.yml
 
+- name: "Configure NTP."
+  import_playbook: ntp.yml
+
 # - name: "Configure Realm Identity Management."
 #   import_playbook: realm.yml
 

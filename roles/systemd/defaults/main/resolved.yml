@@ -1,0 +1,3 @@
+---
+autonomy_systemd_resolved_owner: "systemd-resolve"
+autonomy_systemd_resolved_group: "{{ autonomy_systemd_resolved_owner }}"

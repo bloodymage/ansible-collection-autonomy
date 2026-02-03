@@ -53,6 +53,3 @@
       when:
         - (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined) or (autonomy_systemd_link is defined)
         - inventory_hostname not in groups["vendor_managed"]
-      tags:
-        - systemd
-        - systemd-networkd

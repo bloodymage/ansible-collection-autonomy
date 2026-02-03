@@ -11,6 +11,9 @@
     purge: true
     autoremove: true
   become: true
+  tags:
+    - systemd
+    - systemd-networkd
 
 # ==================================================================================================
 #
@@ -29,3 +32,6 @@
   failed_when:
     - results["failed"] is true
     - "'Failed to find package' not in results['msg']"
+  tags:
+    - systemd
+    - systemd-networkd

@@ -5,6 +5,9 @@
     state: present
   become: true
   notify: "restart systemd-networkd"
+  tags:
+    - systemd
+    - systemd-networkd
 
 - name: "Install Netdev Files."
   ansible.builtin.template:
@@ -18,6 +21,9 @@
   notify: "restart systemd-networkd"
   when:
     - autonomy_systemd_netdev is defined
+  tags:
+    - systemd
+    - systemd-networkd
 
 - name: "Install Network Files."
   ansible.builtin.template:
@@ -31,6 +37,9 @@
   notify: "restart systemd-networkd"
   when:
     - autonomy_systemd_network is defined
+  tags:
+    - systemd
+    - systemd-networkd
 
 - name: "Disable networking."
   ansible.builtin.systemd:
@@ -41,6 +50,9 @@
   become: true
   when: (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined)
   ignore_errors: true
+  tags:
+    - systemd
+    - systemd-networkd
 
 - name: "Enable Systemd-Networkd"
   ansible.builtin.systemd:
@@ -52,16 +64,9 @@
     - systemd-resolved
   become: true
   when: (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined)
-
-- name: "Link resolv.conf"
-  ansible.builtin.file:
-    src: "/run/systemd/resolve/stub-resolv.conf"
-    dest: "/etc/resolv.conf"
-    owner: root
-    group: root
-    state: link
-  become: true
-  when: (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined)
+  tags:
+    - systemd
+    - systemd-networkd
 
 # ==================================================================================================
 #
@@ -80,3 +85,6 @@
     - dhcp
     - avahi
   become: true
+  tags:
+    - systemd
+    - systemd-networkd

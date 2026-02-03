@@ -17,8 +17,11 @@ Driver={{ item['driver'] }}
 
 {% if item['link'] is defined and item['link'] is truthy %}
 [Link]
-{% if item['mac_address'] is defined %}
-MACAddress={{ item['mac_address'] }}
+{% if item['link']['mac_address'] is defined %}
+MACAddress={{ item['link']['mac_address'] }}
+{% endif %}
+{% if item['link']['required_for_online'] is defined %}
+RequiredForOnline={{ item['link']['required_for_online'] }}
 {% endif %}
 {% endif %}
 

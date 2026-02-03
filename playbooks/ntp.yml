@@ -1,0 +1,18 @@
+---
+- name: "Configure NTP Servers."
+  hosts: samba_domain_controllers:ntp_servers
+  roles:
+    - role: bloodymage.autonomy.ntpsec
+      tags:
+        - ntp
+        - ntpsec
+
+- name: "Configure NTP Clients."
+  hosts: all:!samba_domain_controllers:!ntp_servers:!localhost:!vendor_managed
+  roles:
+    - role: bloodymage.autonomy.systemd
+      when:
+        - autonomy_virtual_host is falsy
+      vars:
+        __systemd_tasks: "timesyncd"
+

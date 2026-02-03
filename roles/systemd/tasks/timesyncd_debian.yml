@@ -1,0 +1,11 @@
+---
+- name: "Remove Non-Systemd networking packages."
+  ansible.builtin.apt:
+    name: "{{ autonomy_systemd_timesyncd_packages_conflics }}"
+    state: "absent"
+    purge: true
+    autoremove: true
+  become: true
+  tags:
+    - systemd
+    - systemd-timesyncd

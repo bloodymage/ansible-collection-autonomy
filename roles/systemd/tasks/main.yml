@@ -9,6 +9,7 @@
         - "vars"
   become: false
   tags:
+    - systemd
     - systemd-networkd
     - systemd-timesyncd
 
@@ -17,11 +18,22 @@
   when:
     - __systemd_tasks == "networkd"
   tags:
+    - systemd
     - systemd-networkd
+
+- name: "Configure Systemd-Resolved."
+  include_tasks: "resolved.yml"
+  when:
+    - (__systemd_tasks == "networkd" or __systemd_tasks == "resolved") 
+  tags:
+    - systemd
+    - systemd-networkd
+    - systemd-resolved
 
 - name: "Configure Systemd-Timesyncd."
   include_tasks: "timesyncd.yml"
   when:
     - __systemd_tasks == "timesyncd"
   tags:
+    - systemd
     - systemd-timesyncd

@@ -3,4 +3,22 @@
   ansible.builtin.package:
     name: "{{ autonomy_systemd_timesyncd_packages }}"
     state: present
-  become: yes
+  become: true
+  tags:
+    - systemd
+    - systemd-timesyncd
+
+- name: "Install Timesyncd Config Files."
+  ansible.builtin.template:
+    src: "etc/systemd/timesyncd.conf.j2"
+    dest: "/etc/systemd/timesyncd.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  become: true
+  notify: "restart systemd-timesyncd"
+  tags:
+    - systemd
+    - systemd-timesyncd
+
+- include_tasks: "timesyncd_{{ ansible_os_family | lower }}.yml"

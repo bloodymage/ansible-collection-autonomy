@@ -29,11 +29,7 @@ autonomy_ntp_enable_logging: true
 autonomy_ntp_statistics_dir: "/var/log/ntpsec"
 autonomy_ntp_enable_statistics: false
 
-autonomy_ntp_server_addresses:
-  - 0.pool.ntp.org
-  - 1.pool.ntp.org
-  - 2.pool.ntp.org
-  - 3.pool.ntp.org
+autonomy_ntp_server_addresses: "{{ autonomy_common_ntp_server_addresses }}"
 
 autonomy_ntp_association_options:
   - iburst

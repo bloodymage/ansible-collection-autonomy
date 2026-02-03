@@ -1,0 +1,10 @@
+---
+- name: "Link resolv.conf"
+  ansible.builtin.file:
+    src: "/run/systemd/resolve/stub-resolv.conf"
+    dest: "/etc/resolv.conf"
+    owner: "{{ autonomy_systemd_resolved_owner }}"
+    group: "{{ autonomy_systemd_resolved_group }}"
+    state: link
+  become: true
+  when: (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined)
