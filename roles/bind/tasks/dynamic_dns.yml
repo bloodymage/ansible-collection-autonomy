@@ -9,12 +9,12 @@
 # ==================================================================================================
 - name: "Ensure keys directory is present."
   ansible.builtin.file:
-    path: "{{ bind_key_dir }}"
+    path: "{{ autonomy_bind_key_dir }}"
     state: directory
-    owner: "{{ bind_owner }}"
-    group: "{{ bind_group }}"
+    owner: "{{ autonomy_bind_owner }}"
+    group: "{{ autonomy_bind_group }}"
     mode: '0750'
-  become: yes
+  become: true
   when:
     - autonomy_virtual_host is falsy
 
@@ -25,8 +25,8 @@
 # ==================================================================================================
 - name: "Check if a keyfile exists."
   ansible.builtin.stat:
-    path: "{{ bind_key_dir }}/{{ autonomy_zone_name }}.key"
-  become: yes
+    path: "{{ autonomy_bind_key_dir }}/{{ autonomy_zone_name }}.key"
+  become: true
   register: existing_ddns_keys
 
 # - name: "Print existing dynamic key information."
@@ -59,7 +59,7 @@
       cut -d\  -f4 |
       cut -d\; -f1
     executable: /bin/bash
-  become: yes
+  become: true
   register: algorithms
   changed_when: algorithms.stdout != autonomy_ddns_key_algorithm
   when:
@@ -120,7 +120,7 @@
   ansible.builtin.shell:
     cmd: >-
       set -o pipefail &&
-      {{ bind_ddns_confgen }} -a {{ autonomy_ddns_key_algorithm }} -k {{ autonomy_zone_name }} -z {{ autonomy_domain }} |
+      {{ autonomy_bind_ddns_confgen }} -a {{ autonomy_ddns_key_algorithm }} -k {{ autonomy_zone_name }} -z {{ autonomy_domain }} |
       grep secret |
       cut -d\" -f2
     executable: /bin/bash
@@ -150,7 +150,7 @@
 - name: "Install Dynamic DNS Keys."
   ansible.builtin.template:
     src: "etc/bind/ddns_key.j2"
-    dest: "{{ bind_key_dir }}/{{ autonomy_zone_name }}.key"
+    dest: "{{ autonomy_bind_key_dir }}/{{ autonomy_zone_name }}.key"
     owner: root
     group: bind
     mode: "0640"
@@ -164,6 +164,6 @@
     __password_overwrite: "overwrite={{ __force }} backup={{ __force }}"
     __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/hosts/{{ inventory_hostname_short }}/bind_dyndns_secret"
     __password_lookup: "{{ __password_store_id }} {{ __password_userpass }} {{ __password_create }} {{__password_overwrite }}"
-    bind_dyndns_secret: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+    autonomy_bind_dyndns_secret: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   when:
     - bind_ddns_keys['skipped'] is not defined

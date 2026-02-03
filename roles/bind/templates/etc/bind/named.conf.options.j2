@@ -20,13 +20,21 @@ acl {{ acl['name'] }} {
 {% endif %}
 {% endif %}
 options {
-  directory "{{ autonomy_bind_directory }}";
+  directory "{{ autonomy_bind_cache_dir }}";
 {# version statement for security to avoid hacking known weaknesses #}
 {# if the real version number is revealed #}
   version "{{ autonomy_bind_version }}";
   dnssec-validation {{ autonomy_bind_dnssec_validation }};
-  listen-on { {{ autonomy_bind_listen_on }}; };
-  listen-on-v6 { {{ autonomy_bind_listen_on_v6 }}; };
+  listen-on {
+{% for item in autonomy_bind_listen_on_ipv4 %}
+    {{ item }};
+{% endfor %}
+  };
+  listen-on-v6 {
+{% for item in autonomy_bind_listen_on_ipv6 %}
+    {{ item }};
+{% endfor %}
+  };
 {% if inventory_hostname in groups['samba_domain_controllers'] %}
   tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
 {% else %}
@@ -66,9 +74,33 @@ options {
   forward {{ autonomy_bind_forward }};
 {% endif %}
 
-{# if bind_rpz_zones length > 0 #}
-{# response-policy { #}
-{# }; #}
-{# endif #}
-
+{% if inventory_hostname not in groups['samba_domain_controllers'] %}
+{% if autonomy_bind_rpz_enabled and autonomy_bind_rpz_zones is truthy %}
+  response-policy {
+  {# Ensure Disabled Policies are First #}
+  {% for rpz in autonomy_bind_rpz_zones -%}
+    {%- if rpz["policy"] == "disabled" -%}
+    zone {{ rpz['name'] }} policy {{ rpz["policy"] }};
+    {% endif -%}
+  {% endfor -%}
+  {% for rpz in autonomy_bind_rpz_zones -%}
+    {%- if rpz["policy"] != "disabled" -%}
+    zone {{ rpz['name'] }}{% if rpz['policy'] != 'given' %} policy {{ rpz["policy"] }}{% endif %};
+    {% endif -%}
+  {% endfor -%}
+  {% if autonomy_bind_rpz_hagezi_enabled and autonomy_bind_rpz_hagezi_zones is truthy %}
+  {% for rpz in autonomy_bind_rpz_hagezi_zones -%}
+    {%- if rpz["policy"] == "disabled" -%}
+    zone {{ rpz['name'] }} policy {{ rpz["policy"] }};
+    {% endif -%}
+  {% endfor -%}
+  {%- for rpz in autonomy_bind_rpz_hagezi_zones -%}
+    {%- if rpz["policy"] != "disabled" -%}
+    zone {{ rpz['name'] }}{% if rpz['policy'] != 'given' %} policy {{ rpz["policy"] }}{% endif %};
+    {% endif -%}
+  {% endfor -%}
+  {% endif -%}
+}{% if autonomy_bind_rpz_break_dnssec is truthy %} break-dnssec {{ autonomy_bind_rpz_break_dnssec }}{% endif %};
+{% endif %}
+{% endif %}
 };

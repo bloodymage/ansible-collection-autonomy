@@ -1,138 +1,110 @@
 ---
 # roles/bind/defaults/main.yml
-autonomy_bind9_packages:
+autonomy_bind_packages:
   - python3-netaddr
   - python3-dnspython
   - bind9
   - bind9utils
 
-bind_service: bind9
+autonomy_bind_service: bind9
 
 #autonomy_bind_ipv6_reversezones: []
 
 autonomy_bind_zone_samba_controlled: false
 
-# Directory with run-time stuff
-bind_dir: "/var/lib/bind"
-bind_conf_dir: "/etc/bind"
-bind_key_dir: "{{ bind_conf_dir }}/keys"
-auth_file: "auth_transfer.conf"
-bind_auth_file: "{{ bind_conf_dir }}/{{ auth_file }}"
-# Custom location for zone files
-bind_zone_dir: "{{ bind_dir }}"
-autonomy_bind_zone_dir: "{{ bind_dir }}"
-
-bind_zone_dir_mode: "0775"
+# Directories
+autonomy_bind_zone_dir: "/var/lib/bind"
+autonomy_bind_conf_dir: "/etc/bind"
+autonomy_bind_key_dir: "{{ autonomy_bind_conf_dir }}/keys"
 autonomy_bind_log_dir: "/var/log/bind"
-bind_log_dir_mode: "0770"
+autonomy_bind_cache_dir: "/var/cache/bind"
+# autonomy_bind_geoip-directory ( <quoted_string> | none );
+# autonomy_bind_key-directory <quoted_string>;
+# autonomy_bind_managed-keys-directory <quoted_string>;
+# autonomy_bind_new-zones-directory <quoted_string>;
 
-# Main config file
-bind_config_file: "{{ bind_conf_dir }}/named.conf"
-bind_default_zone_file: "{{ bind_conf_dir }}/named.conf.root-hints"
-bind_options_file: "{{ bind_conf_dir }}/named.conf.options"
-bind_local_file: "{{ bind_conf_dir }}/named.conf.local"
-bind_rpz_file: "{{ bind_conf_dir }}/named.conf.rpz"
-autonomy_bind_logging_file: "{{ bind_conf_dir }}/named.conf.log"
+# Files
+autonomy_bind_auth_file: "auth_transfer.conf"
+autonomy_bind_config_file: "named.conf"
+autonomy_bind_default_zone_file: "named.conf.root-hints"
+autonomy_bind_local_file: "named.conf.local"
+autonomy_bind_logging_file: "named.conf.log"
+autonomy_bind_options_file: "named.conf.options"
+autonomy_bind_rpz_file: "named.conf.rpz"
+autonomy_bind_log: "data/named.run"
+autonomy_bind_session_key_file: "session.key"
+autonomy_bind_pid_file: "/run/named/named.pid"
+autonomy_bind_bindkeys_file: "/etc/named.iscdlv.key"
+# autonomy_bind_dump-file <quoted_string>;
+# autonomy_bind_memstatistics-file <quoted_string>;
+# autonomy_bind_statistics-file <quoted_string>;
+# autonomy_bind_secroots-file <quoted_string>;
+# autonomy_bind_recursing-file <quoted_string>;
+# autonomy_bind_session-keyfile ( <quoted_string> | none );
 
-bind_config_files:
-  - named.conf
-  - named.conf.root-hints
-  - named.conf.options
-  - named.conf.local
-  - named.conf.log
-
-bind_owner: root
-bind_group: bind
-
-
-bind_session_keyfile: "/run/named/session.key"
-
+# Paths
+autonomy_bind_auth_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_auth_file }}"
+autonomy_bind_config_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_config_file }}"
+autonomy_bind_default_zone_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_default_zone_file }}"
+autonomy_bind_local_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_local_file }}"
+autonomy_bind_logging_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_logging_file }}"
+autonomy_bind_options_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_options_file }}"
+autonomy_bind_rpz_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_rpz_file }}"
 autonomy_bind_root_zone_path: "{{ autonomy_bind_cache_dir }}/db.root"
 autonomy_bind_root_hints_path: "/usr/share/dns/root.hints"
+autonomy_bind_session_key_path: "/run/named/{{ autonomy_bind_session_key_file }}"
+
+# URLs
+autonomy_bind_root_hints_url: "https://www.internic.net/domain/named.root"
+autonomy_bind_root_zone_url: "https://www.internic.net/domain/root.zone"
+
+
+autonomy_bind_dir_mode: "0755"
+autonomy_bind_zone_dir_mode: "0775"
+autonomy_bind_log_dir_mode: "0770"
+
+autonomy_bind_file_mode: "0644"
+autonomy_bind_zone_file_mode: "{{ autonomy_bind_file_mode }}"
+
+autonomy_bind_config_files:
+  - "{{ autonomy_bind_config_file }}"
+  - "{{ autonomy_bind_default_zone_file }}"
+  - "{{ autonomy_bind_local_file }}"
+  - "{{ autonomy_bind_logging_file }}"
+  - "{{ autonomy_bind_options_file }}"
+
+autonomy_bind_owner: root
+autonomy_bind_group: bind
 
 # Commands
-bind_ddns_confgen: "/usr/sbin/ddns-confgen"
+autonomy_bind_ddns_confgen: "/usr/sbin/ddns-confgen"
 
-bind_rpz_zones: []
-bind_dyndns_secret: "secret"
-bind_ddns_algorithm: "hmac-sha512"
+autonomy_bind_dyndns_secret: "secret"
+autonomy_bind_ddns_algorithm: "hmac-sha512"
 
-# SOA information
-bind_zone_time_to_refresh: "1D"
-bind_zone_time_to_retry: "1H"
-bind_zone_time_to_expire: "1W"
-bind_zone_minimum_ttl: "1D"
-autonomy_bind_zone_ttl: "604800"
-bind_zone_ttl: "{{ autonomy_bind_zone_ttl }}"
-bind_zone_refresh: "604800"
-autonomy_bind_zone_refresh: "{{ bind_zone_refresh }}"
-bind_zone_retry: "86400"
-autonomy_bind_zone_retry: "{{ bind_zone_retry }}"
-bind_zone_expire: "2419200"
-autonomy_bind_zone_expire: "{{ bind_zone_expire }}"
-bind_zone_negative_cache_ttl: "604800"
-autonomy_bind_zone_negative_cache_ttl: "{{ bind_zone_negative_cache_ttl }}"
-bind_zone_soa: "{{ groups[autonomy_zone_name + '_dns_servers'][0] }}"
-autonomy_bind_zone_soa: "{{ bind_zone_soa }}"
-bind_zone_admin: "{{ autonomy_default_sysadmin_user }}.{{ autonomy_domain }}"
-autonomy_bind_zone_admin:  "{{ bind_zone_admin }}"
-bind_zone_serial_number: "{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}00"
-bind_reverse_zone_serial_number: "{{ bind_zone_serial_number }}"
-bind_log: "data/named.run"
-
-autonomy_bind_ipv6_reversezone_serial_number: "{{ bind_reverse_zone_serial_number }}"
-
-bind_primary_zone: "primary"
-bind_secondary_zone: "secondary"
-
-bind_zone_domains:
-  - name: "example.com"
-    hostmaster_email: "hostmaster"
-    networks:
-      - "10.0.2"
-
+autonomy_bind_primary_zone: "primary"
+autonomy_bind_secondary_zone: "secondary"
 
 # Key bindings
-bind_dns_keys: []
+autonomy_bind_dns_keys: []
 #  - name: master_key
 #    algorithm: hmac-sha256
 #    secret: "password"
 
-# List of IPv4 address of the network interface(s) to listen on. Set to "any"
-# to listen on all interfaces
-bind_listen_ipv4:
-  - "127.0.0.1"
-
-# List of IPv6 address of the network interface(s) to listen on.
-bind_listen_ipv6:
-  - "::1"
-
-# Determines whether recursion should be allowed. Typically, an authoritative
-# name server should have recursion turned OFF.
-bind_recursion: "yes"
-bind_allow_recursion: "any"
-
-
-# DNS round robin order (random or cyclic)
-bind_rrset_order: "random"
 
 # statistics channels configuration
-bind_statistics_channels: false
-bind_statistics_port: 8053
-bind_statistics_host: 127.0.0.1
-bind_statistics_allow:
+autonomy_bind_statistics_channels: false
+autonomy_bind_statistics_port: 8053
+autonomy_bind_statistics_host: 127.0.0.1
+autonomy_bind_statistics_allow:
   - "127.0.0.1"
 
-bind_extra_include_files: []
+autonomy_bind_extra_include_files: []
 
 # File mode for master zone files (needs to be something like 0660 for dynamic updates)
-bind_zone_file_mode: "0640"
 
-bind_rpc_policies:
-  - "zone 'accept.{{ autonomy_root_domain }}' policy passthru;"
-  - "zone 'block.{{ autonomy_root_domain }}';"
 
-bind9_bogusnet_acl:
+autonomy_bind9_bogusnet_acl:
   name: "bogusnet"
   networks:
     - 0.0.0.0/8
@@ -142,24 +114,14 @@ bind9_bogusnet_acl:
     - 172.16.0.0/12
     - 192.168.0.0/16
 
-bind9_myipv4_acl:
+autonomy_bind9_myipv4_acl:
   name: myipv4
   networks:
     - 127.0.0.1
     - "{{ ansible_host }}"
 
-bind9_myipv6_acl:
+autonomy_bind9_myipv6_acl:
   name: "myipv6"
-
-autonomy_bind_allow_query: "any"
-autonomy_bind_allow_transfer: "any"
-
-
-autonomy_bind_prefetch_trigger: 2
-autonomy_bind_prefetch_eligibility: 9
-
-autonomy_bind_root_hints_url: "https://www.internic.net/domain/named.root"
-autonomy_bind_root_zone_file: "https://www.internic.net/domain/root.zone"
 
 # ==================================================================================================
 #
@@ -171,13 +133,13 @@ __complete_bind_dns_zones: []
 __bind_dns_zone_samba_domain: no
 __tmp_keyfiles: []
 
-__autonomy_bind_zone_directories:
+__bind_zone_directories:
   - name: "{{ autonomy_bind_zone_dir }}"
-    mode: "{{ bind_zone_dir_mode }}"
+    mode: "{{ autonomy_bind_zone_dir_mode }}"
   - name: "{{ autonomy_bind_cache_dir }}"
-    mode: "{{ bind_zone_dir_mode }}"
+    mode: "{{ autonomy_bind_zone_dir_mode }}"
   - name: "{{ autonomy_bind_log_dir }}"
-    mode: "{{ bind_log_dir_mode }}"
+    mode: "{{ autonomy_bind_log_dir_mode }}"
 
 __bind_bin_dir: "/usr/bin"
 __bind_named_checkconf: "{{ __bind_bin_dir }}/named-checkconf"

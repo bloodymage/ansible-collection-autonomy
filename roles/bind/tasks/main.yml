@@ -19,11 +19,34 @@
 
 - name: "Install packages."
   ansible.builtin.package:
-    name: "{{ autonomy_bind9_packages }}"
+    name: "{{ autonomy_bind_packages }}"
     state: present
   become: true
   when:
     - autonomy_virtual_host is falsy
+    - inventory_hostname not in groups['public_zone'] | default([])
+
+# ==================================================================================================
+#
+# This creates the following directories:
+#   - /var/lib/bind/
+#   - /var/cache/bind/
+#
+# These are set 0775 so that the bind group can make changes.
+#
+# ==================================================================================================
+- name: "Ensure Zone Directories Exists and are writable by bind user."
+  ansible.builtin.file:
+    dest: "{{ item.name }}"
+    state: directory
+    owner: "{{ autonomy_bind_owner }}"
+    group: "{{ autonomy_bind_group }}"
+    mode: "{{ item.mode }}"
+  become: yes
+  loop: "{{ __autonomy_bind_zone_directories }}"
+  when:
+    - autonomy_virtual_host is falsy
+    - bind_dyndns_secret is defined
     - inventory_hostname not in groups['public_zone'] | default([])
 
 # ==================================================================================================
@@ -45,51 +68,14 @@
 - name: "Configure Dynamic DNS Keys."
   include_tasks: dynamic_dns.yml
 
-# ==================================================================================================
-#
-# Install Configuration files
-#
-# ==================================================================================================
-- name: "Install Bind Config Files."
-  ansible.builtin.template:
-    src: "etc/bind/{{ item }}.j2"
-    dest: "{{ bind_conf_dir }}/{{ item }}"
-    owner: root
-    group: root
-    mode: "0644"
-    validate: "{{ __bind_named_checkconf }} %s"
-  become: true
-  loop: "{{ bind_config_files }}"
+- name: "Configure RPZ."
+  include_tasks: "rpz.yml"
   when:
-    - bind_dyndns_secret is defined
-    - inventory_hostname not in groups['public_zone'] | default([])
-    #- autonomy_virtual_host is falsy
-    - (autonomy_bind_forwardzones is defined or inventory_hostname in groups['samba_domain_controllers'] | default([]))
-    - groups['dmz_dns_servers'] is defined # Temporary fix for #534
-  notify: restart bind
+    - autonomy_bind_rpz_enabled
+    - inventory_hostname not in groups['samba_domain_controllers'] | default([])
 
-# ==================================================================================================
-#
-# This creates the following directories:
-#   - /var/lib/bind/
-#   - /var/cache/bind/
-#
-# These are set 0775 so that the bind group can make changes.
-#
-# ==================================================================================================
-- name: "Ensure Zone Directories Exists and are writable by bind user."
-  ansible.builtin.file:
-    dest: "{{ item.name }}"
-    state: directory
-    owner: "{{ bind_owner }}"
-    group: "{{ bind_group }}"
-    mode: "{{ item.mode }}"
-  become: yes
-  loop: "{{ __autonomy_bind_zone_directories }}"
-  when:
-    - autonomy_virtual_host is falsy
-    - bind_dyndns_secret is defined
-    - inventory_hostname not in groups['public_zone'] | default([])
+- name: "Configure Bind."
+  include_tasks: config.yml
 
 # ==================================================================================================
 #
@@ -103,112 +89,11 @@
 - name: "Ensure bind is up and running."
   ansible.builtin.meta: flush_handlers
 
-# ==================================================================================================
-#
-# Install Zone Files
-#
-# FIXME: This fails if bind daemon is not running.
-#
-# Set 'force' to 'no' because once installed bind will update the file itself.  Only needed if the
-# file does not exist.
-#
-# ==================================================================================================
-- name: "Download Root Zone file."
-  ansible.builtin.get_url:
-    url: "http://www.internic.net/domain/root.zone"
-    dest: "{{ autonomy_bind_root_zone_path }}"
-    owner: bind
-    group: bind
-    mode: "0644"
-    force: false
-  become: true
-  when:
-    - autonomy_virtual_host is falsy
-    - bind_dyndns_secret is defined
-    - inventory_hostname not in groups['public_zone'] | default([])
+- name: "Configure Zones."
+  include_tasks: "zones.yml"
 
-- name: "Ensure we have a Root Hints File."
-  ansible.builtin.get_url:
-    url: "{{ autonomy_bind_root_hints_url }}"
-    dest: "{{ autonomy_bind_root_hints_path }}"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-    force: false
-  become: true
+- name: "Configure Dynamic DNS Keys."
+  include_tasks: dynamic_rpz.yml
   when:
-    - autonomy_virtual_host is falsy
-    - inventory_hostname not in groups['public_zone'] | default([])
-
-# ==================================================================================================
-#
-# The next two templates have 'force' set to 'no' so that they only install a new zone file if one
-# does not already exist.  Any further updates are done via the 'nsupdate' module in either the
-# dns_forwardzone or dns_reversezone roles.
-#
-# ==================================================================================================
-- name: "Installing Forward Zone files."
-  ansible.builtin.template:
-    src: "var/lib/bind/forwardzone.j2"
-    dest: "{{ bind_zone_dir }}/db.{{ autonomy_domain }}"
-    owner: "{{ bind_owner }}"
-    group: "{{ bind_group }}"
-    mode: "0644"
-    force: no
-    #validate: "{{ __bind_named_checkzone }} {{ item['domain'] }} %s"
-  become: yes
-  register: forwardzone_refresh
-  when:
-    - not autonomy_bind_zone_samba_controlled
+    - autonomy_bind_rpz_enabled
     - inventory_hostname not in groups['samba_domain_controllers'] | default([])
-  notify: restart bind
-
-- name: "Installing Reverse Zone files."
-  ansible.builtin.template:
-    src: "var/lib/bind/reversezone.j2"
-    dest: "{{ bind_zone_dir }}/db.{{ item['name'] }}"
-    owner: "{{ bind_owner }}"
-    group: "{{ bind_group }}"
-    mode: "0644"
-    force: no
-    #validate: "{{ __bind_named_checkzone }} {{ item.name }} %s"
-  loop: "{{ autonomy_bind_reversezones }}"
-  become: yes
-  register: reversezone_refresh
-  when:
-    - autonomy_bind_reversezones is defined
-    - inventory_hostname not in groups['samba_domain_controllers'] | default([])
-    - item['type'] == "primary"
-  notify: restart bind
-
-- name: "Installing IPv6 Reverse Zone files."
-  ansible.builtin.template:
-    src: "var/lib/bind/reversezonev6.j2"
-    dest: "{{ bind_zone_dir }}/db.{{ item['name'] | replace(':', '') }}"
-    owner: "{{ bind_owner }}"
-    group: "{{ bind_group }}"
-    mode: "0644"
-    force: no
-    #validate: "{{ __bind_named_checkzone }} {{ item.name }} %s"
-  loop: "{{ autonomy_bind_ipv6_reversezones }}"
-  become: yes
-  register: reversezone_refresh
-  when:
-    - autonomy_bind_ipv6_reversezones is defined
-    - inventory_hostname not in groups['samba_domain_controllers'] | default([])
-    - item['type'] == "primary"
-  notify: restart bind
-
-# - name: "Install RPZ Zonefiles"
-#   ansible.builtin.copy:
-#     src: "{{ item.zonefile }}"
-#     dest: "{{ autonomy_bind_cache_dir }}/{{ item.zonefile }}"
-#     owner: "{{ bind_owner }}"
-#     group: "{{ bind_group }}"
-#     mode: "0644"
-#     force: no
-#   loop: "{{ autonomy_bind_rpz_zones }}"
-#   become: true
-#   when:
-#     - autonomy_bind_rpz_enabled
-#     - autonomy_bind_rpz_zones is truthy

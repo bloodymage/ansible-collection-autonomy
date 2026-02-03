@@ -236,6 +236,12 @@
     - dns
     - dns-nsupdate
 
+- name: "Add RPZ records."
+  include_tasks: "dns_nsupdate_rpz.yml"
+  when:
+    - autonomy_bind_rpz_zones is truthy
+    - autonomy_bind_rpz_adblock_zone_type == "primary"
+
 # ==================================================================================================
 #
 # Ideally this would dynamically identify hosts that have dns records, but do not exist in the

@@ -1,0 +1,49 @@
+---
+- name: "Install RPZ conf file."
+  ansible.builtin.template:
+    src: "etc/bind/{{ autonomy_bind_rpz_file }}.j2"
+    dest: "{{ autonomy_bind_rpz_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+    validate: "{{ __bind_named_checkconf }} %s"
+  become: true
+  when:
+    - autonomy_virtual_host is falsy
+  notify: restart bind
+
+- name: "Install RPZ Zonefiles (File Definition)."
+  ansible.builtin.copy:
+    src: "var/lib/bind/{{ item['file'] }}"
+    dest: "{{ item['path'] }}"
+    owner: "{{ autonomy_bind_owner }}"
+    group: "{{ autonomy_bind_group }}"
+    mode: "0644"
+    force: no
+  loop: "{{ autonomy_bind_rpz_zones }}"
+  become: true
+  when:
+    - autonomy_bind_rpz_zones is truthy
+    - item['definition'] == 'fixed'
+    - autonomy_virtual_host is falsy
+
+- name: "Install RPZ Zonefiles (Template definition)."
+  ansible.builtin.template:
+    src: "var/lib/bind/rpz.j2"
+    dest: "{{ item['path'] }}"
+    owner: "{{ autonomy_bind_owner }}"
+    group: "{{ autonomy_bind_group }}"
+    mode: "0644"
+    force: no
+  loop: "{{ autonomy_bind_rpz_zones }}"
+  become: true
+  when:
+    - autonomy_bind_rpz_zones is truthy
+    - item['definition'] == 'dynamic'
+    - autonomy_virtual_host is falsy
+    - autonomy_bind_rpz_adblock_zone_type == "primary"
+
+- name: "Configure Hagezi RPZs."
+  include_tasks: "rpz_hagezi.yml"
+  when:
+    - autonomy_bind_rpz_hagezi_enabled

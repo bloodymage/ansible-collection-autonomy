@@ -57,7 +57,6 @@ autonomy_dns_cloudflare_mx_records: []
 autonomy_dns_cloudflare_txt_records: []
 autonomy_dns_dmarc_cloudflare_email: ""
 
-
 # FIXME: The cloudflare dmarc email should only be an entry if it is truthy
 autonomy_dns_dmarc_email:
   - "{{ autonomy_dns_dmarc_cloudflare_email }}"

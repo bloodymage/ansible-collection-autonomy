@@ -5,6 +5,12 @@
     - dns
     - dns-nsupdate
 
+- name: "Update DNS records using nsupdate protocol."
+  include_tasks: "dns_file.yml"
+  tags:
+    - dns
+    - dns-file
+
 # - name: "Update DNS records using CloudFlare DNS."
 #   include_tasks: "dns_cloudflare.yml"
 #   when:

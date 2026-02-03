@@ -51,7 +51,6 @@ Features and Advantages
 -----------------------
 
 - Configures local bind9 servers to be a caching server of all root zones.
-- 
 
 Similar Projects
 ----------------

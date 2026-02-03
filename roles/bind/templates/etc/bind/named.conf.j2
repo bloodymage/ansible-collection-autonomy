@@ -1,18 +1,23 @@
 # {{ ansible_managed }}
 
-// This is the primary configuration file for the BIND DNS server named.
-//
-// Please read /usr/share/doc/bind9/README.Debian.gz for information on the 
-// structure of BIND configuration files in Debian, *BEFORE* you customize 
-// this configuration file.
-//
-// If you are just adding zones, please do that in /etc/bind/named.conf.local
+{# // This is the primary configuration file for the BIND DNS server named. #}
+{# // #}
+{# // Please read /usr/share/doc/bind9/README.Debian.gz for information on the #}
+{# // structure of BIND configuration files in Debian, *BEFORE* you customize #}
+{# // this configuration file. #}
+{# // #}
+{# // If you are just adding zones, please do that in /etc/bind/named.conf.local #}
 
-include "{{ bind_options_file }}";
-include "{{ autonomy_bind_logging_file }}";
-include "{{ bind_local_file }}";
-{% if autonomy_bind_forwarders is falsy or autonomy_bind_forward == "first" %}
-include "{{ bind_default_zone_file }}";
+include "{{ autonomy_bind_options_path }}";
+include "{{ autonomy_bind_logging_path }}";
+include "{{ autonomy_bind_local_path }}";
+{% if autonomy_bind_forwarders is falsy or autonomy_bind_forward == "first" -%}
+  include "{{ autonomy_bind_default_zone_path }}";
+{% endif %}
+{% if autonomy_bind_rpz_enabled -%}
+{% if groups['samba_domain_controllers'] is not defined or inventory_hostname not in groups['samba_domain_controllers'] -%}
+  include "{{ autonomy_bind_rpz_path }}";
+{% endif %}
 {% endif %}
 {% if groups['samba_domain_controllers'] is defined %}
 {% if inventory_hostname in groups['samba_domain_controllers'] -%}

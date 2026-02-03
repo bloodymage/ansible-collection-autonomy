@@ -1,0 +1,438 @@
+---
+# ==================================================================================================
+#
+# Hagezi DNS Block lists
+#
+# https://github.com/hagezi/dns-blocklists 
+#
+# ==================================================================================================
+autonomy_bind_rpz_hagezi_enabled: false
+autonomy_bind_rpz_hagezi_base_url: "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/rpz"
+
+autonomy_bind_rpz_hagezi_zones:
+  - "{{ autonomy_bind_rpz_hagezi_pro_zone }}"
+  - "{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_zone }}"
+  - "{{ autonomy_bind_rpz_hagezi_doh_zone }}"
+  - "{{ autonomy_bind_rpz_hagezi_badware_zone }}"
+  - "{{ autonomy_bind_rpz_hagezi_tlds_zone }}"
+  - "{{ autonomy_bind_rpz_hagezi_antipiracy_zone }}"
+
+# Multi Light
+autonomy_bind_rpz_hagezi_light_name: "light"
+autonomy_bind_rpz_hagezi_light_policy: "given"
+autonomy_bind_rpz_hagezi_light_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_light_name }}.rpz"
+autonomy_bind_rpz_hagezi_light_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_light_zone_file }}"
+autonomy_bind_rpz_hagezi_light_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_light_zone_type: "primary"
+autonomy_bind_rpz_hagezi_light_nameservers: []
+
+autonomy_bind_rpz_hagezi_light_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_light_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_light_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_light_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_light_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_light_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_light_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_light_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_light_name }}.txt"
+
+# Multi Normal
+autonomy_bind_rpz_hagezi_normal_name: "multi"
+autonomy_bind_rpz_hagezi_normal_policy: "given"
+autonomy_bind_rpz_hagezi_normal_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_normal_name }}.rpz"
+autonomy_bind_rpz_hagezi_normal_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_normal_zone_file }}"
+autonomy_bind_rpz_hagezi_normal_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_normal_zone_type: "primary"
+autonomy_bind_rpz_hagezi_normal_nameservers: []
+
+autonomy_bind_rpz_hagezi_normal_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_normal_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_normal_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_normal_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_normal_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_normal_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_normal_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_normal_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_normal_name }}.txt"
+
+# Multi Pro
+autonomy_bind_rpz_hagezi_pro_name: "pro"
+autonomy_bind_rpz_hagezi_pro_policy: "given"
+autonomy_bind_rpz_hagezi_pro_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_pro_name }}.rpz"
+autonomy_bind_rpz_hagezi_pro_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_pro_zone_file }}"
+autonomy_bind_rpz_hagezi_pro_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_pro_zone_type: "primary"
+autonomy_bind_rpz_hagezi_pro_nameservers: []
+
+autonomy_bind_rpz_hagezi_pro_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_pro_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_pro_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_pro_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_pro_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_pro_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_pro_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_pro_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_pro_name }}.txt"
+
+# Multi Proplus
+autonomy_bind_rpz_hagezi_proplus_name: "proplus"
+autonomy_bind_rpz_hagezi_proplus_policy: "given"
+autonomy_bind_rpz_hagezi_proplus_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_proplus_name }}.rpz"
+autonomy_bind_rpz_hagezi_proplus_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_proplus_zone_file }}"
+autonomy_bind_rpz_hagezi_proplus_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_proplus_zone_type: "primary"
+autonomy_bind_rpz_hagezi_proplus_nameservers: []
+
+autonomy_bind_rpz_hagezi_proplus_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_proplus_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_proplus_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_proplus_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_proplus_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_proplus_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_proplus_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_proplus_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/pro.plus.txt"
+
+# Multi Ultimate
+autonomy_bind_rpz_hagezi_ultimate_name: "ultimate"
+autonomy_bind_rpz_hagezi_ultimate_policy: "given"
+autonomy_bind_rpz_hagezi_ultimate_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_ultimate_name }}.rpz"
+autonomy_bind_rpz_hagezi_ultimate_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_ultimate_zone_file }}"
+autonomy_bind_rpz_hagezi_ultimate_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_ultimate_zone_type: "primary"
+autonomy_bind_rpz_hagezi_ultimate_nameservers: []
+
+autonomy_bind_rpz_hagezi_ultimate_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_ultimate_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_ultimate_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_ultimate_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_ultimate_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_ultimate_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_ultimate_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_ultimate_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_ultimate_name }}.txt"
+
+# Multi Fake
+autonomy_bind_rpz_hagezi_fake_name: "fake"
+autonomy_bind_rpz_hagezi_fake_policy: "given"
+autonomy_bind_rpz_hagezi_fake_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_fake_name }}.rpz"
+autonomy_bind_rpz_hagezi_fake_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_fake_zone_file }}"
+autonomy_bind_rpz_hagezi_fake_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_fake_zone_type: "primary"
+autonomy_bind_rpz_hagezi_fake_nameservers: []
+
+autonomy_bind_rpz_hagezi_fake_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_fake_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_fake_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_fake_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_fake_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_fake_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_fake_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_fake_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_fake_name }}.txt"
+
+# Multi Popupads
+autonomy_bind_rpz_hagezi_popupads_name: "popupads"
+autonomy_bind_rpz_hagezi_popupads_policy: "given"
+autonomy_bind_rpz_hagezi_popupads_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_popupads_name }}.rpz"
+autonomy_bind_rpz_hagezi_popupads_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_popupads_zone_file }}"
+autonomy_bind_rpz_hagezi_popupads_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_popupads_zone_type: "primary"
+autonomy_bind_rpz_hagezi_popupads_nameservers: []
+
+autonomy_bind_rpz_hagezi_popupads_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_popupads_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_popupads_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_popupads_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_popupads_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_popupads_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_popupads_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_popupads_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_popupads_name }}.txt"
+
+# Multi Threat_Intelligence_Feeds
+autonomy_bind_rpz_hagezi_threat_intelligence_feeds_name: "tif"
+autonomy_bind_rpz_hagezi_threat_intelligence_feeds_policy: "given"
+autonomy_bind_rpz_hagezi_threat_intelligence_feeds_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_name }}.rpz"
+autonomy_bind_rpz_hagezi_threat_intelligence_feeds_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_zone_file }}"
+autonomy_bind_rpz_hagezi_threat_intelligence_feeds_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_threat_intelligence_feeds_zone_type: "primary"
+autonomy_bind_rpz_hagezi_threat_intelligence_feeds_nameservers: []
+
+autonomy_bind_rpz_hagezi_threat_intelligence_feeds_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_threat_intelligence_feeds_name }}.txt"
+
+# DOH, VPN, TOR, and Proxy Bypass
+autonomy_bind_rpz_hagezi_doh_vpn_proxy_name: "doh-vpn-proxy-bypass"
+autonomy_bind_rpz_hagezi_doh_vpn_proxy_policy: "given"
+autonomy_bind_rpz_hagezi_doh_vpn_proxy_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_name }}.rpz"
+autonomy_bind_rpz_hagezi_doh_vpn_proxy_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_zone_file }}"
+autonomy_bind_rpz_hagezi_doh_vpn_proxy_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_doh_vpn_proxy_zone_type: "primary"
+autonomy_bind_rpz_hagezi_doh_vpn_proxy_nameservers: []
+
+autonomy_bind_rpz_hagezi_doh_vpn_proxy_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_doh_vpn_proxy_name }}.txt"
+
+# DOH
+autonomy_bind_rpz_hagezi_doh_name: "doh"
+autonomy_bind_rpz_hagezi_doh_policy: "given"
+autonomy_bind_rpz_hagezi_doh_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_doh_name }}.rpz"
+autonomy_bind_rpz_hagezi_doh_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_doh_zone_file }}"
+autonomy_bind_rpz_hagezi_doh_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_doh_zone_type: "primary"
+autonomy_bind_rpz_hagezi_doh_nameservers: []
+
+autonomy_bind_rpz_hagezi_doh_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_doh_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_doh_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_doh_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_doh_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_doh_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_doh_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_doh_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_doh_name }}.txt"
+
+# Search Engines that do not support Safesearch
+autonomy_bind_rpz_hagezi_safesearch_name: "nosafesearch"
+autonomy_bind_rpz_hagezi_safesearch_policy: "given"
+autonomy_bind_rpz_hagezi_safesearch_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_safesearch_name }}.rpz"
+autonomy_bind_rpz_hagezi_safesearch_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_safesearch_zone_file }}"
+autonomy_bind_rpz_hagezi_safesearch_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_safesearch_zone_type: "primary"
+autonomy_bind_rpz_hagezi_safesearch_nameservers: []
+
+autonomy_bind_rpz_hagezi_safesearch_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_safesearch_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_safesearch_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_safesearch_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_safesearch_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_safesearch_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_safesearch_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_safesearch_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_safesearch_name }}.txt"
+
+# Multi Dyndns
+autonomy_bind_rpz_hagezi_dyndns_name: "dyndns"
+autonomy_bind_rpz_hagezi_dyndns_policy: "given"
+autonomy_bind_rpz_hagezi_dyndns_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_dyndns_name }}.rpz"
+autonomy_bind_rpz_hagezi_dyndns_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_dyndns_zone_file }}"
+autonomy_bind_rpz_hagezi_dyndns_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_dyndns_zone_type: "primary"
+autonomy_bind_rpz_hagezi_dyndns_nameservers: []
+
+autonomy_bind_rpz_hagezi_dyndns_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_dyndns_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_dyndns_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_dyndns_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_dyndns_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_dyndns_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_dyndns_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_dyndns_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_dyndns_name }}.txt"
+
+# Multi Badware
+autonomy_bind_rpz_hagezi_badware_name: "hoster"
+autonomy_bind_rpz_hagezi_badware_policy: "given"
+autonomy_bind_rpz_hagezi_badware_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_badware_name }}.rpz"
+autonomy_bind_rpz_hagezi_badware_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_badware_zone_file }}"
+autonomy_bind_rpz_hagezi_badware_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_badware_zone_type: "primary"
+autonomy_bind_rpz_hagezi_badware_nameservers: []
+
+autonomy_bind_rpz_hagezi_badware_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_badware_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_badware_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_badware_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_badware_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_badware_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_badware_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_badware_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_badware_name }}.txt"
+
+# Multi Url_Shortener
+autonomy_bind_rpz_hagezi_url_shortener_name: "urlshortener"
+autonomy_bind_rpz_hagezi_url_shortener_policy: "given"
+autonomy_bind_rpz_hagezi_url_shortener_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_url_shortener_name }}.rpz"
+autonomy_bind_rpz_hagezi_url_shortener_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_url_shortener_zone_file }}"
+autonomy_bind_rpz_hagezi_url_shortener_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_url_shortener_zone_type: "primary"
+autonomy_bind_rpz_hagezi_url_shortener_nameservers: []
+
+autonomy_bind_rpz_hagezi_url_shortener_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_url_shortener_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_url_shortener_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_url_shortener_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_url_shortener_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_url_shortener_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_url_shortener_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_url_shortener_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_url_shortener_name }}.txt"
+
+# Multi Tlds
+autonomy_bind_rpz_hagezi_tlds_name: "spam-tlds"
+autonomy_bind_rpz_hagezi_tlds_policy: "given"
+autonomy_bind_rpz_hagezi_tlds_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_tlds_name }}.rpz"
+autonomy_bind_rpz_hagezi_tlds_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_tlds_zone_file }}"
+autonomy_bind_rpz_hagezi_tlds_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_tlds_zone_type: "primary"
+autonomy_bind_rpz_hagezi_tlds_nameservers: []
+
+autonomy_bind_rpz_hagezi_tlds_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_tlds_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_tlds_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_tlds_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_tlds_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_tlds_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_tlds_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_tlds_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/spam-tlds-rpz.txt"
+
+# Multi Tlds_Aggressive
+autonomy_bind_rpz_hagezi_tlds_aggressive_name: "spam-tlds-aggressive"
+autonomy_bind_rpz_hagezi_tlds_aggressive_policy: "given"
+autonomy_bind_rpz_hagezi_tlds_aggressive_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_tlds_aggressive_name }}.rpz"
+autonomy_bind_rpz_hagezi_tlds_aggressive_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_tlds_aggressive_zone_file }}"
+autonomy_bind_rpz_hagezi_tlds_aggressive_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_tlds_aggressive_zone_type: "primary"
+autonomy_bind_rpz_hagezi_tlds_aggressive_nameservers: []
+
+autonomy_bind_rpz_hagezi_tlds_aggressive_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_tlds_aggressive_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_tlds_aggressive_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_tlds_aggressive_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_tlds_aggressive_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_tlds_aggressive_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_tlds_aggressive_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_tlds_aggressive_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/spam-tlds-rpz-aggressive.txt"
+
+# Multi Antipiracy
+autonomy_bind_rpz_hagezi_antipiracy_name: "antipiracy"
+autonomy_bind_rpz_hagezi_antipiracy_policy: "given"
+autonomy_bind_rpz_hagezi_antipiracy_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_antipiracy_name }}.rpz"
+autonomy_bind_rpz_hagezi_antipiracy_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_antipiracy_zone_file }}"
+autonomy_bind_rpz_hagezi_antipiracy_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_antipiracy_zone_type: "primary"
+autonomy_bind_rpz_hagezi_antipiracy_nameservers: []
+
+autonomy_bind_rpz_hagezi_antipiracy_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_antipiracy_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_antipiracy_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_antipiracy_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_antipiracy_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_antipiracy_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_antipiracy_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_antipiracy_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/anti.piracy.txt"
+
+# Multi Gambling
+autonomy_bind_rpz_hagezi_gambling_name: "gambling"
+autonomy_bind_rpz_hagezi_gambling_policy: "given"
+autonomy_bind_rpz_hagezi_gambling_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_gambling_name }}.rpz"
+autonomy_bind_rpz_hagezi_gambling_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_gambling_zone_file }}"
+autonomy_bind_rpz_hagezi_gambling_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_gambling_zone_type: "primary"
+autonomy_bind_rpz_hagezi_gambling_nameservers: []
+
+autonomy_bind_rpz_hagezi_gambling_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_gambling_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_gambling_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_gambling_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_gambling_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_gambling_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_gambling_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_gambling_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_gambling_name }}.txt"
+
+# Multi Gambling_Medium
+autonomy_bind_rpz_hagezi_gambling_medium_name: "gambling-medium"
+autonomy_bind_rpz_hagezi_gambling_medium_policy: "given"
+autonomy_bind_rpz_hagezi_gambling_medium_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_gambling_medium_name }}.rpz"
+autonomy_bind_rpz_hagezi_gambling_medium_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_gambling_medium_zone_file }}"
+autonomy_bind_rpz_hagezi_gambling_medium_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_gambling_medium_zone_type: "primary"
+autonomy_bind_rpz_hagezi_gambling_medium_nameservers: []
+
+autonomy_bind_rpz_hagezi_gambling_medium_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_gambling_medium_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_gambling_medium_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_gambling_medium_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_gambling_medium_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_gambling_medium_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_gambling_medium_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_gambling_medium_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/gambling-medium.txt"
+
+# Multi Social
+autonomy_bind_rpz_hagezi_social_name: "social"
+autonomy_bind_rpz_hagezi_social_policy: "given"
+autonomy_bind_rpz_hagezi_social_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_social_name }}.rpz"
+autonomy_bind_rpz_hagezi_social_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_social_zone_file }}"
+autonomy_bind_rpz_hagezi_social_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_social_zone_type: "primary"
+autonomy_bind_rpz_hagezi_social_nameservers: []
+
+autonomy_bind_rpz_hagezi_social_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_social_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_social_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_social_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_social_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_social_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_social_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_social_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_social_name }}.txt"
+
+# Multi Nsfw
+autonomy_bind_rpz_hagezi_nsfw_name: "nsfw"
+autonomy_bind_rpz_hagezi_nsfw_policy: "given"
+autonomy_bind_rpz_hagezi_nsfw_zone_file: "db.hagezi_{{ autonomy_bind_rpz_hagezi_nsfw_name }}.rpz"
+autonomy_bind_rpz_hagezi_nsfw_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_hagezi_nsfw_zone_file }}"
+autonomy_bind_rpz_hagezi_nsfw_allow_query: "{{ autonomy_bind_allow_query }}"
+autonomy_bind_rpz_hagezi_nsfw_zone_type: "primary"
+autonomy_bind_rpz_hagezi_nsfw_nameservers: []
+
+autonomy_bind_rpz_hagezi_nsfw_zone:
+  name: "{{ autonomy_bind_rpz_hagezi_nsfw_name }}"
+  type: "{{ autonomy_bind_rpz_hagezi_nsfw_zone_type }}"
+  file: "{{ autonomy_bind_rpz_hagezi_nsfw_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_hagezi_nsfw_policy }}"
+  path: "{{ autonomy_bind_rpz_hagezi_nsfw_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_hagezi_nsfw_allow_query }}"
+  definition: "fixed"
+  nameservers: "{{ autonomy_bind_rpz_hagezi_nsfw_nameservers }}"
+  url: "{{ autonomy_bind_rpz_hagezi_base_url }}/{{ autonomy_bind_rpz_hagezi_nsfw_name }}.txt"

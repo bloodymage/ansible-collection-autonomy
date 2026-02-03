@@ -4,10 +4,10 @@
 # Include key files
 {% for localzone in autonomy_bind_forwardzones -%}
 {% if localzone['type'] == "primary" -%}
-  include "{{ bind_key_dir }}/{{ localzone['name'] }}.key";
+  include "{{ autonomy_bind_key_dir }}/{{ localzone['name'] }}.key";
 {% endif %}
 {% if localzone['samba_controlled'] is defined and localzone['samba_controlled'] -%}
-  include "{{ bind_key_dir }}/{{ localzone['name'] }}.key";
+  include "{{ autonomy_bind_key_dir }}/{{ localzone['name'] }}.key";
 {% endif %}
 {% endfor %}
 include "/etc/bind/rndc.key";
@@ -31,7 +31,7 @@ include "/etc/bind/rndc.key";
   file "{{ localzone['file'] }}";
 {% else %}
   allow-update { key {{ localzone['name'] }}; };
-  file "{{ bind_zone_dir }}/db.{{ localzone['domain'] }}";
+  file "{{ autonomy_bind_zone_dir }}/db.{{ localzone['domain'] }}";
 {% endif %}
 };
 {% endif %}
@@ -50,12 +50,12 @@ include "/etc/bind/rndc.key";
 {% for localzone in autonomy_bind_reversezones -%}
 {% if localzone['type'] == "primary" %}
 zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }}.in-addr.arpa" {
-  type {{ bind_primary_zone }};
+  type {{ autonomy_bind_primary_zone }};
   notify no;
   allow-query { any; };
   allow-transfer { any; };
   allow-update { key {{ localzone['update_key'] }}; };
-  file "{{ bind_zone_dir }}/db.{{ localzone['name'] }}"; # zone file path
+  file "{{ autonomy_bind_zone_dir }}/db.{{ localzone['name'] }}"; # zone file path
   };
 {% endif %}
 
@@ -66,12 +66,12 @@ zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }
 {% for localzone in autonomy_bind_ipv6_reversezones -%}
 {% if localzone['type'] == "primary" %}
 zone "{{ localzone['name'] | community.dns.reverse_pointer | replace('0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.', '') }}" {
-  type {{ bind_primary_zone }};
+  type {{ autonomy_bind_primary_zone }};
   notify no;
   allow-query { any; };
   allow-transfer { any; };
   allow-update { key {{ localzone['update_key'] }}; };
-  file "{{ bind_zone_dir }}/db.{{ localzone['name'] | replace(':', '') }}"; # zone file path
+  file "{{ autonomy_bind_zone_dir }}/db.{{ localzone['name'] | replace(':', '') }}"; # zone file path
   };
 {% endif %}
 

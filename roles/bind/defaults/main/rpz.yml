@@ -1,15 +1,25 @@
 ---
-autonomy_bind_rpz_enabled: false
+autonomy_bind_rpz_break_dnssec: "yes"
 
-autonomy_bind_rpz_zones:
-  - name: "mozilla.rpz"
-    type: "primary"
-    zonefile: "db.mozilla.rpz"
-    break_dnssec: "yes"
+autonomy_bind_rpz_default_policy: "given"
 
+# RPZ Zones
+# Mozilla
+autonomy_bind_rpz_mozilla_name: "mozilla.rpz"
+autonomy_bind_rpz_mozilla_policy: "{{ autonomy_bind_rpz_default_policy }}"
+autonomy_bind_rpz_mozilla_zone_file: "db.{{ autonomy_bind_rpz_mozilla_name }}"
+autonomy_bind_rpz_mozilla_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_mozilla_zone_file }}"
+autonomy_bind_rpz_mozilla_allow_query: "{{ autonomy_bind_allow_query }}"
 
+autonomy_bind_rpz_mozilla_zone:
+  name: "{{ autonomy_bind_rpz_mozilla_name }}"
+  type: "primary"
+  file: "{{ autonomy_bind_rpz_mozilla_zone_file }}"
+  policy: "{{ autonomy_bind_rpz_mozilla_policy }}"
+  path: "{{ autonomy_bind_rpz_mozilla_zone_path }}"
+  allow_query: "{{ autonomy_bind_rpz_mozilla_allow_query }}"
+  definition: "fixed"
 
-#{ zone <string> [ add-soa <boolean> ] [ log <boolean> ] [ max-policy-ttl <duration> ] [ min-update-interval <duration> ] [ policy ( cname | disabled | drop | given | no-op | nodata | nxdomain | passthru | tcp-only <quoted_string> ) ] [ recursive-only <boolean> ] [ nsip-enable <boolean> ] [ nsdname-enable <boolean> ] [ ede <string> ]; ... } [ add-soa <boolean> ] [ break-dnssec <boolean> ] [ max-policy-ttl <duration> ] [ min-update-interval <duration> ] [ min-ns-dots <integer> ] [ nsip-wait-recurse <boolean> ] [ nsdname-wait-recurse <boolean> ] [ qname-wait-recurse <boolean> ] [ recursive-only <boolean> ] [ servfail-until-ready <boolean> ] [ nsip-enable <boolean> ] [ nsdname-enable <boolean> ] [ dnsrps-enable <boolean> ] [ dnsrps-options { <unspecified-text> } ];
 
 # RPZ / RPS
 # autonomy_bind_dnsrps-enable <boolean>; // obsolete

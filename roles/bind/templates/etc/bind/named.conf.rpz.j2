@@ -1,7 +1,54 @@
 # {{ ansible_managed }}
 
-response-policy {
-{% for policy in bind9_rpc_policies %}
-  {{ policy }}
+{% if autonomy_bind_rpz_enabled and autonomy_bind_rpz_zones is truthy %}
+{% for rpz in autonomy_bind_rpz_zones -%}
+{% if rpz["type"] == "primary" -%}
+  zone {{ rpz["name"] }} {
+  type primary;
+  notify no;
+  allow-query { {{ rpz['allow_query'] }}; };
+{% if rpz['definition'] == 'dynamic' %}
+  allow-transfer { any; };
+  allow-update { key {{ autonomy_zone_name }};  };
+{% endif %}
+{% if rpz['path'] is defined %}
+  file "{{ rpz['path'] }}";
+{% else %}
+  file "{{ autonomy_bind_zone_dir }}/db.{{ rpz['name'] }}.rpz";
+{% endif %}
+};
+
+{% endif %}
 {% endfor %}
-};   
+{% for rpz in autonomy_bind_rpz_zones -%}
+{% if rpz["type"] == "secondary" -%}
+  zone {{ rpz["name"] }} {
+  type secondary;
+  notify no;
+  allow-query { {{ rpz['allow_query'] }}; };
+  primaries {
+  {% for ns in rpz['nameservers'] %}
+    {{ ns }};
+  {% endfor %}
+};
+  file "{{ autonomy_bind_cache_dir }}/db.{{ rpz['name'] }}.rpz";
+};
+
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if autonomy_bind_rpz_hagezi_enabled and autonomy_bind_rpz_hagezi_zones is truthy %}
+{% for rpz in autonomy_bind_rpz_hagezi_zones -%}
+  zone {{ rpz["name"] }} {
+  type primary;
+  notify no;
+  allow-query { {{ rpz['allow_query'] }}; };
+{% if rpz['path'] is defined %}
+  file "{{ rpz['path'] }}";
+{% else %}
+  file "{{ autonomy_bind_zone_dir }}/db.{{ rpz['name'] }}.rpz";
+{% endif %}
+};
+
+{% endfor %}
+{% endif %}

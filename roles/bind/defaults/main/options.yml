@@ -3,28 +3,18 @@
 # Define acls for defining ip addresses or networks allowed to query bind
 autonomy_bind_acls: []
 
-# Directories
-autonomy_bind_directory: "/var/cache/bind"
-autonomy_bind_cache_dir: "{{ autonomy_bind_directory }}"
-# autonomy_bind_geoip-directory ( <quoted_string> | none );
-# autonomy_bind_key-directory <quoted_string>;
-# autonomy_bind_managed-keys-directory <quoted_string>;
-# autonomy_bind_new-zones-directory <quoted_string>;
-
-# Files
-autonomy_bind_pid_file: "/run/named/named.pid"
-autonomy_bind_bindkeys_file: "/etc/named.iscdlv.key"
-# autonomy_bind_dump-file <quoted_string>;
-# autonomy_bind_memstatistics-file <quoted_string>;
-# autonomy_bind_statistics-file <quoted_string>;
-# autonomy_bind_secroots-file <quoted_string>;
-# autonomy_bind_recursing-file <quoted_string>;
-# autonomy_bind_session-keyfile ( <quoted_string> | none );
-
 # Server
 #  [ port <integer> ] [ proxy <string> ] [ tls <string> ] [ http <string> ] { <address_match_element>; ... }; // may occur multiple times
-autonomy_bind_listen_on: "any"
-autonomy_bind_listen_on_v6: "any"
+
+# List of IPv4 address of the network interface(s) to listen on. Set to "any"
+# to listen on all interfaces
+autonomy_bind_listen_on_ipv4:
+  - "127.0.0.1"
+
+# List of IPv6 address of the network interface(s) to listen on.
+autonomy_bind_listen_on_ipv6:
+  - "::1"
+
 autonomy_bind_version: "not currently available"
 # autonomy_bind_memstatistics <boolean>;
 # autonomy_bind_port <integer>;
@@ -44,6 +34,8 @@ autonomy_bind_dnssec_validation: "auto"
 # autonomy_bind_allow-query-on { <address_match_element>; ... };
 # autonomy_bind_max-query-count <integer>;
 # autonomy_bind_max-query-restarts <integer>;
+autonomy_bind_allow_query: "any"
+autonomy_bind_allow_transfer: "any"
 
 # Forwards
 # autonomy_bind_forwarders [ port <integer> ] [ tls <string> ] { ( <ipv4_address> | <ipv6_address> ) [ port <integer> ] [ tls <string> ]; ... };
@@ -210,6 +202,9 @@ autonomy_bind_stale_cache_enable: "no"
 
 
 # autonomy_bind_preferred-glue <string>;
+autonomy_bind_prefetch_trigger: 2
+autonomy_bind_prefetch_eligibility: 9
+
 # autonomy_bind_prefetch <integer> [ <integer> ];
 # autonomy_bind_provide-ixfr <boolean>;
 # autonomy_bind_provide-zoneversion <boolean>;
@@ -247,7 +242,8 @@ autonomy_bind_stale_cache_enable: "no"
 # autonomy_bind_responselog <boolean>;
 # autonomy_bind_reuseport <boolean>;
 # autonomy_bind_root-key-sentinel <boolean>;
-# autonomy_bind_rrset-order { [ class <string> ] [ type <string> ] [ name <quoted_string> ] <string> <string>; ... };
+# autonomy_bind_rrset_order { [ class <string> ] [ type <string> ] [ name <quoted_string> ] <string> <string>; ... };
+autonomy_bind_rrset_order: "random"
 
 # autonomy_bind_send-cookie <boolean>;
 # autonomy_bind_send-report-channel <string>;

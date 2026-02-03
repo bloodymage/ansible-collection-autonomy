@@ -1,0 +1,27 @@
+---
+# ==================================================================================================
+#
+# Install Configuration files
+#
+# ==================================================================================================
+# ==================================================================================================
+#
+# Install Configuration files
+#
+# ==================================================================================================
+- name: "Install Bind Config Files."
+  ansible.builtin.template:
+    src: "etc/bind/{{ item }}.j2"
+    dest: "{{ autonomy_bind_conf_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+    validate: "{{ __bind_named_checkconf }} %s"
+  become: true
+  loop: "{{ autonomy_bind_config_files }}"
+  when:
+    - autonomy_bind_dyndns_secret is defined
+    - inventory_hostname not in groups['public_zone'] | default([])
+    - (autonomy_bind_forwardzones is defined or inventory_hostname in groups['samba_domain_controllers'] | default([]))
+    - groups['dmz_dns_servers'] is defined # Temporary fix for #534
+  notify: restart bind

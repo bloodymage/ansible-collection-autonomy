@@ -1,5 +1,0 @@
-$TTL  604800
-$ORIGIN       mozilla.rpz.
-@     IN      SOA     localhost. root.localhost. 1 604800 86400 2419200 604800
-@     IN      NS      localhost.
-use-application-dns.net CNAME .

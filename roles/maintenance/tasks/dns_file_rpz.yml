@@ -1,0 +1,14 @@
+---
+- name: "Download Hagezi RPZ files."
+  ansible.builtin.get_url:
+    url: "{{ item['url'] }}"
+    dest: "{{ item['path'] }}"
+    owner: "{{ autonomy_bind_owner }}"
+    group: "{{ autonomy_bind_group }}"
+    mode: "0644"
+  loop: "{{ autonomy_bind_rpz_hagezi_zones }}"
+  become: true
+  when:
+    - autonomy_virtual_host is falsy
+    - autonomy_bind_rpz_hagezi_enabled
+  notify: restart bind
