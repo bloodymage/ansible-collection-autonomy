@@ -63,6 +63,7 @@ References
 - [DNS for Rocket Scientists](http://www.zytrax.com/books/dns/)
 - [Debian Wiki: Bind9](https://wiki.debian.org/Bind9)
 - [Samba Wiki: Setting up an BIND DNS Server](https://wiki.samba.org/index.php/Setting_up_a_BIND_DNS_Server)
+- [Dynamically update a RPZ with nsupdate](https://serverfault.com/questions/990996/dynamically-update-a-rpz-with-nsupdate)
 
 Contributing
 ------------
