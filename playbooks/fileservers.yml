@@ -3,10 +3,10 @@
   hosts: all:!wifi_access_points:!routers:!switches:!printers
   ignore_unreachable: true
   roles:
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       tags:
         - always
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       vars:
         __env_tasks: "realm"
       tags:

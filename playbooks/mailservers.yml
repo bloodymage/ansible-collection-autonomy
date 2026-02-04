@@ -2,14 +2,16 @@
 - name: "Configure Environment"
   hosts: all:!wifi_access_points:!routers:!switches:!printers
   roles:
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       tags:
         - always
 
 - name: "Aliases"
   hosts: linux:!localhost:!routeros:!wifi_access_points:!printers:!public_zone:!virtual_hosts
   roles:
-    - role: bloodymage.autonomy.etc_aliases
+    - role: bloodymage.autonomy.etc
+      vars:
+        __etc_tasks: "aliases"
       tags:
         - aliases
 
@@ -20,16 +22,6 @@
       tags:
         - exim
 
-- name: "Configure ACME CA."
-  hosts: mail_servers:&public_zone
-  roles:
-    - role: bloodymage.autonomy.acmeca
-      vars:
-        __acmeca_tasks: "account"
-    - role: bloodymage.autonomy.acmeca
-      vars:
-        __acmeca_tasks: "certs"
-
 - name: "Configure mailservers."
   hosts: mail_servers:!public_zone
   roles:
@@ -39,13 +31,6 @@
     # - role: bloodymage.autonomy.clamav
     #   tags:
     #     - clamav
-
-- name: "Configure OpenDKIM Servers."
-  hosts: opendkim_servers
-  roles:
-    - role: bloodymage.autonomy.opendkim
-      tags:
-        - opendkim
 
 - name: "Configure Dovecot Servers."
   hosts: dovecot_servers:!public_zone

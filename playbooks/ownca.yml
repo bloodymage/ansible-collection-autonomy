@@ -16,10 +16,10 @@
   hosts: all:!dns_only
   ignore_unreachable: yes
   roles:
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       tags:
         - always
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       vars:
         __env_tasks: "ownca"
       tags: []

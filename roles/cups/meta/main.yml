@@ -1,6 +1,6 @@
 galaxy_info:
   author: G Derber
-  description: Installs Samba Domain Controllers
+  description: Installs CUPS
   company: Bloodymage
 
   issue_tracker_url: http://github.com/bloodymage/ansible-collection-autonomy
@@ -10,19 +10,16 @@ galaxy_info:
   min_ansible_version: 2.10
 
   platforms:
-    - name: Rasbian
-      versions:
-        - 10
     - name: Debian
       versions:
-        - 10
-    - name: Ubuntu
-      versions:
-        - 18.04
+        - 13
 
   galaxy_tags:
     - bloodymage
-    - samba
+    - servers
+    - server
+    - print
+    - cups
 
 dependencies:
-  - role: bloodymage.autonomy.collection_globals
+  - role: bloodymage.autonomy.common

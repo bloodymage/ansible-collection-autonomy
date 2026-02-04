@@ -8,7 +8,7 @@
 - name: "Configure the control node."
   hosts: localhost
   roles:
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       tags:
         - always
     - role: bloodymage.autonomy.ansible

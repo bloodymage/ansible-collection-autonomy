@@ -1,7 +1,7 @@
 - name: "Prepare playbook environment."
   hosts: all:!wifi_access_points:!routers:!switches:!printers
   roles:
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       tags:
         - always
 

@@ -7,7 +7,7 @@
 - name: "Configure environment for database server configuration."
   hosts: all:!wifi_access_points:!routers:!switches:!printers
   roles:
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       tags:
         - always
 

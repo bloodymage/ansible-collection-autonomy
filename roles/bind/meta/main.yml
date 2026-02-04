@@ -22,8 +22,11 @@ galaxy_info:
 
   galaxy_tags:
     - bloodymage
+    - servers
+    - server
+    - bind
     - dns
     - bind9
 
 dependencies:
-  - role: bloodymage.autonomy.collection_globals
+  - role: bloodymage.autonomy.common

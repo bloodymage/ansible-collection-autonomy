@@ -1,7 +1,7 @@
 ---
 - name: "Import Environment Role."
   ansible.builtin.import_role:
-    name: "bloodymage.autonomy.config_environment"
+    name: "bloodymage.autonomy.autoconfig"
   tags:
     - host-groups
 

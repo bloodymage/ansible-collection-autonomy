@@ -2,7 +2,7 @@
 - name: "Configure the environment for DNS configuration."
   hosts: all:!dns_only
   roles:
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       tags:
         - always
 

@@ -1,7 +1,7 @@
 ---
 - hosts: all
   roles:
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       tags:
         - always
       when:

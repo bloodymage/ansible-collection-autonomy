@@ -16,7 +16,7 @@
 #   hosts: vendor_managed
 #   ignore_unreachable: yes
 #   roles:
-#     - role: bloodymage.autonomy.config_environment
+#     - role: bloodymage.autonomy.autoconfig
 #       tags:
 #         - always
 
@@ -24,7 +24,7 @@
   hosts: all:!localhost:!vendor_managed:!dns_only
   ignore_unreachable: yes
   roles:
-    - role: bloodymage.autonomy.config_environment
+    - role: bloodymage.autonomy.autoconfig
       tags:
         - always
 
