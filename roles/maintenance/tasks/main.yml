@@ -5,7 +5,9 @@
   when:
     __maintenance_tasks == "dns"
   tags:
+    - maintenance
     - dns
+    - dns-file
     - dns-nsupdate
     - dns-cloudflare
 
@@ -23,6 +25,9 @@
   include_tasks: "upgrade.yml"
   when:
     __maintenance_tasks == "upgrade"
+  tags:
+    - maintenance
+    - upgrade
 
 - name: "Include Wake-on-LAN Tasks."
   include_tasks: "wake_on_lan.yml"

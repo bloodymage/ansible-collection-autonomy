@@ -12,3 +12,15 @@
     - autonomy_virtual_host is falsy
     - autonomy_bind_rpz_hagezi_enabled
   notify: restart bind
+  tags:
+    - dns
+    - dns-file
+
+- name: "Flush Handlers for DNS Servers."
+  ansible.builtin.meta: flush_handlers
+  when:
+    - autonomy_virtual_host is falsy
+    - autonomy_bind_rpz_hagezi_enabled
+  tags:
+    - dns
+    - dns-file

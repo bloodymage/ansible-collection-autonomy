@@ -1,25 +1,25 @@
 ---
-- name: "NSUPDATE: Add adblock domains."
-  community.general.nsupdate:
-    key_name: "{{ autonomy_zone_name }}"
-    key_secret: "{{ __key_secret }}"
-    key_algorithm: "{{ autonomy_ddns_key_algorithm }}"
-    server: "{{ autonomy_dns_primary_server }}"
-    zone: "{{ autonomy_bind_rpz_adblock_name }}"
-    record: "{{ item }}.{{ autonomy_bind_rpz_adblock_name }}"
-    value: "."
-    type: "CNAME"
-    state: present
-  loop: "{{ autonomy_dns_adblock_records }}"
-  become: false
-  vars:
-    __nameserver: "{{ autonomy_dns_primary_server }}"
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/hosts/{{ __nameserver }}/bind_dyndns_secret"
-    __password_lookup: "{{ __password_store_id }}"
-    __key_secret: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
-    __dns_servers: "{{ autonomy_zone_name }}_dns_servers"
-  delegate_to: localhost
-  ignore_unreachable: true
-  tags:
-    - dns
-    - dns-nsupdate
+# - name: "NSUPDATE: Add adblock domains."
+#   community.general.nsupdate:
+#     key_name: "{{ autonomy_zone_name }}"
+#     key_secret: "{{ __key_secret }}"
+#     key_algorithm: "{{ autonomy_ddns_key_algorithm }}"
+#     server: "{{ autonomy_dns_primary_server }}"
+#     zone: "{{ autonomy_bind_rpz_adblock_name }}"
+#     record: "{{ item }}.{{ autonomy_bind_rpz_adblock_name }}"
+#     value: "."
+#     type: "CNAME"
+#     state: present
+#   loop: "{{ autonomy_dns_adblock_records }}"
+#   become: false
+#   vars:
+#     __nameserver: "{{ autonomy_dns_primary_server }}"
+#     __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/hosts/{{ __nameserver }}/bind_dyndns_secret"
+#     __password_lookup: "{{ __password_store_id }}"
+#     __key_secret: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+#     __dns_servers: "{{ autonomy_zone_name }}_dns_servers"
+#   delegate_to: localhost
+#   ignore_unreachable: true
+#   tags:
+#     - dns
+#     - dns-nsupdate

@@ -13,7 +13,6 @@ autonomy_bind_service: bind9
 autonomy_bind_zone_samba_controlled: false
 
 # Directories
-autonomy_bind_zone_dir: "/var/lib/bind"
 autonomy_bind_conf_dir: "/etc/bind"
 autonomy_bind_key_dir: "{{ autonomy_bind_conf_dir }}/keys"
 autonomy_bind_log_dir: "/var/log/bind"
@@ -72,9 +71,6 @@ autonomy_bind_config_files:
   - "{{ autonomy_bind_local_file }}"
   - "{{ autonomy_bind_logging_file }}"
   - "{{ autonomy_bind_options_file }}"
-
-autonomy_bind_owner: root
-autonomy_bind_group: bind
 
 # Commands
 autonomy_bind_ddns_confgen: "/usr/sbin/ddns-confgen"

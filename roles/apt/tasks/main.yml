@@ -8,9 +8,9 @@
         - "vars"
   become: no
   tags:
-    - aptitude
-    - aptitude_debug
-    - aptitude-debug
+    - maintenance
+    - apt
+    - upgrade
 
 # - name: "Ensure Raspbian Raspberry Pi Repo is current"
 #   ansible.builtin.template:
@@ -46,7 +46,6 @@
     state: present
   become: true
   tags:
-    - aptitude
-    - aptitude_debug
-    - aptitude-debug
-    - install-packages
+    - maintenance
+    - apt
+    - upgrade

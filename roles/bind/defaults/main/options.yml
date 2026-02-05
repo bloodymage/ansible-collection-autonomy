@@ -34,7 +34,6 @@ autonomy_bind_dnssec_validation: "auto"
 # autonomy_bind_allow-query-on { <address_match_element>; ... };
 # autonomy_bind_max-query-count <integer>;
 # autonomy_bind_max-query-restarts <integer>;
-autonomy_bind_allow_query: "any"
 autonomy_bind_allow_transfer: "any"
 
 # Forwards

@@ -42,12 +42,15 @@
 - name: "DNS Maintenance."
   hosts: all:!localhost
   ignore_unreachable: true
-  roles:
-    - role: bloodymage.autonomy.maintenance
+  tasks:
+    - ansible.builtin.include_role:
+        name: bloodymage.autonomy.maintenance
       vars:
         __maintenance_tasks: "dns"
       tags:
+        - maintenance
         - dns
+        - dns-file
         - dns-nsupdate
         - dns-cloudflare
 
@@ -58,17 +61,10 @@
       when:
         - ansible_os_family == "Debian"
         - ansible_network_os is not defined
-      tags:
-        - maintenance-upgrade
-        - apt
-        - upgrade
 
     - role: bloodymage.autonomy.maintenance
       vars:
         __maintenance_tasks: "upgrade"
-      tags:
-        - maintenance-upgrade
-        - upgrade
 
 - name: "User Maintenance."
   hosts: all:!localhost:!public_zone:!routeros:!virtual_hosts:!printers

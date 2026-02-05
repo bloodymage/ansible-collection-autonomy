@@ -45,6 +45,8 @@
     timeout: "{{ autonomy_dns_cloudflare_timeout }}"
     ttl: "{{ autonomy_dns_cloudflare_ttl }}"
   become: false
+  when:
+    - autonomy_dns_cloudflare_only
   vars:
     __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
