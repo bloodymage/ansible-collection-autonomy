@@ -1,4 +1,0 @@
----
-# defaults file for nfs_server
-autonomy_nfsserver_packages:
-  - nfs-kernel-server

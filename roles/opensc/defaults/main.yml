@@ -1,4 +1,0 @@
----
-autonomy_opensc_packages:
-  - opensc
-  - opensc-pkcs11

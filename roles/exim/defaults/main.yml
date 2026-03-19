@@ -1,4 +1,0 @@
----
-# defaults file for exim
-autonomy_exim_packages:
-  - exim4-daemon-light

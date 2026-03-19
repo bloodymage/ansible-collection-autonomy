@@ -1,9 +1,0 @@
-# {{ ansible_managed }}
-
-require ["include", "variables", "fileinto", "mailbox", "envelope", "subaddress", "regex", "imap4flags"];
-global ["level1", "level2", "level3", "level4", "level5", "level6", "level7"];
-
-if envelope :matches :detail "to" "*" {
-  # Save name in ${sort} in all lowercase except for the first letter
-  set :lower :upperfirst "level2" "${1}";
-}
