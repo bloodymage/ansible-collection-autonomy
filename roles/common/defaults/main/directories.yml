@@ -1,0 +1,41 @@
+---
+# ==================================================================================================
+#
+# Files, Directories, and URLs
+#
+# ==================================================================================================
+# Directories
+autonomy_common_bin_dir: "/bin"
+autonomy_common_cache_dir: "/var/cache"
+autonomy_common_cmd_dir: "/usr/bin"
+autonomy_common_data_dir: "/usr/share"
+autonomy_common_home_dir: "/home"
+autonomy_common_lib_dir: "/usr/lib"
+autonomy_common_local_dir: "/usr/local"
+autonomy_common_local_data_dir: "{{ autonomy_common_local_dir }}/share"
+autonomy_common_lock_dir: "/var/lock"
+autonomy_common_log_dir: "/var/log"
+autonomy_common_mail_dir: "/var/mail"
+autonomy_common_media_dir: "/media"
+autonomy_common_mnt_dir: "/mnt"
+autonomy_common_opt_dir: "/opt"
+autonomy_common_run_dir: "/run"
+autonomy_common_srv_dir: "/srv"
+autonomy_common_state_dir: "/var/lib"
+autonomy_common_spool_dir: "/var/spool"
+autonomy_common_syscmd_dir: "/usr/sbin"
+autonomy_common_sysconf_dir: "/etc"
+autonomy_common_tmp_dir: "/tmp"
+autonomy_common_realm_home_dir: "/home/{{ autonomy_org_unit_name | upper }}"
+
+# User Dirs
+autonomy_common_user_dir: "{{ autonomy_common_home_dir }}/{{ autonomy_common_user }}"
+autonomy_common_user_ssh_dir: "{{ autonomy_common_user_dir }}/.ssh"
+
+# Files
+autonomy_common_shell_file: "sh"
+autonomy_common_bash_file: "bash"
+
+# Paths
+autonomy_common_shell_path: "{{ autonomy_common_bin_dir }}/{{ autonomy_common_shell_file }}"
+autonomy_common_bash_path: "{{ autonomy_common_bin_dir }}/{{ autonomy_common_bash_path }}"

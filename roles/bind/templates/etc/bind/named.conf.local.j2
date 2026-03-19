@@ -31,7 +31,14 @@ include "/etc/bind/rndc.key";
   file "{{ localzone['file'] }}";
 {% else %}
   allow-update { key {{ localzone['name'] }}; };
-  file "{{ autonomy_bind_zone_dir }}/db.{{ localzone['domain'] }}";
+  file "{{ autonomy_common_bind_zone_dir }}/db.{{ localzone['domain'] }}";
+{% if localzone['also_notify'] is defined and localzone['also_notify'] is truthy %}
+  also-notify {
+  {% for host in localzone['also_notify'] %}
+    {{ host }};
+  {% endfor %}
+  };
+{% endif %}
 {% endif %}
 };
 {% endif %}
@@ -50,12 +57,19 @@ include "/etc/bind/rndc.key";
 {% for localzone in autonomy_bind_reversezones -%}
 {% if localzone['type'] == "primary" %}
 zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }}.in-addr.arpa" {
-  type {{ autonomy_bind_primary_zone }};
+  type {{ autonomy_common_bind_primary_zone }};
   notify no;
   allow-query { any; };
   allow-transfer { any; };
   allow-update { key {{ localzone['update_key'] }}; };
-  file "{{ autonomy_bind_zone_dir }}/db.{{ localzone['name'] }}"; # zone file path
+{% if localzone['also_notify'] is defined and localzone['also_notify'] is truthy %}
+  also-notify {
+  {% for host in localzone['also_notify'] %}
+    {{ host }};
+  {% endfor %}
+  };
+{% endif %}
+  file "{{ autonomy_common_bind_zone_dir }}/db.{{ localzone['name'] }}"; # zone file path
   };
 {% endif %}
 
@@ -66,12 +80,19 @@ zone "{{ localzone['name'].split('.')[1] }}.{{ localzone['name'].split('.')[0] }
 {% for localzone in autonomy_bind_ipv6_reversezones -%}
 {% if localzone['type'] == "primary" %}
 zone "{{ localzone['name'] | community.dns.reverse_pointer | replace('0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.', '') }}" {
-  type {{ autonomy_bind_primary_zone }};
+  type {{ autonomy_common_bind_primary_zone }};
   notify no;
   allow-query { any; };
   allow-transfer { any; };
   allow-update { key {{ localzone['update_key'] }}; };
-  file "{{ autonomy_bind_zone_dir }}/db.{{ localzone['name'] | replace(':', '') }}"; # zone file path
+{% if localzone['also_notify'] is defined and localzone['also_notify'] is truthy %}
+  also-notify {
+  {% for host in localzone['also_notify'] %}
+    {{ host }};
+  {% endfor %}
+  };
+{% endif %}
+  file "{{ autonomy_common_bind_zone_dir }}/db.{{ localzone['name'] | replace(':', '') }}"; # zone file path
   };
 {% endif %}
 

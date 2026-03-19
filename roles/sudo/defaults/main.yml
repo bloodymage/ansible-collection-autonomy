@@ -1,4 +1,4 @@
 ---
 # defaults file for sudo
-autonomy_packages:
+autonomy_sudo_packages:
   - sudo

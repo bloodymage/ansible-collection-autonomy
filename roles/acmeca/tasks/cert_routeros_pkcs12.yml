@@ -1,0 +1,32 @@
+---
+- name: "Generate PKCS#12 file."
+  community.crypto.openssl_pkcs12:
+    action: export
+    backup: true
+    path:  "{{ autonomy_acmceca_user_pkcs12_path }}"
+    friendly_name: "{{ inventory_hostname }}"
+    passphrase: "{{ __password }}"
+    privatekey_path: "{{ autonomy_acmeca_user_key_path }}"
+    certificate_path: "{{ autonomy_acmeca_user_cert_path }}"
+    other_certificates_parse_all: true
+    other_certificates:
+      - "{{ autonomy_acmeca_user_fullchain_path }}"
+    state: present
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "0600"
+    #force: true
+  become: false
+  delegate_to: localhost
+  vars:
+    __password: >-
+      {% if autonomy_acmeca_host_pkcs12_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_acmeca_host_pkcs12_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_acmeca_host_pkcs12_password }}
+      {%- endif %}
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs

@@ -13,13 +13,13 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
 
 - name: "Check to determine if we need krb5 support"
   ansible.builtin.set_fact:
-    autonomy_packages: "{{ autonomy_apache_packages + autonomy_apache_krb5_packages }}"
-    apache_modules: "{{ autonomy_apache_modules + autonomy_apache_kerberos_ad_sso_modules }}"
-  become: no
+    autonomy_apache_packages: "{{ autonomy_apache_packages + autonomy_apache_krb5_packages }}"
+    autonomy_apache_modules: "{{ autonomy_apache_modules + autonomy_apache_kerberos_ad_sso_modules }}"
+  become: false
   when:
     - inventory_hostname in groups['internal_zone']
     - autonomy_realm_identity_management_system is truthy
@@ -27,7 +27,7 @@
 - name: "Check to determine if we need ldap support"
   ansible.builtin.set_fact:
     autonomy_apache_modules: "{{ autonomy_apache_modules + autonomy_apache_ldap_modules  }}"
-  become: no
+  become: false
   when:
     - autonomy_realm_identity_management_system is truthy
 
@@ -35,25 +35,14 @@
   ansible.builtin.package:
     name: "{{ autonomy_apache_packages }}"
     state: present
-  become: yes
+  become: true
 
 - name: "http service state"
   ansible.builtin.service:
     name: apache2
     state: started
-    enabled: yes
-  become: yes
-
-- name: "Enable Apache Modules"
-  community.general.apache2_module:
-    state: present
-    name: "{{ item }}"
-  loop: "{{ autonomy_apache_modules }}"
-  become: yes
-  notify: restart apache
-  when:
-    - virtual_hosts is defined
-    - inventory_hostname in groups['apache_servers']
+    enabled: true
+  become: true
 
 # ======================================================================
 #
@@ -64,22 +53,8 @@
 #   seboolean:
 #     name: httpd_can_network_connect_db
 #     state: true
-#     persistent: yes
+#     persistent: true
 #   when: sestatus.rc != 0
-
-- name: "Create file directories for each site"
-  ansible.builtin.file:
-    path: "/srv/www/{{ item.name }}"
-    owner: www-data
-    group: www-data
-    state: directory
-    mode: "0755"
-  become: yes
-  loop:
-    "{{ virtual_hosts }}"
-  when:
-    - virtual_hosts is defined
-    - item.name is defined
 
 # ======================================================================
 #
@@ -92,27 +67,6 @@
     owner: www-data
     group: www-data
     state: directory
-    recurse: yes
+    recurse: true
     mode: "0755"
-  become: yes
-  loop:
-    "{{ virtual_hosts }}"
-  when:
-    - virtual_hosts is defined
-    - item.enable is defined
-    - item.enabled
-
-- name: "Create log directories for each site"
-  ansible.builtin.file:
-    path: "/var/log/apache2/{{ item.name }}"
-    owner: root
-    group: root
-    state: directory
-    mode: "0770"
-  become: yes
-  loop:
-    "{{ virtual_hosts }}"
-  when:
-    - virtual_hosts is defined
-    - item.enable is defined
-    - item.enabled
+  become: true

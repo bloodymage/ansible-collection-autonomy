@@ -1,0 +1,39 @@
+---
+# defaults file for unattended_upgrades
+autonomy_unattendedupgrades_packages:
+  - unattended-upgrades
+
+autonomy_unattendedupgrades_sysconf_dir: "{{ autonomy_common_apt_sysconf_dir }}/apt.conf.d"
+autonomy_unattendedupgrades_sysconf_file: "50unattended-upgrades"
+autonomy_unattendedupgrades_sysconf_path: "{{ autonomy_unattendedupgrades_sysconf_dir }}/{{ autonomy_unattendedupgrades_sysconf_file }}"
+
+autonomy_unattendedupgrades_automatic_reboot: "true"
+autonomy_unattendedupgrades_automatic_reboot_with_users: "false"
+autonomy_unattendedupgrades_automatic_reboot_time: "02:00"
+autonomy_unattendedupgrades_syslog_enable: "true"
+autonomy_unattendedupgrades_mail_to: "{{ autonomy_common_sysadmin_email_address }}"
+
+autonomy_unattendedupgrades_remove_unused_kernel_packages: "{{ __autonomy_unattendedupgrades_remove_unused_kernel_packages }}"
+autonomy_unattendedupgrades_remove_new_unused_dependencies: "{{ __autonomy_unattendedupgrades_remove_new_unused_dependencies }}"
+autonomy_unattendedupgrades_remove_unused_dependencies: "{{ __autonomy_unattendedupgrades_remove_unused_dependencies }}"
+autonomy_unattendedupgrades_syslog_facility: "{{ __autonomy_unattendedupgrades_syslog_facility }}"
+autonomy_unattendedupgrades_mail_report: "{{ __autonomy_unattendedupgrades_mail_report }}"
+autonomy_unattendedupgrades_blacklist: []
+
+autonomy_unattendedupgrades_enabled: false
+
+# ==================================================================================================
+#
+# App default settings
+#
+# ==================================================================================================
+__autonomy_unattendedupgrades_mail_to: ""
+__autonomy_unattendedupgrades_mail_report: "on-change"
+__autonomy_unattendedupgrades_automatic_reboot: "false"
+__autonomy_unattendedupgrades_automatic_reboot_with_users: "true"
+__autonomy_unattendedupgrades_automatic_reboot_time: "now"
+__autonomy_unattendedupgrades_syslog_enable: "false"
+__autonomy_unattendedupgrades_syslog_facility: "daemon"
+__autonomy_unattendedupgrades_remove_unused_dependencies: "false"
+__autonomy_unattendedupgrades_remove_new_unused_dependencies: "true"
+__autonomy_unattendedupgrades_remove_unused_kernel_packages: "true"

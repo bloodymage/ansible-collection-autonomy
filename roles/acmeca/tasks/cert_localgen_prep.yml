@@ -1,0 +1,47 @@
+---
+- name: "Generate Let's Encrypt Certificate private key."
+  community.crypto.openssl_privatekey:
+    path: '{{ autonomy_acmeca_user_key_path }}'
+    type: '{{ __type }}'
+    size: "{{ autonomy_acmeca_host_key_size }}"
+    regenerate: "full_idempotence"
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "{{ autonomy_acmeca_host_key_mode }}"
+    state: "present"
+    backup: "{{ autonomy_acmeca_user_backup_keys }}"
+    force: "{{ autonomy_acmeca_regenerate_host_key }}"
+  become: false
+  delegate_to: localhost
+  vars:
+    __tmp_type: "{{ autonomy_acmeca_host_key_type }}"
+    __type: "{% if __tmp_type.lower() in ['ed25519','ed448'] %}{{ __tmp_type | capitalize }}{% else %}{{ __tmp_type | upper }}{% endif %}"
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-dns
+    - acmeca-http
+
+- name: "Generate Let's Encrypt CSR."
+  community.crypto.openssl_csr:
+    path: "{{ autonomy_acmeca_user_csr_path }}"
+    common_name: "{{ inventory_hostname }}"
+    key_usage: "{{ autonomy_acmeca_key_usage }}"
+    extended_key_usage: "{{ autonomy_acmeca_extended_key_usage }}"
+    subject_alt_name: "{{ autonomy_acmeca_host_subject_alt_name }}"
+    privatekey_path: "{{ autonomy_acmeca_user_key_path }}"
+    ocsp_must_staple: "{{ autonomy_acmeca_ocsp_must_staple }}"
+    use_common_name_for_san: false
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "0644"
+    state: "present"
+    backup: "{{ autonomy_acmeca_user_backup_keys }}"
+    force: "{{ autonomy_acmeca_regenerate_host_csr }}"
+  become: false
+  delegate_to: localhost
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-dns
+    - acmeca-http

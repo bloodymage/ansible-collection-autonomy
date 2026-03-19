@@ -3,11 +3,13 @@
   ansible.builtin.get_url:
     url: "{{ item['url'] }}"
     dest: "{{ item['path'] }}"
-    owner: "{{ autonomy_bind_owner }}"
-    group: "{{ autonomy_bind_group }}"
+    owner: "{{ autonomy_common_bind_owner }}"
+    group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-  loop: "{{ autonomy_bind_rpz_hagezi_zones }}"
+    #force: false
+  loop: "{{ autonomy_common_dns_rpz_hagezi_zones }}"
   become: true
   when:
-    - autonomy_virtual_host is falsy
+    - autonomy_common_virtual_host is falsy
+    - item['type'] == "primary"
   notify: restart bind

@@ -7,7 +7,7 @@
     owner: root
     group: root
     mode: "0644"
-  become: yes
+  become: true
   notify: restart all
   when:
     - inventory_hostname not in group['dmz_zone']

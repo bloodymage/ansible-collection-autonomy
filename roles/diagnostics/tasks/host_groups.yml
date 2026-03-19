@@ -22,7 +22,7 @@
 #   vars:
 #     __group_name: "wifi_access_points"
 #   delegate_to: localhost
-#   run_once: yes
+#   run_once: true
 #   tags:
 #     - host-groups
 
@@ -33,7 +33,7 @@
 #       - "  Hosts:    {{ item.value }}"
 #   loop: "{{ groups | dict2items }}"
 #   delegate_to: localhost
-#   run_once: yes
+#   run_once: true
 #   tags:
 #     - host-groups
 
@@ -43,6 +43,6 @@
 #       - "Group: {{ item }}"
 #   loop: "{{ groups | dict2items }}"
 #   delegate_to: localhost
-#   run_once: yes
+#   run_once: true
 #   tags:
 #     - host-groups

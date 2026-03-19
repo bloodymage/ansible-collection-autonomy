@@ -38,7 +38,7 @@ options {
 {% if inventory_hostname in groups['samba_domain_controllers'] %}
   tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
 {% else %}
-  allow-query { {{ autonomy_bind_allow_query }}; };
+  allow-query { {{ autonomy_common_bind_allow_query }}; };
   allow-transfer { {{ autonomy_bind_allow_transfer }}; };
 {# enable recursive queries #}
   recursion {{ autonomy_bind_recursion }};
@@ -75,31 +75,19 @@ options {
 {% endif %}
 
 {% if inventory_hostname not in groups['samba_domain_controllers'] %}
-{% if autonomy_bind_rpz_enabled and autonomy_bind_rpz_zones is truthy %}
+{% if autonomy_common_dns_rpz_enabled and autonomy_common_dns_rpz_zones is truthy %}
   response-policy {
   {# Ensure Disabled Policies are First #}
-  {% for rpz in autonomy_bind_rpz_zones -%}
+  {% for rpz in autonomy_common_dns_rpz_zones -%}
     {%- if rpz["policy"] == "disabled" -%}
     zone {{ rpz['name'] }} policy {{ rpz["policy"] }};
     {% endif -%}
   {% endfor -%}
-  {% for rpz in autonomy_bind_rpz_zones -%}
+  {% for rpz in autonomy_common_dns_rpz_zones -%}
     {%- if rpz["policy"] != "disabled" -%}
     zone {{ rpz['name'] }}{% if rpz['policy'] != 'given' %} policy {{ rpz["policy"] }}{% endif %};
     {% endif -%}
   {% endfor -%}
-  {% if autonomy_bind_rpz_hagezi_enabled and autonomy_bind_rpz_hagezi_zones is truthy %}
-  {% for rpz in autonomy_bind_rpz_hagezi_zones -%}
-    {%- if rpz["policy"] == "disabled" -%}
-    zone {{ rpz['name'] }} policy {{ rpz["policy"] }};
-    {% endif -%}
-  {% endfor -%}
-  {%- for rpz in autonomy_bind_rpz_hagezi_zones -%}
-    {%- if rpz["policy"] != "disabled" -%}
-    zone {{ rpz['name'] }}{% if rpz['policy'] != 'given' %} policy {{ rpz["policy"] }}{% endif %};
-    {% endif -%}
-  {% endfor -%}
-  {% endif -%}
 }{% if autonomy_bind_rpz_break_dnssec is truthy %} break-dnssec {{ autonomy_bind_rpz_break_dnssec }}{% endif %};
 {% endif %}
 {% endif %}

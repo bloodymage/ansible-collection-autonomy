@@ -1,0 +1,2 @@
+---
+autonomy_openssh_sshd_conf_gitolite_match: "User {{ autonomy_common_users_git_username }}"

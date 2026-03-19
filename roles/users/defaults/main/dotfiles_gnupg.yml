@@ -1,0 +1,42 @@
+---
+# .gnupg/gpg.conf
+autonomy_users_dotfiles_gpg_pinentry_mode: "{{ autonomy_gnupg_pinentry_mode }}"
+autonomy_users_dotfiles_gpg_personal_cipher_preferences: "{{ autonomy_gnupg_personal_cipher_preferences }}"
+autonomy_users_dotfiles_gpg_personal_digest_preferences: "{{ autonomy_gnupg_personal_digest_preferences }}"
+autonomy_users_dotfiles_gpg_personal_compress_preferences: "{{ autonomy_gnupg_personal_compress_preferences }}"
+autonomy_users_dotfiles_gpg_default_preference_list: "{{ autonomy_users_dotfiles_gpg_personal_digest_preferences + autonomy_users_dotfiles_gpg_personal_cipher_preferences + autonomy_users_dotfiles_gpg_personal_compress_preferences }}"
+autonomy_users_dotfiles_gpg_cert_digest_algo: "{{ autonomy_gnupg_cert_digest_algo }}"
+autonomy_users_dotfiles_gpg_s2k_digest_algo: "{{ autonomy_gnupg_s2k_digest_algo }}"
+autonomy_users_dotfiles_gpg_s2k_cipher_algo: "{{ autonomy_gnupg_cipher_algo }}"
+autonomy_users_dotfiles_gpg_comment: "{{ autonomy_gnupg_comment }}"
+autonomy_users_dotfiles_gpg_emit_version: "{{ autonomy_gnupg_emit_version }}"
+autonomy_users_dotfiles_gpg_greeting: "{{ autonomy_gnupg_greeting }}"
+autonomy_users_dotfiles_gpg_keyid_format: "{{ autonomy_gnupg_keyid_format }}"
+autonomy_users_dotfiles_gpg_list_options: "{{ autonomy_gnupg_list_options }}"
+autonomy_users_dotfiles_gpg_verify_options: "{{ autonomy_gnupg_verify_options }}"
+autonomy_users_dotfiles_gpg_with_fingerprint: "{{ autonomy_gnupg_with_fingerprint }}"
+autonomy_users_dotfiles_gpg_require_cross_certification: "{{ autonomy_gnupg_require_cross_certification }}"
+autonomy_users_dotfiles_gpg_symkey_cache: "{{ autonomy_gnupg_symkey_cache }}"
+autonomy_users_dotfiles_gpg_throw_keyids: "{{ autonomy_gnupg_throw_keyids }}"
+autonomy_users_dotfiles_gpg_with_keygrip: "{{ autonomy_gnupg_with_keygrip }}"
+autonomy_users_dotfiles_gpg_keyserver_options: "{{ autonomy_gnupg_keyserver_options }}"
+
+# .gnupg/dirmngr.conf
+autonomy_users_dotfiles_gpg_keyservers: "{{ autonomy_gnupg_keyservers }}"
+autonomy_users_dotfiles_gpg_use_tor: "{{ autonomy_gnupg_use_tor }}"
+
+# .gnupg/gpg-agent.conf
+autonomy_users_dotfiles_gpg_pinentry_program: "/usr/bin/pinentry"
+autonomy_users_dotfiles_gpg_allow_loopback_pinentry: true
+autonomy_users_dotfiles_gpg_allow_emacs_pinentry: false
+autonomy_users_dotfiles_gpg_default_cache_ttl: 600
+autonomy_users_dotfiles_gpg_default_cache_ttl_ssh: 1800
+autonomy_users_dotfiles_gpg_max_cache_ttl: 7200
+autonomy_users_dotfiles_gpg_default_max_cache_ttl_ssh: 7200
+autonomy_users_dotfiles_gpg_enable_ssh_support: no
+
+# .gnupg/scdaemon.conf
+autonomy_users_dotfiles_gpg_pcsc_driver: "/usr/lib/x86_64-linux-gnu/libpcsclite.so.1"
+autonomy_users_dotfiles_gpg_disable_ccid: false
+autonomy_users_dotfiles_gpg_pcsc_shared: false
+autonomy_users_dotfiles_gpg_reader_port: []

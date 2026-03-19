@@ -1,0 +1,4 @@
+---
+autonomy_common_spamassassin_package: "spamassassin"
+autonomy_common_spamassassin_daemon: "spamd"
+autonomy_common_spamassassin_milter_daemon: "spamass-milter"

@@ -8,7 +8,7 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
   tags:
     - aliases
     - fstab

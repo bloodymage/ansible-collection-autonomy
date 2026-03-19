@@ -8,11 +8,11 @@
         - ntpsec
 
 - name: "Configure NTP Clients."
-  hosts: all:!samba_domain_controllers:!ntp_servers:!localhost:!vendor_managed
+  hosts: all:!samba_domain_controllers:!ntp_servers:!localhost:!vendor_managed:!virtual_hosts
   roles:
     - role: bloodymage.autonomy.systemd
       when:
-        - autonomy_virtual_host is falsy
+        - autonomy_common_virtual_host is falsy
       vars:
         __systemd_tasks: "timesyncd"
 

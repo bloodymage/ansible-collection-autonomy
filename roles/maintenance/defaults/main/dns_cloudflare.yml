@@ -1,0 +1,11 @@
+---
+# Cloudflare Settings
+autonomy_dns_cloudflare_proxied: true
+autonomy_dns_cloudflare_solo: true
+autonomy_dns_cloudflare_solo_mx: true
+autonomy_dns_cloudflare_timeout: 30
+autonomy_dns_cloudflare_ttl: 1
+autonomy_dns_cloudflare_cname_records: []
+autonomy_dns_cloudflare_mx_records: []
+autonomy_dns_cloudflare_txt_records: []
+autonomy_dns_dmarc_cloudflare_email: ""

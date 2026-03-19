@@ -10,12 +10,12 @@
 - name: Setup Master Sudoers file
   ansible.builtin.template:
     src: "sudoers.j2"
-    dest: "/etc/sudoers"
+    dest: "{{ autonomy_common_sysconf_dir }}/sudoers"
     owner: root
     group: root
     mode: "0640"
     validate: /usr/sbin/visudo -csf %s
-  become: yes
+  become: true
   tags:
     - sudo
     - sudo_debug

@@ -1,0 +1,42 @@
+---
+autonomy_openssh_ssh_conf_realm_certificate_file: ""
+autonomy_openssh_ssh_conf_realm_enabled: true
+autonomy_openssh_ssh_conf_realm_forward_agent: "no"
+autonomy_openssh_ssh_conf_realm_host: "*.{{ autonomy_common_root_domain }}"
+autonomy_openssh_ssh_conf_realm_identity_file: ""
+autonomy_openssh_ssh_conf_realm_name: "{{ autonomy_common_org_name | lower }}"
+autonomy_openssh_ssh_conf_realm_path: "{{ autonomy_openssh_ssh_conf_d_dir }}/{{ autonomy_openssh_ssh_conf_realm_name }}.conf"
+autonomy_openssh_ssh_conf_realm_pkcs11_provider: ""
+autonomy_openssh_ssh_conf_realm_send_env: []
+
+autonomy_openssh_ssh_conf_realm:
+  certificate_file: "{{ autonomy_openssh_ssh_conf_realm_certificate_file }}"
+  enabled: "{{ autonomy_openssh_ssh_conf_realm_enabled }}"
+  forward_agent: "{{ autonomy_openssh_ssh_conf_realm_forward_agent }}"
+  host: "{{ autonomy_openssh_ssh_conf_realm_host }}"
+  identity_file: "{{ autonomy_openssh_ssh_conf_realm_identity_file }}"
+  name: "{{ autonomy_openssh_ssh_conf_realm_name }}"
+  path: "{{ autonomy_openssh_ssh_conf_realm_path }}"
+  pkcs11_provider: "{{ autonomy_openssh_ssh_conf_realm_pkcs11_provider }}"
+  send_env: "{{ autonomy_openssh_ssh_conf_realm_send_env }}"
+
+autonomy_openssh_ssh_conf_ipv4_zone1_certificate_file: "{{ autonomy_openssh_ssh_conf_realm_forward_agent }}"
+autonomy_openssh_ssh_conf_ipv4_zone1_enabled: true
+autonomy_openssh_ssh_conf_ipv4_zone1_forward_agent: "{{ autonomy_openssh_ssh_conf_realm_forward_agent }}"
+autonomy_openssh_ssh_conf_ipv4_zone1_identity_file: "{{ autonomy_openssh_ssh_conf_realm_identity_file }}"
+autonomy_openssh_ssh_conf_ipv4_zone1_host: "192.168.*"
+autonomy_openssh_ssh_conf_ipv4_zone1_name: "192168"
+autonomy_openssh_ssh_conf_ipv4_zone1_path: "{{ autonomy_openssh_ssh_conf_d_dir }}/{{ autonomy_openssh_ssh_conf_ipv4_zone1_name }}.conf"
+autonomy_openssh_ssh_conf_ipv4_zone1_pkcs11_provider: "{{ autonomy_openssh_ssh_conf_realm_pkcs11_provider }}"
+autonomy_openssh_ssh_conf_ipv4_zone1_send_env: "{{ autonomy_openssh_ssh_conf_realm_send_env }}"
+
+autonomy_openssh_ssh_conf_ipv4_zone1:
+  certificate_file: "{{ autonomy_openssh_ssh_conf_ipv4_zone1_certificate_file }}"
+  enabled: "{{ autonomy_openssh_ssh_conf_ipv4_zone1_enabled }}"
+  forward_agent: "{{ autonomy_openssh_ssh_conf_ipv4_zone1_forward_agent }}"
+  host: "{{ autonomy_openssh_ssh_conf_ipv4_zone1_host }}"
+  identity_file: "{{ autonomy_openssh_ssh_conf_ipv4_zone1_identity_file }}"
+  name: "{{ autonomy_openssh_ssh_conf_ipv4_zone1_name }}"
+  path: "{{ autonomy_openssh_ssh_conf_ipv4_zone1_path }}"
+  pkcs11_provider: "{{ autonomy_openssh_ssh_conf_ipv4_zone1_pkcs11_provider }}"
+  send_env: "{{ autonomy_openssh_ssh_conf_ipv4_zone1_send_env }}"

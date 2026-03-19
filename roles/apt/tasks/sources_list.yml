@@ -1,0 +1,34 @@
+---
+# - name: "Ensure sources.list is current"
+#    ansible.builtin.template:
+#      src: "etc/apt/sources.list.j2"
+#      dest: "{{ autonomy_common_apt_sysconf_dir }}/sources.list"
+#      owner: root
+#      group: root
+#      mode: '0644'
+#    become: true
+#    tags:
+#      - apt
+
+# - name: "Ensure Raspbian Raspberry Pi Repo is current"
+#   ansible.builtin.template:
+#     src: "raspi.list.j2"
+#     dest: "{{ autonomy_apt_sourcesd_dir }}/raspi.list"
+#     owner: root
+#     group: root
+#     mode: '0644'
+#   become: true
+#   when:
+#     - ansible_lsb.id is defined and ansible_lsb.id == "Raspbian"
+#   tags:
+#     - aptitude
+#     - aptitude_debug
+#     - aptitude-debug
+
+# - name: "Remove debian.sources (This is unsupported)."
+#   ansible.builtin.file:
+#     path: "{{ autonomy_apt_sources_path }}"
+#     state: absent
+#   become: true
+#   tags:
+#     - apt

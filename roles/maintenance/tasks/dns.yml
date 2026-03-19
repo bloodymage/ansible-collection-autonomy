@@ -2,7 +2,7 @@
 - name: "Update DNS records using nsupdate protocol."
   include_tasks: "dns_nsupdate.yml"
   when:
-    - autonomy_dns_cloudflare_only is falsy
+    - autonomy_common_dns_cloudflare_only is falsy
   tags:
     - dns
     - dns-nsupdate
@@ -10,7 +10,8 @@
 - name: "Update DNS records using nsupdate protocol."
   include_tasks: "dns_file.yml"
   when:
-    - autonomy_dns_cloudflare_only is falsy
+    - autonomy_common_dns_rpz_zones is truthy
+    - autonomy_common_dns_rpz_zone_type == "primary"
   tags:
     - dns
     - dns-file
@@ -19,7 +20,7 @@
 #   include_tasks: "dns_cloudflare.yml"
 #   when:
 #     - autonomy_dns_protocol == "cloudflare"
-#     - autonomy_zone_type == "public"
+#     - autonomy_common_zone_type == "public"
 #   tags:
 #     - dns
 #     - dns-cloudflare

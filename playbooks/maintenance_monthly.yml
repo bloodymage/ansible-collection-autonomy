@@ -4,5 +4,3 @@
     - role: bloodymage.autonomy.autoconfig
       tags:
         - always
-      when:
-        - ansible_date_time.day == "01"

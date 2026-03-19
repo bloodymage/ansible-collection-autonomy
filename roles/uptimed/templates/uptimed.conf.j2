@@ -17,9 +17,9 @@ MAIL_MINIMUM_UPTIME=1d
 # Minimum position before sending out e-mail.
 MAIL_MINIMUM_POSITION=10
 
-EMAIL={{ uptimed_email_address }}
+EMAIL={{ autonomy_uptimed_email_address }}
 
-SEND_EMAIL={{ uptimed_send_email }}
+SEND_EMAIL={{ autonomy_uptimed_send_email }}
 
 # We need a sendmail compatible mailer, though.
 SENDMAIL=/usr/lib/sendmail -t
@@ -27,6 +27,6 @@ SENDMAIL=/usr/lib/sendmail -t
 # Where to note our PID
 PIDFILE=/run/uptimed/uptimed.pid
 
-{% for milestone in uptimed_milestones %}
+{% for milestone in autonomy_uptimed_milestones %}
 MILESTONE={{ milestone.name }}:{{ milestone.description }}
 {% endfor %}

@@ -5,7 +5,7 @@
   services = {{ sssd_services }}
 {% endif %}
 config_file_version = 2
-domains = {{ autonomy_domain }}
+domains = {{ autonomy_common_zone_domain }}
 debug_level = {{ sssd_debug_level }}
 {% if autonomy_smart_card_login and inventory_hostname in groups['workstations'] %}
 {% if sssd_certificate_verification is defined -%}
@@ -36,14 +36,14 @@ pam_cert_db_path = {{ autonomy_ownca_identity_ca_chain_file_path }}
   pam_verbosity = {{ sssd_pam_verbosity }}
 {% endif %}
 
-[domain/{{ autonomy_domain | upper }}]
-ad_domain = {{ autonomy_domain }}
+[domain/{{ autonomy_common_zone_domain | upper }}]
+ad_domain = {{ autonomy_common_zone_domain }}
 ad_server =
 {%- for server in groups['samba_domain_controllers'] -%}
   {{ server }}{{ "," if not loop.last else "" }}
 {%- endfor %}
 
-krb5_realm = {{ autonomy_domain | upper }}
+krb5_realm = {{ autonomy_common_zone_domain | upper }}
 id_provider = ad
 access_provider = ad
 realmd_tags = manages-system joined-with-adcli
@@ -65,7 +65,7 @@ ldap_user_certificate = {{ sssd_ldap_user_certificate }}
 
 {# Smart card's don't work without this #}
 {% if autonomy_smart_card_login  and inventory_hostname in groups['workstations'] -%}
-  [certmap/{{ autonomy_domain }}/ms]
+  [certmap/{{ autonomy_common_zone_domain }}/ms]
   matchrule = <SAN:ntPrincipalName>.*@.*
   maprule = (|(userPrincipal={subject_nt_principal})(samAccountName={subject_nt_principal.short_name}))
 {% endif %}

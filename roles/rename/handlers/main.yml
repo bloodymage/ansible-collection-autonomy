@@ -3,4 +3,4 @@
 #   service:
 #     name: bind9
 #     state: reloaded
-#   become: yes
+#   become: true

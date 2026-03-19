@@ -166,14 +166,14 @@ For each zone, you'll need to set the following group variables:
 
 ```
 autonomy_zone_type: "internal"
-autonomy_zone_name: "internal"
+autonomy_common_zone_name: "internal"
 ```
 
 These are required to match the 'name' and 'type' set in the autonomy_zones listing.
 
 For Public Zones it's recommended you also add:
 ```
-autonomy_root_domain: "{{ autonomy_zone_name }}.com" or .net, .org, etc
+autonomy_root_domain: "{{ autonomy_common_zone_name }}.com" or .net, .org, etc
 autonomy_domain: "{{ autonomy_root_domain }}"
 ```
 

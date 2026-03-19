@@ -1,15 +1,17 @@
 ---
 # defaults file for spamassassin
 autonomy_spamassassin_packages:
-  - spamassassin
+  - "{{ autonomy_common_spamassassin_package }}"
   - spamass-milter
+
+autonomy_spamassassin_user_home: "{{ autonomy_common_state_dir }}/spamassassin"
 
 autonomy_spamassassin_directories:
   - name: "{{ mail_spamassassin_sock_dir }}"
     owner: "{{ spamassassin_spamass_milter_user }}"
     group: root
     mode: "0755"
-  - name: /var/lib/spamassassin/sa-update-keys
+  - name: "{{ autonomy_spamassassin_user_home }}/sa-update-keys"
     owner: "{{ spamassassin_spamd_user }}"
     group: "{{ spamassassin_spamd_user }}"
     mode: "0700"
@@ -28,10 +30,10 @@ autonomy_spamassassin_syslog: ""
 autonomy_spamassassin_debug: false
 autonomy_spamassassin_max_children: 5
 
-autonomy_spamassassin_user_home: "/var/lib/spamassassin"
-autonomy_spamassassin_user_shell: "/bin/sh"
-autonomy_spamass_milter_user_home: "/var/lib/spamass-milter"
-autonomy_spamass_milter_user_shell: "/usr/sbin/nologin"
+
+autonomy_spamassassin_user_shell: "{{ autonomy_common_shell_path }}"
+autonomy_spamass_milter_user_home: "{{ autonomy_common_state_dir }}/spamass-milter"
+autonomy_spamass_milter_user_shell: "{{ autonomy_common_syscmd_dir }}/nologin"
 
 autonomy_spamassassin_users:
   - name: "{{ spamassassin_spamd_user }}"

@@ -1,0 +1,221 @@
+# {{ ansible_managed }}
+{# ============================================================================================== #}
+{#                                                                                                #}
+{# For clarity with the final configuration file, we only generate a configuration file with      #}
+{# settings that are different from the default settings. (Work in Progress)                      #}
+{#                                                                                                #}
+{# ============================================================================================== #}
+
+{% if autonomy_openssh_sshd_conf_includes is truthy -%}
+  {%- for item in autonomy_openssh_sshd_conf_includes -%}
+    Include {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if autonomy_openssh_sshd_conf_port != __autonomy_openssh_sshd_conf_port -%}
+  Port {{ autonomy_openssh_sshd_conf_port }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_address_family != __autonomy_openssh_sshd_conf_address_family -%}
+  AddressFamily {{ autonomy_openssh_sshd_conf_address_family }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_listen_address != __autonomy_openssh_sshd_conf_listen_address -%}
+  {% for item in autonomy_openssh_sshd_conf_listen_address -%}
+    ListenAddress {{ item }}
+  {% endfor %}
+{% endif %}
+
+HostKey {{ autonomy_openssh_host_key_path }}
+HostCertificate  {{ autonomy_common_openssh_host_cert_path }}
+
+{# Ciphers and keying #}
+#RekeyLimit default none
+
+{# Logging #}
+{% if autonomy_openssh_sshd_conf_syslog_facility != __autonomy_openssh_sshd_conf_syslog_facility -%}
+  SyslogFacility {{ autonomy_openssh_sshd_conf_syslog_facility }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_log_level != __autonomy_openssh_sshd_conf_log_level -%}
+  LogLevel {{ autonomy_openssh_sshd_conf_log_level }}
+{% endif %}
+
+{# Authentication #}
+TrustedUserCAKeys {{ autonomy_common_sshca_userca_openssh_pub_path }}
+{% if autonomy_openssh_sshd_conf_authorized_keys_file is truthy -%}
+  AuthorizedKeysFile	{{ autonomy_openssh_sshd_conf_authorized_keys_file }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_authorized_principals_file is truthy -%}
+  AuthorizedPrincipalsFile {{ autonomy_openssh_sshd_conf_authorized_principals_file }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_authorized_keys_command != __autonomy_openssh_sshd_conf_authorized_keys_command -%}
+  AuthorizedKeysCommand {{ autonomy_openssh_sshd_conf_authorized_keys_command }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_authorized_keys_command_user != __autonomy_openssh_sshd_conf_authorized_keys_command_user -%}
+  AuthorizedKeysCommandUser {{ autonomy_openssh_sshd_conf_authorized_keys_command_user }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_password_authentication != __autonomy_openssh_sshd_conf_password_authentication -%}
+  PasswordAuthentication {{ autonomy_openssh_sshd_conf_password_authentication }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_permit_root_login != __autonomy_openssh_sshd_conf_permit_root_login -%}
+  PermitRootLogin {{ autonomy_openssh_sshd_conf_permit_root_login }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_login_grace_time != __autonomy_openssh_sshd_conf_login_grace_time -%}
+  LoginGraceTime {{ autonomy_openssh_sshd_conf_login_grace_time }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_strict_modes != __autonomy_openssh_sshd_conf_strict_modes %}
+  StrictModes {{ autonomy_openssh_sshd_conf_strict_modes }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_max_auth_tries != __autonomy_openssh_sshd_conf_max_auth_tries -%}
+  MaxAuthTries {{ autonomy_openssh_sshd_conf_max_auth_tries }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_max_sessions != __autonomy_openssh_sshd_conf_max_sessions -%}
+  MaxSessions {{ autonomy_openssh_sshd_conf_max_sessions }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_pubkey_authentication != __autonomy_openssh_sshd_conf_pubkey_authentication -%}
+  PubkeyAuthentication {{ autonomy_openssh_sshd_conf_pubkey_authentication }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_host_based_authentication is defined -%}
+  HostbasedAuthentication {{ autonomy_openssh_sshd_conf_host_based_authentication }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_ignore_user_known_hosts != __autonomy_openssh_sshd_conf_ignore_user_known_hosts -%}
+  IgnoreUserKnownHosts {{ autonomy_openssh_sshd_conf_ignore_user_known_hosts }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_ignore_rhosts != __autonomy_openssh_sshd_conf_ignore_rhosts -%}
+  IgnoreRhosts {{ autonomy_openssh_sshd_conf_ignore_rhosts }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_permit_empty_passwords != __autonomy_openssh_sshd_conf_permit_empty_passwords -%}
+  PermitEmptyPasswords {{ autonomy_openssh_sshd_conf_permit_empty_passwords }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_kbd_interactive_authentication != __autonomy_openssh_sshd_conf_kbd_interactive_authentication -%}
+  KbdInteractiveAuthentication {{autonomy_openssh_sshd_conf_kbd_interactive_authentication }}
+{% endif %}
+
+{# Kerberos options #}
+{% if autonomy_openssh_sshd_conf_kerberos_authentication != __autonomy_openssh_sshd_conf_kerberos_authentication -%}
+  KerberosAuthentication {{ autonomy_openssh_sshd_conf_kerberos_authentication }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_kerberos_or_local_password != __autonomy_openssh_sshd_conf_kerberos_or_local_password -%}
+  KerberosOrLocalPasswd {{ autonomy_openssh_sshd_conf_kerberos_or_local_password }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_kerberos_ticket_cleanup != __autonomy_openssh_sshd_conf_kerberos_ticket_cleanup -%}
+  KerberosTicketCleanup {{ autonomy_openssh_sshd_conf_kerberos_ticket_cleanup }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_kerberos_get_afs_token != __autonomy_openssh_sshd_conf_kerberos_get_afs_token -%}
+  KerberosGetAFSToken {{ autonomy_openssh_sshd_conf_kerberos_get_afs_token }}
+{% endif %}
+
+{# ============================================================================================== #}
+{#                                                                                                #}
+{# GSSAPI options                                                                                 #}
+{#                                                                                                #}
+{# If we are in a smart card environment, we want to use the smart card public key authentication #}
+{# instead.                                                                                       #}
+{#                                                                                                #}
+{# ============================================================================================== #}
+{% if not autonomy_smart_card_login -%}
+  {% if autonomy_openssh_sshd_conf_gssapi_authentication != __autonomy_openssh_sshd_conf_gssapi_authentication -%}
+    GSSAPIAuthentication {{ autonomy_openssh_sshd_conf_gssapi_authentication }}
+  {% endif %}
+  {% if autonomy_openssh_sshd_conf_gssapi_cleanup_credentials != __autonomy_openssh_sshd_conf_gssapi_cleanup_credentials -%}
+    GSSAPICleanupCredentials {{ autonomy_openssh_sshd_conf_gssapi_cleanup_credentials }}
+  {% endif %}
+  {% if autonomy_openssh_sshd_conf_gssapi_key_exchange != __autonomy_openssh_sshd_conf_gssapi_key_exchange -%}
+    GSSAPIKeyExchange {{ autonomy_openssh_sshd_conf_gssapi_key_exchange }}
+  {% endif %}
+  {% if autonomy_openssh_sshd_conf_gssapi_store_credentials_on_rekey != __autonomy_openssh_sshd_conf_gssapi_store_credentials_on_rekey -%}
+    GSSAPIStoreCredentialsOnRekey {{ autonomy_openssh_sshd_conf_gssapi_store_credentials_on_rekey }}
+  {% endif %}
+  {% if autonomy_openssh_sshd_conf_gssapi_strict_accept_or_check != __autonomy_openssh_sshd_conf_gssapi_strict_accept_or_check -%}
+    GSSAPIStrictAcceptorCheck {{ autonomy_openssh_sshd_conf_gssapi_strict_accept_or_check }}
+  {% endif %}
+{% endif %}
+
+{% if autonomy_openssh_sshd_conf_use_pam != __autonomy_openssh_sshd_conf_use_pam -%}
+  UsePAM {{ autonomy_openssh_sshd_conf_use_pam }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_allow_agent_forwarding != __autonomy_openssh_sshd_conf_allow_agent_forwarding -%}
+  AllowAgentForwarding {{ autonomy_openssh_sshd_conf_allow_agent_forwarding }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_allow_tcp_forwarding != __autonomy_openssh_sshd_conf_allow_tcp_forwarding -%}
+  AllowTcpForwarding {{ autonomy_openssh_sshd_conf_allow_tcp_forwarding }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_gateway_ports != __autonomy_openssh_sshd_conf_gateway_ports -%}
+  GatewayPorts {{ autonomy_openssh_sshd_conf_gateway_ports }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_x11_forwarding != __autonomy_openssh_sshd_conf_x11_forwarding -%}
+  X11Forwarding {{ autonomy_openssh_sshd_conf_x11_forwarding }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_x11_display_offset != __autonomy_openssh_sshd_conf_x11_display_offset -%}
+  X11DisplayOffset {{ autonomy_openssh_sshd_conf_x11_display_offset }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_x11_use_localhost != __autonomy_openssh_sshd_conf_x11_use_localhost -%}
+  X11UseLocalhost {{ autonomy_openssh_sshd_conf_x11_use_localhost }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_permit_tty != __autonomy_openssh_sshd_conf_permit_tty -%}
+  PermitTTY {{ autonomy_openssh_sshd_conf_permit_tty }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_print_motd != __autonomy_openssh_sshd_conf_print_motd -%}
+  PrintMotd {{ autonomy_openssh_sshd_conf_print_motd }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_print_last_log != __autonomy_openssh_sshd_conf_print_last_log -%}
+  PrintLastLog {{ autonomy_openssh_sshd_conf_print_last_log }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_tcp_keep_alive != __autonomy_openssh_sshd_conf_tcp_keep_alive -%}
+  TCPKeepAlive {{ autonomy_openssh_sshd_conf_tcp_keep_alive }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_permit_user_environment != __autonomy_openssh_sshd_conf_permit_user_environment -%}
+  PermitUserEnvironment {{ autonomy_openssh_sshd_conf_permit_user_environment }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_client_compression != __autonomy_openssh_sshd_conf_client_compression -%}
+  Compression {{ autonomy_openssh_sshd_conf_client_compression }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_client_alive_interval != __autonomy_openssh_sshd_conf_client_alive_interval -%}
+  ClientAliveInterval {{ autonomy_openssh_sshd_conf_client_alive_interval }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_client_alive_count_max != __autonomy_openssh_sshd_conf_client_alive_count_max -%}
+  ClientAliveCountMax {{ autonomy_openssh_sshd_conf_client_alive_count_max }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_use_dns != __autonomy_openssh_sshd_conf_use_dns -%}
+  UseDNS {{ autonomy_openssh_sshd_conf_use_dns }}
+{% endif %}
+{% if autonomy_openssh_sshd_pid_path != __autonomy_openssh_sshd_pid_path -%}
+  PidFile {{ autonomy_openssh_sshd_pid_path }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_max_startups != __autonomy_openssh_sshd_conf_max_startups -%}
+  MaxStartups {{ autonomy_openssh_sshd_conf_max_startups }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_permit_tunnel != __autonomy_openssh_sshd_conf_permit_tunnel -%}
+  PermitTunnel {{ autonomy_openssh_sshd_conf_permit_tunnel }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_chroot_dir != __autonomy_openssh_sshd_conf_chroot_dir -%}
+  ChrootDirectory {{ autonomy_openssh_sshd_conf_chroot_dir }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_version_addendum is truthy -%}
+  VersionAddendum {{ autonomy_openssh_sshd_conf_version_addendum }}
+{% endif %}
+
+{% if autonomy_openssh_sshd_conf_banner != __autonomy_openssh_sshd_conf_banner -%}
+  Banner {{ autonomy_openssh_sshd_conf_banner }}
+{% endif %}
+{% if autonomy_openssh_sshd_conf_accept_env is truthy -%}
+  AcceptEnv
+  {%- for item in autonomy_openssh_sshd_conf_accept_env -%}
+    {{ " " }}{{ item }}
+  {%- endfor %}
+{% endif %}
+
+{# override default of no subsystems #}
+{% if autonomy_openssh_sshd_conf_subsystems is truthy -%}
+  {%- for item in autonomy_openssh_sshd_conf_subsystems -%}
+    Subsystem {{ item }}
+  {% endfor %}
+{% endif %}
+
+{# LocalWords:  sshd AuthorizedKeysCommandUser AuthorizedPrincipalsFile ClientAliveCountMax PidFile
+{# LocalWords:  ListenAddress AuthorizedKeysFile UseDNS HostCertificate HostKey UsePAM MaxAuthTries
+{# LocalWords:  AuthorizedKeysCommand PermitEmptyPasswords PasswordAuthentication PermitRootLogin
+{# LocalWords:  ChallengeResponseAuthentication MaxSessions StrictModes IgnoreUserKnownHosts rhosts
+{# LocalWords:  AddressFamily KerberosAuthentication KerberosOrLocalPasswd LoginGraceTime rekey
+{# LocalWords:  HostbasedAuthentication PubkeyAuthentication MaxStartups GatewayPorts sftp
+{# LocalWords:  AllowTcpForwarding AllowAgentForwarding GSSAPIStrictAcceptorCheck GSSAPIKeyExchange
+{# LocalWords:  GSSAPIStoreCredentialsOnRekey PrintMotd KerberosTicketCleanup PermitUserEnvironment
+#}

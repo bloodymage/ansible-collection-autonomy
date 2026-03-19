@@ -1,4 +1,4 @@
 ---
 # defaults file for nginx
-autonomy_packages:
-  - nginx
+autonomy_nginx_packages:
+  - "{{ autonomy_common_nginx_package }}"

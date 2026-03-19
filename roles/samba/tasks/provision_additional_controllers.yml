@@ -6,18 +6,18 @@
 - name: "Provision Subsequent Active Directory Domain Controller."
   ansible.builtin.command:
     cmd: >
-      samba-tool domain join {{ autonomy_domain }} DC
+      samba-tool domain join {{ autonomy_common_zone_domain }} DC
       --dns-backend=BIND9_DLZ
-      -U'{{ autonomy_org_unit_name | upper }}\administrator'
+      -U'{{ autonomy_common_org_unit_name | upper }}\administrator'
       --password={{ samba_administrator_password }}
   register: samba_ad_created
-  become: yes
+  become: true
   notify:
     #- "Update krb5"
     - "start samba-ad-dc"
   when:
     - not __samba_joined_as_domain_controller
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master
 
 # ==================================================================================================
 #
@@ -28,44 +28,44 @@
 #   find:
 #     path: "/var"
 #     pattern: idmap.ldb
-#     recurse: yes
+#     recurse: true
 #   register: idmap_file
-#   when: autonomy_fqdn == __samba_schema_master
+#   when: inventory_hostname == __samba_schema_master
 
 - name: "Backup idmap.ldb."
   ansible.builtin.command:
     cmd: "tdbbackup -s .bak /var/lib/samba/private/idmap.ldb"
-  become: yes
+  become: true
   when:
     - __samba_recreate_realm
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "Fetch idmap.ldb."
   ansible.builtin.fetch:
     src: "/var/lib/samba/private/idmap.ldb.bak"
     dest: "/tmp/idmap.ldb"
-    flat: yes
-  become: yes
+    flat: true
+  become: true
   when:
     - __samba_recreate_realm
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "Copy idmap.ldb to New Servers."
   ansible.builtin.copy:
     src: "/tmp/idmap.ldb"
     dest: "/var/lib/samba/private/idmap.ldb"
-  become: yes
+  become: true
   when:
     - __samba_recreate_realm
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master
 
 - name: "Flush Net Cache on New DC."
   ansible.builtin.command:
     cmd: "net cache flush"
-  become: yes
+  become: true
   when:
     - __samba_recreate_realm
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master
 
 # ==================================================================================================
 #
@@ -82,8 +82,8 @@
   ansible.posix.synchronize:
     src: "/var/lib/samba/sysvol"
     dest: "rsync://{{ __samba_schema_master }}/var/lib/samba"
-    archive: yes
-    compress: yes
+    archive: true
+    compress: true
     rsync_opts:
       - "--xattrs"
       - "--acls"
@@ -94,7 +94,7 @@
   notify:
     - "sysvolreset"
   when:
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master
     - __samba_recreate_realm
 
 - name: "Ensure services are in proper state after package installation."

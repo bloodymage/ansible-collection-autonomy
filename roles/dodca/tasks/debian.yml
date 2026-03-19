@@ -6,7 +6,7 @@
     owner: root
     group: root
     mode: "0755"
-  become: yes
+  become: true
 
 # ==================================================================================================
 #
@@ -25,7 +25,7 @@
     #group: root
     #mode: "0644"
   loop: "{{ autonomy_dodca_url }}"
-  become: yes
+  become: true
   notify:
     - "update ca-certificates"
 
@@ -34,7 +34,7 @@
     path: "{{ autonomy_dodca_dir }}/{{ item }}"
     state: absent
   loop: "{{ autonomy_dodca_exclude }}"
-  become: yes
+  become: true
   notify:
     - "update ca-certificates"
 
@@ -45,8 +45,8 @@
     owner: root
     group: root
     mode: "0644"
-    remote_src: yes
+    remote_src: true
   loop: "{{ autonomy_dodca_pem_files }}"
-  become: yes
+  become: true
   notify:
     - "update ca-certificates"

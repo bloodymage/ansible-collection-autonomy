@@ -123,6 +123,9 @@ Metric={{ route['metric'] }}
 {% if item['dhcpv4']['hostname'] is defined %}
 Hostname={{ item['dhcpv4']['hostname'] }}
 {% endif %}
+{% if item['dhcpv4']['route_metric'] is defined %}
+RouteMetric={{ item['dhcpv4']['route_metric'] }}
+{% endif %}
 {% endif %}
 {% if item['dhcpv6'] is defined and item['dhcpv6'] is truthy %}
 

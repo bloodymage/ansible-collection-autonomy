@@ -7,13 +7,13 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
 
 - name: "Install packages"
   ansible.builtin.package:
     name: "{{ autonomy_python_packages }}"
     state: present
-  become: yes
+  become: true
 
 # - name: "Create list of alternative links for python"
 #   ansible.builtin.set_fact:
@@ -36,7 +36,7 @@
 #     path: "/usr/bin/{{ item.name }}"
 #     priority: "{{ item.priority }}"
 #   loop: "{{ __python_alternatives }}"
-#   become: yes
+#   become: true
 #   when:
 #     - python2 in ansible_facts.packages
 #     - python3 in ansible_facts.packages

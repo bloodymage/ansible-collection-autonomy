@@ -1,8 +1,8 @@
 ---
 # Organization Info
-autonomy_org_name: "{{ autonomy_root_zone_name }}"
-autonomy_org_unit_name: "{{ autonomy_zone_name }}"
-autonomy_country: ""
-autonomy_region: ""
-autonomy_state: "{{ autonomy_region }}"
-autonomy_city: ""
+autonomy_common_org_name: "Example"
+autonomy_common_org_unit_name: "Internal"
+autonomy_common_country: ""
+autonomy_common_region: ""
+autonomy_common_state: "{{ autonomy_common_region }}"
+autonomy_common_city: ""

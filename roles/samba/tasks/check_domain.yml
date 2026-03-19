@@ -9,14 +9,14 @@
     responses:
       (?i)password: "{{ samba_administrator_password }}"
   no_log: true
-  become: no
+  become: false
   when:
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master
 
 - name: "Test Kerberos Ticket from Active Directory Domain Controller"
   ansible.builtin.command:
     cmd: "klist"
   register: success
-  become: no
+  become: false
   when:
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master

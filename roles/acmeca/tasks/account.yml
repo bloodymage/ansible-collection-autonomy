@@ -1,0 +1,58 @@
+---
+- name: "Generate ACMECA Account private key."
+  community.crypto.openssl_privatekey:
+    path: "{{ autonomy_acmeca_account_key_path }}"
+    type: "{{ __type }}"
+    size: "{{ autonomy_acmeca_account_key_size }}"
+    passphrase: "{{ __password }}"
+    cipher: "auto"
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "0600"
+    backup: true
+    regenerate: "full_idempotence"
+    force: "{{ autonomy_acmeca_regenerate_account_key }}"
+    state: "present"
+  become: true
+  delegate_to: localhost
+  run_once: true
+  vars:
+    __password: >-
+      {% if autonomy_acmca_account_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_acmca_account_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_acmca_account_password }}
+      {%- endif %}
+    __tmp_type: "{{ autonomy_acmeca_account_key_type }}"
+    __type: "{% if __tmp_type.lower() in ['ed25519','ed448'] %}{{ __tmp_type | capitalize }}{% else %}{{ __tmp_type | upper }}{% endif %}"
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-account
+
+- name: "Make sure account exists and has given contacts. We agree to TOS."
+  community.crypto.acme_account:
+    account_key_src: "{{ autonomy_acmeca_account_key_path }}"
+    account_key_passphrase: "{{ __password }}"
+    acme_directory: "{{ autonomy_acmeca_url }}"
+    acme_version: "{{ autonomy_acmeca_version }}"
+    state: present
+    terms_agreed: true
+    contact:
+      - mailto:{{ autonomy_acmeca_account_email }}
+    validate_certs: true
+  become: true
+  delegate_to: localhost
+  run_once: true
+  vars:
+    __password: >-
+      {% if autonomy_acmca_account_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_acmca_account_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_acmca_account_password }}
+      {%- endif %}
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-account
+

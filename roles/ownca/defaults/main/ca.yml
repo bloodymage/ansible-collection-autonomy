@@ -1,0 +1,77 @@
+---
+autonomy_ownca_ca_dir_mode: "0700"
+autonomy_ownca_ca_dir_owner: "{{ autonomy_ownca_user }}"
+autonomy_ownca_ca_dir_group: "{{ autonomy_ownca_group }}"
+
+autonomy_ownca_ca_dir: "{{ autonomy_ownca_dir }}/ca"
+autonomy_ownca_ca_certs_dir: "{{ autonomy_ownca_ca_dir }}/certs"
+autonomy_ownca_ca_crl_dir: "{{ autonomy_ownca_ca_dir }}/crl"
+autonomy_ownca_ca_csr_dir: "{{ autonomy_ownca_ca_dir }}/csr"
+autonomy_ownca_ca_db_dir: "{{ autonomy_ownca_ca_dir }}/db"
+autonomy_ownca_ca_private_key_dir: "{{ autonomy_ownca_ca_dir }}/private"
+
+autonomy_ownca_ca_certs_dir_mode: "{{ autonomy_ownca_ca_dir_mode }}"
+autonomy_ownca_ca_crl_dir_mode: "{{ autonomy_ownca_ca_dir_mode }}"
+autonomy_ownca_ca_csr_dir_mode: "{{ autonomy_ownca_ca_dir_mode }}"
+autonomy_ownca_ca_db_dir_mode: "{{ autonomy_ownca_ca_dir_mode }}"
+autonomy_ownca_ca_private_key_dir_mode: "{{ autonomy_ownca_ca_dir_mode }}"
+
+autonomy_ownca_ca_certs_dir_owner: "{{ autonomy_ownca_ca_dir_owner }}"
+autonomy_ownca_ca_crl_dir_owner: "{{ autonomy_ownca_ca_dir_owner }}"
+autonomy_ownca_ca_csr_dir_owner: "{{ autonomy_ownca_ca_dir_owner }}"
+autonomy_ownca_ca_db_dir_owner: "{{ autonomy_ownca_ca_dir_owner }}"
+autonomy_ownca_ca_private_key_dir_owner: "{{ autonomy_ownca_ca_dir_owner }}"
+
+autonomy_ownca_ca_certs_dir_group: "{{ autonomy_ownca_ca_dir_group }}"
+autonomy_ownca_ca_crl_dir_group: "{{ autonomy_ownca_ca_dir_group }}"
+autonomy_ownca_ca_csr_dir_group: "{{ autonomy_ownca_ca_dir_group }}"
+autonomy_ownca_ca_db_dir_group: "{{ autonomy_ownca_ca_dir_group }}"
+autonomy_ownca_ca_private_key_dir_group: "{{ autonomy_ownca_ca_dir_group }}"
+
+autonomy_ownca_ca_dirs:
+  - name: "{{ autonomy_ownca_ca_certs_dir }}"
+    owner: "{{ autonomy_ownca_ca_certs_dir_owner }}"
+    group: "{{ autonomy_ownca_ca_certs_dir_group }}"
+    mode: "{{ autonomy_ownca_ca_certs_dir_mode }}"
+
+  - name: "{{ autonomy_ownca_ca_crl_dir }}"
+    owner: "{{ autonomy_ownca_ca_crl_dir_owner }}"
+    group: "{{ autonomy_ownca_ca_crl_dir_group }}"
+    mode: "{{ autonomy_ownca_ca_crl_dir_mode }}"
+
+  - name: "{{ autonomy_ownca_ca_csr_dir }}"
+    owner: "{{ autonomy_ownca_ca_csr_dir_owner }}"
+    group: "{{ autonomy_ownca_ca_csr_dir_group }}"
+    mode: "{{ autonomy_ownca_ca_csr_dir_mode }}"
+
+  - name: "{{ autonomy_ownca_ca_db_dir }}"
+    owner: "{{ autonomy_ownca_ca_db_dir_owner }}"
+    group: "{{ autonomy_ownca_ca_db_dir_group }}"
+    mode: "{{ autonomy_ownca_ca_db_dir_mode }}"
+
+  - name: "{{ autonomy_ownca_ca_private_key_dir }}"
+    owner: "{{ autonomy_ownca_ca_private_key_dir_owner }}"
+    group: "{{ autonomy_ownca_ca_private_key_dir_group }}"
+    mode: "{{ autonomy_ownca_ca_private_key_dir_mode }}"
+
+autonomy_ownca_ca_certs:
+  - src: "{{ autonomy_ownca_rootca_cert_path }}"
+    dest: "{{ autonomy_ownca_rootca_usr_cert_path }}"
+  - src: "{{ autonomy_ownca_intermediateca_cert_path }}"
+    dest: "{{ autonomy_ownca_intermediateca_usr_cert_path }}"
+  - src: "{{ autonomy_ownca_componentca_cert_path }}"
+    dest: "{{ autonomy_ownca_componentca_usr_cert_path }}"
+  - src: "{{ autonomy_ownca_identityca_cert_path }}"
+    dest: "{{ autonomy_ownca_identityca_usr_cert_path }}"
+  - src: "{{ autonomy_ownca_codesignca_cert_path }}"
+    dest: "{{ autonomy_ownca_codesignca_usr_cert_path }}"
+
+# autonomy_ownca_ca_chains:
+#   - src: "{{ autonomy_ownca_intermediateca_chain_path }}"
+#     dest: "{{ autonomy_ownca_intermediateca_usr_chain_path }}"
+#   - src: "{{ autonomy_ownca_componentca_chain_path }}"
+#     dest: "{{ autonomy_ownca_componentca_usr_chain_path }}"
+#   - src: "{{ autonomy_ownca_identityca_chain_path }}"
+#     dest: "{{ autonomy_ownca_identityca_usr_chain_path }}"
+#   - src: "{{ autonomy_ownca_codesignca_chain_path }}"
+#     dest: "{{ autonomy_ownca_codesignca_usr_chain_path }}"

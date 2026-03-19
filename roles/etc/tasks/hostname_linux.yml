@@ -8,8 +8,8 @@
 # ==================================================================================================
 - name: "Set Hostname"
   ansible.builtin.hostname:
-    name: "{{ autonomy_hostname }}"
-  become: yes
+    name: "{{ inventory_hostname }}"
+  become: true
   when:
     - inventory_hostname != "localhost"
   tags:

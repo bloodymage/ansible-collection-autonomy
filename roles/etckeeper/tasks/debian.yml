@@ -10,5 +10,5 @@
 # ==================================================================================================
 - name: "Update Apt Repo information."
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     upgrade: no

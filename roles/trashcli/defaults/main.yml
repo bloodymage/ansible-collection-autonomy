@@ -1,0 +1,5 @@
+---
+autonomy_trashcli_packages:
+  - trash-cli
+
+autonomy_trashcli_enabled: false

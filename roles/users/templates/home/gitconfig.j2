@@ -7,7 +7,7 @@
 {#                                                                                                #}
 {# ============================================================================================== #}
 [user]
-{% if item.gpg_keys is defined %}
+{% if item.gpg_keys is defined and item.gpg_keys is truthy %}
   name = "{{ item.gpg_keys[0].name }}"
   email = "{{ item.gpg_keys[0].email }}"
 {% if item.gpg_keys[0].sign_keyid is defined %}
@@ -18,23 +18,23 @@
   email = "{{ item.mail }}"
 {% else %}
   name = "{{ item.username }}"
-  email = "{{ item.username }}@{{ autonomy_fqdn }}"
+  email = "{{ item.username }}@{{ inventory_hostname }}"
 {% endif %}
 {% if ( (item.use_config_only is defined) and
         (item.use_config_only is truthy) and
-        (item.use_config_only != autonomy_gitconfig_user_use_config_only) ) %}
+        (item.use_config_only != autonomy_users_gitconfig_user_use_config_only) ) %}
   useConfigOnly = {{ item.use_config_only }}
-{% elif autonomy_user_gitconfig_user_use_config_only != autonomy_gitconfig_user_use_config_only %}
-  useConfigOnly = {{ autonomy_user_gitconfig_user_use_config_only }}
+{% elif autonomy_users_gitconfig_user_use_config_only != autonomy_users_gitconfig_user_use_config_only %}
+  useConfigOnly = {{ autonomy_users_gitconfig_user_use_config_only }}
 {% endif %}
 
 {# Not sure this is still necessary #}
 {#  [add "interactive"] #}
 {# useBuiltin = false # required for git 2.37.0 #}
 
-[branch "{{ autonomy_user_gitconfig_init_default_branch }}"]
+[branch "{{ autonomy_users_gitconfig_init_default_branch }}"]
   remote = origin
-  merge = refs/heads/{{ autonomy_user_gitconfig_init_default_branch }}
+  merge = refs/heads/{{ autonomy_users_gitconfig_init_default_branch }}
 
 [color]
   branch = always
@@ -73,18 +73,18 @@
 {% endif %}
 
 [core]
-{% if ( (autonomy_user_gitconfig_core_editor is truthy) and
-        (autonomy_user_gitconfig_core_editor != autonomy_gitconfig_core_editor) ) %}
-  editor = {{ autonomy_user_gitconfig_core_editor }}
+{% if ( (autonomy_users_gitconfig_core_editor is truthy) and
+        (autonomy_users_gitconfig_core_editor != autonomy_gitconfig_core_editor) ) %}
+  editor = {{ autonomy_users_gitconfig_core_editor }}
 {% endif %}
-{% if ( (autonomy_user_gitconfig_core_pager is truthy) and
-        (autonomy_user_gitconfig_core_pager != autonomy_gitconfig_core_pager ) ) %}
-  pager = {{ autonomy_user_gitconfig_core_pager }}
+{% if ( (autonomy_users_gitconfig_core_pager is truthy) and
+        (autonomy_users_gitconfig_core_pager != autonomy_gitconfig_core_pager ) ) %}
+  pager = {{ autonomy_users_gitconfig_core_pager }}
 {% endif %}
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
-{% if ( (autonomy_user_gitconfig_core_excludes_file is truthy) and
-        (autonomy_gitconfig_core_excludes_files != autonomy_user_gitconfig_core_excludes_file) ) %}
-  excludesFile = {{ autonomy_user_gitconfig_core_excludes_file }}
+{% if ( (autonomy_users_gitconfig_core_excludes_file is truthy) and
+        (autonomy_gitconfig_core_excludes_files != autonomy_users_gitconfig_core_excludes_file) ) %}
+  excludesFile = {{ autonomy_users_gitconfig_core_excludes_file }}
 {% endif %}
 
 [delta]
@@ -111,14 +111,14 @@
   oauth-token = {{ autonomy_github_oauth_token }}
 {% endif %}
 
-{% if ( (autonomy_user_gitconfig_init_default_branch is truthy) or
-        (autonomy_user_gitconfig_init_template_dir is truthy) ) %}
+{% if ( (autonomy_users_gitconfig_init_default_branch is truthy) or
+        (autonomy_users_gitconfig_init_template_dir is truthy) ) %}
 [init]
-{% if autonomy_user_gitconfig_init_default_branch is truthy %}
-  defaultBranch = {{ autonomy_user_gitconfig_init_default_branch }}
+{% if autonomy_users_gitconfig_init_default_branch is truthy %}
+  defaultBranch = {{ autonomy_users_gitconfig_init_default_branch }}
 {% endif %}
-{% if autonomy_user_gitconfig_init_template_dir is truthy %}
-  templateDir = {{ autonomy_user_gitconfig_init_template_dir }}
+{% if autonomy_users_gitconfig_init_template_dir is truthy %}
+  templateDir = {{ autonomy_users_gitconfig_init_template_dir }}
 {% endif %}
 {% endif %}
 
@@ -170,7 +170,7 @@ co0 = checkout HEAD --
 cob = checkout -b
 cod = checkout develop
 coh = checkout hotfix
-com = checkout {{ autonomy_user_gitconfig_init_default_branch }}
+com = checkout {{ autonomy_users_gitconfig_init_default_branch }}
 cor = checkout release
 
 # Clone Aliases
@@ -308,7 +308,7 @@ lp   = log --patch
 
 # merge
 m   = merge
-mom = merge origin/{{ autonomy_user_gitconfig_init_default_branch }}
+mom = merge origin/{{ autonomy_users_gitconfig_init_default_branch }}
 
 # push
 o = !git push origin --all && git push --prune
@@ -322,7 +322,7 @@ ra  = rebase --abort
 rc  = rebase --continue
 ri  = rebase --interactive
 rs  = rebase --skip
-rom = rebase origin/{{ autonomy_user_gitconfig_init_default_branch }}
+rom = rebase origin/{{ autonomy_users_gitconfig_init_default_branch }}
 
 # Remote Aliases
 re  = remote
@@ -347,3 +347,6 @@ rex = remote rm
 # Find files ...
 grep = "!git ls-files | grep --binary-files=without-match --ignore-case"
 {# #grep = "!git ls-files | grep --ignore-case" #}
+
+{# LocalWords:  gitconfig
+#}

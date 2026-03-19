@@ -1,0 +1,17 @@
+---
+# ==================================================================================================
+#
+# MiniDLNA
+#
+# ==================================================================================================
+autonomy_common_users_minidlna:
+  username: "{{ autonomy_common_users_minidlna_username }}"
+  name: MiniDLNA Server
+  groups: []
+  id_number: "{{ autonomy_common_users_minidlna_id_number }}"
+  unix_home: /var/lib/minidlna
+  shell: /usr/sbin/nologin
+
+autonomy_common_users_minidlna_group:
+  name: minidlna
+  gid: "{{ autonomy_common_users_minidlna_id_number }}"

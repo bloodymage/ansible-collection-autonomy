@@ -1,0 +1,36 @@
+---
+- name: "Ensure user has their .ssh directory"
+  ansible.builtin.file:
+    path: "/home/{{ autonomy_common_org_unit_name | upper }}/{{ item.username }}/.ssh"
+    state: directory
+    owner: "{{ item.id_number }}"
+    group: "{{ item.id_number }}"
+    mode: "0700"
+  loop: "{{ __realm_users }}"
+  become: true
+  when:
+    - item.id_number is defined
+
+
+- name: "Create user SSH public keys."
+  community.crypto.openssl_publickey:
+    path: "/home/{{ autonomy_common_org_unit_name | upper }}/{{ item.username }}/.ssh/{{ item.username }}.pub"
+    privatekey_path: "{{ __user_private_dir }}/{{ item.username }}.key"
+    privatekey_passphrase: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+    format: "OpenSSH"
+    owner: "{{ item.id_number }}"
+    group: "{{ item.id_number }}"
+    mode: "0600"
+    state: "present"
+    backup: true
+    force: false
+    return_content: true
+  vars:
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/domain_users/{{ item.username }}/password"
+    __password_lookup: "{{ __password_store_id }}"
+    __user_home_dir: "{{ sshca_home_dir }}/{{ item.username }}"
+    __user_private_dir: "{{ __user_home_dir }}/{{ ownca_user_private_dir }}"
+  loop: "{{ __realm_users }}"
+  become: true
+  when:
+    - item.id_number is defined

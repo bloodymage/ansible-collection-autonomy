@@ -1,0 +1,4 @@
+---
+autonomy_common_etckeeper_package: "etckeeper"
+autonomy_common_etckeeper_daemon: "etckeeper"
+autonomy_common_etckeeper_enabled: true

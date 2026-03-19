@@ -1,10 +1,12 @@
 ---
-autonomy_parent_groups:
+autonomy_common_parent_groups:
   - name: "apache_servers"
     parent: "web_servers"
   - name: "auth_servers"
     parent: "servers"
   - name: "bind9_servers"
+    parent: "bind_servers"
+  - name: "bind_servers"
     parent: "dns_servers"
   - name: "db_servers"
     parent: "servers"

@@ -1,0 +1,5 @@
+---
+autonomy_common_cron_daemon: "cron"
+autonomy_common_cron_package: "cron"
+
+autonomy_cron_enabled: false

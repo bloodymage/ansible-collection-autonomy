@@ -12,56 +12,33 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
   tags:
     - openssh
-    - openssh_debug
-    - openssh-debug
     - install-packages
 
 - name: "Install packages"
   ansible.builtin.package:
-    name: "{{ autonomy_packages }}"
+    name: "{{ autonomy_openssh_packages }}"
     state: present
-  become: yes
+  become: true
+  tags:
+    - openssh
+    - install-packages
 
-# ==================================================================================================
-#
-# Tasks:
-#
-#
-# ==================================================================================================
-- name: Create Required Directories for Cert authorization.
+- name: "Create Required Directories for Cert authorization."
   ansible.builtin.file:
     name: "{{ item }}"
     state: directory
     owner: root
     group: root
     mode: "0755"
-  become: yes
+  become: true
   loop:
-    - "{{ sshca_cert_directory }}"
-    - "{{ sshca_authorized_principals_dir }}"
-
-- name: Install Host CA Certificate on Hosts
-  ansible.builtin.copy:
-    src: "{{ sshca_key_directory }}/{{ sshca_host_pubfile }}"
-    dest: "{{ sshca_hostca_certificate }}"
-    owner: root
-    group: root
-    mode: '0644'
-  become: yes
-  notify: restart ssh
-
-- name: Install User CA Certificate on Hosts
-  ansible.builtin.copy:
-    src: "{{ sshca_key_directory }}/{{ sshca_user_pubfile }}"
-    dest: "{{ sshca_userca_certificate }}"
-    owner: root
-    group: root
-    mode: '0644'
-  become: yes
-  notify: restart ssh
+    - "{{ autonomy_common_openssh_ca_dir }}"
+    - "{{ autonomy_common_openssh_authorized_principals_dir }}"
+  tags:
+    - openssh
 
 # ==================================================================================================
 #
@@ -70,20 +47,52 @@
 # ==================================================================================================
 - name: "Get Host CA public key"
   ansible.builtin.set_fact:
-    __openssh_host_ca_public_key: "{{ lookup('file', sshca_key_directory + '/' + sshca_host_pubfile) }}"
+    __openssh_host_ca_public_key: "{{ lookup('file', autonomy_common_sshca_hostca_openssh_pub_path) }}"
   delegate_to: localhost
-  run_once: yes
-  become: no
+  run_once: true
+  become: false
+  tags:
+    - openssh
 
 - name: "Install Configuration files"
   ansible.builtin.template:
-    src: "{{ item.name }}.j2"
-    dest: "{{ ssh_config_dir }}/{{ item.name }}"
+    src: "etc/ssh/{{ item['name'] }}.j2"
+    dest: "{{ item['path'] }}"
     owner: root
     group: root
-    mode: "{{ item.mode | default('0644') }}"
-    validate: "{{ item.validate | default(none) }}"
-    backup: yes
-  become: yes
-  loop: "{{ openssh_config_files }}"
+    mode: "{{ item['mode'] | default('0644') }}"
+    validate: "{{ item['validate'] | default(none) }}"
+    backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
+  become: true
+  loop: "{{ autonomy_openssh_config_files }}"
   notify: restart ssh
+  tags:
+    - openssh
+
+- name: "Install ssh_config.d files."
+  ansible.builtin.template:
+    src: "etc/ssh/ssh_config.d/conf.j2"
+    dest: "{{ item['path'] }}"
+    owner: "root"
+    group: "root"
+    mode: "{{ item['mode'] | default('0644') }}"
+    backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
+  become: true
+  loop: "{{ autonomy_openssh_ssh_conf_d }}"
+  notify: restart ssh
+  when:
+    - item['enabled']
+  tags:
+    - openssh
+
+- name: "Remove ssh_config.d files."
+  ansible.builtin.file:
+    path: "{{ item['path'] }}"
+    state: "absent"
+  become: true
+  loop: "{{ autonomy_openssh_ssh_conf_d }}"
+  notify: restart ssh
+  when:
+    - not item['enabled']
+  tags:
+    - openssh

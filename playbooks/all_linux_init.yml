@@ -8,7 +8,7 @@
 #
 # ==================================================================================================
 - name: "Initialize Linux Host Configuration."
-  hosts: linux:!localhost:!public_zone:!virtual_hosts:!vendor_managed:!dns_only
+  hosts: all:!localhost:!public_zone:!virtual_hosts:!vendor_managed:!dns_only
   roles:
     - role: bloodymage.autonomy.git
       when:
@@ -17,36 +17,27 @@
         - inventory_hostname not in groups["vendor_managed"]
       tags:
         - git
+
     - role: bloodymage.autonomy.etckeeper
       when:
         - ansible_connection != "local"
-        - ansible_network_os is not defined
-        - autonomy_virtual_host is falsy
-        - autonomy_enable_etckeeper
+        - autonomy_common_etckeeper_enabled
         - inventory_hostname not in groups["vendor_managed"]
       tags:
         - etckeeper
 
-    # ==============================================================================================
-    #
-    #                                      WARNING
-    #
-    # Do not set the sshca role to ignore local connections.
-    #
-    # This will cause the temporary directory to not be created leading to a failure to fetch host
-    # public keys and existing certs.
-    #
-    # ==============================================================================================
     - role: bloodymage.autonomy.sshca
       when:
         - inventory_hostname not in groups["vendor_managed"]
       vars:
         __sshca_tasks: "hostcerts"
+
     - role: bloodymage.autonomy.openssh
       when:
         - inventory_hostname not in groups["vendor_managed"]
       tags:
         - openssh
+
     - role: bloodymage.autonomy.systemd
       vars:
         __systemd_tasks: "networkd"

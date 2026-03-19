@@ -1,0 +1,6 @@
+---
+autonomy_common_samba_package: "samba"
+autonomy_common_samba_dc_daemon: "samba-ad-dc"
+autonomy_common_samba_smbd_daemon: "smbd"
+autonomy_common_samba_nmbd_daemon: "nmbd"
+autonomy_common_samba_winbind_daemon: "winbind"

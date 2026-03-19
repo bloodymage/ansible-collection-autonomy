@@ -8,9 +8,9 @@
     group: "{{ ansible_user }}"
     mode: "0644"
   loop: "{{ autonomy_dodca_url }}"
-  become: yes
+  become: true
   delegate_to: localhost
-  run_once: yes
+  run_once: true
 
 - name: "Include OS Family Tasks."
   include_tasks: "{{ ansible_os_family | lower }}.yml"
@@ -24,6 +24,6 @@
     path: "/tmp/{{ item.file }}"
     state: absent
   loop: "{{ autonomy_dodca_url }}"
-  become: yes
+  become: true
   delegate_to: localhost
-  run_once: yes
+  run_once: true

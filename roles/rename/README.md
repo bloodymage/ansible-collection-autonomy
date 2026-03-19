@@ -1,4 +1,4 @@
-Ansible Role: Bloodymage.autonomy.global_packages
+Ansible Role: bloodymage.autonomy.rename
 ===============
 
 - [Description](#description)

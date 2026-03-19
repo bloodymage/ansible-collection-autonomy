@@ -1,0 +1,61 @@
+---
+# ==================================================================================================
+#
+# https://wiki.mikrotik.com/wiki/Manual:Create_Certificates
+#
+# ==================================================================================================
+
+# ==================================================================================================
+#
+# Create SSL Private Key and CRS Directories
+#
+# Creates the following Directories:
+#   - {{ ownca_etc }}/private mode: 0700
+#   - {{ ownca_etc }}/csr     mode: 0700
+#   - {{ ownca_etc }}/certs   mode: 0755
+#
+# ==================================================================================================
+- name: "Generate Host Private Key."
+  community.crypto.openssl_privatekey:
+    path: "{{ autonomy_ownca_hosts_private_key_path }}"
+    type: "{{ autonomy_ownca_privatekey_type }}"
+    size: 4096
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "{{ autonomy_ownca_hosts_private_key_mode }}"
+    force: no
+  become: false
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  tags:
+    - ownca_host_certs
+    - ownca-host-certs
+    - ownca_host_certs_debug
+    - ownca-host-certs-debug
+    - ownca-all
+
+- name: "Generate Host CSR."
+  community.crypto.openssl_csr:
+    path: "{{ autonomy_ownca_hosts_csr_path }}"
+    privatekey_path: "{{ autonomy_ownca_hosts_private_key_path }}"
+    country_name: "{{ autonomy_common_pki_loc_country_code | default(omit)}}"
+    state_or_province_name: "{{ autonomy_common_pki_loc_region | default(omit) }}"
+    locality_name: "{{ autonomy_common_pki_loc_city | default(omit) }}"
+    organization_name: "{{ autonomy_common_org_name | title }}"
+    organizational_unit_name: "{{ autonomy_common_org_unit_name | title }}"
+    common_name: "{{ inventory_hostname }}"
+    key_usage: "{{ autonomy_ownca_host_key_usage }}"
+    key_usage_critical: "{{ autonomy_ownca_host_key_usage_critical }}"
+    extended_key_usage: "{{ autonomy_ownca_host_extended_key_usage }}"
+    extended_key_usage_critical: "{{ autonomy_ownca_host_extended_key_usage_critical }}"
+    subject_alt_name: "{{ autonomy_ownca_host_subject_alt_name }}"
+    authority_cert_issuer: "{{ __autonomy_ownca_componentca_cert_info['subject_alt_name'] }}"
+    authority_cert_serial_number: "{{ __autonomy_ownca_componentca_cert_info['serial_number'] }}"
+    authority_key_identifier: "{{ __autonomy_ownca_componentca_cert_info['subject_key_identifier'] }}"
+    crl_distribution_points:
+      - full_name: "URI:{{ autonomy_ownca_componentca_crl_distribution_point_url }}"
+        reasons: "{{ autonomy_ownca_componentca_crl_distribution_points_reasons }}"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "{{ autonomy_ownca_hosts_csr_mode }}"
+  become: false
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"

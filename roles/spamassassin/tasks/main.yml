@@ -12,13 +12,13 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
 
 - name: "Install packages."
   ansible.builtin.package:
     name: "{{ autonomy_spamassassin_packages }}"
     state: present
-  become: yes
+  become: true
 
 - name: "Ensure spamassassin users and groups are correct"
   ansible.builtin.user:
@@ -27,7 +27,7 @@
     home: "{{ item.home }}"
     shell: "{{ item.shell }}"
     append: "{{ item.append | default(omit) }}"
-  become: yes
+  become: true
   loop: "{{ autonomy_spamassassin_users }}"
 
 - name: "Ensure spamassasin directories exist with proper permissions."
@@ -37,7 +37,7 @@
     owner: "{{ item.owner }}"
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
-  become: yes
+  become: true
   loop: "{{ autonomy_spamassassin_directories }}"
 
 - name: "Ensure spamassassin logging directory exists with proper permissions."
@@ -47,7 +47,7 @@
     owner: "{{ spamassassin_spamd_user }}"
     group: "{{ spamassassin_spamd_user }}"
     mode: "0750"
-  become: yes
+  become: true
   when:
     - autonomy_spamassassin_syslog_dir is truthy
     - autonomy_spamassassin_syslog_dir != "/var/log"
@@ -86,7 +86,7 @@
     owner: root
     group: root
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ autonomy_spamassassin_default_files }}"
   notify:
     - "restart spamassassin"
@@ -99,7 +99,7 @@
     owner: root
     group: root
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ autonomy_spamassassin_config_files }}"
   notify:
     - "restart spamassassin"

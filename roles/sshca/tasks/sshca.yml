@@ -3,35 +3,25 @@
   ansible.builtin.package:
     name: "{{ autonomy_sshca_packages }}"
     state: present
-  become: yes
+  become: true
   delegate_to: localhost
-  run_once: yes
+  run_once: true
   tags:
     - sshca
-    - sshca_debug
-    - sshca-debug
     - install-packages
 
-# ==================================================================================================
-#
-# Create a CA key directory
-#
-#
-# ==================================================================================================
 - name: "Create CA key directory."
   ansible.builtin.file:
-    path: "{{ sshca_key_directory }}"
+    path: "{{ autonomy_sshca_ca_dir }}"
     state: directory
     owner: "{{ autonomy_sshca_user }}"
     group: "{{ autonomy_sshca_group }}"
     mode: '0700'
+  run_once: true
   delegate_to: localhost
-  run_once: yes
-  become: no
+  become: false
   tags:
     - sshca
-    - sshca_debug
-    - sshca-debug
 
 # ==================================================================================================
 #
@@ -40,21 +30,22 @@
 # ==================================================================================================
 - name: "Ensure we have a password for the Host CA Key."
   ansible.builtin.set_fact:
-    sshca_host_key_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+    autonomy_sshca_hostca_key_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_root_domain }}/sshca/sshca_host_key_password"
-    __password_length: "length={{ autonomy_password_length }}"
-    __password_overwrite: "overwrite={{ autonomy_overwrite_password }} backup=yes"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_root_domain }}/sshca/sshca_host_key_password"
+    __password_length: "length={{ autonomy_common_password_length }}"
+    __password_overwrite: "overwrite={{ autonomy_common_password_overwrite }} backup=yes"
     __password_create: "create=true"
-    __password_symbols: "nosymbols=true"
+    __password_symbols: "nosymbols={{ autonomy_common_password_no_symbols }}"
     __password_lookup: "{{ __password_store_id }} {{ __password_create }} {{ __password_length }} {{ __password_symbols }} {{ __password_overwrite }}"
+  run_once: true
   delegate_to: localhost
-  run_once: yes
-  become: no
+  become: false
+  no_log: true
   changed_when:
-    - sshca_host_key_password != "password"
+    - autonomy_sshca_hostca_key_password != "password"
   when:
-    - sshca_host_key_password == "password"
+    - autonomy_sshca_hostca_key_password == "password"
   tags:
     - sshca
     - sshca_debug
@@ -62,20 +53,21 @@
 
 - name: "Ensure we have a password for the User CA Key."
   ansible.builtin.set_fact:
-    sshca_user_key_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+    autonomy_sshca_userca_key_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_root_domain }}/sshca/sshca_user_key_password"
-    __password_length: "length={{ autonomy_password_length }}"
-    __password_overwrite: "overwrite={{ autonomy_overwrite_password }} backup=yes"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_root_domain }}/sshca/sshca_user_key_password"
+    __password_length: "length={{ autonomy_common_password_length }}"
+    __password_overwrite: "overwrite={{ autonomy_common_password_overwrite }} backup=yes"
     __password_create: "create=true"
-    __password_symbols: "nosymbols=true"
+    __password_symbols: "nosymbols={{ autonomy_common_password_no_symbols }}"
     __password_lookup: "{{ __password_store_id }} {{ __password_create }} {{ __password_length }} {{ __password_symbols }} {{ __password_overwrite }}"
   delegate_to: localhost
-  become: no
+  become: false
+  no_log: true
   changed_when:
-    - sshca_user_key_password != "password"
+    - autonomy_sshca_userca_key_password != "password"
   when:
-    - sshca_user_key_password == "password"
+    - autonomy_sshca_userca_key_password == "password"
   tags:
     - sshca
     - sshca_debug
@@ -88,10 +80,10 @@
 # ==================================================================================================
 - name: "Generate Host CA keys."
   community.crypto.openssh_keypair:
-    path: "{{ sshca_key_directory }}/{{ sshca_host_keyfile }}"
-    type: "{{ sshca_host_key_type }}"
-    comment: "{{ sshca_host_key_comment }}"
-    passphrase: "{{ sshca_host_key_password }}"
+    path: "{{ autonomy_sshca_hostca_key_path }}"
+    type: "{{ autonomy_sshca_hostca_key_type }}"
+    comment: "{{ autonomy_sshca_hostca_key_comment }}"
+    passphrase: "{{ autonomy_sshca_hostca_key_password }}"
     owner: "{{ autonomy_sshca_user }}"
     group: "{{ autonomy_sshca_group }}"
     mode: "0600"
@@ -102,10 +94,10 @@
 
 - name: "Generate User CA keys."
   community.crypto.openssh_keypair:
-    path: "{{ sshca_key_directory }}/{{ sshca_user_keyfile }}"
-    type: "{{ sshca_user_key_type }}"
-    comment: "{{ sshca_user_key_comment }}"
-    passphrase: "{{ sshca_user_key_password }}"
+    path: "{{ autonomy_sshca_userca_key_path }}"
+    type: "{{ autonomy_sshca_userca_key_type }}"
+    comment: "{{ autonomy_sshca_userca_key_comment }}"
+    passphrase: "{{ autonomy_sshca_userca_key_password }}"
     owner: "{{ autonomy_sshca_user }}"
     group: "{{ autonomy_sshca_group }}"
     state: "present"

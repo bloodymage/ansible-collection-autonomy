@@ -1,0 +1,64 @@
+---
+# - name: "Check if we are regenerating all ownca certs."
+#   ansible.builtin.set_fact:
+#     __autonomy_common_ownca_regenerate: true
+#     __ownca_force_regenerate_intermediate_ca: true
+#     __ownca_force_regenerate_issuing_ca: true
+#   become: false
+#   changed_when: __autonomy_common_ownca_regenerate
+#   tags:
+#     - never
+#     - regenerate-ownca
+
+# - name: "Check if we are regenerating intermediate CA certs."
+#   ansible.builtin.set_fact:
+#     __ownca_force_regenerate_intermediate_ca: true
+#     __ownca_force_regenerate_issuing_ca: true
+#   become: false
+#   changed_when: __ownca_force_regenerate_intermediate_ca
+#   tags:
+#     - never
+#     - regenerate-intermediate-ca
+
+# - name: "Check if we are regenerating issuing CA certs."
+#   ansible.builtin.set_fact:
+#     __ownca_force_regenerate_issuing_ca: true
+#   become: false
+#   changed_when: __ownca_force_regenerate_issuing_ca
+#   tags:
+#     - never
+#     - regenerate-issuing-ca
+
+- name: "Setup OwnCA: Definitions."
+  include_tasks: "ca_definitions.yml"
+  tags:
+    - ownca
+    - ownca-root
+    - ownca-intermediate
+    - ownca-issuing
+
+- name: "Create OwnCA: Root CA."
+  include_tasks: "ca_root.yml"
+  tags:
+    - ownca
+    - ownca-root
+
+# TODO: There has got to be a better way to only run on one host per zone.
+- name: "Create OwnCA: Intermediate CAs."
+  include_tasks: "ca_intermediate.yml"
+  when:
+    - inventory_hostname in groups['certificate_authority_proxies']
+  tags:
+    - ownca
+    - ownca-root
+    - ownca-intermediate
+
+- name: "Create OwnCA: Issuing CAs."
+  include_tasks: "ca_issuing.yml"
+  when:
+    - inventory_hostname in groups['certificate_authority_proxies']
+  tags:
+    - ownca
+    - ownca-root
+    - ownca-issuing
+    - ownca-intermediate

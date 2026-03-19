@@ -1,0 +1,16 @@
+---
+- name: "Create Hosts Certs using Acme CA."
+  hosts: acmeca_hosts
+  serial: 3
+  tasks:
+    - ansible.builtin.include_role:
+        name: bloodymage.autonomy.acmeca
+      vars:
+        __acmeca_tasks: "certs"
+      tags:
+        - acmeca
+        - acmeca-test
+        - acmeca-certs
+    - name: Pause for a day
+      ansible.builtin.pause:
+        minutes: 1440

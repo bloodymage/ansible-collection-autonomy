@@ -1,30 +1,28 @@
 ---
 # tasks file for uptimed
-- name: "Pre-tasks"
-  block:
-    - name: "Include OS-specific variables."
-      include_vars: "{{ lookup('first_found', params) }}"
-      vars:
-        params:
-          files: "{{ __os_variables_files }}"
-          paths:
-            - "vars"
-      become: no
+- name: "Include OS-specific variables."
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: false
 
-    - name: "Install packages."
-      ansible.builtin.package:
-        name: "{{ autonomy_packages }}"
-        state: present
-      become: yes
+- name: "Install packages."
+  ansible.builtin.package:
+    name: "{{ autonomy_uptimed_packages }}"
+    state: present
+  become: true
 
 - name: "Install uptimed configuration file."
   ansible.builtin.template:
     src: "uptimed.conf.j2"
-    dest: "/etc/uptimed.conf"
+    dest: "{{ autonomy_common_sysconf_dir }}/uptimed.conf"
     owner: root
     group: root
     mode: "0644"
-  become: yes
+  become: true
   notify:
     - restart uptimed
 

@@ -1,0 +1,8 @@
+---
+autonomy_openssh_ssh_conf_d_pkcs11_provider: "/usr/lib/x86_64-linux-gnu/opensc-pkcs11.so"
+
+autonomy_openssh_ssh_conf_d:
+  - "{{ autonomy_openssh_ssh_conf_realm }}"
+  - "{{ autonomy_openssh_ssh_conf_github }}"
+  - "{{ autonomy_openssh_ssh_conf_gitlab }}"
+  - "{{ autonomy_openssh_ssh_conf_ipv4_zone1 }}"

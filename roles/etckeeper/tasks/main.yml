@@ -1,11 +1,5 @@
 ---
-# ======================================================================
-#
-# Role: etckeeper
-#
-# 
-#
-# ======================================================================
+# tasks file for etckeeper
 - name: Include OS-specific variables.
   include_vars: "{{ lookup('first_found', params) }}"
   vars:
@@ -13,32 +7,31 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
   tags:
     - etckeeper
-    - etckeeper_debug
-    - etckeeper-debug
     - install-packages
 
 - name: "Install packages"
   ansible.builtin.package:
-    name: "{{ autonomy_packages }}"
+    name: "{{ autonomy_etckeeper_packages }}"
     state: present
-  become: yes
+  become: true
   tags:
     - etckeeper
-    - etckeeper_debug
-    - etckeeper-debug
     - install-packages
 
+  # NOTE: We do not back this up because etckeeper allows git to manage backups.
 - name: "Install etckeeper configuration file."
   ansible.builtin.template:
     src: "etc/etckeeper/etckeeper.conf.j2"
-    dest: "/etc/etckeeper/etckeeper.conf"
+    dest: "{{ autonomy_etckeeper_conf_path }}"
     owner: root
     group: root
     mode: "0644"
-    backup: yes
-  become: yes
+    backup: false
+  become: true
   notify:
-    - restart etckeeper
+    - "restart {{ autonomy_common_etckeeper_daemon }}"
+  tags:
+    - etckeeper

@@ -4,16 +4,16 @@
   ansible.builtin.package:
     name: "{{ autonomy_ansible_packages }}"
     state: present
-  become: yes
+  become: true
 
 - name: "Install ansible.cfg"
   ansible.builtin.template:
     src: "ansible.cfg.j2"
     dest: ~/.ansible.cfg
-    owner: "{{ autonomy_user }}"
-    group: "{{ autonomy_group }}"
+    owner: "{{ autonomy_common_user }}"
+    group: "{{ autonomy_common_group }}"
     mode: '0644'
-  become: no
+  become: false
 
 - name: "End playbook."
   ansible.builtin.meta: end_play

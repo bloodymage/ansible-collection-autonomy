@@ -2,8 +2,8 @@
 # tasks file for config_realm_environment
 - name: "Determine whether to force domain recreation"
   ansible.builtin.set_fact:
-    __samba_recreate_realm: yes
-  become: no
+    __samba_recreate_realm: true
+  become: false
   changed_when: __samba_recreate_realm
   tags:
     - never
@@ -13,8 +13,8 @@
   ansible.builtin.command:
     cmd: "samba-tool fsmo show"
   register: __samba_schema_master_role
-  run_once: yes
-  become: yes
+  run_once: true
+  become: true
   when:
     - not __samba_recreate_realm
     - inventory_hostname in groups['samba_domain_controllers']
@@ -24,7 +24,7 @@
 - name: Set Samba Schema Master if domain exists
   ansible.builtin.set_fact:
     __samba_schema_master: "{{ __samba_schema_master_list | join('.') }}"
-  become: no
+  become: false
   vars:
     __samba_schema_master_list:
       - "{{ __samba_schema_master_role.stdout_lines[0].split(' ')[3].split(',')[1].split('=')[1] | lower }}"
@@ -42,6 +42,7 @@
     name: "{{ __samba_schema_master }}"
     groups:
       - samba_schema_master
+  become: false
   tags:
     - always
 
@@ -118,18 +119,19 @@
     __display_middle_part: "{% if __callsign is truthy %}{{ __full_callsign }}{% else %}{{ __full_middle_initial }}{% endif %}"
     __full_name: "{{ __given_name }}{{ __full_middle_part }}{{ __full_surname }}"
     __display_name: "{{ __nickname }}{{ __display_middle_part }}{{ __full_surname | default(None) }}"
-    __autonomy_organization: "{{ autonomy_org_name | title }}"
-    __autonomy_org_unit_name: "{{ autonomy_org_unit_name | title }}"
-    __hash_string: "{{ __display_name }} {{ __autonomy_organization }} {{ __autonomy_org_unit_name }}"
+    __autonomy_organization: "{{ autonomy_common_org_name | title }}"
+    __autonomy_common_org_unit_name: "{{ autonomy_common_org_unit_name | title }}"
+    __hash_string: "{{ __display_name }} {{ __autonomy_organization }} {{ __autonomy_common_org_unit_name }}"
     __hash: "{{ __hash_string | hash('sha1') }}"
     __full_generated_username: "{{ __initials | lower }}{{ __hash }}"
     __generated_username: "{{ __full_generated_username | truncate(8, True, '') }}"
     __username: "{{ item.username | default(__generated_username) }}"
-    __default_mail: "{{ __username }}@{{ autonomy_root_domain }}"
+    __default_mail: "{{ __username }}@{{ autonomy_common_root_domain }}"
     __mail: "{{ item.mail | default(__default_mail) }}"
   loop: "{{ domain_users }}"
   delegate_to: localhost
-  run_once: yes
+  run_once: true
+  become: false
   when:
     - domain_users is truthy
   tags:
@@ -161,6 +163,6 @@
 #     - groups["samba_domain_controllers"] is defined
 #     - groups[item.name] is defined
 #   delegate_to: localhost
-#   run_once: yes
+#   run_once: true
 #   tags:
 #     - always

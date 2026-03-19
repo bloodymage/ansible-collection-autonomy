@@ -1,0 +1,19 @@
+---
+# autonomy_ownca_force_private_key_password_regeneration: false
+
+# autonomy_ownca_force_regeneration: "{{ autonomy_ownca_force_private_key_password_regeneration }}"
+# autonomy_ownca_force_private_key_regeneration: "{{ autonomy_ownca_force_regeneration }}"
+# autonomy_ownca_force_csr_regeneration: "{{ autonomy_ownca_force_private_key_regeneration }}"
+# autonomy_ownca_force_cert_regeneration: "{{ autonomy_ownca_force_csr_regeneration }}"
+
+# autonomy_ownca_rootca_private_key_force_regeneration: "{{ autonomy_ownca_force_private_key_regeneration }}"
+# autonomy_ownca_rootca_csr_force_regeneration: "{{ autonomy_ownca_rootca_private_key_force_regeneration }}"
+# autonomy_ownca_rootca_cert_force_regeneration: "{{ autonomy_ownca_rootca_csr_force_regeneration }}"
+
+# #
+# autonomy_ownca_intermediateca_private_key_force_regeneration: "{{ autonomy_ownca_private_key_force_regeneration }}"
+
+
+
+# autonomy_ownca_issuingca_private_key_force_regeneration: "{{ autonomy_ownca_private_key_force_regeneration }}"
+# autonomy_ownca_host_private_key_force_regeneration: "{{ autonomy_ownca_private_key_force_regeneration }}"

@@ -1,0 +1,74 @@
+---
+autonomy_acmeca_regenerate_host_key: false
+autonomy_acmeca_regenerate_host_csr: false
+autonomy_acmeca_regenerate_host_cert: false
+
+# Certificate Settings
+autonomy_acmeca_host_key_type: "{{ autonomy_acmeca_key_type }}"
+autonomy_acmeca_host_key_size: "{{ autonomy_acmeca_key_size }}"
+autonomy_acmeca_host_key_owner: "{{ autonomy_acmeca_sysconf_dir_owner }}"
+autonomy_acmeca_host_key_group: "{{ autonomy_acmeca_sysconf_dir_group }}"
+autonomy_acmeca_host_key_mode: "0600"
+
+autonomy_acmeca_sysconf_backup_keys: "{{ autonomy_acmeca_sysconf_backup_files }}"
+autonomy_acmeca_sysconf_backup_csr: "{{ autonomy_acmeca_sysconf_backup_files }}"
+autonomy_acmeca_sysconf_backup_certs: "{{ autonomy_acmeca_sysconf_backup_files }}"
+
+autonomy_acmeca_user_backup_keys: "{{ autonomy_acmeca_user_backup_files }}"
+autonomy_acmeca_user_backup_csr: "{{ autonomy_acmeca_user_backup_files }}"
+autonomy_acmeca_user_backup_certs: "{{ autonomy_acmeca_user_backup_files }}"
+
+# Host Configuration
+autonomy_acmeca_host_subject_alt_name:
+  - "DNS:{{ inventory_hostname }}"
+
+# Files
+autonomy_acmeca_host_key_file: "{{ inventory_hostname }}.key"
+autonomy_acmeca_host_csr_file: "{{ inventory_hostname }}.csr"
+autonomy_acmeca_host_cert_file: "{{ inventory_hostname }}.pem"
+autonomy_acmeca_host_chain_file: "{{ inventory_hostname }}-chain.pem"
+autonomy_acmeca_host_fullchain_file: "{{ inventory_hostname }}-fullchain.pem"
+autonomy_acmeca_host_pkcs12_file: "{{ inventory_hostname }}.pkcs12"
+
+# Paths
+autonomy_acmeca_sysconf_key_path: "{{ autonomy_acmeca_sysconf_private_dir }}/{{ autonomy_acmeca_host_key_file }}"
+autonomy_acmeca_user_key_path: "{{ autonomy_acmeca_user_private_dir }}/{{ autonomy_acmeca_host_key_file }}"
+
+autonomy_acmeca_sysconf_csr_path: "{{ autonomy_acmeca_sysconf_csr_dir }}/{{ autonomy_acmeca_host_csr_file }}"
+autonomy_acmeca_user_csr_path: "{{ autonomy_acmeca_user_csr_dir }}/{{ autonomy_acmeca_host_csr_file }}"
+
+autonomy_acmeca_sysconf_cert_path: "{{ autonomy_acmeca_sysconf_certs_dir }}/{{ autonomy_acmeca_host_cert_file }}"
+autonomy_acmeca_sysconf_chain_path: "{{ autonomy_acmeca_sysconf_certs_dir }}/{{ autonomy_acmeca_host_chain_file }}"
+autonomy_acmeca_sysconf_fullchain_path: "{{ autonomy_acmeca_sysconf_certs_dir }}/{{ autonomy_acmeca_host_fullchain_file }}"
+
+autonomy_acmeca_user_cert_path: "{{ autonomy_acmeca_user_certs_dir }}/{{ autonomy_acmeca_host_cert_file }}"
+autonomy_acmeca_user_chain_path: "{{ autonomy_acmeca_user_certs_dir }}/{{ autonomy_acmeca_host_chain_file }}"
+autonomy_acmeca_user_fullchain_path: "{{ autonomy_acmeca_user_certs_dir }}/{{ autonomy_acmeca_host_fullchain_file }}"
+
+autonomy_acmceca_user_pkcs12_path: "{{ autonomy_acmeca_user_pkcs12_dir }}/{{ autonomy_acmeca_host_pkcs12_file }}"
+
+autonomy_acmeca_sysconf_cert_paths:
+  - src: "{{ autonomy_acmeca_user_cert_path }}"
+    dest: "{{ autonomy_acmeca_sysconf_cert_path }}"
+  - src: "{{ autonomy_acmeca_user_chain_path }}"
+    dest: "{{ autonomy_acmeca_sysconf_chain_path }}"
+  - src: "{{ autonomy_acmeca_user_fullchain_path }}"
+    dest: "{{ autonomy_acmeca_sysconf_fullchain_path }}"
+
+
+# Passwords
+autonomy_acmeca_host_pkcs12_password: "password"
+autonomy_acmeca_host_pcks12_password_length: "{{ autonomy_acmeca_password_length }}"
+
+autonomy_acmeca_host_pkcs12_password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/hosts/{{ inventory_hostname_short }}/acmeca_host_pkcs12_password"
+autonomy_acmeca_host_pkcs12_password_store_length: "length={{ autonomy_acmeca_host_pcks12_password_length }}"
+autonomy_acmeca_host_pkcs12_password_store_overwrite: "overwrite={{ autonomy_common_password_overwrite }} backup=yes"
+autonomy_acmeca_host_pkcs12_password_store_create: "create=true missing=create"
+autonomy_acmeca_host_pkcs12_password_store_symbols: "nosymbols={{ autonomy_common_password_no_symbols }}"
+
+autonomy_acmeca_host_pkcs12_password_store_lookup: >-
+  {{ autonomy_acmeca_host_pkcs12_password_store_id }}
+  {{ autonomy_acmeca_host_pkcs12_password_store_length }}
+  {{ autonomy_acmeca_host_pkcs12_password_store_overwrite }}
+  {{ autonomy_acmeca_host_pkcs12_password_store_create }}
+  {{ autonomy_acmeca_host_pkcs12_password_store_symbols }}

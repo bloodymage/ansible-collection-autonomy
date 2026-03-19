@@ -1,0 +1,11 @@
+---
+# PKI: These settings are the defaults, overwriten by acmeca, ownca, and sshca
+autonomy_common_pki_key_type: "rsa"
+autonomy_common_pki_key_size: 4096
+
+autonomy_common_user_pki_dir: "{{ autonomy_common_user_dir }}/.pki"
+
+autonomy_common_pki_loc_country_name: ""
+autonomy_common_pki_loc_country_code: ""
+autonomy_common_pki_loc_region: ""
+autonomy_common_pki_loc_city: ""

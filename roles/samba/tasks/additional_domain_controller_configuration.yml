@@ -12,20 +12,20 @@
       samba-tool dns add localhost
       "{{ ansible_host.split('.')[1] }}.{{ ansible_host.split('.')[0] }}.in-addr.arpa"
       "{{ ansible_host.split('.')[3] }}.{{ ansible_host.split('.')[2] }}"
-      PTR "{{ autonomy_fqdn }}"
+      PTR "{{ inventory_hostname }}"
       -U administrator
       --password="{{ samba_administrator_password }}"
   register: result
   #failed_when: >
   #  - result.rc != "0"
   #  - "'Record already exist' not in result.stderr"
-  become: yes
-  ignore_errors: yes
+  become: true
+  ignore_errors: true
 
 - name: "Harden domain."
   include_tasks: "hardening.yml"
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 # ==================================================================================================
 #
@@ -43,7 +43,7 @@
     owner: root
     group: root
     mode: "0755"
-  become: yes
+  become: true
 
 - name: "Create SSH Control Configuration."
   ansible.builtin.template:
@@ -52,7 +52,7 @@
     owner: root
     group: root
     mode: "0644"
-  become: yes
+  become: true
 
 - name: "Create Log File."
   ansible.builtin.file:
@@ -61,7 +61,7 @@
     owner: root
     group: root
     mode: "0640"
-  become: yes
+  become: true
 
 - name: "Ensure unison configuration directory exists."
   ansible.builtin.file:
@@ -70,7 +70,7 @@
     owner: root
     group: root
     mode: "0750"
-  become: yes
+  become: true
 
 - name: "Create Unison Preferences."
   ansible.builtin.template:
@@ -79,7 +79,7 @@
     owner: root
     group: root
     mode: "0644"
-  become: yes
+  become: true
 
 - name: "Create Backup of SysVol directory."
   ansible.builtin.archive:
@@ -88,15 +88,15 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  become: yes
+  become: true
 
 # This fails, not sure why.
 # - name: "Test Unison Synchronization"
 #   ansible.builtin.command: "/usr/bin/unison"
-#   become: yes
+#   become: true
 #   register: success
 #   when:
-#     - autonomy_fqdn == __samba_schema_master
+#     - inventory_hostname == __samba_schema_master
 
 - name: "Create Cron Sync."
   ansible.builtin.cron:
@@ -108,11 +108,11 @@
     month: "*"
     job: "/usr/bin/unison -silent"
     user: "root"
-  become: yes
+  become: true
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "Update Schema"
   include_tasks: "schema_updates.yml"
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master

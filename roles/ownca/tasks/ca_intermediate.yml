@@ -1,0 +1,110 @@
+---
+- name: "Generate Intermediate CA Private Key."
+  community.crypto.openssl_privatekey:
+    path: "{{ autonomy_ownca_intermediateca_key_path }}"
+    passphrase: "{{ __password }}"
+    type: "{{ autonomy_ownca_privatekey_type }}"
+    size: "{{ autonomy_ownca_privatekey_size }}"
+    cipher: "auto"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0400"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
+  vars:
+    __password: >-
+      {% if autonomy_ownca_intermediateca_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_ownca_intermediateca_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_ownca_intermediateca_password }}
+      {%- endif %}
+
+- name: "Generate Intermediate CA Certificate Signing Requests (CSR)."
+  community.crypto.openssl_csr:
+    path: "{{ autonomy_ownca_intermediateca_csr_path }}"
+    privatekey_path: "{{ autonomy_ownca_intermediateca_key_path }}"
+    privatekey_passphrase: "{{ __password }}"
+    common_name: "{{ autonomy_ownca_intermediateca_common_name }}"
+    country_name: "{{ autonomy_common_pki_loc_country_name | default(omit) }}"
+    email_address: "{{ autonomy_ownca_intermediateca_email_address | default(omit) }}"
+    organization_name: "{{ autonomy_ownca_intermediateca_org_name }}"
+    state_or_province_name: "{{ autonomy_common_pki_loc_region | default(omit) }}"
+    key_usage: "{{ autonomy_ownca_intermediateca_keyusage }}"
+    key_usage_critical: "{{ autonomy_ownca_intermediateca_keyusage_critical }}"
+    basic_constraints: "{{ autonomy_ownca_intermediateca_basic_constraints }}"
+    basic_constraints_critical: "{{ autonomy_ownca_intermediateca_basic_constraints_critical }}"
+    create_subject_key_identifier: "{{ autonomy_ownca_intermediateca_create_subject_key_identifier }}"
+    authority_cert_issuer: "{{ __autonomy_ownca_rootca_cert_info['subject_alt_name'] }}"
+    authority_cert_serial_number: "{{ __autonomy_ownca_rootca_cert_info['serial_number'] }}"
+    authority_key_identifier: "{{ __autonomy_ownca_rootca_cert_info['subject_key_identifier'] }}"
+    crl_distribution_points:
+      - full_name: "URI:{{ autonomy_ownca_intermediateca_crl_distribution_point_url }}"
+        reasons: "{{ autonomy_ownca_intermediateca_crl_distribution_points_reasons }}"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0400"
+    backup: "{{ autonomy_ownca_intermediateca_csr_backup }}"
+    state: present
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  #run_once: true
+  become: false
+  vars:
+    __password: >-
+      {% if autonomy_ownca_intermediateca_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_ownca_intermediateca_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_ownca_intermediateca_password }}
+      {%- endif %}
+
+- name: "Generate Intermediate CA Certificate."
+  community.crypto.x509_certificate:
+    path: "{{ autonomy_ownca_intermediateca_cert_path }}"
+    csr_path: "{{ autonomy_ownca_intermediateca_csr_path }}"
+    ownca_path: "{{ autonomy_ownca_rootca_cert_path }}"
+    ownca_privatekey_path: "{{ autonomy_ownca_rootca_key_path }}"
+    ownca_privatekey_passphrase: "{{ __password }}"
+    ownca_not_after: "{{ autonomy_ownca_intermediateca_not_after }}"
+    provider: "ownca"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0644"
+    backup: true
+    state: present
+    #force: "{{ __autonomy_ownca_regenerate }}"
+    return_content: true
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  #run_once: true
+  become: false
+  register: __autonomy_ownca_intermediateca_cert
+  vars:
+    __password: >-
+      {% if autonomy_ownca_rootca_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_ownca_rootca_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_ownca_rootca_password }}
+      {%- endif %}
+  notify:
+    - "regenerate certificates"
+
+- name: "Run handlers now."
+  ansible.builtin.meta: flush_handlers
+
+- name: "Get Intermediate CA Cert information."
+  community.crypto.x509_certificate_info:
+    path: "{{ autonomy_ownca_intermediateca_cert_path }}"
+  register: __autonomy_ownca_intermediateca_cert_info
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  #run_once: true
+  become: false
+
+# - name: "Print intermediate cert."
+#   ansible.builtin.debug:
+#     msg:
+#       - "{{ __autonomy_ownca_intermediateca_cert }}"
+
+# - name: "Print intermediate cert info."
+#   ansible.builtin.debug:
+#     msg:
+#       - "{{ __autonomy_ownca_intermediate_certca_info }}"
+
+#  LocalWords:  intermediateca

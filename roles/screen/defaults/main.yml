@@ -3,6 +3,8 @@
 autonomy_screen_packages:
   - screen
 
+autonomy_screen_enabled: false
+
 autonomy_screen_autodetach: "on"        # default: on
 autonomy_screen_crlf: "off"             # default: off
 autonomy_screen_deflogin: "off"         # default: on

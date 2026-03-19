@@ -1,0 +1,15 @@
+---
+# ==================================================================================================
+#
+# Git
+#
+# ==================================================================================================
+autonomy_common_users_git:
+  username: "{{ autonomy_common_users_git_username }}"
+  groups: []
+  uid_number: "{{ autonomy_common_users_git_id_number }}"
+  unix_home: /srv/git
+
+autonomy_common_users_git_group:
+  name: git
+  gid: "{{ autonomy_common_users_git_id_number }}"

@@ -16,18 +16,18 @@
       --server-role=dc
       --use-rfc2307
       --dns-backend="{{ samba_dns_backend }}"
-      --realm="{{ autonomy_domain | upper }}"
-      --domain="{{ autonomy_org_unit_name | upper }}"
+      --realm="{{ autonomy_common_zone_domain | upper }}"
+      --domain="{{ autonomy_common_org_unit_name | upper }}"
       --adminpass="{{ samba_administrator_password }}"
   register: samba_ad_created
-  become: yes
+  become: true
   any_errors_fatal: true
   notify:
     - "restart bind"
     - "start samba-ad-dc"
   when:
     - __samba_recreate_realm
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "Configure smb.conf file."
   ansible.builtin.template:
@@ -37,11 +37,11 @@
     group: root
     mode: 0644
     validate: "/usr/bin/testparm -s %s"
-  become: yes
+  become: true
   notify: restart samba
   when:
     - __samba_recreate_realm
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "Ensure services are in proper state after package installation."
   ansible.builtin.meta: flush_handlers
@@ -53,10 +53,10 @@
       "{{ ansible_host.split('.')[1] }}.{{ ansible_host.split('.')[0] }}.in-addr.arpa"
       -U administrator
       --password="{{ samba_administrator_password }}"
-  become: yes
-  ignore_errors: yes
+  become: true
+  ignore_errors: true
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 # ==================================================================================================
 #
@@ -67,16 +67,16 @@
   ansible.builtin.command:
     cmd: "smbclient -L localhost -U%"
   register: shares
-  become: yes
+  become: true
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 # - name: Verify SMB Authentication
 #   shell: "smbclient //localhost/netlogon -UAdministrator -c 'ls' --password={{ samba_administrator_password }}"
 #   register: success
-#   become: yes
-#   when: autonomy_fqdn == __samba_schema_master
-#   ignore_errors: yes
+#   become: true
+#   when: inventory_hostname == __samba_schema_master
+#   ignore_errors: true
 
 #- debug:
 #    var: success
@@ -84,27 +84,27 @@
 
 - name: "(Tests) Tcp-based _ldap SRV record in the domain."
   ansible.builtin.command:
-    cmd: "host -t SRV _ldap._tcp.{{ autonomy_domain }}."
+    cmd: "host -t SRV _ldap._tcp.{{ autonomy_common_zone_domain }}."
   register: success
-  become: yes
+  become: true
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "(Tests) udp-based _kerberos SRV resource record in the domain."
   ansible.builtin.command:
-    cmd: "host -t SRV _kerberos._udp.{{ autonomy_domain }}."
+    cmd: "host -t SRV _kerberos._udp.{{ autonomy_common_zone_domain }}."
   register: success
-  become: yes
+  become: true
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "(Tests) The A record of the domain controller."
   ansible.builtin.command:
     cmd: "host -t A {{ ansible_fqdn }}."
   register: success
-  become: yes
+  become: true
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "(Tests) KDC get ticket."
   ansible.builtin.expect:
@@ -112,25 +112,25 @@
     responses:
       (?i)password: "{{ samba_administrator_password }}"
   no_log: true
-  become: no
+  become: false
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "(Tests) KDC verify ticket."
   ansible.builtin.command:
     cmd: "klist"
   register: success
-  become: no
+  become: false
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "(Tests) The PTR record of the domain controller."
   ansible.builtin.command:
     cmd: "host -t PTR {{ ansible_host }}"
   register: success
-  become: yes
+  become: true
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 - name: "Ensure we have the correct permissionss on /var/lib/samba/usershares."
   ansible.builtin.file:
@@ -138,4 +138,4 @@
     owner: "root"
     group: "sambashare"
     mode: "1755"
-  become: yes
+  become: true

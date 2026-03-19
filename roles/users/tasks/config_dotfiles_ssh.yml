@@ -1,0 +1,28 @@
+---
+# ==================================================================================================
+#
+# Set .k5login
+#
+# This is required by ssh to allow GSSAPI logins
+#
+# ==================================================================================================
+- name: "Install .k5login."
+  ansible.builtin.template:
+    src: "home/k5login.j2"
+    dest: "{{ __dotfiles_home }}/.k5login"
+    owner: "{{ __dotfiles_owner }}"
+    group: "{{ __dotfiles_group }}"
+    mode: "0644"
+  loop: "{{ autonomy_users_dotfiles_users }}"
+  become: true
+  vars:
+    __dotfiles_home: "{{ item.unix_home | default(__dotfiles_default_home) }}"
+    __dotfiles_owner: "{{ cifs_owner | default(item.id_number) }}"
+    __dotfiles_group: "{{ cifs_group | default(item.id_number) }}"
+    __mode: "{{ cifs_file_mode | default(autonomy_user_dotfiles_mode) }}"
+    __dotfiles_default_home: "{{ autonomy_users_dotfiles_home + '/' + item.username }}"
+  when:
+    - autonomy_users_dotfiles_users is defined
+    - item.id_number is defined
+    - (item.shell is not defined) or (item.shell != "/usr/sbin/nologin")
+    - (item.id_number | int) >= autonomy_realm_min_id_number

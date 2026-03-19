@@ -7,7 +7,7 @@
 - name: "Check if a RPZ keyfile exists."
   ansible.builtin.stat:
     path: "{{ autonomy_bind_key_dir }}/{{ item['name'] }}.key"
-  loop: "{{ autonomy_bind_rpz_zones }}"
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
   become: true
   register: existing_ddns_keys
   when:
@@ -43,9 +43,9 @@
 #       cut -d\  -f4 |
 #       cut -d\; -f1
 #     executable: /bin/bash
-#   become: yes
+#   become: true
 #   register: algorithms
-#   changed_when: algorithms.stdout != autonomy_ddns_key_algorithm
+#   changed_when: algorithms.stdout != autonomy_common_dyndns_key_algorithm
 #   when:
 #     - existing_ddns_keys['stat']['exists'] is defined
 #     - existing_ddns_keys['stat']['exists']
@@ -69,15 +69,15 @@
 #     __bind_ddns_zones: "{{ __bind_ddns_zones + [__zone] }}"
 #   vars:
 #     __zone:
-#       name: "{{ autonomy_zone_name }}"
-#       domain: "{{ autonomy_domain }}"
+#       name: "{{ autonomy_common_zone_name }}"
+#       domain: "{{ autonomy_common_zone_domain }}"
 #       existing_algorithm: "{{ algorithms['stdout'] | default(omit) }}"
 #       keyfile_status: "{{ existing_ddns_keys['exists'] | default(false)}}"
 #       samba_domain: "{{ __bind_dns_zone_samba_domain }}"
 #   delegate_to: localhost
-#   become: no
+#   become: false
 #   when:
-#     - autonomy_virtual_host is falsy
+#     - autonomy_common_virtual_host is falsy
 
 # - name: "Print updated zone information."
 #   ansible.builtin.debug:
@@ -104,15 +104,15 @@
 #   ansible.builtin.shell:
 #     cmd: >-
 #       set -o pipefail &&
-#       {{ autonomy_bind_ddns_confgen }} -a {{ autonomy_ddns_key_algorithm }} -k {{ item['name'] }} -z {{ autonomy_domain }} |
+#       {{ autonomy_bind_ddns_confgen }} -a {{ autonomy_common_dyndns_key_algorithm }} -k {{ item['name'] }} -z {{ autonomy_common_zone_domain }} |
 #       grep secret |
 #       cut -d\" -f2
 #     executable: /bin/bash
-#   become: yes
+#   become: true
 #   register: bind_ddns_keys
 #   changed_when: false
 #   when:
-#     - (__bind_ddns_zones['keyfile_status'] is not defined or (__bind_ddns_zones is defined and not __bind_ddns_zones['keyfile_status']) or __bind_ddns_zones['existing_algorithm'] != autonomy_ddns_key_algorithm)
+#     - (__bind_ddns_zones['keyfile_status'] is not defined or (__bind_ddns_zones is defined and not __bind_ddns_zones['keyfile_status']) or __bind_ddns_zones['existing_algorithm'] != autonomy_common_dyndns_key_algorithm)
 #     - inventory_hostname not in groups['samba_domain_controllers'] | default([])
 
 # - name: "Print dynamic key information."
@@ -134,7 +134,7 @@
 # - name: "Install Dynamic DNS Keys."
 #   ansible.builtin.template:
 #     src: "etc/bind/ddns_key.j2"
-#     dest: "{{ autonomy_bind_key_dir }}/{{ autonomy_zone_name }}.key"
+#     dest: "{{ autonomy_bind_key_dir }}/{{ autonomy_common_zone_name }}.key"
 #     owner: root
 #     group: bind
 #     mode: "0640"
@@ -146,7 +146,7 @@
 #     __password_userpass: "userpass={{ bind_ddns_keys['stdout'] }}"
 #     __password_create: "create=true"
 #     __password_overwrite: "overwrite={{ __force }} backup={{ __force }}"
-#     __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/hosts/{{ inventory_hostname_short }}/bind_dyndns_secret"
+#     __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/hosts/{{ inventory_hostname_short }}/bind_dyndns_secret"
 #     __password_lookup: "{{ __password_store_id }} {{ __password_userpass }} {{ __password_create }} {{__password_overwrite }}"
 #     bind_dyndns_secret: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
 #   when:

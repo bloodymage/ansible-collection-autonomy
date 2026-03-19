@@ -1,4 +1,12 @@
 ---
+- name: "Identify User running ansible."
+  ansible.builtin.set_fact:
+    autonomy_common_user: "{{ lookup('env','USER') }}"
+  run_once: true
+  delegate_to: localhost
+  when:
+    - autonomy_common_user == "ansible_autonomy"
+
 # ==================================================================================================
 #
 # Create groups based on OS information.
@@ -32,14 +40,14 @@
 # =================================================================================================
 - name: "Create group by zone type."
   ansible.builtin.group_by:
-    key: "{{ autonomy_zone_type }}_zone"
+    key: "{{ autonomy_common_zone_type }}_zone"
   changed_when: False
 
 - name: "Create group by zone name."
   ansible.builtin.group_by:
-    key: "{{ autonomy_zone_name }}_zone"
+    key: "{{ autonomy_common_zone_name }}_zone"
   when:
-    - autonomy_zone_name is defined
+    - autonomy_common_zone_name is truthy
   changed_when: False
 
 # ==================================================================================================
@@ -49,9 +57,9 @@
 # ==================================================================================================
 - name: "Create group by zone name."
   ansible.builtin.group_by:
-    key: "{{ autonomy_zone_name }}"
+    key: "{{ autonomy_common_zone_name }}"
   when:
-    - autonomy_zone_name is defined
+    - autonomy_common_zone_name is truthy
   changed_when: False
 
 # ==================================================================================================
@@ -62,7 +70,7 @@
 - name: "Create parent groups based on host's role."
   ansible.builtin.group_by:
     key: "{{ item['parent'] }}"
-  loop: "{{ autonomy_parent_groups }}"
+  loop: "{{ autonomy_common_parent_groups }}"
   when:
     - item['parent'] is defined
     - inventory_hostname in groups[item['name']] | default([])
@@ -82,7 +90,7 @@
 - name: "Create parent groups based on host's role."
   ansible.builtin.group_by:
     key: "{{ item['parent'] }}"
-  loop: "{{ autonomy_parent_groups }}"
+  loop: "{{ autonomy_common_parent_groups }}"
   when:
     - item['parent'] is defined
     - inventory_hostname not in groups[item['parent']] | default([])
@@ -91,16 +99,16 @@
 
 - name: "Create host groups based on zone name and role."
   ansible.builtin.group_by:
-    key: "{{ autonomy_zone_name }}_{{ item['name'] }}"
-  loop: "{{ autonomy_parent_groups }}"
+    key: "{{ autonomy_common_zone_name }}_{{ item['name'] }}"
+  loop: "{{ autonomy_common_parent_groups }}"
   when:
     - inventory_hostname in groups[item['name']] | default([])
   changed_when: False
 
 - name: "Create host groups based on zone type and role."
   ansible.builtin.group_by:
-    key: "{{ autonomy_zone_type }}_{{ item['name'] }}"
-  loop: "{{ autonomy_parent_groups }}"
+    key: "{{ autonomy_common_zone_type }}_{{ item['name'] }}"
+  loop: "{{ autonomy_common_parent_groups }}"
   when:
     - inventory_hostname in groups[item['name']] | default([])
   changed_when: False
@@ -109,7 +117,7 @@
   ansible.builtin.group_by:
     key: "virtual_hosts"
   when:
-    - autonomy_virtual_host
+    - autonomy_common_virtual_host
   changed_when: False
 
 - name: "Include Samba Domain Tasks"
@@ -125,30 +133,6 @@
     - ansible_system is defined
     - inventory_hostname in groups[__ansible_system] | default([])
 
-# ==================================================================================================
-#
-# Now we need to identify who is running ansible.
-#
-# ==================================================================================================
-- name: "Identify User running ansible."
-  ansible.builtin.set_fact:
-    autonomy_user: "{{ lookup('env','USER') }}"
-  run_once: true
-  delegate_to: localhost
-  when:
-    - autonomy_user == "ansible_autonomy"
-
-- name: "Check if we are using passwords for logon."
-  ansible.builtin.set_fact:
-    ansible_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
-  when:
-    - autonomy_use_password_logon is defined
-    - autonomy_use_password_logon
-  vars:
-    __password_store_dir: "{{ autonomy_passdb }}/{{ autonomy_domain }}/hosts/{{ ansible_user }}"
-    __password_store_id: "{{ __password_store_dir }}/password"
-    __password_lookup: "{{ __password_store_id }}"
-
 - name: "Set environment configuration complete flag."
   ansible.builtin.set_fact:
-    __autonomy_configuration_complete: true
+    __autonomy_autoconfig_environment: true

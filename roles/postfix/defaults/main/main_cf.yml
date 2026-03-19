@@ -34,9 +34,9 @@ postfix_milter_connect_macros: "j {daemon_name} v {if_name} _"
 postfix_milter_default_action: "accept"
 postfix_mydestination:
   - "$myhostname"
-  - "localhost.{{ autonomy_domain }}"
+  - "localhost.{{ autonomy_common_zone_domain }}"
   - "localhost"
-postfix_myhostname: "{{ autonomy_fqdn }}"
+postfix_myhostname: "{{ inventory_hostname }}"
 postfix_non_smtpd_milters: "$smtpd_milters"
 postfix_postscreen_dnsbl_action: "enforce"
 postfix_postscreen_dnsbl_sites:
@@ -66,8 +66,8 @@ autonomy_postfix_smtpd_forbid_unauth_pipelining: "yes"
 postfix_smtpd_milters:
   - "{{ mail_spamassassin_unix_socket }}"
 postfix_smtpd_tls_chain_files:
-  - "/etc/ssl/private/{{ autonomy_fqdn }}.key"
-  - "/etc/ssl/certs/{{ autonomy_fqdn }}-chain.pem"
+  - "/etc/ssl/private/{{ inventory_hostname }}.key"
+  - "/etc/ssl/certs/{{ inventory_hostname }}-chain.pem"
 postfix_smtpd_helo_required: "yes"
 autonomy_postfix_smtpd_tls_mandatory_protocols: ">=TLSv1.2"
 autonomy_postfix_smtpd_tls_protocols: ">=TLSv1.2"

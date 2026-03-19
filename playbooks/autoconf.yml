@@ -1,0 +1,26 @@
+---
+# - name: "Configure the environment for basic host configuration."
+#   hosts: vendor_managed
+#   ignore_unreachable: yes
+#   roles:
+#     - role: bloodymage.autonomy.autoconfig
+#       tags:
+#         - always
+
+- name: "Configure Host Connections."
+  hosts: all:!localhost:!vendor_managed:!dns_only
+  gather_facts: false
+  roles:
+    - role: bloodymage.autonomy.autoconfig
+      vars:
+        __env_tasks: "connections"
+      tags:
+        - always
+
+- name: "Configure the environment for basic host configuration."
+  hosts: all:!localhost:!vendor_managed:!dns_only
+  ignore_unreachable: yes
+  roles:
+    - role: bloodymage.autonomy.autoconfig
+      tags:
+        - always

@@ -1,5 +1,6 @@
 ---
 autonomy_samba_packages:
+  - "{{ autonomy_common_samba_package }}"
   - acl
   - attr
   - dnsutils
@@ -9,14 +10,13 @@ autonomy_samba_packages:
   - libpam-krb5
   - libpam-winbind
   - rsync
-  - samba
   - samba-dsdb-modules
   - samba-vfs-modules
   - smbclient
   - unison
   - winbind
 
-autonomy_joined_as_domain_member: yes
+autonomy_joined_as_domain_member: true
 
 samba_domain_password_expiration: "{{ __samba_domain_password_expiration }}"
 samba_dns_backend: "BIND9_DLZ"
@@ -84,7 +84,7 @@ __dc_samba_shares:
     path: "/var/lib/samba/sysvol"
     read_only: "No"
   - name: "netlogon"
-    path: "/var/lib/samba/sysvol/{{ autonomy_domain }}/scripts"
+    path: "/var/lib/samba/sysvol/{{ autonomy_common_zone_domain }}/scripts"
     read_only: "No"
 
 # ==================================================================================================

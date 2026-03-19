@@ -6,7 +6,7 @@
 # ==================================================================================================
 # - name: "Cloudflare: Identify CNAME records."
 #   ansible.builtin.set_fact:
-#     autonomy_dns_cname_records: "{{ autonomy_dns_cname_records + [inventory_hostname_short] }}"
+#     autonomy_common_dns_cname_records: "{{ autonomy_common_dns_cname_records + [inventory_hostname_short] }}"
 #   when:
 #     - inventory_hostname_short != autonomy_dns_public_host
 
@@ -14,16 +14,16 @@
 #   community.general.cloudflare_dns:
 #     #account_email: "{{ autonomy_dns_cloudflare_email }}"
 #     api_token: "{{ __cloudflare_key }}"
-#     zone: "{{ autonomy_domain }}"
+#     zone: "{{ autonomy_common_zone_domain }}"
 #     record: "{{ inventory_hostname_short }}"
 #     type: "CNAME"
 #     state: "absent"
 #   become: false
 #   vars:
-#     __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
+#     __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/external/cloudflare/dns"
 #     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
 #   when:
-#     - autonomy_dns_cname_records is falsy
+#     - autonomy_common_dns_cname_records is falsy
 
 - name: "Cloudflare: Get public IPv4 Address."
   community.general.ipify_facts:
@@ -35,7 +35,7 @@
   community.general.cloudflare_dns:
     #account_email: "{{ autonomy_dns_cloudflare_email }}"
     api_token: "{{ __cloudflare_key }}"
-    zone: "{{ autonomy_domain }}"
+    zone: "{{ autonomy_common_zone_domain }}"
     record: "{{ autonomy_dns_public_host }}"
     type: "A"
     value: "{{ ipify_public_ip }}"
@@ -46,19 +46,19 @@
     ttl: "{{ autonomy_dns_cloudflare_ttl }}"
   become: false
   when:
-    - autonomy_dns_cloudflare_only
+    - autonomy_common_dns_cloudflare_only
   vars:
-    __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
+    __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
 
 - name: "Cloudflare: Add or modify AAAA records."
   community.general.cloudflare_dns:
     #account_email: "{{ autonomy_dns_cloudflare_email }}"
     api_token: "{{ __cloudflare_key }}"
-    zone: "{{ autonomy_domain }}"
+    zone: "{{ autonomy_common_zone_domain }}"
     record: "{{ autonomy_dns_public_host }}"
     type: "AAAA"
-    value: "{{ autonomy_ipv6_address }}"
+    value: "{{ autonomy_common_ipv6_address }}"
     state: "present"
     proxied: "{{ autonomy_dns_cloudflare_proxied }}"
     solo: "{{ autonomy_dns_cloudflare_solo }}"
@@ -66,7 +66,7 @@
     ttl: "{{ autonomy_dns_cloudflare_ttl }}"
   become: false
   vars:
-    __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
+    __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
 
 # ==================================================================================================
@@ -78,7 +78,7 @@
   community.general.cloudflare_dns:
     #account_email: "{{ autonomy_dns_cloudflare_email }}"
     api_token: "{{ __cloudflare_key }}"
-    zone: "{{ item['zone'] | default(autonomy_domain) }}"
+    zone: "{{ item['zone'] | default(autonomy_common_zone_domain) }}"
     record: "{{ item['record'] }}"
     type: "CNAME"
     value: "{{ item['value'] }}"
@@ -90,7 +90,7 @@
   loop: "{{ autonomy_dns_cloudflare_cname_records }}"
   become: false
   vars:
-    __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
+    __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   when:
     - autonomy_dns_cloudflare_cname_records is truthy
@@ -99,7 +99,7 @@
   community.general.cloudflare_dns:
     #account_email: "{{ autonomy_dns_cloudflare_email }}"
     api_token: "{{ __cloudflare_key }}"
-    zone: "{{ item['zone'] | default(autonomy_domain) }}"
+    zone: "{{ item['zone'] | default(autonomy_common_zone_domain) }}"
     record: "{{ item['record'] }}"
     type: "MX"
     value: "{{ item['value'] }}"
@@ -111,7 +111,7 @@
   loop: "{{ autonomy_dns_cloudflare_mx_records }}"
   become: false
   vars:
-    __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
+    __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   when:
     - autonomy_dns_cloudflare_mx_records is truthy
@@ -120,7 +120,7 @@
   community.general.cloudflare_dns:
     #account_email: "{{ autonomy_dns_cloudflare_email }}"
     api_token: "{{ __cloudflare_key }}"
-    zone: "{{ item['zone'] | default(autonomy_domain) }}"
+    zone: "{{ item['zone'] | default(autonomy_common_zone_domain) }}"
     record: "{{ item['record'] }}"
     type: "TXT"
     state: "present"
@@ -130,7 +130,7 @@
   loop: "{{ autonomy_dns_cloudflare_txt_records }}"
   become: false
   vars:
-    __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
+    __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   when:
     - autonomy_dns_cloudflare_txt_records is truthy
@@ -139,7 +139,7 @@
 #   community.general.cloudflare_dns:
 #     #account_email: "{{ autonomy_dns_cloudflare_email }}"
 #     api_token: "{{ __cloudflare_key }}"
-#     zone: "{{ autonomy_domain }}"
+#     zone: "{{ autonomy_common_zone_domain }}"
 #     record: "{{ ansible_date_time.year }}_mail._domainkey"
 #     type: "TXT"
 #     state: "present"
@@ -149,9 +149,9 @@
 #     ttl: "{{ autonomy_dns_cloudflare_ttl }}"
 #   become: false
 #   vars:
-#     __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
+#     __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/external/cloudflare/dns"
 #     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
-#     #__password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/dns/dkim"
+#     #__password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/dns/dkim"
 #     #__password_lookup_dkim: "{{ __password_store_id }}, missing=empty"
 #     #dkim_public_key: "{{ lookup('community.general.passwordstore', __password_lookup_dkim) }}"
 #   when:
@@ -174,7 +174,7 @@
   community.general.cloudflare_dns:
     #account_email: "{{ autonomy_dns_cloudflare_email }}"
     api_token: "{{ __cloudflare_key }}"
-    zone: "{{ autonomy_domain }}"
+    zone: "{{ autonomy_common_zone_domain }}"
     record: "_dmarc"
     type: "TXT"
     state: "present"
@@ -188,7 +188,7 @@
     __dmarc_percent: "{% if autonomy_dns_dmarc_percent != 100 %}pct={{ autonomy_dns_dmarc_percent }}; {% endif %}"
     __dmarc_email: "rua={% for email in autonomy_dns_dmarc_email %}mailto:{{ email }}{{ ',' if not loop.last else '' }}{% endfor %}; "
     __dmarc_value: "v=DMARC1; p={{ autonomy_dns_dmarc_policy }}; {{ __dmarc_percent }}{{ __dmarc_email }}adkim={{ autonomy_dns_dmarc_adkim }}; aspf={{ autonomy_dns_dmarc_aspf }}"
-    __password_lookup: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external/cloudflare/dns"
+    __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/external/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   when:
     - inventory_hostname in groups['mail_servers'] | default([])

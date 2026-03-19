@@ -1,0 +1,335 @@
+# {{ ansible_managed }}
+
+# References
+# https://starship.rs/config/
+
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+format = """
+\\[ (bold white)\
+$username\
+$hostname\
+$sudo\
+$localip\
+${custom.ssh_keys}\
+${custom.ssh_no_keys}\
+$fill\
+\\](bold white)
+\\[ (bold white)\
+$os\
+$time\
+$battery\
+$memory_usage\
+$jobs\
+$env_var\
+$fill\
+\\](bold white)
+\\[ (bold white)\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+$fill\
+\\](bold white)
+$shell\
+$status\
+${custom.history_command}\
+$character"""
+
+[battery]
+#full_symbol = '󰁹 '
+#charging_symbol = '󰂄 '
+#discharging_symbol = '󰂃 '
+#unknown_symbol = '󰁽 '
+#empty_symbol = '󰂎 '
+format = '[$symbol$percentage]($style) '
+disabled = true
+
+[[battery.display]]
+threshold = 10
+style = 'bold red'
+
+[[battery.display]]
+threshold = 50
+style = 'bold yellow'
+
+[[battery.display]]
+threshold = 100
+style = 'bold green'
+
+[character] # The name of the module we are configuring is 'character'
+success_symbol = '[\$](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+error_symbol = '[\$](bold red)'   # The 'error_symbol' segment is being set to '➜' with the color 'bold green'
+
+[custom.history_command]
+description = "Displays the current command number."
+when = true
+command = "echo $(($HISTCMD + 1))"
+format = '[$symbol($output )]($style)'
+style = "bold blue"
+#shell = "/bin/bash"
+unsafe_no_escape = true
+os = "linux"
+disabled = true
+
+[custom.ssh_no_keys]
+description = "SSH missing keys"
+when = "ssh-add -l | grep -q 'no identities'"
+command = "echo 🚫"
+format = "$symbol[$output]($style) "
+shell = ["bash", "--noprofile", "--norc"]
+symbol = "🔑"
+style = "bold fg:red"
+
+[custom.ssh_keys]
+description = "SSH key count"
+when = "ssh-add -l | grep -v -q 'no identities'"
+command = "ssh-add -l | grep -v 'no identities' | wc -l"
+format = "$symbol[$output]($style) "
+shell = ["bash", "--noprofile", "--norc"]
+symbol = "🔑"
+style = "bold fg:green"
+
+[direnv]
+# format = '[$symbol$loaded/$allowed]($style) '
+# symbol = 'direnv '
+# style = 'bold orange'
+# disabled = false
+# detect_extensions = []
+# detect_files = ['.envrc']
+# detect_folders = []
+# allowed_msg = 'allowed'
+# not_allowed_message = 'not allowed'
+# denied_msg = 'denied'
+# loaded_msg = 'loaded'
+# unloaded_msg = 'not loaded'
+
+[directory]
+truncation_length = 100
+truncate_to_repo = false
+format = '[$path]($style)[$read_only]($read_only_style) '
+#style = 'bold cyan'
+#disabled = false
+#read_only = '🔒'
+#read_only_style = 'red'
+#truncation_symbol = ''
+#before_repo_root_style = ''
+#repo_root_style = 'bold green'
+#repo_root_format = '[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '
+home_symbol = '~'
+use_os_path_sep = true
+
+[env_var.WINDOW]
+symbol=""
+# variable
+# default
+format = "[\\($env_value\\)](bold blue)"
+description = "Screen Windown Number."
+disabled = false
+
+[fill]
+symbol = ' '
+#style = 'bold black'
+disabled = false
+
+[git_branch]
+#always_show_remote = false
+format = '[$symbol$branch(:$remote_branch)]($style) '
+#symbol = ' '
+#style = 'bold purple'
+#truncate_length = 2^63 - 1
+#truncation_symbol = '…'
+#only_attached = false
+#ignore_branches = []
+#disabled = false
+
+[git_commit]
+#commit_hash_length = 7
+#format = '[\($hash$tag\)]($style) '
+#style = 'bold green'
+#only_detached = true
+tag_disabled = false
+#tag_max_candidates = 0
+tag_symbol = '🔖 '
+#disabled = false
+
+[git_state]
+#rebase = 'REBASING'
+#merge = 'MERGING'
+#revert = 'REVERTING'
+#cherry_pick = 'CHERRY-PICKING'
+#bisect = 'BISECTING'
+#am = 'AM'
+#am_or_rebase = 'AM/REBASE'
+#style = 'bold yellow'
+#format = '\([$state( $progress_current/$progress_total)]($style)\) '
+disabled = false
+
+[git_metrics]
+#added_style = 'bold green'
+#deleted_style = 'bold red'
+#only_nonzero_diffs = true
+#format = '([+$added]($added_style) )([-$deleted]($deleted_style) )'
+#ignore_submodules = false
+disabled = false
+
+[git_status]
+# format = '([\[$all_status$ahead_behind\]]($style) )'
+# conflicetd = '='
+ahead = '⇡${count}'
+behind = '⇣${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+# up_to_date = ''
+# untracked = '?'
+# stashed = '$'
+# modified = '!'
+staged = '[++\($count\)](green)'
+# renamed = '»'
+# deleted = '✘'
+# typechanged = ''
+# style = 'bold red'
+# ignore_submodules = false
+disabled = false
+# windows_starship = # TBD?
+
+[hostname]
+ssh_only = false
+# ssh_symbol = '🌐 '
+# trim_at = '.'
+# detect_env_vars = []
+format = "[@[$hostname]($style) $ssh_symbol](bold white)"
+style = 'bold dimmed yellow'
+# disabled = false
+
+[jobs]
+symbol_threshold = 0
+number_threshold = 0
+format = '[$symbol$number]($style) '
+symbol = '+'
+style = 'bold blue'
+disabled = false
+
+[localip]
+ssh_only = false
+format = '[$localipv4]($style) '
+style = 'bold dimmed yellow'
+disabled = false
+
+[memory_usage]
+threshold = 1
+format = '$symbol[${ram_pct}( | ${swap_pct})]($style) '
+#symbol = '🐏'
+#style = 'bold dimmed white'
+disabled = false
+
+[os]
+#format = '[$symbol]($style)'
+style = 'bold white'
+disabled = false
+
+[os.symbols]
+AIX = "➿ "
+Alpaquita = "🔔 "
+AlmaLinux = "💠 "
+Alpine = "🏔️ "
+Amazon = "🙂 "
+Android = "🤖 "
+Arch = "🎗️ "
+Artix = "🎗️ "
+CentOS = "💠 "
+Debian = "🌀 "
+DragonFly = "🐉 "
+Emscripten = "🔗 "
+EndeavourOS = "🚀 "
+Fedora = "🎩 "
+FreeBSD = "😈 "
+Garuda = "🦅 "
+Gentoo = "🗜️ "
+HardenedBSD = "🛡️ "
+Illumos = "🐦 "
+Kali = "🐉 "
+Linux = "🐧 "
+Mabox = "📦 "
+Macos = "🍎 "
+Manjaro = "🥭 "
+Mariner = "🌊 "
+MidnightBSD = "🌘 "
+Mint = "🌿 "
+NetBSD = "🚩 "
+NixOS = "❄️ "
+OpenBSD = "🐡 "
+OpenCloudOS = "☁️ "
+openEuler = "🦉 "
+openSUSE = "🦎 "
+OracleLinux = "🦴 "
+Pop = "🍭 "
+Raspbian = "🍓 "
+Redhat = "🎩 "
+RedHatEnterprise = "🎩 "
+RockyLinux = "💠 "
+Redox = "🧪 "
+Solus = "⛵ "
+SUSE = "🦎 "
+Ubuntu = "🎯 "
+Ultramarine = "🔷 "
+Unknown = "❓ "
+Void = "  "
+Windows = "🪟 "
+
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = true
+
+[shell]
+disabled = true
+
+[shlvl]
+threshold = 1
+# format = '[$symbol$shlvl]($style) '
+# symbol = '↕️ '
+# repeat = false
+# repeat_offset = 0
+# style = 'bold yellow'
+disabled = false
+
+[status]
+#format = '[$symbol$status]($style) '
+symbol = '❌ '
+success_symbol = '🟢 '
+# not_executable_symbol =	'🚫'
+# not_found_symbol = '🔍'
+# sigint_symbol = '🧱'
+# signal_symbol = '⚡'
+# style = 'bold red'
+# recognize_signal_code = true
+# map_symbol = false
+# pipestatus =false
+# pipestatus_separator = "|"
+# pipestatus_format = '\[$pipestatus\] => [$symbol$common_meaning$signal_name$maybe_int]($style)'
+#pipestatus_segment_format = ""
+disabled = false
+
+[time]
+format = '[$time]($style) '
+#use_12h = false
+time_format = '%T'
+style = 'bold blue'
+#utc_time_offset = 'local'
+disabled = false
+#time_range = '-'
+
+[username]
+# style_root = 'bold red'
+style_user = 'bold green'
+# detect_env_vars = []
+format = '[$user]($style)'
+show_always = true
+# disabled = false
+# aliases = {}

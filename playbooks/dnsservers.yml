@@ -6,22 +6,29 @@
       tags:
         - always
 
-- name: "Configure Bind9 Servers."
-  hosts: dns_servers
-  roles:
-    - role: bloodymage.autonomy.bind
+- name: "Configure Bind Servers."
+  hosts: bind_servers
+  tasks:
+    - ansible.builtin.include_role:
+        role: bloodymage.autonomy.bind
       tags:
+        - install-packages
         - bind
-        - bind9
+        - bind-dyndns
+        - bind-dyndns-keyupdate
+        - bind-rpz
 
 - name: "Update DNS Records."
   hosts: all:!localhost
   ignore_unreachable: true
-  roles:
-    - role: bloodymage.autonomy.maintenance
+  tasks:
+    - ansible.builtin.include_role:
+        name: bloodymage.autonomy.maintenance
       vars:
         __maintenance_tasks: "dns"
       tags:
+        - maintenance
         - dns
+        - dns-file
         - dns-nsupdate
         - dns-cloudflare

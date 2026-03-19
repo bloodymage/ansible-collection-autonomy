@@ -6,39 +6,31 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
   tags:
     - maintenance
     - apt
     - upgrade
 
-# - name: "Ensure Raspbian Raspberry Pi Repo is current"
-#   ansible.builtin.template:
-#     src: "raspi.list.j2"
-#     dest: /etc/apt/sources.list.d/raspi.list
-#     owner: root
-#     group: root
-#     mode: '0644'
-#   become: yes
-#   when:
-#     - ansible_lsb.id is defined and ansible_lsb.id == "Raspbian"
-#   tags:
-#     - aptitude
-#     - aptitude_debug
-#     - aptitude-debug
+- name: "Update distribution repos 'debian.sources' format."
+  include_tasks: "debian_sources.yml"
+  vars:
+    __dist_major_version: "{{ ansible_distribution_major_version | int }}"
+  when:
+    - __dist_major_version >= 13
+  tags:
+    - maintenance
+    - apt
+    - upgrade
 
-# - name: "Ensure sources.list is current"
-#   ansible.builtin.template:
-#     src: "sources.list.j2"
-#     dest: /etc/apt/sources.list
-#     owner: root
-#     group: root
-#     mode: '0644'
-#   become: yes
-#   tags:
-#     - aptitude
-#     - aptitude_debug
-#     - aptitude-debug
+- name: "Update distribution repos 'sources.list' format."
+  include_tasks: "sources_list.yml"
+  vars:
+    __dist_major_version: "{{ ansible_distribution_major_version | int }}"
+  when:
+    - __dist_major_version < 13
+  tags:
+    - apt
 
 - name: "Install packages"
   ansible.builtin.package:

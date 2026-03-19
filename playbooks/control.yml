@@ -18,13 +18,13 @@
     - role: bloodymage.autonomy.gnupg
       tags:
         - gnupg
-    - role: bloodymage.autonomy.password_store
+    - role: bloodymage.autonomy.passwordstore
       tags:
-        - password-store
+        - passwordstore
     - role: bloodymage.autonomy.users
       vars:
         autonomy_users_password_store_users:
-          - username: "{{ autonomy_user }}"
+          - username: "{{ autonomy_common_user }}"
         __user_tasks: "passwordstore"
       tags:
         - user-password-store

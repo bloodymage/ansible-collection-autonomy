@@ -1,0 +1,3 @@
+---
+autonomy_common_dyndns_key_algorithm: "hmac-sha512"
+__autonomy_common_dyndns_key_algorithm: "hmac-sha256"

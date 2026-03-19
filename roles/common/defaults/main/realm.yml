@@ -8,7 +8,7 @@
 #
 # ==================================================================================================
 
-autonomy_realm: "{{ autonomy_zone_name | upper }}"
+autonomy_realm: "{{ autonomy_common_zone_name | upper }}"
 
 # Realm User Management / Password Requirements
 autonomy_realm_identity_management_system: ""
@@ -31,8 +31,8 @@ domain_users: []
 
 # Samba LDAP lookups
 # LDAP Definitions
-autonomy_base_dn: "DC={{ autonomy_org_unit_name | upper }},DC={{ autonomy_org_name | upper }},DC={{ autonomy_tld | upper }}"
-autonomy_base_dn_lower: "DC={{ autonomy_org_unit_name | lower }},DC={{ autonomy_org_name | lower }},DC={{ autonomy_tld | lower }}"
+autonomy_base_dn: "DC={{ autonomy_common_org_unit_name | upper }},DC={{ autonomy_common_org_name | upper }},DC={{ autonomy_tld | upper }}"
+autonomy_base_dn_lower: "DC={{ autonomy_common_org_unit_name | lower }},DC={{ autonomy_common_org_name | lower }},DC={{ autonomy_tld | lower }}"
 autonomy_user_dn: "CN=Users,{{ autonomy_base_dn_lower }}"
 autonomy_group_dn: "CN=Users,{{ autonomy_base_dn_lower }}"
 autonomy_config_dn: "CN=Configuration,{{ autonomy_base_dn }}"
@@ -50,10 +50,10 @@ domain_user_vmail:
   spns:
     - spn: "imap"
       host: "{{ autonomy_internal_mail_host }}"
-      keytab_file: "/etc/dovecot/dovecot.keytab"
+      keytab_file: "{{ autonomy_common_dovecot_keytab_path }}"
     - spn: "smtp"
       host: "{{ autonomy_internal_mail_host }}"
-      keytab_file: "/etc/dovecot/dovecot.keytab"
+      keytab_file: "{{ autonomy_common_dovecot_keytab_path }}"
   account_expire: "--noexpiry"
 
 domain_user_mediawiki:
@@ -61,7 +61,7 @@ domain_user_mediawiki:
   spns:
     - spn: "HTTP"
       host: "{{ autonomy_internal_www_host }}"
-      keytab_file: "/etc/apache2/wiki.{{ autonomy_domain }}.keytab"
+      keytab_file: "/etc/apache2/wiki.{{ autonomy_common_zone_domain }}.keytab"
   account_expire: "--noexpiry"
 
 domain_user_keycloak:

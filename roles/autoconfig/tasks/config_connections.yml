@@ -1,0 +1,19 @@
+---
+# ==================================================================================================
+#
+# Now we need to identify who is running ansible.
+#
+# ==================================================================================================
+- name: "Check if we are using passwords for logon."
+  ansible.builtin.set_fact:
+    ansible_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+  when:
+    - autonomy_common_use_password_logon
+  vars:
+    __password_store_dir: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/hosts/{{ ansible_user }}"
+    __password_store_id: "{{ __password_store_dir }}/password"
+    __password_lookup: "{{ __password_store_id }}"
+
+- name: "Set connection configuration complete flag."
+  ansible.builtin.set_fact:
+    __autonomy_autoconfig_connection: true

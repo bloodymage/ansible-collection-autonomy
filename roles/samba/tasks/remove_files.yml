@@ -23,7 +23,7 @@
     path: "{{ item.path }}"
     state: absent
   loop: "{{ __directory.files }}"
-  become: yes
+  become: true
   when:
     - __samba_recreate_realm
     - __directory is defined

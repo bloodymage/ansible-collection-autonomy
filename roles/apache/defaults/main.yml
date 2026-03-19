@@ -1,6 +1,6 @@
 ---
 autonomy_apache_packages:
-  - apache2
+  - "{{ autonomy_common_apache_package }}"
 #  - libsemanage-python
 #  - libselinux-python
 

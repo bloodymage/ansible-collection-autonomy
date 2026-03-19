@@ -1,5 +1,11 @@
 ---
 # Collection Default Variables for Bind
-autonomy_ddns_key_algorithm: "hmac-sha512"
+autonomy_common_bind_daemon: "named"
+autonomy_common_bind_package: "bind9"
 
-__autonomy_ddns_key_algorithm: "hmac-sha256"
+autonomy_common_bind_owner: root
+autonomy_common_bind_group: bind
+
+autonomy_common_bind_zone_dir: "{{ autonomy_common_state_dir }}/bind"
+autonomy_common_bind_cache_dir: "{{ autonomy_common_cache_dir }}/bind"
+autonomy_common_bind_allow_query: "any"

@@ -1,0 +1,8 @@
+---
+autonomy_common_postfix_package: "postfix"
+autonomy_common_postfix_daemon: "postfix"
+
+autonomy_common_postfix_spool_dir: "{{ autonomy_common_spool_dir }}/postfix"
+
+autonomy_common_postfix_user: "postfix"
+autonomy_common_postfix_group: "{{ autonomy_common_postfix_user }}"

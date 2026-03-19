@@ -9,10 +9,10 @@
 # ==================================================================================================
 - name: "Perform Safe Upgrade."
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     upgrade: safe
     cache_valid_time: 86400 #One day
-  become: yes
+  become: true
   tags:
     - system_upgrade
     - system-upgrade
@@ -21,10 +21,10 @@
 
 - name: "Perform Full Upgrade."
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     upgrade: full
     cache_valid_time: 86400 #One day
-  become: yes
+  become: true
   tags:
     - system_upgrade
     - system-upgrade

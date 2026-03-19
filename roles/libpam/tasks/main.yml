@@ -1,0 +1,16 @@
+---
+# tasks file for linux-pam
+- name: Include OS-specific variables.
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: false
+
+- name: "Install packages"
+  ansible.builtin.package:
+    name: "{{ autonomy_libpam_packages }}"
+    state: present
+  become: true

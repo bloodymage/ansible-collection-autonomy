@@ -1,0 +1,21 @@
+---
+# ==================================================================================================
+#
+# Keycloak
+#
+# ==================================================================================================
+autonomy_common_users_keycloak_username: "{{ autonomy_keycloak_name }}" # Set in keycloak.yml
+autonomy_common_users_keycloak_groupname: "{{ autonomy_common_users_keycloak_username }}"
+
+autonomy_common_users_keycloak:
+  username: "{{ autonomy_common_users_keycloak_username }}"
+  groups: []
+  id_number: "{{ autonomy_common_users_keycloak_id_number }}"
+  unix_home: "{{ autonomy_keycloak_home }}"
+  ssh_access_cert: []
+  ssh_cert:
+    - None
+
+autonomy_common_users_keycloak_group:
+  name: "{{ autonomy_common_users_keycloak_groupname }}"
+  gid: "{{ autonomy_common_users_keycloak_id_number }}"

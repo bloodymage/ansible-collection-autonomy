@@ -1,4 +1,0 @@
----
-# defaults file for libnss3-tools
-autonomy_packages:
-  - libnss3-tools

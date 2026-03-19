@@ -1,0 +1,14 @@
+---
+# Github
+autonomy_openssh_ssh_conf_github_name: "github"
+autonomy_openssh_ssh_conf_github_host: "{{ autonomy_openssh_ssh_conf_github_name }}.com"
+autonomy_openssh_ssh_conf_github_enabled: false
+autonomy_openssh_ssh_conf_github_path: "{{ autonomy_openssh_ssh_conf_d_dir }}/{{ autonomy_openssh_ssh_conf_github_name }}.conf"
+autonomy_openssh_ssh_conf_github_pkcs11_provider: "{{ autonomy_openssh_ssh_conf_d_pkcs11_provider }}"
+
+autonomy_openssh_ssh_conf_github:
+  name: "{{ autonomy_openssh_ssh_conf_github_name }}"
+  path: "{{ autonomy_openssh_ssh_conf_github_path }}"
+  host: "{{ autonomy_openssh_ssh_conf_github_host }}"
+  pkcs11_provider: "{{ autonomy_openssh_ssh_conf_github_pkcs11_provider }}"
+  enabled: "{{ autonomy_openssh_ssh_conf_github_enabled }}"

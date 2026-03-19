@@ -1,0 +1,335 @@
+---
+- name: "Install packages."
+  ansible.builtin.package:
+    name: "{{ autonomy_users_packages }}"
+    state: present
+  become: true
+
+# ==================================================================================================
+#
+# Create users and groups
+#
+# ==================================================================================================
+- name: "Ensure we have user groups required by host role."
+  ansible.builtin.set_fact:
+    __user_groups: "{{ __user_groups + autonomy_users_groups + [ item['group'] ] }}"
+  loop:
+    - name: "mythtv"
+      group: "{{ autonomy_common_users_mythtv_group }}"
+    - name: "file_servers"
+      group: "{{ autonomy_common_users_mythtv_group }}"
+    - name: "file_servers"
+      group: "{{ autonomy_common_users_git_group }}"
+    - name: "minidlna_servers"
+      group: "{{ autonomy_common_users_minidlna_group }}"
+    - name: "git_servers"
+      group: "{{ autonomy_common_users_git_group }}"
+    - name: "homeassistant"
+      group: "{{ autonomy_common_users_homeassistant_group }}"
+    - name: "mail_servers"
+      group: "{{ autonomy_common_users_vmail_group }}"
+    - name: "keycloak"
+      group: "{{ autonomy_common_users_keycloak_group }}"
+  when:
+    - inventory_hostname in groups [item['name']] | default([])
+  become: false
+
+- name: "Ensure we have users required by host role."
+  ansible.builtin.set_fact:
+    __users: "{{ __users + [ item['user'] ] }}"
+  loop:
+    - name: "mythtv"
+      user: "{{ autonomy_common_users_mythtv }}"
+    - name: "file_servers"
+      user: "{{ autonomy_common_users_mythtv }}"
+    - name: "file_servers"
+      user: "{{ autonomy_common_users_git }}"
+    - name: "minidlna_servers"
+      user: "{{ autonomy_common_users_minidlna }}"
+    - name: "git_servers"
+      user: "{{ autonomy_common_users_git }}"
+    - name: "homeassistant"
+      user: "{{ autonomy_common_users_homeassistant }}"
+    - name: "mail_servers"
+      user: "{{ autonomy_common_users_vmail }}"
+    - name: "keycloak"
+      user: "{{ autonomy_common_users_keycloak }}"
+  when:
+    - inventory_hostname in groups[item['name']] | default([])
+  become: false
+
+- name: "Create groups."
+  ansible.builtin.group:
+    name: "{{ item['name'] }}"
+    state: present
+    system: "{{ item['system'] | default('false') }}"
+    gid: "{{ item['gid'] | default(omit) }}"
+  loop: "{{ __user_groups }}"
+  become: true
+
+# ==================================================================================================
+#
+# This creates all local users.
+#
+# The user is added as a member of all groups defined in the user definition.  In addition, the user
+# is added to a group 'ansiblemanaged'.  This is to track which users were installed by ansible.
+# The end goal is, if a user is a member of the 'ansiblemanaged' group, and that user is no longer
+# defined in the user definitions, then remove the user from the local system.
+#
+# ==================================================================================================
+- name: "Create users belonging to the 'ansiblemanaged' group."
+  ansible.builtin.user:
+    name: "{{ item['username'] }}"
+    password: "{{ __user_password }}"
+    groups: "{{ __groups }}"
+    state: present
+    shell: "{{ item['shell'] | default('/bin/bash') }}"
+    system: false
+    create_home: true
+    comment: "{{ item['name'] | default(omit) }}"
+    home: "{{ item['unix_home'] | default('/nonexistent') }}"
+    uid:  "{{ item['id_number'] | default(omit) }}"
+    update_password: "always"
+    move_home: true
+  loop: "{{ __users }}"
+  vars:
+    __groups: "{% if item['groups'] is defined %}{{ item['groups'] + [autonomy_users_group_ansible_managed] }}{% else %}{{ [autonomy_users_group_ansible_managed] }}{% endif %}"
+    __password_store_base_dir: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/hosts/"
+    __password_store_host_dir: "{{ __password_store_base_dir }}/{{ inventory_hostname_short }}"
+    __password_store_dir: "{{ __password_store_host_dir }}/{{ item['username'] }}"
+    __password_store_id: "{{ __password_store_dir }}/password"
+    __password_length: " length={{ item['password_legnth'] | default(autonomy_common_password_length) }}"
+    __password_overwrite: " overwrite={{ autonomy_common_password_overwrite }} backup=true"
+    __password_create_bool: >-
+      {% if item['password'] is defined and item['password'] in ['!', '*'] -%}
+      false
+      {%- elif item['password'] is defined and item['password'] != 'password' -%}
+      false
+      {%- else -%}
+      true
+      {%- endif %}
+    __password_create: " create={{ __password_create_bool }}"
+    __password_missing: "missing=empty"
+    __password_symbols: " nosymbols={{ autonomy_common_password_no_symbols }}"
+    __password_lookup: >-
+      {{ __password_store_id }}
+      {{ __password_create }}
+      {{ __password_missing }}
+      {{ __password_length }}
+      {{ __password_symbols }}
+      {{ __password_overwrite }}
+    __password1: >-
+      {% if __password_create -%}
+      {{ lookup('community.general.passwordstore', __password_lookup) }}
+      {%- else -%}
+      {{ item['password'] }}
+      {%- endif %}
+    __password: >-
+      {% if item['password'] is defined and item['password'] != 'password' -%}
+      {{ item['password'] }}
+      {%- else -%}
+      {{ __password1 }}
+      {%- endif %}
+    __password_hash: >-
+      {{ __password | password_hash('sha512', 65534 | random(seed=autonomy_users_password_hash_seed) | string ) }}
+    __user_password: >-
+      {% if item['password'] is defined and item.password in ['!','*'] -%}
+      {{ item['password'] }}
+      {%- else -%}
+      {{ __password_hash }}
+      {%- endif %}
+  loop_control:
+    index_var: index
+  become: true
+  when:
+    - __users is defined
+    - item.id_number is defined
+    - item.id_number >= autonomy_users_managed_min_id
+    - item.id_number <= autonomy_users_managed_max_id
+
+# ==================================================================================================
+#
+# These are generally application users.  For example 'mythtv', 'vmail', 'git', etc.  So we do not
+# want people to login as those users.
+#
+# ==================================================================================================
+- name: "Create non 'ansiblemanaged' users."
+  ansible.builtin.user:
+    name: "{{ item['username'] }}"
+    groups: "{{ item['groups'] | default(omit) }}"
+    password: "!"
+    state: present
+    shell: "{{ item['shell'] | default('/bin/bash') }}"
+    system: "{{ item['system'] | default('no') }}"
+    create_home: true
+    comment: "{{ item['name'] | default(omit) }}"
+    home: "{{ item['unix_home'] | default('/nonexistent') }}"
+    move_home: true
+    uid:  "{{ item['id_number'] | default(omit) }}"
+  loop: "{{ __users }}"
+  loop_control:
+    index_var: index
+  become: true
+  when:
+    - __users is defined
+    - ((item.id_number is not defined) or
+       (item.id_number < autonomy_users_managed_min_id) or
+       (item.id_number > autonomy_users_managed_max_id))
+
+# ==================================================================================================
+#
+# Post configuration
+#
+# ==================================================================================================
+- name: "Create User SSH Keys."
+  ansible.builtin.user:
+    name: "{{ item['username'] }}"
+    generate_ssh_key: true
+    ssh_key_type: "{{ item['ssh_key_type'] | default(autonomy_common_users_ssh_key_type) }}"
+    ssh_key_passphrase: "{{ __ssh_key_passphrase }}"
+    #force: true
+  loop: "{{ __users }}"
+  loop_control:
+    index_var: index
+  become: true
+  vars:
+    __password_store_base_dir: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/hosts/"
+    __password_store_host_dir: "{{ __password_store_base_dir }}/{{ inventory_hostname_short }}"
+    __password_store_dir: "{{ __password_store_host_dir }}/{{ item['username'] }}"
+    __password_store_id: "{{ __password_store_dir }}/ssh_key_password"
+    __password_length: "length={{ item['password_legnth'] | default(autonomy_common_password_length) }}"
+    __password_overwrite: "overwrite={{ autonomy_common_password_overwrite }} backup=true"
+    __password_create: "create={{ __password_create_bool }}"
+    __password_missing: "missing=create"
+    __password_symbols: " nosymbols={{ autonomy_common_password_no_symbols }}"
+    __password_create_bool: >-
+      {% if item['password'] is defined and item['password'] != 'password' -%}
+      false
+      {%- else -%}
+      true
+      {%- endif %}
+    __password_lookup: >-
+      {{ __password_store_id }}
+      {{ __password_create }}
+      {{ __password_missing }}
+      {{ __password_length }}
+      {{ __password_symbols }}
+      {{ __password_overwrite }}
+    __ssh_key_passphrase: >-
+      {% if item['ssh_key_password'] is not defined or item['ssh_key_password'] is falsy or item['ssh_key_password'] == "password" -%}
+      {{ lookup('community.general.passwordstore', __password_lookup) }}
+      {%- else -%}
+      {{ item['ssh_key_password'] }}
+      {%- endif %}
+  when:
+    - (item.shell is not defined) or (item.shell != "/usr/sbin/nologin")
+  register: ssh_gen_results
+
+- name: "Create SSH Principals file for users."
+  ansible.builtin.template:
+    src: "etc/ssh/auth_principals/ssh_principals.j2"
+    dest: "/etc/ssh/auth_principals/{{ item['username'] }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ __users }}"
+  become: true
+  when:
+    - (item.shell is not defined) or (item.shell != "/usr/sbin/nologin")
+
+# ==================================================================================================
+#
+# Configure Sudoers for each user
+#
+# ...
+#
+# ==================================================================================================
+- name: "Setup Sudoers file for users"
+  ansible.builtin.template:
+    src: "etc/sudoers.d/user_sudoers.j2"
+    dest: "/etc/sudoers.d/user_{{ item['username'] }}"
+    owner: "root"
+    group: "root"
+    mode: "0440"
+    validate: /usr/sbin/visudo -csf %s
+  loop: "{{ __users }}"
+  become: true
+  when:
+    - item.sudoers is defined
+    - (item.shell is not defined) or (item.shell != "/usr/sbin/nologin")
+
+# - name: "Setup Sudoers file for applications"
+#   ansible.builtin.template:
+#     src: "user_sudoers.j2"
+#     dest: "/etc/sudoers.d/application_{{ item.application }}"
+#     owner: "root"
+#     group: "root"
+#     mode: "0440"
+#     validate: /usr/sbin/visudo -csf %s
+#   loop: "{{ users_sudoers_options }}"
+#   become: true
+#   tags:
+#     - users
+#     - users_debug
+#     - users-debug
+
+# ==================================================================================================
+#
+# Delete no longer defined users
+#
+# ...
+#
+# ==================================================================================================
+- name: "Identify ansible managed users existing on the system."
+  ansible.builtin.shell:
+    cmd: >-
+      set -o pipefail &&
+      grep {{ autonomy_users_group_ansible_managed }} /etc/group |
+      cut -d: -f4 |
+      tr "," "\n"
+    executable: "/bin/bash"
+  changed_when: false
+  register: existing_users
+
+- name: "Get inventory defined users into a list."
+  ansible.builtin.set_fact:
+    __username_list: "{{ __username_list + [ item.username ] }}"
+  loop: "{{ __users }}"
+
+# This currently fails because it needs a straight list of users.  Currently "users" list each item
+# is a dictionary.  Containing user configuration options
+- name: "Identify user accounts to be removed."
+  ansible.builtin.set_fact:
+    __removed_users: "{{ existing_users.stdout_lines | difference(__username_list) }}"
+
+- name: "Delete user accounts to be removed."
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ __removed_users }}"
+  become: true
+
+- name: "Remove sudoers for accounts that no longer exist."
+  ansible.builtin.file:
+    name: "/etc/sudoers.d/{{ item }}"
+    state: absent
+  loop: "{{ __removed_users }}"
+  become: true
+
+# ==================================================================================================
+#
+#
+#
+# ==================================================================================================
+# - name: Add Users' SSH keys to gitolite.
+#   fetch:
+#     src: "/home/{{ item.username }}/.ssh/id_ed25519.pub"
+#     dest: "~/gitolite-admin/keydir/{{ inventory_hostname }}/{{ item.usename }}.pub"
+#   loop: "{{ users }}"
+#   tags:
+#     - users
+#     - users_debug
+#     - users-debug
+
+
+#  LocalWords:  nosymbols

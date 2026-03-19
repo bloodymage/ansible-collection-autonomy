@@ -1,5 +1,22 @@
 ---
-# tasks file for dns-update
+# tasks file for maintenance
+- name: Include OS-specific variables.
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: false
+  tags:
+    - dns
+    - dns-nsupdate
+    - dns-cloudflare
+    - system_upgrade
+    - system-upgrade
+    - system_upgrade_debug
+    - system-upgrade-debug
+
 - name: "Include DNS Tasks."
   include_tasks: "dns.yml"
   when:

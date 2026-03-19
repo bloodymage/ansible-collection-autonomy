@@ -4,7 +4,7 @@
     commands:
       - /system package update check-for-updates
   register: routeros_resources
-  become: no
+  become: false
   changed_when: false
   tags:
     - system_upgrade
@@ -22,7 +22,7 @@
     installed_version: "{{ __lines[0][5].split(':')[1].split(' ')[1] | trim }}"
     available_version: "{{ __lines[0][6].split(':')[1].split(' ')[1] | trim }}"
     status: "{{ __lines[0][7].split(':')[1] | trim }}"
-  become: no
+  become: true
   tags:
     - system-upgrade
     - system_upgrade

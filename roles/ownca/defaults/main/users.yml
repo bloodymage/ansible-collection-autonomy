@@ -1,0 +1,95 @@
+---
+# Users
+autonomy_ownca_users_dir: "{{ autonomy_ownca_dir }}/users"
+autonomy_ownca_users_private_dir: "{{ autonomy_ownca_users_dir }}/private"
+autonomy_ownca_users_private_dir_owner: "{{ autonomy_ownca_user }}"
+autonomy_ownca_users_private_dir_group: "{{ autonomy_ownca_group }}"
+autonomy_ownca_users_private_dir_mode: "0700"
+
+autonomy_ownca_users_csr_dir: "{{ autonomy_ownca_users_dir }}/csr"
+autonomy_ownca_users_csr_dir_owner: "{{ autonomy_ownca_user }}"
+autonomy_ownca_users_csr_dir_group: "{{ autonomy_ownca_group }}"
+autonomy_ownca_users_csr_dir_mode: "0700"
+
+autonomy_ownca_users_pkcs12_dir: "{{ autonomy_ownca_users_dir }}/pkcs12"
+autonomy_ownca_users_pkcs12_dir_owner: "{{ autonomy_ownca_user }}"
+autonomy_ownca_users_pkcs12_dir_group: "{{ autonomy_ownca_group }}"
+autonomy_ownca_users_pkcs12_dir_mode: "0700"
+
+autonomy_ownca_users_certs_dir: "{{ autonomy_ownca_users_dir }}/certs"
+autonomy_ownca_users_certs_dir_owner: "{{ autonomy_ownca_user }}"
+autonomy_ownca_users_certs_dir_group: "{{ autonomy_ownca_group }}"
+autonomy_ownca_users_certs_dir_mode: "0700"
+
+autonomy_ownca_users_crls_dir: "{{ autonomy_ownca_users_dir }}/crls"
+autonomy_ownca_users_crls_dir_owner: "{{ autonomy_ownca_user }}"
+autonomy_ownca_users_crls_dir_group: "{{ autonomy_ownca_group }}"
+autonomy_ownca_users_crls_dir_mode: "0700"
+
+autonomy_ownca_users_dirs:
+  - name: "{{ autonomy_ownca_users_private_dir }}"
+    owner: "{{ autonomy_ownca_users_private_dir_owner }}"
+    group: "{{ autonomy_ownca_users_private_dir_group }}"
+    mode: "{{ autonomy_ownca_users_private_dir_mode }}"
+  - name: "{{ autonomy_ownca_users_csr_dir }}"
+    owner: "{{ autonomy_ownca_users_csr_dir_owner }}"
+    group: "{{ autonomy_ownca_users_csr_dir_group }}"
+    mode: "{{ autonomy_ownca_users_csr_dir_mode }}"
+  - name: "{{ autonomy_ownca_users_pkcs12_dir }}"
+    owner: "{{ autonomy_ownca_users_pkcs12_dir_owner }}"
+    group: "{{ autonomy_ownca_users_pkcs12_dir_group }}"
+    mode: "{{ autonomy_ownca_users_pkcs12_dir_mode }}"
+  - name: "{{ autonomy_ownca_users_certs_dir }}"
+    owner: "{{ autonomy_ownca_users_certs_dir_owner }}"
+    group: "{{ autonomy_ownca_users_certs_dir_group }}"
+    mode: "{{ autonomy_ownca_users_certs_dir_mode }}"
+  - name: "{{ autonomy_ownca_users_crls_dir }}"
+    owner: "{{ autonomy_ownca_users_crls_dir_owner }}"
+    group: "{{ autonomy_ownca_users_crls_dir_group }}"
+    mode: "{{ autonomy_ownca_users_crls_dir_mode }}"
+
+# autonomy_ownca_user_pki_dirs:
+#   - name: private
+#     mode: "0755"
+#   - name: csr
+#     mode: "0755"
+#   - name: "certs"
+#     mode: "0755"
+#   - name: "pkcs12"
+#     mode: "0755"
+#   - name: "ssh"
+#     mode: "0755"
+
+# autonomy_ownca_user_directories:
+#   - name: "csr"
+#     mode: "0755"
+#   - name: "certs"
+#     mode: "0755"
+
+# ==================================================================================================
+#
+# While I know the key usage and extended key usage work, I am not sure if they are right.
+#
+# ==================================================================================================
+autonomy_ownca_user_cert_purposes:
+  - name: authentication
+    key_usage:
+      - "nonRepudiation"
+      - "digitalSignature"
+      - "keyEncipherment"
+    extended_key_usage:
+      - "clientAuth"
+      - "msSmartcardLogin"
+  - name: identification
+    key_usage:
+      - "digitalSignature"
+    extended_key_usage:
+      - "emailProtection"
+      - "clientAuth"
+  - name: encryption
+    key_usage:
+      - "keyEncipherment"
+    extended_key_usage:
+      - "emailProtection"
+      - "1.3.6.1.4.1.311.67.1.1"
+      #- "msEFS"

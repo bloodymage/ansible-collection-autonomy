@@ -1,0 +1,17 @@
+---
+- name: "Copy Certificates to host."
+  ansible.builtin.copy:
+    src: "{{ item['src'] }}"
+    dest: "{{ item['dest'] }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop: "{{ autonomy_acmeca_sysconf_cert_paths }}"
+  become: true
+  notify:
+    - restart acmeca
+  tags:
+    - acmeca
+    - acmeca-cert
+    - acmeca-certs
+    - acmeca-dns

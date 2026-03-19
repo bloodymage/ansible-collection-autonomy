@@ -1,0 +1,13 @@
+---
+# .gitconfig
+autonomy_users_gitconfig_user_use_config_only: "{{ autonomy_gitconfig_user_use_config_only }}"
+autonomy_users_gitconfig_core_editor: "{{ autonomy_gitconfig_core_editor }}"
+autonomy_users_gitconfig_core_pager: "{{ autonomy_gitconfig_core_pager }}"
+autonomy_users_gitconfig_core_excludes_file: ""
+autonomy_users_gitconfig_init_default_branch: "{{ autonomy_gitconfig_init_default_branch }}"
+autonomy_users_gitconfig_init_template_dir: "{{ autonomy_gitconfig_init_template_dir }}"
+
+# .gitignore
+autonomy_users_gitignore: []
+
+#  LocalWords:  gitconfig

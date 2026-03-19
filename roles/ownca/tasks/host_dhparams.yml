@@ -13,12 +13,12 @@
 # ==================================================================================================
 - name: "Generate Diffie-Hellman Parameters."
   community.crypto.openssl_dhparam:
-    path: "/etc/ssl/dhparams/{{ autonomy_fqdn }}.pem"
+    path: "/etc/ssl/dhparams/{{ inventory_hostname }}.pem"
     owner: "root"
     group: "root"
     mode: "0644"
     backup: true
-    #force: "{{ __ownca_regenerate_csr }}"
+    #force: "{{ __autonomy_common_ownca_regenerate_csr }}"
   become: true
   notify:
     - restart tls

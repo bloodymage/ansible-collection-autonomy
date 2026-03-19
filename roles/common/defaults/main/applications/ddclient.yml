@@ -1,0 +1,3 @@
+---
+autonomy_common_ddclient_daemon: "ddclient"
+autonomy_common_ddclient_package: "ddclient"

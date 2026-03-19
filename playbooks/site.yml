@@ -29,38 +29,41 @@
         - never
         - ansible
 
-- name: "Configure the Ansible Control node."
+- name: "Run Control Node Playbook."
   import_playbook: control.yml
 
-- name: "Configure SshCA."
+- name: "Run SshCA Playbook."
   import_playbook: sshca.yml
 
-- name: "Configure OwnCA."
-  import_playbook: ownca.yml
+- name: "Run OwnCA Certificate Authorities Playbook."
+  import_playbook: ownca_certificate_authorities.yml
 
-- name: "Basic Configuration for all hosts."
+- name: "Run AcmeCA Account Playbook."
+  import_playbook: acmeca_account.yml
+
+- name: "Run All Hosts Playbook."
   import_playbook: all.yml
 
-- name: "Configure DNS Servers."
+- name: "Run DNS Servers Playbook."
   import_playbook: dnsservers.yml
 
-- name: "Configure NTP."
+- name: "Run NTP Playbook."
   import_playbook: ntp.yml
 
-# - name: "Configure Realm Identity Management."
+# - name: "Run Identity Management Playbook."
 #   import_playbook: realm.yml
 
-# - name: "Configure File Servers."
+# - name: "Run File Servers Playbook."
 #   import_playbook: fileservers.yml
 
-# - name: "Configure Database Servers."
+# - name: "Run Database Servers Playbook."
 #   import_playbook: dbservers.yml
 
-# - name: "Configure Web Servers."
+# - name: "Run Web Servers Playbook."
 #   import_playbook: webservers.yml
 
-# - name: "Configure Mail Servers."
+# - name: "Run Mail Servers Playbook."
 #   import_playbook: mailservers.yml
 
-# - name: "Configure Workstations."
+# - name: "Run Workstations Playbook."
 #   import_playbook: workstations.yml

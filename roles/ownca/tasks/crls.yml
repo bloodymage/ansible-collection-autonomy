@@ -10,37 +10,6 @@
 #   - /etc/ssl/certs   mode: 0755
 #
 # ==================================================================================================
-- name: Include OS-specific variables.
-  include_vars: "{{ lookup('first_found', params) }}"
-  vars:
-    params:
-      files: "{{ __os_variables_files }}"
-      paths:
-        - "vars"
-  become: no
-  tags:
-    - ownca_crl
-    - ownca-crl
-    - ownca_crl_debug
-    - ownca-crl-debug
-    - ownca-all
-    - install-packages
-
-- name: "Install packages"
-  ansible.builtin.package:
-    pkg: "{{ autonomy_ownca_packages }}"
-    state: present
-  become: yes
-  register: result
-  delegate_to: localhost
-  tags:
-    - ownca_crl
-    - ownca-crl
-    - ownca_crl_debug
-    - ownca-crl-debug
-    - ownca-all
-    - install-packages
-
 - name: "Create SSL CRL Directory"
   ansible.builtin.file:
     path: "/etc/ssl/crls"
@@ -48,12 +17,21 @@
     owner: root
     group: root
     mode: "0755"
-  become: yes
+  become: true
   tags:
-    - ownca_crl
     - ownca-crl
-    - ownca_crl_debug
-    - ownca-crl-debug
+
+- name: "Create crl serial file."
+  ansible.builtin.template:
+    src: "serial.j2"
+    dest: "{{ autonomy_common_ownca_ca_db_dir }}/{{ autonomy_common_org_name }}-{{ item.name }}-ca.crl.srl"
+    owner: "{{ autonomy_ownca_ca_db_dir_owner }}"
+    group: "{{ autonomy_ownca_ca_db_dir_group }}"
+    mode: "0600"
+    force: no
+  loop: "{{ autonomy_common_ownca_certificate_authorities }}"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
 
 # ==================================================================================================
 #
@@ -62,21 +40,21 @@
 # ==================================================================================================
 - name: "Generate a CRL."
   community.crypto.x509_crl:
-    path: "{{ ownca_directory }}/certificate_authorities/crl/{{ autonomy_org_name }}-{{ item.name }}-ca.crl"
-    privatekey_path: "{{ ownca_directory }}/certificate_authorities/private/{{ autonomy_org_name }}-{{ item.name }}-ca.key"
+    path: "{{ autonomy_common_ownca_ca_crl_dir }}/{{ autonomy_common_org_name }}-{{ item.name }}-ca.crl"
+    privatekey_path: "{{ autonomy_common_ownca_ca_private_key_dir }}/{{ autonomy_common_org_name }}-{{ item.name }}-ca.key"
     privatekey_passphrase: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
     issuer:
       CN: "{{ item.common_name }}"
     last_update: "+0s"
     next_update: "+7d"
     revoked_certificates: "{{ item.revoked_certificates | default(ownca_revoked_certificates) }}"
-  loop: "{{ ownca_certificate_authorities }}"
+  loop: "{{ autonomy_common_ownca_certificate_authorities }}"
   vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ item.domain }}/ownca/ownca_{{ item.ca_id }}_password"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ item.domain }}/ownca/ownca_{{ item.ca_id }}_password"
     __password_lookup: "{{ __password_store_id }}"
-  #  __revoked_certificate_serials: "{{ lookup('file', ownca_directory + '/certificate_authorities/db/' + autonomy_org_name + '-' + item.name +'-ca.crl.srl').splitlines() }}"
-  become: no
-  delegate_to: localhost
+  #  __revoked_certificate_serials: "{{ lookup('file', ownca_directory + '/certificate_authorities/db/' + autonomy_common_org_name + '-' + item.name +'-ca.crl.srl').splitlines() }}"
+  become: false
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
   tags:
     - ownca_crl
     - ownca-crl

@@ -1,0 +1,93 @@
+---
+- name: "Generate Issuing CAs Private Key."
+  community.crypto.openssl_privatekey:
+    path: "{{ item['key_path'] }}"
+    passphrase: "{{ __password }}"
+    type: "{{ autonomy_ownca_privatekey_type }}"
+    size: "{{ autonomy_ownca_privatekey_size }}"
+    cipher: "auto"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0400"
+  loop: "{{ autonomy_ownca_issuingcas }}"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
+  vars:
+    __password: >-
+      {% if item['password'] == "password" and item['password_lookup'] is defined and item['password_lookup'] is truthy -%}
+      {{ lookup('community.general.passwordstore', item['password_lookup']) }}
+      {%- else -%}
+      {{ item['password'] }}
+      {%- endif %}
+
+# ==================================================================================================
+#
+# Generate's the Issing CA's CSR.
+#
+# Note:
+# - item[0].org_unit_name check in when clause is added because this loops through all Certificate
+#   Authorities.  The 'Root' CA does not have an organizational unit.  It is the organization.
+#
+# ==================================================================================================
+- name: "Generate Issuing Certificate Authority Certificate Signing Requests (CSR)."
+  community.crypto.openssl_csr:
+    path: "{{ item['csr_path'] }}"
+    privatekey_path: "{{ item['key_path'] }}"
+    privatekey_passphrase: "{{ __password }}"
+    common_name: "{{ item['common_name'] }}"
+    country_name: "{{ item['country_name'] | default(omit) }}"
+    email_address: "{{ item['email_address'] | default(omit) }}"
+    organization_name: "{{ item['org_name'] }}"
+    organizational_unit_name: "{{ item['org_unit_name'] }}"
+    state_or_province_name: "{{ item['region_name'] }}"
+    key_usage: "{{ item['keyusage'] }}"
+    key_usage_critical: "{{ item['keyusage_critical'] }}"
+    basic_constraints: "{{ item['basic_constraints'] }}"
+    basic_constraints_critical: "{{ item['basic_constraints_critical'] }}"
+    create_subject_key_identifier: "{{ item['create_subject_key_id'] }}"
+    authority_cert_issuer: "{{ __autonomy_ownca_intermediateca_cert_info['subject_alt_name'] }}"
+    authority_cert_serial_number: "{{ __autonomy_ownca_intermediateca_cert_info['serial_number'] }}"
+    authority_key_identifier: "{{ __autonomy_ownca_intermediateca_cert_info['subject_key_identifier'] }}"
+    crl_distribution_points:
+      - full_name: "URI:{{ item['crl_url'] }}"
+        reasons: "{{ item['crl_reasons'] }}"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    backup: true
+    state: present
+  loop: "{{ autonomy_ownca_issuingcas }}"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
+  vars:
+    __password: >-
+      {% if item['password'] == "password" and item['password_lookup'] is defined and item['password_lookup'] is truthy -%}
+      {{ lookup('community.general.passwordstore', item['password_lookup']) }}
+      {%- else -%}
+      {{ item['password'] }}
+      {%- endif %}
+
+- name: "Generate Issuing CA Signed Certificate."
+  community.crypto.x509_certificate:
+    path: "{{ item['cert_path'] }}"
+    csr_path: "{{ item['csr_path'] }}"
+    ownca_path: "{{ autonomy_ownca_intermediateca_cert_path }}"
+    ownca_privatekey_path: "{{ autonomy_ownca_intermediateca_key_path }}"
+    ownca_privatekey_passphrase: "{{ __password }}"
+    provider: "ownca"
+    backup: true
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    #force: "{{ __autonomy_ownca_force_regenerate_issuing_ca }}"
+  loop: "{{ autonomy_ownca_issuingcas }}"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
+  vars:
+    __password: >-
+      {% if autonomy_ownca_intermediateca_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_ownca_intermediateca_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_ownca_intermediateca_password }}
+      {%- endif %}
+  notify:
+    - "regenerate host certificates"
+    - "regenerate user certificates"

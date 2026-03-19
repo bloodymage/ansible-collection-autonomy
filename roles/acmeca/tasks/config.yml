@@ -1,0 +1,107 @@
+---
+- name: "Force account private key regeneration."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_regenerate_account_key: true
+  become: false
+  tags:
+    - never
+    - ca-regenerate
+    - acmeca-regenerate
+    - acmeca-regenerate-account
+
+- name: "Force host private key regeneration."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_regenerate_host_key: true
+    autonomy_acmeca_regenerate_host_cert: true
+  become: false
+  tags:
+    - never
+    - ca-regenerate
+    - acmeca-regenerate
+    - acmeca-regenerate-host
+    - acmeca-regenerate-host-key
+
+- name: "Force host csr key regeneration."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_regenerate_host_csr: true
+  become: false
+  tags:
+    - never
+    - ca-regenerate
+    - acmeca-regenerate
+    - acmeca-regenerate-host
+    - acmeca-regenerate-host-key
+    - acmeca-regenerate-host-csr
+
+- name: "Force host csr key regeneration."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_regenerate_host_cert: true
+  become: false
+  tags:
+    - never
+    - ca-regenerate
+    - acmeca-regenerate
+    - acmeca-regenerate-host
+    - acmeca-regenerate-host-key
+    - acmeca-regenerate-host-csr
+    - acmeca-regenerate-host-cert
+
+- name: "Set to use ZeroSSL CA."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_url: "https://acme.zerossl.com/v2/DV90"
+  become: false
+  when:
+    - autonomy_acmeca_method == "zerossl"
+  tags:
+    - acmeca
+    - acmeca-test
+
+- name: "Set to use Sectigo CA."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_url: "https://acme-qa.secure.trust-provider.com/v2/DV"
+  become: false
+  when:
+    - autonomy_acmeca_method == "sectigo"
+  tags:
+    - acmeca
+    - acmeca-test
+
+- name: "Set to use HARICA CA."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_url: "https://acme.harica.gr/{{ autonomy_acmeca_harica_id }}/directory"
+  become: false
+  when:
+    - autonomy_acmeca_method == "harica"
+    - autonomy_acmeca_harica_id is truthy
+  tags:
+    - acmeca
+    - acmeca-test
+
+- name: "Set to use staging configuration."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_sysconf_dir: "{{ autonomy_acmeca_sysconf_base_dir }}/staging"
+    autonomy_acmeca_user_dir: "{{ autonomy_acmeca_user_base_dir }}/staging"
+    autonomy_acmeca_url: "https://acme-staging-v02.api.letsencrypt.org/directory"
+  become: false
+  when:
+    - autonomy_acmeca_method == "letsencrypt"
+  tags:
+    - never
+    - acmeca-test
+
+- name: "Check if host is in 'apache' group."
+  ansible.builtin.set_fact:
+    autonomy_acmeca_sysconf_dir_group: "ssl-cert"
+    autonomy_acmeca_sysconf_dir_mode: "0750"
+  when:
+    - inventory_hostname in groups['apache_servers'] | default([])
+  tags:
+    - acmeca
+    - acmeca-test
+
+- name: "Run ACME Account Tasks (Local Configuration)."
+  include_tasks: "config_local.yml"
+  tags:
+    - acmeca
+    - acmeca-account
+    - acmeca-test

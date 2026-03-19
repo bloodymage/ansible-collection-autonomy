@@ -1,9 +1,12 @@
 ---
 # defaults file for cron
-autonomy_packages:
-  - cron
+autonomy_cron_packages:
+  - "{{ autonomy_common_cron_package }}"
 
-cron_entries:
+autonomy_cron_file: "crontab"
+autonomy_cron_path: "{{ autonomy_common_sysconf_dir }}/{{ autonomy_cron_file }}"
+
+autonomy_cron_entries:
   - name: "hourly"
     minute: "17"
     hour: "*"
@@ -36,4 +39,3 @@ cron_entries:
     day_of_week: "*"
     user: "root"
     command: "test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )"
-

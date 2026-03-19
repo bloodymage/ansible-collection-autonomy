@@ -1,0 +1,54 @@
+---
+# ==================================================================================================
+#
+# Emacs.d
+#
+# ==================================================================================================
+- name: "Ensure Emacs.d exists for users."
+  ansible.builtin.file:
+    path: "{{ __emacsd_path }}"
+    owner: "{{ __dotfiles_owner }}"
+    group: "{{ __dotfiles_group }}"
+    mode: "0755"
+    state: "directory"
+  loop: "{{ autonomy_users_dotfiles_users }}"
+  become: true
+  vars:
+    __dotfiles_home: "{{ item['unix_home'] | default(autonomy_users_dotfiles_home + '/' + item.username) }}"
+    __emacsd_path: >-
+      {% if autonomy_users_dotfiles_emacs_use_xdg_config_home %}
+      {{ __dotfiles_home }}/.config/{{ autonomy_users_dotfiles_emacs_dir }}
+      {% else %}
+      {{ __dotfiles_home }}/.{{ autonomy_users_dotfiles_emacs_dir }}
+      {% endif %}
+    __dotfiles_owner: "{{ cifs_owner | default(item.id_number) }}"
+    __dotfiles_group: "{{ cifs_group | default(item.id_number) }}"
+    __mode: "{{ cifs_file_mode | default(autonomy_user_dotfiles_mode) }}"
+  when:
+    - autonomy_users_dotfiles_users is defined
+    - autonomy_users_dotfiles_emacsd_repo is truthy
+    - autonomy_common_emacs_enable
+    - (item.shell is not defined) or (item.shell != "/usr/sbin/nologin")
+
+- name: "Install Emacs.d for users."
+  ansible.builtin.git:
+    repo: "{{ __repo }}"
+    dest: "{{ __dotfiles_home }}/.emacs.d"
+    remote: "{{ autonomy_users_dotfiles_emacsd_repo_remote }}"
+    version: "{{ autonomy_users_dotfiles_emacsd_repo_version }}"
+    clone: true
+    update: true
+  loop: "{{ autonomy_users_dotfiles_users }}"
+  become: true
+  become_user: "{{ __user }}"
+  vars:
+    __dotfiles_home: "{{ item.unix_home | default(autonomy_users_dotfiles_home + '/' + item.username) }}"
+    __user: "{{ item.username }}"
+    __repo: "{{ autonomy_user_dotfiles_emacsd_repo }}"
+    __ssh_repo: "{{ autonomy_user_dotfiles_emacsd_ssh_repo }}"
+    __repo: "{% if __user in autonomy_github_users %}{{ __ssh_repo }}{% else %}{{ __http_repo }}{% endif %}"
+  when:
+    - autonomy_users_dotfiles_users is defined
+    - autonomy_users_dotfiles_emacsd_repo is truthy
+    - autonomy_common_emacs_enable
+    - (item.shell is not defined) or (item.shell != "/usr/sbin/nologin")

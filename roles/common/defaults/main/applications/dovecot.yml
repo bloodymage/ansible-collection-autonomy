@@ -1,0 +1,18 @@
+---
+autonomy_common_dovecot_daemon: "dovecot"
+autonomy_common_dovecot_package: "dovecot-core"
+
+# Directories
+autonomy_common_dovecot_sysconf_dir: "{{ autonomy_common_sysconf_dir }}/dovecot"
+
+# Files
+autonomy_common_dovecot_keytab_file: "dovecot.keytab"
+
+# Paths
+autonomy_common_dovecot_keytab_path: "{{ autonomy_common_dovecot_sysconf_dir }}/{{ autonomy_common_dovecot_keytab_file }}"
+
+domain_mail_user_spns:
+  - spn: "imap"
+    keytab_file: "{{ autonomy_common_dovecot_keytab_path }}"
+  - spn: "smtp"
+    keytab_file: "{{ autonomy_common_dovecot_keytab_path }}"

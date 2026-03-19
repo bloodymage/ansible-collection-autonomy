@@ -1,0 +1,30 @@
+---
+# ==================================================================================================
+#
+# 'Certificate Authority Proxies' hosts should be 1 host per zone.
+#
+# host1.zone1.example.com
+# host1.zone2.example.com
+# host3.zone3.example.com
+#
+# The actions will always take place on the certificate authority host (usually localhost), but
+# these hosts will be used to identify the intermediate authorities required.
+#
+# ==================================================================================================
+- name: "Setup the TLS Certificate Authorities."
+  hosts: certificate_authority_proxies # all:!localhost:!public_zone #:!vendor_managed
+  roles:
+    - role: bloodymage.autonomy.ownca
+      vars:
+        __ownca_tasks: "ownca"
+      tags:
+        - ownca
+        - regenerate-ownca
+    - role: bloodymage.autonomy.ownca
+      vars:
+        __ownca_tasks: "crls"
+      tags:
+        - ownca
+        - regenerate-ownca
+        - ownca_crl
+        - ownca-crl

@@ -25,8 +25,8 @@
       parent: "samba_domain"
   when:
     - inventory_hostname in groups[item.name] | default([])
-    #- inventory_hostname in groups[autonomy_zone_name] | default([])
-    #- groups['samba_domain_controllers'][0] in groups[autonomy_zone_name] | default([])
+    #- inventory_hostname in groups[autonomy_common_zone_name] | default([])
+    #- groups['samba_domain_controllers'][0] in groups[autonomy_common_zone_name] | default([])
   changed_when: False
 
 # ==================================================================================================
@@ -41,6 +41,6 @@
 # - name: "Update password and auth mechanims."
 #   ansible.builtin.set_fact:
 #     autonomy_realm_identity_management_system: "ad"
-#   become: no
+#   become: false
 #   when:
 #     - groups['samba_domain_controllers'] is defined

@@ -1,0 +1,119 @@
+---
+# ==================================================================================================
+#
+# Tasks: Copy Host Certificate back to Server.
+#  
+#
+# ==================================================================================================
+- name: "Copy Host Certificate."
+  ansible.builtin.copy:
+    src: "{{ autonomy_ownca_hosts_cert_path }}"
+    dest: "{{ autonomy_ownca_host_usr_cert_path }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  become: true
+  notify: restart tls
+
+- name: "Copy Host Certificate Chain."
+  ansible.builtin.copy:
+    src: "{{ autonomy_ownca_hosts_chain_path }}"
+    dest: "{{ autonomy_ownca_host_usr_chain_path }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  become: true
+  notify: restart tls
+
+# - name: "Copy domain controllers' certificate to server."
+#   ansible.builtin.copy:
+#     src: "{{ ownca_hosts_directory }}/certs/{{ item }}.crt"
+#     dest: "/usr/local/share/ca-certificates/{{ item }}.crt"
+#     owner: root
+#     group: root
+#     mode: "0644"
+#   become: true
+#   loop: "{{ groups['samba_domain_controllers'] | default([]) }}"
+#   when:
+#     - autonomy_realm_identity_management_system is truthy
+#   notify: restart tls
+
+# - name: "Copy domain controllers' certificate chain to server."
+#   ansible.builtin.copy:
+#     src: "{{ ownca_hosts_directory }}/certs/{{ item }}-chain.crt"
+#     dest: "/usr/local/share/ca-certificates/{{ item }}-chain.crt"
+#     owner: root
+#     group: root
+#     mode: "0644"
+#   become: true
+#   loop: "{{ groups['samba_domain_controllers'] | default([]) }}"
+#   when:
+#     - autonomy_realm_identity_management_system is truthy
+#   notify: restart tls
+
+- name: "Copy CA Certificates to server."
+  ansible.builtin.copy:
+    src: "{{ item['src'] }}"
+    dest: "{{ item['dest'] }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ autonomy_ownca_ca_certs }}"
+  become: true
+  notify: restart tls
+
+# - name: "Copy CA Certificate Chains to server."
+#   ansible.builtin.copy:
+#     src: "{{ item['src'] }}"
+#     dest: "{{ item['dest'] }}"
+#     owner: root
+#     group: root
+#     mode: "0644"
+#   loop: "{{ autonomy_ownca_ca_chains }}"
+#   become: true
+#   notify: restart tls
+
+# - name: "Copy CRLs to server."
+#   ansible.builtin.copy:
+#     src: "{{ autonomy_ownca_ca_directory }}/crl/{{ autonomy_common_org_name }}-{{ item.name }}-ca.crl"
+#     dest: "{{ ownca_etc }}/crls/{{ autonomy_common_org_name }}-{{ item.name }}-ca.crl"
+#     owner: root
+#     group: root
+#     mode: "0644"
+#   loop: "{{ ownca_certificate_authorities }}"
+#   become: true
+
+- name: "Generate PKCS#12 file."
+  community.crypto.openssl_pkcs12:
+    path:  "{{ autonomy_ownca_host_sysconf_pkcs12_path }}"
+    certificate_path: "{{ autonomy_ownca_host_usr_cert_path }}"
+    privatekey_path: "{{ autonomy_ownca_host_private_key_path }}"
+    passphrase: "{{ __password }}"
+    other_certificates:
+      - "{{ autonomy_ownca_componentca_usr_cert_path }}"
+      - "{{ autonomy_ownca_intermediateca_usr_cert_path }}"
+      - "{{ autonomy_ownca_rootca_usr_cert_path }}"
+    friendly_name: "{{ inventory_hostname }}"
+    action: export
+    owner: "{{ autonomy_ownca_host_pkcs12_owner }}"
+    group: "{{ autonomy_ownca_host_pkcs12_group }}"
+    mode: "{{ autonomy_ownca_host_pkcs12_mode }}"
+    state: present
+    backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
+    #force: "{{ __autonomy_common_ownca_regenerate_csr }}"
+  become: true
+  vars:
+    __password: >-
+      {% if autonomy_ownca_host_pkcs12_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_ownca_host_pkcs12_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_ownca_host_pkcs12_password }}
+      {%- endif %}
+
+
+# - name: Fetch PKCS#12 files
+#   ansible.builtin.fetch:
+#     src: "{{ ownca_etc }}/csr/{{ inventory_hostname }}.csr"
+#     dest: "{{ ownca_hosts_directory }}/csr/"
+#     flat: true
+#   become: true

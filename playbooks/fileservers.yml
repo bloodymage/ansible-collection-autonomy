@@ -1,6 +1,6 @@
 ---
 - name: "Prepare playbook environment."
-  hosts: all:!wifi_access_points:!routers:!switches:!printers
+  hosts: all:!vendor_managed
   ignore_unreachable: true
   roles:
     - role: bloodymage.autonomy.autoconfig
@@ -35,7 +35,6 @@
 - name: "Configure NFS Servers"
   hosts: nfs_file_servers
   roles:
-    - role: bloodymage.autonomy.nfs_server
+    - role: bloodymage.autonomy.nfsserver
       tags:
-        - nfs-server
-        - nfs_server
+        - nfsserver

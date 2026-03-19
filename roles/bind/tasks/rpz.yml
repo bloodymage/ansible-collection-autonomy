@@ -4,46 +4,57 @@
     src: "etc/bind/{{ autonomy_bind_rpz_file }}.j2"
     dest: "{{ autonomy_bind_rpz_path }}"
     owner: root
-    group: root
+    group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    validate: "{{ __bind_named_checkconf }} %s"
+    #validate: "{{ __bind_named_checkconf }} %s"
   become: true
   when:
-    - autonomy_virtual_host is falsy
+    - autonomy_common_virtual_host is falsy
   notify: restart bind
 
 - name: "Install RPZ Zonefiles (File Definition)."
   ansible.builtin.copy:
     src: "var/lib/bind/{{ item['file'] }}"
     dest: "{{ item['path'] }}"
-    owner: "{{ autonomy_bind_owner }}"
-    group: "{{ autonomy_bind_group }}"
+    owner: "{{ autonomy_common_bind_owner }}"
+    group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    force: no
-  loop: "{{ autonomy_bind_rpz_zones }}"
+    force: false
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
   become: true
   when:
-    - autonomy_bind_rpz_zones is truthy
+    - autonomy_common_dns_rpz_zones is truthy
     - item['definition'] == 'fixed'
-    - autonomy_virtual_host is falsy
+    - autonomy_common_virtual_host is falsy
 
 - name: "Install RPZ Zonefiles (Template definition)."
   ansible.builtin.template:
     src: "var/lib/bind/rpz.j2"
     dest: "{{ item['path'] }}"
-    owner: "{{ autonomy_bind_owner }}"
-    group: "{{ autonomy_bind_group }}"
+    owner: "{{ autonomy_common_bind_owner }}"
+    group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    force: no
-  loop: "{{ autonomy_bind_rpz_zones }}"
+    force: false
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
   become: true
   when:
-    - autonomy_bind_rpz_zones is truthy
+    - autonomy_common_dns_rpz_zones is truthy
     - item['definition'] == 'dynamic'
-    - autonomy_virtual_host is falsy
-    - autonomy_bind_rpz_adblock_zone_type == "primary"
+    - autonomy_common_virtual_host is falsy
+    - item['type'] == "primary"
 
-- name: "Configure Hagezi RPZs."
-  include_tasks: "rpz_hagezi.yml"
+- name: "Download Hagezi RPZ files."
+  ansible.builtin.get_url:
+    url: "{{ item['url'] }}"
+    dest: "{{ item['path'] }}"
+    owner: "{{ autonomy_common_bind_owner }}"
+    group: "{{ autonomy_common_bind_group }}"
+    mode: "0644"
+    force: false
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  become: true
   when:
-    - autonomy_bind_rpz_hagezi_enabled
+    - autonomy_common_virtual_host is falsy
+    - item['type'] == "primary"
+    - item['url'] is defined
+  notify: restart bind

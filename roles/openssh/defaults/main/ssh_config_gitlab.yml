@@ -1,0 +1,14 @@
+---
+# Gitlab
+autonomy_openssh_ssh_conf_gitlab_name: "gitlab"
+autonomy_openssh_ssh_conf_gitlab_path: "{{ autonomy_openssh_ssh_conf_d_dir }}/{{ autonomy_openssh_ssh_conf_gitlab_name }}.conf"
+autonomy_openssh_ssh_conf_gitlab_host: "{{ autonomy_openssh_ssh_conf_gitlab_name }}.com"
+autonomy_openssh_ssh_conf_gitlab_enabled: false
+autonomy_openssh_ssh_conf_gitlab_pkcs11_provider: "{{ autonomy_openssh_ssh_conf_d_pkcs11_provider }}"
+
+autonomy_openssh_ssh_conf_gitlab:
+  name: "{{ autonomy_openssh_ssh_conf_gitlab_name }}"
+  path: "{{ autonomy_openssh_ssh_conf_gitlab_path }}"
+  host: "{{ autonomy_openssh_ssh_conf_gitlab_host }}"
+  pkcs11_provider: "{{ autonomy_openssh_ssh_conf_gitlab_pkcs11_provider }}"
+  enabled: "{{ autonomy_openssh_ssh_conf_gitlab_enabled }}"

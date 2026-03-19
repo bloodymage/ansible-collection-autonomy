@@ -1,0 +1,68 @@
+---
+autonomy_ownca_componentca_common_name: "{{ autonomy_common_org_name | title }} {{ autonomy_common_org_unit_name | title }} Component CA"
+autonomy_ownca_componentca_email_address: ""
+autonomy_ownca_componentca_org_name: "{{ autonomy_common_org_name | title }}"
+autonomy_ownca_componentca_org_unit_name: "{{ autonomy_common_org_unit_name | title }}"
+autonomy_ownca_componentca_keyusage:
+    - "keyCertSign"
+    - "cRLSign"
+autonomy_ownca_componentca_keyusage_critical: true
+autonomy_ownca_componentca_basic_constraints:
+  - 'CA:TRUE'
+autonomy_ownca_componentca_basic_constraints_critical: true
+autonomy_ownca_componentca_create_subject_key_identifier: true
+autonomy_ownca_componentca_crl_distribution_points_reasons:
+  - key_compromise
+  - ca_compromise
+  - affiliation_changed
+  - superseded
+  - cessation_of_operation
+  - certificate_hold
+  - privilege_withdrawn
+  - aa_compromise
+autonomy_ownca_componentca_csr_backup: false
+autonomy_ownca_componentca_revoked_certificates: []
+autonomy_ownca_componentca_not_after: "+825d"
+
+# Component CA Files
+autonomy_ownca_componentca_key_file: "{{ autonomy_common_org_name }}-{{ autonomy_common_org_unit_name }}-component-ca.key"
+autonomy_ownca_componentca_csr_file: "{{ autonomy_common_org_name }}-{{ autonomy_common_org_unit_name }}-component-ca.csr"
+autonomy_ownca_componentca_cert_file: "{{ autonomy_common_org_name }}-{{ autonomy_common_org_unit_name }}-component-ca"
+autonomy_ownca_componentca_chain_file: "{{ autonomy_common_org_name }}-{{ autonomy_common_org_unit_name }}-component-ca-chain"
+autonomy_ownca_componentca_crl_file: "{{ autonomy_common_org_name }}-{{ autonomy_common_org_unit_name }}-component.crl"
+
+# Component CA Path
+autonomy_ownca_componentca_key_path: "{{ autonomy_ownca_ca_private_key_dir }}/{{ autonomy_ownca_componentca_key_file }}"
+autonomy_ownca_componentca_csr_path: "{{ autonomy_ownca_ca_csr_dir }}/{{ autonomy_ownca_componentca_csr_file }}"
+autonomy_ownca_componentca_cert_path: "{{ autonomy_ownca_ca_certs_dir }}/{{ autonomy_ownca_componentca_cert_file }}.crt"
+autonomy_ownca_componentca_chain_file_path: "{{ autonomy_ownca_ca_certs_dir }}/{{ autonomy_ownca_componentca_chain_file }}.crt"
+
+autonomy_ownca_componentca_sysconf_cert_path: "{{ autonomy_ownca_sysconf_dir }}/certs/{{ autonomy_ownca_componentca_cert_file }}.pem"
+autonomy_ownca_componentca_sysconf_chain_path: "{{ autonomy_ownca_sysconf_dir }}/certs/{{ autonomy_ownca_componentca_chain_file }}.pem"
+
+autonomy_ownca_componentca_usr_cert_path: "{{ autonomy_ownca_data_dir }}/{{ autonomy_ownca_componentca_cert_file }}.crt"
+autonomy_ownca_componentca_usr_chain_path: "{{ autonomy_ownca_data_dir }}/{{ autonomy_ownca_componentca_chain_file }}.crt"
+
+autonomy_ownca_componentca_crl_path: "{{ autonomy_ownca_ca_crl_dir }}/{{ autonomy_ownca_component_crl_file }}"
+autonomy_ownca_componentca_crl_sysconf_path: "{{ autonomy_ownca_sysconf_dir }}/crls/{{ autonomy_ownca_component_crl_file }}"
+
+autonomy_ownca_componentca_crl_distribution_point_url: "{{ autonomy_ownca_crl_distribution_point }}/{{ autonomy_common_org_name | lower }}-{{ autonomy_common_org_unit_name | lower }}-component-ca.crl"
+
+# Password Config
+autonomy_ownca_componentca_password_length: "{{ autonomy_ownca_password_length }}"
+autonomy_ownca_componentca_password: "password"
+
+autonomy_ownca_componentca_password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_root_domain }}/ownca/ownca_componentca_password"
+autonomy_ownca_componentca_password_store_length: "length={{ autonomy_ownca_componentca_password_length }}"
+autonomy_ownca_componentca_password_store_overwrite: "overwrite={{ autonomy_common_password_overwrite }} backup=yes"
+autonomy_ownca_componentca_password_store_create: "create=true missing=create"
+autonomy_ownca_componentca_password_store_symbols: "nosymbols={{ autonomy_common_password_no_symbols }}"
+autonomy_ownca_componentca_password_store_lookup: >-
+  {{ autonomy_ownca_componentca_password_store_id }}
+  {{ autonomy_ownca_componentca_password_store_length }}
+  {{ autonomy_ownca_componentca_password_store_overwrite }}
+  {{ autonomy_ownca_componentca_password_store_create }}
+  {{ autonomy_ownca_componentca_password_store_symbols }}
+
+
+#  LocalWords:  componentca

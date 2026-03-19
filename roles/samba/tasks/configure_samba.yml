@@ -7,7 +7,7 @@
     group: root
     mode: 0644
     validate: "/usr/bin/testparm -s %s"
-  become: yes
+  become: true
   notify: restart samba
 
 - name: "Configure user.map file."
@@ -17,5 +17,5 @@
     owner: root
     group: root
     mode: 0644
-  become: yes
+  become: true
   notify: restart samba

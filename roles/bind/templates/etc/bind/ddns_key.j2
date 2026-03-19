@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-key "{{ autonomy_zone_name }}" {
-  algorithm {{ autonomy_ddns_key_algorithm }};
+key "{{ autonomy_common_zone_name }}" {
+  algorithm {{ autonomy_common_dyndns_key_algorithm }};
   secret "{{ autonomy_bind_dyndns_secret }}";
 };

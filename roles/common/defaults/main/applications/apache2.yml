@@ -1,0 +1,3 @@
+---
+autonomy_common_apache_daemon: "apache2"
+autonomy_common_apache_package: "apache2"

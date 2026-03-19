@@ -1,0 +1,174 @@
+---
+- name: "Include Host Generation Prep Tasks."
+  include_tasks: "cert_hostgen_prep.yml"
+  when:
+    - not autonomy_acmeca_generate_locally
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+
+- name: "Include Local Generation Prep Tasks."
+  include_tasks: "cert_localgen_prep.yml"
+  when:
+    - autonomy_acmeca_generate_locally
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+
+- name: "Begin Let's Encrypt challenges."
+  community.crypto.acme_certificate:
+    dest: "{{ autonomy_acmeca_user_cert_path }}"
+    chain_dest: "{{ autonomy_acmeca_user_chain_path }}"
+    fullchain_dest: "{{ autonomy_acmeca_user_fullchain_path }}"
+    csr: "{{ autonomy_acmeca_user_csr_path }}"
+    acme_directory: "{{ autonomy_acmeca_url }}"
+    acme_version: "{{ autonomy_acmeca_version }}"
+    account_email: "{{ autonomy_acmeca_account_email }}"
+    account_key_src: "{{ autonomy_acmeca_account_key_path }}"
+    account_key_passphrase: "{{ __password }}"
+    modify_account: false
+    challenge: "{{ autonomy_acmeca_challenge_type }}"
+    remaining_days: 10
+    force: "{{ autonomy_acmeca_regenerate_host_cert }}"
+    request_timeout: 10
+    validate_certs: true
+  become: false
+  delegate_to: localhost
+  register: __autonomy_acmeca_challenge
+  vars:
+    __password: >-
+      {% if autonomy_acmca_account_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_acmca_account_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_acmca_account_password }}
+      {%- endif %}
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+    - acmeca-dns
+    - acmeca-http
+
+- name: "Print acme_challenge."
+  ansible.builtin.debug:
+    msg:
+      - "{{ __autonomy_acmeca_challenge }}"
+    verbosity: 1
+  become: false
+  when:
+    - __autonomy_acmeca_challenge is defined
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-dns
+    - acmeca-http
+
+# - name: "Run HTTP-01 Challenge Tasks."
+#   include_tasks: "http_challenge.yml"
+#   when:
+#     - autonomy_acmeca_challenge_type == "http-01"
+#     - acme_challenge is defined
+#     - acme_challenge['challenge_data'][inventory_hostname] is defined
+#     - acme_challenge.changed
+#   tags:
+#     - acmeca
+#     - acmeca-http
+
+- name: "Run DNS-01 Challenge Tasks."
+  include_tasks: "cert_dns_challenge.yml"
+  when:
+    - autonomy_acmeca_challenge_type == "dns-01"
+    - __autonomy_acmeca_challenge is defined
+    - __autonomy_acmeca_challenge['challenge_data_dns'] is defined
+    - __autonomy_acmeca_challenge.changed
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+    - acmeca-dns
+
+- name: "Complete Let's Encrypt challenges."
+  community.crypto.acme_certificate:
+    dest: "{{ autonomy_acmeca_user_cert_path }}"
+    chain_dest: "{{ autonomy_acmeca_user_chain_path }}"
+    fullchain_dest: "{{ autonomy_acmeca_user_fullchain_path }}"
+    acme_directory: "{{ autonomy_acmeca_url }}"
+    acme_version: "{{ autonomy_acmeca_version }}"
+    account_key_src: "{{ autonomy_acmeca_account_key_path }}"
+    account_key_passphrase: "{{ __password }}"
+    modify_account: false
+    challenge: "{{ autonomy_acmeca_challenge_type }}"
+    csr: "{{ autonomy_acmeca_user_csr_path }}"
+    data: "{{ __autonomy_acmeca_challenge }}"
+    force: "{{ autonomy_acmeca_regenerate_host_key }}"
+    validate_certs: true
+  become: false
+  delegate_to: localhost
+  vars:
+    __password: >-
+      {% if autonomy_acmca_account_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_acmca_account_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_acmca_account_password }}
+      {%- endif %}
+  when:
+    - __autonomy_acmeca_challenge is defined
+    - __autonomy_acmeca_challenge['challenge_data_dns'] is defined
+    - __autonomy_acmeca_challenge.changed
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+    - acmeca-dns
+
+- name: "Include Host Final Tasks."
+  include_tasks: "cert_hostgen_final.yml"
+  when:
+    - not autonomy_acmeca_generate_locally
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+    - acmeca-dns
+
+- name: "Include Local Final Tasks."
+  include_tasks: "cert_localgen_final.yml"
+  when:
+    - autonomy_acmeca_generate_locally
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+
+# - name: "Run http-01 Clean-Up Tasks."
+#   include_tasks: "http_clean_up.yml"
+#   when:
+#     - autonomy_acmeca_challenge_type == "http-01"
+#   tags:
+#     - acmeca
+#     - acmeca-test
+#     - acmeca-cert
+#     - acmeca-certs
+#     - acmeca-http
+
+- name: "Run DNS-01 clean up tasks."
+  include_tasks: "cert_dns_cleanup.yml"
+  when:
+    - __autonomy_acmeca_challenge is defined
+    - __autonomy_acmeca_challenge['challenge_data_dns'] is defined
+    - __autonomy_acmeca_challenge.changed
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+    - acmeca-dns

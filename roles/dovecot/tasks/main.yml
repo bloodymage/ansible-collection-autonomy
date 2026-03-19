@@ -12,7 +12,7 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
   tags:
     - dovecot
 
@@ -22,6 +22,7 @@
   loop:
     - "dovecot-ldap"
     - "dovecot-gssapi"
+  become: false
   when:
     - autonomy_realm_identity_management_system is truthy
   tags:
@@ -31,7 +32,7 @@
   ansible.builtin.package:
     name: "{{ autonomy_dovecot_packages }}"
     state: present
-  become: yes
+  become: true
   tags:
     - dovecot
 
@@ -40,7 +41,7 @@
     autonomy_dovecot_password_databases: "{{ autonomy_dovecot_password_databases + ['ldap'] }}"
     autonomy_dovecot_auth_mechanisms: "{{ ['gssapi'] + autonomy_dovecot_auth_mechanisms + ['oauthbearer xoauth2'] }}"
     autonomy_dovecot_auth_conf: "{{ autonomy_dovecot_auth_conf + [autonomy_dovecot_auth_conf_ldap] + [autonomy_dovecot_auth_conf_oauth2] }}"
-  become: no
+  become: false
   when:
     - autonomy_realm_identity_management_system == "ad"
   tags:
@@ -49,7 +50,7 @@
 - name: "Check if we are using a bounce folder."
   ansible.builtin.set_fact:
     autonomy_dovecot_private_namespace_mailboxes: "{{ autonomy_dovecot_private_namespace_mailboxes + [autonomy_dovecot_bounce_folder] }}"
-  become: no
+  become: false
   when:
     - autonomy_dovecot_bounce_folder_name is truthy
   tags:
@@ -58,7 +59,7 @@
 - name: "Check if we are using an Advertisements folder."
   ansible.builtin.set_fact:
     autonomy_dovecot_private_namespace_mailboxes: "{{ autonomy_dovecot_private_namespace_mailboxes + [autonomy_dovecot_advertisements_folder] }}"
-  become: no
+  become: false
   when:
     - autonomy_dovecot_advertisements_folder_name is truthy
   tags:
@@ -67,7 +68,7 @@
 - name: "Check if we are using an inboxzero namespace configuration."
   ansible.builtin.set_fact:
     autonomy_dovecot_namespaces: "{{ autonomy_dovecot_namespaces + [autonomy_dovecot_inboxzero_namespace] }}"
-  become: no
+  become: false
   when:
     - autonomy_dovecot_use_inboxzero_namespace
   tags:
@@ -78,10 +79,10 @@
     __mail_user: "{{ mail_user }}"
     __mail_user_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/domain_users/{{ mail_user }}/password"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/domain_users/{{ mail_user }}/password"
     __password_lookup: "{{ __password_store_id }}"
-  #no_log: yes
-  become: no
+  #no_log: true
+  become: false
   delegate_to: localhost
   register: domain_user_list
   tags:
@@ -102,7 +103,7 @@
   loop:
     - dovecot.conf
     #- "{{ autonomy_dovecot_password_file }}"
-  become: yes
+  become: true
   notify: "restart dovecot"
   tags:
     - dovecot
@@ -115,7 +116,7 @@
     group: "root"
     mode: "0644"
   loop: "{{ autonomy_dovecot_auth_conf }}"
-  become: yes
+  become: true
   notify: "restart dovecot"
   when:
     - item.name != "system"
@@ -130,7 +131,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_conf_files }}"
   notify: "restart dovecot"
   tags:
@@ -143,7 +144,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_auth_conf }}"
   notify: "restart dovecot"
   tags:
@@ -161,7 +162,7 @@
     group: "{{ mail_user }}"
     mode: "0755"
     state: directory
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_virtual_mailboxes }}"
   tags:
     - dovecot
@@ -173,7 +174,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_virtual_mailboxes }}"
   tags:
     - dovecot
@@ -197,7 +198,7 @@
     group: "{{ mail_user }}"
     mode: "0755"
     state: directory
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_inboxzero_mailboxes }}"
   when:
     - autonomy_dovecot_use_inboxzero_namespace
@@ -211,7 +212,7 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_inboxzero_mailboxes }}"
   when:
     - autonomy_dovecot_use_inboxzero_namespace
@@ -230,7 +231,7 @@
     group: "{{ mail_user }}"
     mode: "0755"
     state: directory
-  become: yes
+  become: true
   loop:
     - before
     - after
@@ -245,7 +246,7 @@
     owner: "{{ mail_user }}"
     group: "{{ mail_user }}"
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_imapsieve_mailboxes }}"
   notify: "restart dovecot"
   tags:
@@ -259,7 +260,7 @@
     owner: "{{ mail_user }}"
     group: "{{ mail_user }}"
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_sieve_files }}"
   notify: "recompile sieve"
   vars:
@@ -277,7 +278,7 @@
     owner: "{{ mail_user }}"
     group: "{{ mail_user }}"
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_sieve_files }}"
   vars:
     __main_folder: "Archive"
@@ -295,7 +296,7 @@
     group: "{{ mail_user }}"
     mode: "0755"
     state: directory
-  become: yes
+  become: true
   tags:
     - dovecot
 
@@ -306,7 +307,7 @@
     owner: "root"
     group: "root"
     mode: "0755"
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_imapsieve_mailboxes }}"
   tags:
     - dovecot
@@ -323,7 +324,7 @@
     group: "root"
     mode: "0755"
     state: directory
-  become: yes
+  become: true
   when:
     - autonomy_dovecot_log_dir is truthy
     - (autonomy_dovecot_info_log_path is truthy or autonomy_dovecot_debug_log_path is truthy)
@@ -358,10 +359,10 @@
           -O '-$GmailHaveLabels'
           -R
           -u {{ item.account }} imapc:
-  become: yes
+  become: true
   loop: "{{ autonomy_dovecot_migration_users }}"
   vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/external_services/{{ item.source }}/{{ item.account }}"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/external_services/{{ item.source }}/{{ item.account }}"
     __password_lookup: "{{ __password_store_id }}"
     __password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   when:

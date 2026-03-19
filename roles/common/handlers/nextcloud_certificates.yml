@@ -6,8 +6,8 @@
 # ==================================================================================================
 - name: "Get current nextcloud host certificate."
   community.crypto.x509_certificate_info:
-    path: "/etc/letsencrypt/archive/{{ autonomy_fqdn }}/cert.pem"
-  become: yes
+    path: "/etc/letsencrypt/archive/{{ inventory_hostname }}/cert.pem"
+  become: true
   register: __certificate
 
 - name: "Update nextcloud configuration certificate."
@@ -19,5 +19,5 @@
       --value="{{ __certificate.public_key }}"
       --update-only
     chdir: "/srv/www/{{ inventory_hostname }}"
-  become: yes
+  become: true
   become_user: www-data

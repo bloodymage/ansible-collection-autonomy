@@ -31,7 +31,7 @@ ssl_key = </etc/ssl/private/{{ ansible_fqdn }}.key
 {# RedHat-based systems. Note that ssl_client_ca_file isn't recommended with #}
 {# large CA bundles, because it leads to excessive memory usage. #}
 ssl_client_ca_dir = /etc/ssl/certs
-ssl_client_ca_file = {{ ownca_etc }}/certs/{{ autonomy_org_name }}-{{ autonomy_org_unit_name }}-component-ca-chain.pem
+ssl_client_ca_file = {{ ownca_etc }}/certs/{{ autonomy_common_org_name }}-{{ autonomy_org_unit_name }}-component-ca-chain.pem
 {# Require valid cert when connecting to a remote server #}
 #ssl_client_require_valid_cert = yes
 {# # Request client to send a certificate. If you also want to require it, set #}

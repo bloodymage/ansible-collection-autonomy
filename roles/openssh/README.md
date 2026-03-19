@@ -36,7 +36,31 @@ Usage
 
 ### Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+#### SSH Client Config Variables
+
+##### autonomy_openssh_ssh_conf_ciphers
+
+Specifies the ciphers allowed and their order of preference.
+
+Supported Ciphers:
+  - 3des-cbc
+  - aes128-cbc
+  - aes192-cbc
+  - aes256-cbc
+  - aes128-ctr
+  - aes192-ctr
+  - aes256-ctr
+  - aes128-gcm@openssh.com
+  - aes256-gcm@openssh.com
+  - chacha20-poly1305@openssh.com
+
+Default Ciphers:
+  - chacha20-poly1305@openssh.com
+  - aes128-gcm@openssh.com
+  - aes256-gcm@openssh.com
+  - aes128-ctr
+  - aes192-ctr
+  - aes256-ctr
 
 ### Example Playbook
 

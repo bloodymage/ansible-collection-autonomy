@@ -1,6 +1,6 @@
 ---
 - name: "Setup the SSH Certificate Authority."
-  hosts: certificate_authorities
+  hosts: sshca_certificate_authorities
   roles:
     - role: bloodymage.autonomy.autoconfig
       tags:

@@ -7,3 +7,42 @@
 # NOTE: This should only be run after everything is setup (site.yml)
 #
 # ==================================================================================================
+- name: "DNS Maintenance."
+  hosts: all:!localhost
+  ignore_unreachable: true
+  tasks:
+    - ansible.builtin.include_role:
+        name: bloodymage.autonomy.maintenance
+      vars:
+        __maintenance_tasks: "dns"
+      tags:
+        - maintenance
+        - dns
+        - dns-file
+        - dns-nsupdate
+        - dns-cloudflare
+
+- name: "System Maintenance."
+  hosts: all:!localhost:!public_zone:!virtual_hosts:!vendor_managed
+  roles:
+    - role: bloodymage.autonomy.apt
+      when:
+        - ansible_os_family == "Debian"
+        - ansible_network_os is not defined
+
+    - role: bloodymage.autonomy.maintenance
+      vars:
+        __maintenance_tasks: "upgrade"
+
+- name: "User Maintenance."
+  hosts: all:!localhost:!public_zone:!virtual_hosts:!vendor_managed
+  roles:
+    - role: bloodymage.autonomy.users
+      vars:
+        __user_tasks: "dotfiles"
+      tags:
+        - dotfiles
+        - user-dotfiles
+        - user_dotfiles
+
+- import_playbook: acmeca_certs.yml

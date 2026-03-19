@@ -1,0 +1,69 @@
+---
+- name: "Run ACME Account Tasks (Host Configuration)."
+  include_tasks: "config_host.yml"
+  when:
+    - not autonomy_acmeca_generate_locally
+  tags:
+    - acmeca
+    - acmeca-account
+    - acmeca-test
+
+- name: "Generate Let's Encrypt Certificate private key."
+  community.crypto.openssl_privatekey:
+    path: '{{ autonomy_acmeca_sysconf_key_path }}'
+    type: '{{ __type }}'
+    size: "{{ autonomy_acmeca_host_key_size }}"
+    owner: "{{ autonomy_acmeca_host_key_owner }}"
+    group: "{{ autonomy_acmeca_host_key_group }}"
+    mode: "{{ autonomy_acmeca_host_key_mode }}"
+    regenerate: "full_idempotence"
+    force: "{{ autonomy_acmeca_regenerate_host_key }}"
+    state: "present"
+    backup: "{{ autonomy_acmeca_sysconf_backup_keys }}"
+  become: true
+  vars:
+    __tmp_type: "{{ autonomy_acmeca_host_key_type }}"
+    __type: "{% if __tmp_type.lower() in ['ed25519','ed448'] %}{{ __tmp_type | capitalize }}{% else %}{{ __tmp_type | upper }}{% endif %}"
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+    - acmeca-cert-dns
+    - acmeca-cert-http
+    - acmeca-certs-dns
+    - acmeca-certs-http
+
+- name: "Generate Let's Encrypt CSR."
+  community.crypto.openssl_csr:
+    path: "{{ autonomy_acmeca_sysconf_csr_path }}"
+    common_name: "{{ inventory_hostname }}"
+    key_usage: "{{ autonomy_acmeca_key_usage }}"
+    extended_key_usage: "{{ autonomy_acmeca_extended_key_usage }}"
+    subject_alt_name: "{{ autonomy_acmeca_host_subject_alt_name }}"
+    privatekey_path: "{{ autonomy_acmeca_sysconf_key_path }}"
+    ocsp_must_staple: "{{ autonomy_acmeca_ocsp_must_staple }}"
+    use_common_name_for_san: false
+    owner: "{{ autonomy_acmeca_host_key_owner }}"
+    group: "{{ autonomy_acmeca_host_key_group }}"
+    mode: "0644"
+    backup: "{{ autonomy_acmeca_sysconf_backup_csr }}"
+    force: "{{ autonomy_acmeca_regenerate_host_csr }}"
+  become: true
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-dns
+    - acmeca-http
+
+- name: "Fetch CSR."
+  ansible.builtin.fetch:
+    src: "{{ autonomy_acmeca_sysconf_csr_path }}"
+    dest: "{{ autonomy_acmeca_user_csr_path }}"
+    flat: true
+  become: true
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-dns
+    - acmeca-http

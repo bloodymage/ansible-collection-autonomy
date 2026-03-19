@@ -2,35 +2,93 @@
 autonomy_sshca_packages:
   - openssh-client
 
-autonomy_sshca_user: "{{ autonomy_user }}"
-autonomy_sshca_group: "{{ autonomy_group }}"
+autonomy_sshca_users: "{{ autonomy_common_users }}"
+
+autonomy_sshca_host_certs_packages: []
+autonomy_sshca_user_certs_packages: []
+
+autonomy_sshca_user: "{{ autonomy_common_user }}"
+autonomy_sshca_group: "{{ autonomy_common_group }}"
+
+autonomy_sshca_domain: "{{ autonomy_common_org_name }}"
+
+autonomy_sshca_ca_valid_year_int: "{{ ansible_date_time.year | int }}"
+autonomy_sshca_ca_valid_year_plus_one: "{{ autonomy_sshca_ca_valid_year_int + 1 }}"
+autonomy_sshca_ca_valid_month_int: "{{ ansible_date_time.month | int }}"
+autonomy_sshca_ca_valid_month_plus_one: "{{ autonomy_sshca_ca_valid_month_int + 1 }}"
+autonomy_sshca_ca_valid_day_int: "{{ ansible_date_time.day | int }}"
+
+autonomy_sshca_ca_password: "password"
+autonomy_sshca_ca_valid_at: "{{ autonomy_sshca_ca_valid_year_int | string }}-{{ autonomy_sshca_ca_valid_month_plus_one | string }}-{{ autonomy_sshca_ca_valid_day_int | string }}"
+autonomy_sshca_ca_valid_from: "always"
+autonomy_sshca_ca_valid_to: "{{ autonomy_sshca_ca_valid_year_plus_one | string }}-{{ autonomy_sshca_ca_valid_month_int | string }}-{{ autonomy_sshca_ca_valid_day_int | string }}"
+autonomy_sshca_ca_signature_algorithm: "rsa-sha2-512"
+
+autonomy_sshca_use_agent: true
+
+# Key Types
+autonomy_sshca_ca_key_type: "{{ autonomy_common_sshca_key_type }}"
+autonomy_sshca_hostca_key_type: "{{ autonomy_common_sshca_key_type }}"
+autonomy_sshca_userca_key_type: "{{ autonomy_common_sshca_key_type }}"
+autonomy_sshca_user_key_type: "{{ autonomy_common_sshca_key_type }}"
+
+# Directories
+autonomy_sshca_dir: "{{ autonomy_common_user_pki_dir }}/sshca"
+autonomy_sshca_ca_dir: "{{ autonomy_sshca_dir }}/ca"
+autonomy_sshca_host_dir: "{{ autonomy_sshca_dir }}/hosts"
+autonomy_sshca_user_dir: "{{ autonomy_sshca_dir }}/users"
+
+# Files
+autonomy_sshca_hostca_key_file: "{{ autonomy_sshca_domain }}_host_key"
+autonomy_sshca_userca_key_file: "{{ autonomy_sshca_domain }}_user_key"
+
+# Paths
+autonomy_sshca_hostca_key_path: "{{ autonomy_sshca_ca_dir }}/{{ autonomy_sshca_hostca_key_file }}"
+autonomy_sshca_hostca_pub_path: "{{ autonomy_sshca_ca_dir }}/{{ autonomy_common_sshca_hostca_pub_file }}"
+
+autonomy_sshca_userca_key_path: "{{ autonomy_sshca_ca_dir }}/{{ autonomy_sshca_userca_key_file }}"
+autonomy_sshca_userca_pub_path: "{{ autonomy_sshca_ca_dir }}/{{ autonomy_common_sshca_userca_pub_file }}"
+
+autonomy_sshca_host_pub_path: "{{ autonomy_sshca_host_dir }}/{{ inventory_hostname }}/{{ autonomy_common_openssh_host_pub_file }}"
+autonomy_sshca_host_cert_path: "{{ autonomy_sshca_host_dir }}/{{ inventory_hostname }}/{{ autonomy_common_openssh_host_cert_file }}"
 
 # Host CA
-autonomy_sshca_host_certs_packages: []
-
-sshca_host_certificate: "{{ ssh_config_dir }}/ca/{{ sshca_host_pubfile }}"
-sshca_host_key_comment: "{{ sshca_domain }} Host CA"
-sshca_host_keyfile: "{{ sshca_domain }}_host_key"
-sshca_host_pubfile: "{{ sshca_domain }}_host_key.pub"
-sshca_host_signer_hostnames: "{{ ansible_fqdn }},{{ ansible_hostname }}"
-sshca_host_signer_id: "{{ sshca_domain }}"
-sshca_host_signer_key: "{{ sshca_key_directory }}/{{ sshca_host_keyfile }}"
-
-autonomy_sshca_host_key_types:
-  - "{{ sshca_host_key_type }}"
+autonomy_sshca_hostca_key_password: "{{ autonomy_sshca_ca_password }}"
+autonomy_sshca_hostca_key_comment: "{{ autonomy_sshca_domain | capitalize }} Host CA"
 
 # User CA
-sshca_user_key_comment: "{{ sshca_domain }} User CA"
-sshca_user_keyfile: "{{ sshca_domain }}_user_key"
-sshca_user_signer_hostnames: "{{ ansible_fqdn }},{{ ansible_hostname }}"
-sshca_user_signer_id: "{{ sshca_domain }}"
-sshca_user_signer_key: "{{ sshca_key_directory }}/{{ sshca_user_keyfile }}"
-sshca_home_dir: "/home/{{ autonomy_org_unit_name | upper }}"
+autonomy_sshca_userca_key_password: "{{ autonomy_sshca_ca_password }}"
+autonomy_sshca_userca_key_comment: "{{ autonomy_sshca_domain | capitalize }} User CA"
 
-ownca_user_pki_dir: ".pki"
-ownca_user_private_dir: "{{ ownca_user_pki_dir }}/private"
+# Host
+autonomy_sshca_host_principals:
+  - "{{ inventory_hostname }}"
+  - "{{ inventory_hostname_short }}"
+  - "{{ ansible_host }}"
+autonomy_sshca_host_valid_at: "{{ autonomy_sshca_ca_valid_at }}"
+autonomy_sshca_host_valid_from: "{{ autonomy_sshca_ca_valid_from }}"
+autonomy_sshca_host_valid_to: "{{ autonomy_sshca_ca_valid_to }}"
+autonomy_sshca_host_signature_algorithm: "{{ autonomy_sshca_ca_signature_algorithm }}"
+autonomy_sshca_host_ignore_timestamps: true
+autonomy_sshca_host_regenerate: "full_idempotence"
+autonomy_sshca_host_force: false
 
-sshca_user_pki_dirs:
-  - name: "ssh"
-    mode: "0755"
+# Users
+autonomy_sshca_user_principals: "{{ inventory_hostname }},{{ inventory_hostname_short }}"
+autonomy_sshca_user_valid_at: "{{ autonomy_sshca_ca_valid_at }}"
+autonomy_sshca_user_valid_from: "{{ autonomy_sshca_ca_valid_from }}"
+autonomy_sshca_user_valid_to: "{{ autonomy_sshca_ca_valid_to }}"
+autonomy_sshca_user_signature_algorithm: "{{ autonomy_sshca_ca_signature_algorithm }}"
+autonomy_sshca_user_ignore_timestamps: false
+autonomy_sshca_user_regenerate: "full_idempotence"
+autonomy_sshca_user_force: false
+autonomy_sshca_user_use_agent: true
 
+#
+autonomy_sshca_ca_public_keys:
+  - src: "{{ autonomy_sshca_hostca_pub_path }}"
+    dest: "{{ autonomy_common_sshca_hostca_openssh_pub_path }}"
+  - src: "{{ autonomy_sshca_userca_pub_path }}"
+    dest: "{{ autonomy_common_sshca_userca_openssh_pub_path }}"
+
+#  LocalWords:  str

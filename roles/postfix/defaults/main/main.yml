@@ -48,34 +48,34 @@ autonomy_postfix_config_map_files:
     install: "{% if __postfix_sasl_auth_users_list is defined and postfix_sender_relay is truthy and postfix_sasl_auth_user is truthy %}true{% else %}false{% endif %}"
 
 postfix_virtual_mailbox_users:
-  - username: "webmaster@{{ autonomy_root_domain }}"
-    email: "webmaster@{{ autonomy_root_domain }}"
-  - username: "postmaster@{{ autonomy_root_domain }}"
-    email: "postmaster@{{ autonomy_root_domain }}"
-  - username: "abuse@{{ autonomy_root_domain }}"
-    email: "abuse@{{ autonomy_root_domain }}"
+  - username: "webmaster@{{ autonomy_common_root_domain }}"
+    email: "webmaster@{{ autonomy_common_root_domain }}"
+  - username: "postmaster@{{ autonomy_common_root_domain }}"
+    email: "postmaster@{{ autonomy_common_root_domain }}"
+  - username: "abuse@{{ autonomy_common_root_domain }}"
+    email: "abuse@{{ autonomy_common_root_domain }}"
 
 postfix_virtual_mailbox_user_aliases:
-  - alias: "webmaster@{{ autonomy_root_domain }}"
-    email: "webmaster@{{ autonomy_root_domain }}"
-  - alias: "postmaster@{{ autonomy_root_domain }}"
-    email: "postmaster@{{ autonomy_root_domain }}"
-  - alias: "abuse@{{ autonomy_root_domain }}"
-    email: "abuse@{{ autonomy_root_domain }}"
-  - alias: "root@{{ autonomy_root_domain }}"
-    email: "webmaster@{{ autonomy_root_domain }}"
-  - alias: "root@mail.{{ autonomy_root_domain }}"
-    email: "webmaster@{{ autonomy_root_domain }}"
-  - alias: "hostmaster@{{ autonomy_root_domain }}"
-    email: "webmaster@{{ autonomy_root_domain }}"
+  - alias: "webmaster@{{ autonomy_common_root_domain }}"
+    email: "webmaster@{{ autonomy_common_root_domain }}"
+  - alias: "postmaster@{{ autonomy_common_root_domain }}"
+    email: "postmaster@{{ autonomy_common_root_domain }}"
+  - alias: "abuse@{{ autonomy_common_root_domain }}"
+    email: "abuse@{{ autonomy_common_root_domain }}"
+  - alias: "root@{{ autonomy_common_root_domain }}"
+    email: "webmaster@{{ autonomy_common_root_domain }}"
+  - alias: "root@mail.{{ autonomy_common_root_domain }}"
+    email: "webmaster@{{ autonomy_common_root_domain }}"
+  - alias: "hostmaster@{{ autonomy_common_root_domain }}"
+    email: "webmaster@{{ autonomy_common_root_domain }}"
 
 postfix_catchall_user_alias:
-  alias: "@{{ autonomy_root_domain }}"
-  email: "webmaster@{{ autonomy_root_domain }}"
+  alias: "@{{ autonomy_common_root_domain }}"
+  email: "webmaster@{{ autonomy_common_root_domain }}"
 
 postfix_canonical_mappings:
-  - origin: "www-data@{{ autonomy_fqdn }}"
-    destination: "webmaster@{{ autonomy_root_domain }}"
+  - origin: "www-data@{{ inventory_hostname }}"
+    destination: "webmaster@{{ autonomy_common_root_domain }}"
 
 postfix_ldap_maps: []
 postfix_ldap_map_debug_level: 0

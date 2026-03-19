@@ -2,12 +2,12 @@
 autonomy_bind_logging_channels:
   - "{{ autonomy_bind_logging_channel_default_syslog }}"
   - "{{ autonomy_bind_logging_channel_default_logfile }}"
-  - "{{ autonomy_bind_logging_channel_security }}"
   - "{{ autonomy_bind_logging_channel_null }}"
+  # - "{{ autonomy_bind_logging_channel_security }}"
 
 autonomy_bind_logging_categories:
   - "{{ autonomy_bind_logging_category_default }}"
-  - "{{ autonomy_bind_logging_category_security }}"
+  # - "{{ autonomy_bind_logging_category_security }}"
 
 # Category Channels
 autonomy_bind_logging_client_channels:

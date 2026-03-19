@@ -1,36 +1,29 @@
-- name: Include OS-specific variables.
-  include_vars: "{{ lookup('first_found', params) }}"
-  vars:
-    params:
-      files: "{{ __os_variables_files }}"
-      paths:
-        - "vars"
-  become: no
-
+---
 - name: "Create SSL Directories."
   ansible.builtin.file:
-    path: "{{ ownca_hosts_directory }}/{{ item.name }}"
+    path: "{{ item['name'] }}"
+    owner: "{{ item['owner'] }}"
+    group: "{{ item['group'] }}"
+    mode: "{{ item['mode'] }}"
     state: directory
-    owner: "{{ autonomy_user }}"
-    group: "{{ autonomy_group }}"
-    mode: "{{ item.mode }}"
-  loop: "{{ ownca_host_certs_directories }}"
-  become: no
-  delegate_to: localhost
-  run_once: yes
+  loop: "{{ autonomy_ownca_hosts_dirs }}"
+  become: false
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  run_once: true
 
 - name: "Add subject alt names based on ipv6."
   ansible.builtin.set_fact:
-    ownca_host_certs_subject_alt_name: "{{ ownca_host_certs_subject_alt_name + [__alt_name] }}"
+    autonomy_ownca_host_subject_alt_name: "{{ autonomy_ownca_host_subject_alt_name + [__alt_name] }}"
   vars:
-    __alt_name: "IP:{{ autonomy_ipv6_address }}"
+    __alt_name: "IP:{{ autonomy_common_ipv6_address }}"
+  become: false
   when:
-    - autonomy_ipv6_address is truthy
+    - autonomy_common_ipv6_address is truthy
 
 # - name: "Add subject alt names based on role."
 #   ansible.builtin.set_fact:
 #     ownca_host_certs_subject_alt_name: "{{ ownca_host_certs_subject_alt_name + __alt_name }}"
-#   become: no
+#   become: false
 #   loop:
 #     - name: "db_servers"
 #       alt_name: "db"
@@ -69,215 +62,163 @@
 #     - name: "routers"
 #       alt_name: "router"
 #   vars:
-#     __group_id: "{{ autonomy_zone_name }}_{{ item.name }}"
+#     __group_id: "{{ autonomy_common_zone_name }}_{{ item.name }}"
 #     __host_index: "{{ groups[__group_id].index(inventory_hostname) + 1 }}"
 #     __padded_index: "{{ '%02d' % __host_index | int }}"
 #     __alt_name:
-#       - "DNS:{{ item.alt_name }}{{ __padded_index }}.{{ autonomy_domain }}"
-#       - "DNS:{{ item.alt_name }}.{{ autonomy_domain }}"
+#       - "DNS:{{ item.alt_name }}{{ __padded_index }}.{{ autonomy_common_zone_domain }}"
+#       - "DNS:{{ item.alt_name }}.{{ autonomy_common_zone_domain }}"
 #   when:
 #     - inventory_hostname in groups[item.name] | default([])
 
 # - name: "Add hardware based subject alt names."
 #   ansible.builtin.set_fact:
 #     ownca_host_certs_subject_alt_name: "{{ ownca_host_certs_subject_alt_name + __alt_name }}"
-#   become: no
+#   become: true
 #   loop:
 #     - name: "routers"
 #       alt_name: "router"
 #     - name: "printers"
 #       alt_name: "printer"
 #   vars:
-#     __group_id: "{{ autonomy_zone_name }}_{{ item.name }}"
+#     __group_id: "{{ autonomy_common_zone_name }}_{{ item.name }}"
 #     __host_index: "{{ groups[__group_id].index(inventory_hostname) + 1 }}"
 #     __group_size: "{{ groups[__group_id] | length }}"
 #     __padded_index: "{% if __group_size != 1%}{{ '%02d' % __host_index | int }}{% else %}{% endif %}"
 #     __alt_name:
-#       - "DNS:{{ item.alt_name }}{{ __padded_index }}.{{ autonomy_domain }}"
+#       - "DNS:{{ item.alt_name }}{{ __padded_index }}.{{ autonomy_common_zone_domain }}"
 #   when:
 #     - inventory_hostname in groups[item.name] | default([])
 
 - name: "Add additional subject alt names for samba domain controllers."
   ansible.builtin.set_fact:
-    ownca_host_certs_subject_alt_name: "{{ ownca_host_certs_subject_alt_name + __alt_name }}"
+    autonomy_ownca_host_subject_alt_name: "{{ autonomy_ownca_host_subject_alt_name + __alt_name }}"
   vars:
     __alt_name:
-      - "DNS:{{ autonomy_domain }}"
-      - "otherName:{{ ownca_msadguid_oid }};UTF8:{{ ownca_objectguid }}"
+      - "DNS:{{ autonomy_common_zone_domain }}"
+      - "otherName:{{ autonomy_ownca_msadguid_oid }};UTF8:{{ autonomy_ownca_objectguid }}"
+  become: false
   when:
     - inventory_hostname in groups['samba_domain_controllers'] | default([])
+    - autonomy_ownca_objectguid is truthy
 
 - name: "Set extended key usage based on role."
   ansible.builtin.set_fact:
-    ownca_host_certs_extended_key_usage: "{{ ownca_host_certs_extended_key_usage + [item.extended_key_uasge] }}"
-  become: no
+    autonomy_ownca_host_extended_key_usage: "{{ autonomy_ownca_host_extended_key_usage + [item.extended_key_uasge] }}"
   loop:
     - name: "samba_domain_controllers"
-      extended_key_uasge: "{{ ownca_mskdc_oid }}"
+      extended_key_uasge: "{{ autonomy_ownca_mskdc_oid }}"
+  become: false
   when:
     - inventory_hostname in groups[item.name] | default([])
 
-- name: "Add intermediate Certificate Authorities."
-  ansible.builtin.set_fact:
-    ownca_certificate_authorities: "{{ ownca_certificate_authorities + [__certificate_authority] }}"
-  loop: "{{ autonomy_zones }}"
-  become: no
-  vars:
-    ownca_intermediate_ca_key_file: "{{ autonomy_org_name }}-{{ item.name }}-ca.key"
-    __certificate_authority:
-      name: "{{ item.name }}"
-      common_name: "{{ autonomy_org_name | title }} {{ item.name | title }} CA"
-      ownca: "root"
-      provider: "ownca"
-      ca_id: "intermediate"
-      zone_name: "{{ item.name }}."
-      keyusage:
-        - keyCertSign
-        - cRLSign
-      keyusage_critical: yes
-      basic_constraints:
-        - 'CA:TRUE'
-      private_key_path: "{{ ownca_ca_private_key_directory }}/{{ ownca_intermediate_ca_key_file }}"
-      org_unit_name: "{{ item.name }}"
-  when:
-    - item.type != "public"
+- name: "Setup OwnCA: Definitions."
+  include_tasks: "ca_definitions.yml"
 
-- name: "Add issuing Certificate Authorities."
-  ansible.builtin.set_fact:
-    ownca_certificate_authorities: "{{ ownca_certificate_authorities + [__certificate_authority] }}"
-  loop: "{{ autonomy_zones | product(ownca_issuing_authorities) }}"
-  vars:
-    ownca_issuing_ca_key_file: "{{ autonomy_org_name }}-{{ item[0].name }}-{{ item[1] }}-ca.key"
-    __certificate_authority:
-      name: "{{ item[0].name }}-{{ item[1] }}"
-      common_name: "{{ autonomy_org_name | title }} {{ item[0].name | title }} {{ item[1] | title}} CA"
-      ownca: "intermediate"
-      provider: "ownca"
-      ca_id: "{{ item[1] }}"
-      zone_name: "{{ item[0].name }}."
-      keyusage:
-        - keyCertSign
-        - cRLSign
-      keyusage_critical: yes
-      basic_constraints:
-        - 'CA:TRUE'
-      private_key_path: "{{ ownca_ca_private_key_directory }}/{{ ownca_issuing_ca_key_file }}"
-      org_unit_name: "{{ item[0].name }}"
-  when:
-    - item[0].type != "public"
+- name: "Get Component CA Cert information."
+  community.crypto.x509_certificate_info:
+    path: "{{ autonomy_ownca_componentca_cert_path }}"
+  register: __autonomy_ownca_componentca_cert_info
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
 
 - name: "Include OS Family Preparation Tasks."
-  include_tasks: "{{ ansible_os_family | lower }}_prep.yml"
+  include_tasks: "host_{{ ansible_os_family | lower }}_prep.yml"
   when:
     - ansible_network_os is not defined
     - ansible_os_family is defined
-    - not ownca_generate_locally
+    - not autonomy_ownca_generate_locally
     - inventory_hostname not in groups["vendor_managed"]
 
 - name: "Include Localhost Preparation Tasks."
-  include_tasks: "localhost_prep.yml"
+  include_tasks: "host_localhost_prep.yml"
   when:
-    - ansible_network_os is defined or ownca_generate_locally
-    - inventory_hostname in groups["vendor_managed"]
+    - ansible_network_os is defined or autonomy_ownca_generate_locally or inventory_hostname in groups["vendor_managed"]
 
-- name: "Ensure we have a password for the Component Issuing CA."
-  ansible.builtin.set_fact:
-    ownca_component_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
-  vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/ownca/ownca_component_password"
-    __password_lookup: "{{ __password_store_id }}"
-  become: false
-  delegate_to: localhost
-  when:
-    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
+# # ==================================================================================================
+# #
+# # The next four tasks ensure we regenerate the host certificate if the issuing certificate is newer
+# # than the host certificate.
+# #
+# # ==================================================================================================
+# - name: "Check if host cert exists."
+#   ansible.builtin.stat:
+#     path: "{{ ownca_hosts_directory }}/certs/{{ inventory_hostname }}.crt"
+#   delegate_to: localhost
+#   become: false
+#   register: cert_file
+#   when:
+#     - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
 
-# ==================================================================================================
-#
-# The next four tasks ensure we regenerate the host certificate if the issuing certificate is newer
-# than the host certificate.
-#
-# ==================================================================================================
-- name: "Get component CA certificate information."
-  community.crypto.x509_certificate_info:
-    path: "{{ ownca_component_ca_cert_path }}"
-  become: false
-  register: component_cert
-  delegate_to: localhost
-  when:
-    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
+# - name: "Get host certificate information."
+#   community.crypto.x509_certificate_info:
+#     path: "{{ cert_file.stat.path }}"
+#   become: false
+#   delegate_to: localhost
+#   register: host_cert
+#   when:
+#     - cert_file.stat is defined
+#     - cert_file.stat.exists is true
+#     - cert_file.stat.path is defined
 
-- name: "Check if host cert exists."
-  ansible.builtin.stat:
-    path: "{{ ownca_hosts_directory }}/certs/{{ autonomy_fqdn }}.crt"
-  delegate_to: localhost
-  become: false
-  register: cert_file
-  when:
-    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
+# # ==================================================================================================
+# #
+# # We want to check if these match, because if they don't we need to force regeneration of the host's
+# # certificate.  A mismatch typically happens when the issuing CA's cert has been updated while the
+# # host's certificate has not.
+# #
+# # ==================================================================================================
+# - name: "Check if we are regenerating host certs."
+#   ansible.builtin.set_fact:
+#     __host_cert_force_regeneration: true
+#   become: false
+#   changed_when: __host_cert_force_regeneration
+#   tags:
+#     - never
+#     - regenerate-host-certs
 
-- name: "Get host certificate information."
-  community.crypto.x509_certificate_info:
-    path: "{{ cert_file.stat.path }}"
-  become: false
-  delegate_to: localhost
-  register: host_cert
-  when:
-    - cert_file.stat is defined
-    - cert_file.stat.exists is true
-    - cert_file.stat.path is defined
-
-# ==================================================================================================
-#
-# We want to check if these match, because if they don't we need to force regeneration of the host's
-# certificate.  A mismatch typically happens when the issuing CA's cert has been updated while the
-# host's certificate has not.
-#
-# ==================================================================================================
-- name: "Check if we are regenerating host certs."
-  ansible.builtin.set_fact:
-    __host_cert_force_regeneration: yes
-  become: no
-  changed_when: __host_cert_force_regeneration
-  tags:
-    - never
-    - regenerate-host-certs
-
-- name: "Check if the host's cert authority_key_identifier matches the Component CA's subject_key_identifier."
-  ansible.builtin.set_fact:
-    __host_cert_force_regeneration: yes
-  become: no
-  when:
-    - host_cert.authority_key_identifier is defined
-    - host_cert.authority_key_identifier != component_cert.subject_key_identifier
+# - name: "Check if the host's cert authority_key_identifier matches the Component CA's subject_key_identifier."
+#   ansible.builtin.set_fact:
+#     __host_cert_force_regeneration: true
+#   become: false
+#   when:
+#     - host_cert.authority_key_identifier is defined
+#     - host_cert.authority_key_identifier != component_cert.subject_key_identifier
 
 - name: "Generate Host Certificate."
   community.crypto.x509_certificate:
-    path: "{{ ownca_hosts_directory }}/certs/{{ autonomy_fqdn }}.crt"
-    csr_path: "{{ ownca_hosts_directory }}/csr/{{ autonomy_fqdn }}.csr"
-    ownca_path: "{{ ownca_component_ca_cert_path }}"
-    ownca_privatekey_path: "{{ ownca_component_ca_key_path }}"
-    ownca_privatekey_passphrase: "{{ ownca_component_password }}"
+    path: "{{ autonomy_ownca_hosts_cert_path }}"
+    csr_path: "{{ autonomy_ownca_hosts_csr_path }}"
+    ownca_path: "{{ autonomy_ownca_componentca_cert_path }}"
+    ownca_privatekey_path: "{{ autonomy_ownca_componentca_key_path }}"
+    ownca_privatekey_passphrase: "{{ __password }}"
     provider: ownca
-    backup: yes
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "{{ autonomy_ownca_hosts_cert_mode }}"
+    backup: "{{ autonomy_ownca_host_cert_backup }}"
     #force: "{{ __host_cert_force_regeneration }}"
-  become: no
-  delegate_to: localhost
-  when:
-    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
+  become: false
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  vars:
+    __password: >-
+      {% if autonomy_ownca_componentca_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_ownca_componentca_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_ownca_componentca_password }}
+      {%- endif %}
 
 - name: "Identify Certificate Complete Chain."
   community.crypto.certificate_complete_chain:
-    input_chain: "{{ lookup('file', ownca_hosts_directory + '/certs/' + autonomy_fqdn + '.crt') }}"
+    input_chain: "{{ lookup('file', autonomy_ownca_hosts_cert_path) }}"
     intermediate_certificates:
-      - "{{ ownca_component_ca_cert_path }}"
-      - "{{ ownca_intermediate_ca_cert_path }}"
+      - "{{ autonomy_ownca_componentca_cert_path }}"
+      - "{{ autonomy_ownca_intermediateca_cert_path }}"
     root_certificates:
-      - "{{ ownca_ca_certs_directory }}/{{ autonomy_org_name }}-root-ca.crt"
+      - "{{ autonomy_ownca_rootca_cert_path }}"
   register: parent_cert_authorities
-  become: no
-  delegate_to: localhost
-  when:
-    - inventory_hostname not in groups["vendor_managed"] or ownca_generate_locally or ansible_network_os is defined
+  become: false
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
 
 # ==================================================================================================
 #
@@ -286,37 +227,39 @@
 # ==================================================================================================
 - name: "Write complete chain to disk."
   ansible.builtin.copy:
-    dest: "{{ ownca_hosts_directory }}/certs/{{ autonomy_fqdn }}-chain.crt"
+    dest: "{{ autonomy_ownca_hosts_chain_path }}"
     content: "{{ ''.join(parent_cert_authorities.complete_chain) }}"
-    owner: "{{ autonomy_user }}"
-    group: "{{ autonomy_group }}"
-    mode: "0600"
-  become: no
-  delegate_to: localhost
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "{{ autonomy_ownca_hosts_chain_mode }}"
+  become: false
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
   when:
     - parent_cert_authorities.complete_chain is defined
 
-- name: "Include OS Family Tasks."
-  include_tasks: "{{ ansible_os_family | lower }}_final.yml"
+- name: "Include OS Family Finalization Tasks."
+  include_tasks: "host_{{ ansible_os_family | lower }}_final.yml"
   when:
     - ansible_network_os is not defined
     - ansible_os_family is defined
-    - not ownca_generate_locally
+    - not autonomy_ownca_generate_locally
     - inventory_hostname not in groups["vendor_managed"]
 
-- name: "Include NetworkOS Tasks."
-  include_tasks: "{{ ansible_network_os.split('.')[2] | lower }}_final.yml"
-  when:
-    - ansible_network_os is defined
-    - not ownca_generate_locally
+# - name: "Include NetworkOS Tasks."
+#   include_tasks: "hosts_{{ ansible_network_os.split('.')[2] | lower }}_final.yml"
+#   when:
+#     - ansible_network_os is defined
+#     - not ownca_generate_locally
 
-- name: "Include Local tasks."
-  include_tasks: "localhost_final.yml"
-  when:
-    - ownca_generate_locally
-    - inventory_hostname in groups["vendor_managed"]
+# - name: "Include Local tasks."
+#   include_tasks: "hosts_localhost_final.yml"
+#   when:
+#     - ownca_generate_locally
+#     - inventory_hostname in groups["vendor_managed"]
 
-- name: "Copy to Samba File Server."
-  include_tasks: "copy_to_samba.yml"
-  when:
-    - inventory_hostname == groups['samba_ownca_user_hosts'][0] | default([])
+# - name: "Copy to Samba File Server."
+#   include_tasks: "copy_to_samba.yml"
+#   when:
+#     - inventory_hostname == groups['samba_ownca_user_hosts'][0] | default([])
+
+#  LocalWords:  componentca

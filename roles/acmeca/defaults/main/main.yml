@@ -1,0 +1,104 @@
+---
+# defaults file for acmeca
+autonomy_acmeca_packages:
+  - python3-cryptography
+  - python3-dnspython
+
+autonomy_acmeca_generate_locally: false
+autonomy_acmeca_generate_certificate: true
+autonomy_acmeca_password_length: "{{ autonomy_common_password_length }}"
+autonomy_acmeca_sysconf_backup_files: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
+autonomy_acmeca_user_backup_files: true
+
+# Default ACME settings
+autonomy_acmeca_method: "letsencrypt"
+autonomy_acmeca_challenge_type: "dns-01"
+autonomy_acmeca_key_type: "rsa"
+autonomy_acmeca_key_size: "{{ autonomy_common_pki_key_size }}"
+autonomy_acmeca_key_usage:
+  - digitalSignature
+  - keyAgreement
+autonomy_acmeca_extended_key_usage:
+  - serverAuth
+  - clientAuth
+autonomy_acmeca_version: 2
+autonomy_acmeca_ocsp_must_staple: false
+autonomy_acmeca_harica_id: ""
+
+autonomy_acmeca_user_owner: "{{ autonomy_common_user }}"
+autonomy_acmeca_user_group: "{{ autonomy_common_group }}"
+autonomy_acmeca_user_mode: "0700"
+
+autonomy_acmeca_sysconf_dir_owner: "root"
+autonomy_acmeca_sysconf_dir_group: "root"
+autonomy_acmeca_sysconf_dir_mode: "0700"
+
+# ACMECA Directories
+autonomy_acmeca_user_base_dir: "{{ autonomy_common_user_pki_dir }}/acmeca"
+autonomy_acmeca_user_dir: "{{ autonomy_acmeca_user_base_dir }}/production"
+autonomy_acmeca_user_account_dir: "{{autonomy_acmeca_user_dir }}/account"
+autonomy_acmeca_user_private_dir: "{{ autonomy_acmeca_user_dir }}/private"
+autonomy_acmeca_user_certs_dir: "{{ autonomy_acmeca_user_dir }}/certs"
+autonomy_acmeca_user_csr_dir: "{{ autonomy_acmeca_user_dir }}/csr"
+autonomy_acmeca_user_crl_dir: "{{ autonomy_acmeca_user_dir }}/crl"
+autonomy_acmeca_user_pkcs12_dir: "{{ autonomy_acmeca_user_dir }}/pkcs12"
+
+autonomy_acmeca_sysconf_base_dir: "{{ autonomy_common_sysconf_dir }}/acmeca"
+autonomy_acmeca_sysconf_dir: "{{ autonomy_acmeca_sysconf_base_dir }}/production"
+autonomy_acmeca_sysconf_account_dir: "{{autonomy_acmeca_sysconf_dir }}/account"
+autonomy_acmeca_sysconf_private_dir: "{{ autonomy_acmeca_sysconf_dir }}/private"
+autonomy_acmeca_sysconf_certs_dir: "{{ autonomy_acmeca_sysconf_dir }}/certs"
+autonomy_acmeca_sysconf_csr_dir: "{{ autonomy_acmeca_sysconf_dir }}/csr"
+autonomy_acmeca_sysconf_crl_dir: "{{ autonomy_acmeca_sysconf_dir }}/crl"
+autonomy_acmeca_sysconf_pkcs12_dir: "{{ autonomy_acmeca_sysconf_dir }}/pkcs12"
+
+autonomy_acmeca_sysconf_dirs:
+  - path: "{{ autonomy_acmeca_sysconf_private_dir }}"
+    owner: "{{ autonomy_acmeca_sysconf_dir_owner }}"
+    group: "{{ autonomy_acmeca_sysconf_dir_group }}"
+    mode: "{{ autonomy_acmeca_sysconf_dir_mode }}"
+  - path: "{{ autonomy_acmeca_sysconf_certs_dir }}"
+    owner: "{{ autonomy_acmeca_sysconf_dir_owner }}"
+    group: "{{ autonomy_acmeca_sysconf_dir_group }}"
+    mode: "{{ autonomy_acmeca_sysconf_dir_mode }}"
+  - path: "{{ autonomy_acmeca_sysconf_csr_dir }}"
+    owner: "{{ autonomy_acmeca_sysconf_dir_owner }}"
+    group: "{{ autonomy_acmeca_sysconf_dir_group }}"
+    mode: "{{ autonomy_acmeca_sysconf_dir_mode }}"
+  - path: "{{ autonomy_acmeca_sysconf_crl_dir }}"
+    owner: "{{ autonomy_acmeca_sysconf_dir_owner }}"
+    group: "{{ autonomy_acmeca_sysconf_dir_group }}"
+    mode: "{{ autonomy_acmeca_sysconf_dir_mode }}"
+  - path: "{{ autonomy_acmeca_sysconf_pkcs12_dir }}"
+    owner: "{{ autonomy_acmeca_sysconf_dir_owner }}"
+    group: "{{ autonomy_acmeca_sysconf_dir_group }}"
+    mode: "{{ autonomy_acmeca_sysconf_dir_mode }}"
+
+autonomy_acmeca_user_dirs:
+  - path: "{{ autonomy_acmeca_user_account_dir }}"
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "{{ autonomy_acmeca_user_mode }}"
+  - path: "{{ autonomy_acmeca_user_private_dir }}"
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "{{ autonomy_acmeca_user_mode }}"
+  - path: "{{ autonomy_acmeca_user_certs_dir }}"
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "{{ autonomy_acmeca_user_mode }}"
+  - path: "{{ autonomy_acmeca_user_csr_dir }}"
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "{{ autonomy_acmeca_user_mode }}"
+  - path: "{{ autonomy_acmeca_user_crl_dir }}"
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "{{ autonomy_acmeca_user_mode }}"
+  - path: "{{ autonomy_acmeca_user_pkcs12_dir }}"
+    owner: "{{ autonomy_acmeca_user_owner }}"
+    group: "{{ autonomy_acmeca_user_group }}"
+    mode: "{{ autonomy_acmeca_user_mode }}"
+
+# URLs
+autonomy_acmeca_url: "https://acme-v02.api.letsencrypt.org/directory"

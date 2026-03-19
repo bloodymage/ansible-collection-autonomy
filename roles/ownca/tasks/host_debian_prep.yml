@@ -1,0 +1,97 @@
+---
+- name: "Install packages."
+  ansible.builtin.apt:
+    name: "{{ autonomy_ownca_packages }}"
+    state: present
+  become: true
+  when:
+    - inventory_hostname not in groups['virtual_hosts'] | default([])
+
+# ==================================================================================================
+#
+# Apache servers and openldap servers require different permissions for the private keys from other
+# server types.
+#
+# ==================================================================================================
+- name: "Check if host is in 'apache' or 'openldap' group."
+  ansible.builtin.set_fact:
+    autonomy_ownca_host_private_key_group: "ssl-cert"
+    autonomy_ownca_host_private_key_mode: "0640"
+    autonomy_ownca_host_private_dir_group: "ssl-cert"
+    autonomy_ownca_host_private_dir_mode: "0750"
+  when:
+    - inventory_hostname in groups['apache_servers'] | default([])
+    - inventory_hostname in groups['openldap_servers'] | default([])
+
+# ==================================================================================================
+#
+# Create SSL Private Key and CRS Directories
+#
+# Creates the following Directories:
+#   - {{ ownca_etc }}/private mode: 0700
+#   - {{ ownca_etc }}/csr     mode: 0700
+#   - {{ ownca_etc }}/certs   mode: 0755
+#
+# ==================================================================================================
+- name: "Create SSL Directories."
+  ansible.builtin.file:
+    path: "{{ item['name'] }}"
+    state: directory
+    owner: "{{ item['owner'] | default(autonomy_ownca_sysconf_dir_owner) }}"
+    group: "{{ item['group'] | default(autonomy_ownca_sysconf_dir_group) }}"
+    mode: "{{ item['mode'] }}"
+  become: true
+  loop: "{{ autonomy_ownca_host_dirs }}"
+
+- name: "Generate Host Private Key."
+  community.crypto.openssl_privatekey:
+    path: "{{ autonomy_ownca_host_private_key_path }}"
+    type: "{{ autonomy_ownca_privatekey_type }}"
+    size: 4096
+    owner: "{{ autonomy_ownca_host_private_key_owner }}"
+    group: "{{ autonomy_ownca_host_private_key_group }}"
+    mode: "{{ autonomy_ownca_host_private_key_mode }}"
+    backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
+    #force: false
+  become: true
+
+- name: "Generate Host CSR."
+  community.crypto.openssl_csr:
+    country_name: "{{ autonomy_common_pki_loc_country_code | default(omit)}}"
+    state_or_province_name: "{{ autonomy_common_pki_loc_region | default(omit) }}"
+    locality_name: "{{ autonomy_common_pki_loc_city | default(omit) }}"
+    organization_name: "{{ autonomy_common_org_name | title }}"
+    organizational_unit_name: "{{ autonomy_common_org_unit_name | title }}"
+    common_name: "{{ inventory_hostname }}"
+    key_usage: "{{ autonomy_ownca_host_key_usage }}"
+    key_usage_critical: "{{ autonomy_ownca_host_key_usage_critical }}"
+    extended_key_usage: "{{ autonomy_ownca_host_extended_key_usage }}"
+    extended_key_usage_critical: "{{ autonomy_ownca_host_extended_key_usage_critical }}"
+    privatekey_path: "{{ autonomy_ownca_host_private_key_path }}"
+    subject_alt_name: "{{ autonomy_ownca_host_subject_alt_name }}"
+    authority_cert_issuer: "{{ __autonomy_ownca_componentca_cert_info['subject_alt_name'] }}"
+    authority_cert_serial_number: "{{ __autonomy_ownca_componentca_cert_info['serial_number'] }}"
+    authority_key_identifier: "{{ __autonomy_ownca_componentca_cert_info['subject_key_identifier'] }}"
+    crl_distribution_points:
+      - full_name: "URI:{{ autonomy_ownca_componentca_crl_distribution_point_url }}"
+        reasons: "{{ autonomy_ownca_componentca_crl_distribution_points_reasons }}"
+    path: "{{ autonomy_ownca_host_csr_path }}"
+    mode: "{{ autonomy_ownca_host_csr_mode }}"
+    owner: "{{ autonomy_ownca_host_csr_owner }}"
+    group: "{{ autonomy_ownca_host_csr_group }}"
+    backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
+    force: "{{ __autonomy_ownca_regenerate_csr }}"
+  become: true
+
+# ==================================================================================================
+#
+# Tasks:
+#
+#
+# ==================================================================================================
+- name: Fetch CSRs.
+  ansible.builtin.fetch:
+    src: "{{ autonomy_ownca_host_csr_path }}"
+    dest: "{{ autonomy_ownca_hosts_csr_path }}"
+    flat: true
+  become: true

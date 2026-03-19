@@ -14,9 +14,9 @@
     src: "etc/bind/{{ item }}.j2"
     dest: "{{ autonomy_bind_conf_dir }}/{{ item }}"
     owner: root
-    group: root
+    group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    validate: "{{ __bind_named_checkconf }} %s"
+    #validate: "{{ __bind_named_checkconf }} %s"
   become: true
   loop: "{{ autonomy_bind_config_files }}"
   when:

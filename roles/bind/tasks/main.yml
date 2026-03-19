@@ -1,10 +1,4 @@
 ---
-# ==================================================================================================
-#
-# OS Specific Setup
-#
-#
-# ==================================================================================================
 - name: "Include OS-specific variables."
   include_vars: "{{ lookup('first_found', params) }}"
   vars:
@@ -13,9 +7,11 @@
       paths:
         - "vars"
   become: false
-  when:
-    - autonomy_virtual_host is falsy
-    - inventory_hostname not in groups['public_zone'] | default([])
+  tags:
+    - install-packages
+    - bind
+    - bind-dyndns
+    - bind-rpz
 
 - name: "Install packages."
   ansible.builtin.package:
@@ -23,59 +19,61 @@
     state: present
   become: true
   when:
-    - autonomy_virtual_host is falsy
-    - inventory_hostname not in groups['public_zone'] | default([])
+    - autonomy_common_virtual_host is falsy
+  tags:
+    - install-packages
+    - bind
+    - bind-dyndns
+    - bind-rpz
 
-# ==================================================================================================
-#
-# This creates the following directories:
-#   - /var/lib/bind/
-#   - /var/cache/bind/
-#
-# These are set 0775 so that the bind group can make changes.
-#
-# ==================================================================================================
 - name: "Ensure Zone Directories Exists and are writable by bind user."
   ansible.builtin.file:
-    dest: "{{ item.name }}"
+    dest: "{{ item['name'] }}"
     state: directory
-    owner: "{{ autonomy_bind_owner }}"
-    group: "{{ autonomy_bind_group }}"
-    mode: "{{ item.mode }}"
-  become: yes
+    owner: "{{ autonomy_common_bind_owner }}"
+    group: "{{ autonomy_common_bind_group }}"
+    mode: "{{ item['mode'] }}"
+  become: true
   loop: "{{ __autonomy_bind_zone_directories }}"
   when:
-    - autonomy_virtual_host is falsy
-    - bind_dyndns_secret is defined
-    - inventory_hostname not in groups['public_zone'] | default([])
+    - autonomy_common_virtual_host is falsy
+  tags:
+    - bind
+    - bind-dyndns
+    - bind-rpz
 
-# ==================================================================================================
-#
-# Set Variables
-#
-# ==================================================================================================
-# - name: "Check bind version."
-#   ansible.builtin.debug:
-#     msg:
-#       - "{{ ansible_facts.packages['bind9'][0]['version'] }}"
-#   when: "'bind9' in ansible_facts.packages"
-
-# ==================================================================================================
-#
-# The included tasks generate keys used for dynamic dns
-#
-# ==================================================================================================
 - name: "Configure Dynamic DNS Keys."
   include_tasks: dynamic_dns.yml
+  tags:
+    - bind
+    - bind-dyndns
+    - bind-dyndns-force-key-change
+
+- name: "Configure Dynamic RPZ Keys."
+  include_tasks: dynamic_rpz.yml
+  when:
+    - autonomy_common_dns_rpz_enabled
+    - inventory_hostname not in groups['samba_domain_controllers'] | default([])
+  tags:
+    - bind
+    - bind-dynrpz
+    - bind-dynrpz-force-key-change
 
 - name: "Configure RPZ."
   include_tasks: "rpz.yml"
   when:
-    - autonomy_bind_rpz_enabled
+    - autonomy_common_dns_rpz_enabled
     - inventory_hostname not in groups['samba_domain_controllers'] | default([])
+  tags:
+    - bind
+    - bind-rpz
 
 - name: "Configure Bind."
   include_tasks: config.yml
+  tags:
+    - bind
+    - bind-dyndns
+    - bind-rpz
 
 # ==================================================================================================
 #
@@ -91,9 +89,6 @@
 
 - name: "Configure Zones."
   include_tasks: "zones.yml"
-
-- name: "Configure Dynamic DNS Keys."
-  include_tasks: dynamic_rpz.yml
-  when:
-    - autonomy_bind_rpz_enabled
-    - inventory_hostname not in groups['samba_domain_controllers'] | default([])
+  tags:
+    - bind
+    - bind-zones

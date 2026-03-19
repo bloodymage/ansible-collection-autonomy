@@ -1,0 +1,40 @@
+---
+- name: "Ensure debian.sources is current"
+  ansible.builtin.template:
+    src: "etc/apt/sources.list.d/distro.sources.j2"
+    dest: "{{ autonomy_apt_dist_sources_path }}"
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags:
+    - maintenance
+    - apt
+    - upgrade
+
+- name: "Ensure debian.sources is current"
+  ansible.builtin.template:
+    src: "etc/apt/sources.list.d/sources.j2"
+    dest: "{{ autonomy_apt_rpi_sources_path }}"
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  loop: "{{ autonomy_apt_rpi_repos }}"
+  when:
+    - inventory_hostname in groups['raspberry_pi']
+  tags:
+    - maintenance
+    - apt
+    - upgrade
+
+- name: "Remove sources.list"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ autonomy_apt_source_file_remove }}"
+  become: true
+  tags:
+    - maintenance
+    - apt
+    - upgrade

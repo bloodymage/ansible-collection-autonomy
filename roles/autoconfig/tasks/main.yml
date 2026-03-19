@@ -1,20 +1,48 @@
 ---
 # tasks file for config_environment
+- name: "Include OS-specific variables."
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: false
+  tags:
+    - install-packages
+    - autoconfig
+
+- name: "Install packages."
+  ansible.builtin.package:
+    name: "{{ autonomy_autoconfig_packages }}"
+    state: present
+  become: true
+  tags:
+    - install-packages
+    - autoconfig
+
+- name: "Configure Host Connections."
+  include_tasks: "config_connections.yml"
+  when:
+    - __env_tasks == "connections"
+    - __autonomy_autoconfig_connection is false
+    - not autonomy_common_dns_only
+
 - name: "Configure the playbook environment."
   include_tasks: "config_environment.yml"
   when:
-    - __autonomy_configuration_complete is false
+    - __autonomy_autoconfig_environment is false
     - __env_tasks is falsy
-    - not autonomy_dns_only
+    - not autonomy_common_dns_only
 
 - name: "Configure OwnCA Environment."
   include_tasks: "ownca.yml"
   when:
     - __env_tasks == "ownca"
-    - not autonomy_dns_only
+    - not autonomy_common_dns_only
 
 - name: "Configure Realm Environment."
   include_tasks: "realm.yml"
   when:
     - __env_tasks == "realm"
-    - not autonomy_dns_only
+    - not autonomy_common_dns_only

@@ -3,39 +3,35 @@
   ansible.builtin.package:
     name: "{{ autonomy_sshca_host_certs_packages }}"
     state: present
-  become: yes
+  become: true
   tags:
-    - sshca_host_certs
+    - sshca
     - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
     - install-packages
 
 - name: "Create persistant host certificate directory."
   ansible.builtin.file:
-    path: "{{ ownca_directory }}/hosts/ssh/{{ inventory_hostname }}"
-    owner: "{{ autonomy_user }}"
-    group: "{{ autonomy_group }}"
+    path: "{{ autonomy_sshca_host_dir }}/{{ inventory_hostname }}"
+    owner: "{{ autonomy_common_user }}"
+    group: "{{ autonomy_common_group }}"
     mode: "0755"
     state: directory
   become: false
   delegate_to: localhost
   tags:
+    - sshca
     - sshca-host-certs
-    - sshca-host-certs-debug
 
 - name: "Fetch public keys."
   ansible.builtin.fetch:
-    src: "{{ ssh_config_dir }}/ssh_host_{{ item }}_key.pub"
-    dest: "{{ ownca_directory }}/hosts/ssh/{{ inventory_hostname }}/ssh_host_{{ item }}_key.pub"
+    src: "{{ autonomy_common_openssh_host_pub_path }}"
+    dest: "{{ autonomy_sshca_host_pub_path }}"
     flat: true
-  loop: "{{ autonomy_sshca_host_key_types }}"
   changed_when: false
+  become: true
   tags:
-    - sshca_host_certs
+    - sshca
     - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
 
 # ==================================================================================================
 #
@@ -48,44 +44,65 @@
 # ==================================================================================================
 - name: "Sign SSH Public Keys."
   community.crypto.openssh_cert:
-    signing_key: "{{ sshca_host_signer_key }}"
-    public_key: "{{ ownca_directory }}/hosts/ssh/{{ autonomy_fqdn }}/ssh_host_{{ item }}_key.pub"
-    path: "{{ ownca_directory }}/hosts/ssh/{{ autonomy_fqdn }}/ssh_host_{{ item }}_key-cert.pub"
-    identifier: "{{ sshca_host_signer_id }}"
+    signing_key: "{{ autonomy_sshca_hostca_key_path }}"
+    public_key: "{{ autonomy_sshca_host_pub_path }}"
+    path: "{{ autonomy_sshca_host_cert_path }}"
+    identifier: "{{ autonomy_sshca_hostca_key_comment }}"
     type: "host"
-    principals: "{{ sshca_host_signer_hostnames }}"
+    principals: "{{ autonomy_sshca_host_principals }}"
     #serial_number:
-    valid_at: "+2w"
-    valid_from: "+0s"
-    valid_to: "+52w"
-    owner: "{{ autonomy_user }}"
-    group: "{{ autonomy_group }}"
+    valid_at: "{{ autonomy_sshca_host_valid_at }}"
+    valid_from: "{{ autonomy_sshca_host_valid_from }}"
+    valid_to: "{{ autonomy_sshca_host_valid_to }}"
+    ignore_timestamps: "{{ autonomy_sshca_host_ignore_timestamps }}"
+    use_agent: "{{ autonomy_sshca_use_agent }}"
+    regenerate: "{{ autonomy_sshca_host_regenerate }}"
+    force: "{{ autonomy_sshca_host_force }}"
+    owner: "{{ autonomy_common_user }}"
+    group: "{{ autonomy_common_group }}"
     mode: "0644"
-    ignore_timestamps: true
-    regenerate: "full_idempotence"
     state: "present"
-    use_agent: "true"
-  become: no
-  loop: "{{ autonomy_sshca_host_key_types }}"
   delegate_to: localhost
+  become: false
   tags:
-    - sshca_host_certs
+    - sshca
     - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
 
-- name: "Copy certificates to server."
+- name: "Create Required Directories for Cert authorization."
+  ansible.builtin.file:
+    name: "{{ autonomy_common_openssh_ca_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+  tags:
+    - sshca
+    - sshca-host-certs
+
+- name: "Copy CA Public Keys to Server."
   ansible.builtin.copy:
-    src: "{{ ownca_directory }}/hosts/ssh/{{ autonomy_fqdn }}/ssh_host_{{ item }}_key-cert.pub"
-    dest: "{{ ssh_config_dir }}/ssh_host_{{ item }}_key-cert.pub"
+    src: "{{ item['src'] }}"
+    dest: "{{ item['dest'] }}"
     owner: "root"
     group: "root"
     mode: "0644"
-  loop: "{{ autonomy_sshca_host_key_types }}"
+  loop: "{{ autonomy_sshca_ca_public_keys }}"
   notify: restart ssh
-  become: yes
+  become: true
   tags:
-    - sshca_host_certs
+    - sshca
     - sshca-host-certs
-    - sshca_host_certs_debug
-    - sshca-host-certs-debug
+
+- name: "Copy Host Certificates to Server."
+  ansible.builtin.copy:
+    src: "{{ autonomy_sshca_host_cert_path }}"
+    dest: "{{ autonomy_common_openssh_host_cert_path }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: restart ssh
+  become: true
+  tags:
+    - sshca
+    - sshca-host-certs

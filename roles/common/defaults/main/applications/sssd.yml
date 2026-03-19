@@ -1,0 +1,3 @@
+---
+autonomy_common_sssd_package: "sssd"
+autonomy_common_sssd_daemon: "sssd"

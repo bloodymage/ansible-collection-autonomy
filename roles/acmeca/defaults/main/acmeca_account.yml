@@ -1,0 +1,39 @@
+---
+autonomy_acmeca_regenerate_account_key: false
+
+# Account Key Settings
+autonomy_acmeca_account_email: "{{ autonomy_common_sysadmin_email_address }}"
+autonomy_acmeca_account_key_type: "{{ autonomy_acmeca_key_type }}"
+autonomy_acmeca_account_key_size: "{{ autonomy_acmeca_key_size }}"
+
+# Files
+autonomy_acmeca_account_key_file: "{{ autonomy_common_sysadmin_user }}_at_{{ autonomy_common_root_zone_name }}_{{ autonomy_common_zone_tld }}_{{ autonomy_acmeca_account_key_type | lower }}.key"
+
+# Paths
+autonomy_acmeca_account_key_path: "{{ autonomy_acmeca_user_account_dir }}/{{ autonomy_acmeca_account_key_file }}"
+
+# Password Config
+autonomy_acmca_account_password: "password"
+autonomy_acmca_account_password_length: "{{ autonomy_acmeca_password_length }}"
+
+autonomy_acmca_account_password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_root_domain }}/acmeca/account_password"
+autonomy_acmca_account_password_store_length: "length={{ autonomy_acmca_account_password_length }}"
+autonomy_acmca_account_password_store_overwrite: "overwrite={{ autonomy_common_password_overwrite }} backup=yes"
+autonomy_acmca_account_password_store_create: "create=true missing=create"
+autonomy_acmca_account_password_store_symbols: "nosymbols={{ autonomy_common_password_no_symbols }}"
+autonomy_acmca_account_password_store_lookup: >-
+  {{ autonomy_acmca_account_password_store_id }}
+  {{ autonomy_acmca_account_password_store_length }}
+  {{ autonomy_acmca_account_password_store_overwrite }}
+  {{ autonomy_acmca_account_password_store_create }}
+  {{ autonomy_acmca_account_password_store_symbols }}
+
+
+# -    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/acmeca/account_password"
+# -    __password_length: "length={{ autonomy_password_length }}"
+# -    __password_overwrite: "overwrite={{ autonomy_common_password_overwrite }} backup=yes"
+# -    __password_create: "create=true"
+# -    __password_symbols: "nosymbols=true"
+# -    __password_lookup: "{{ __password_store_id }} {{ __password_create }} {{ __password_length }} {{ __password_symbols }} {{ __password_overwrite }}"
+# -    __password: "{% if autonomy_acmeca_account_key_password == 'password' %}{{ lookup('community.general.passwordstore', __password_lookup) }}{% else %}{{ autonomy_acmeca_account_key_passwo
+# rd }}{% endif %}"

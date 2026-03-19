@@ -1,4 +1,4 @@
-Ansible Role: Bloodymage.autonomy.global_packages
+Ansible Role: bloodymage.autonomy.members
 ===============
 
 - [Description](#description)
@@ -15,7 +15,7 @@ Ansible Role: Bloodymage.autonomy.global_packages
 
 Description
 -----------
-Installs miscilanious packages
+Installs members
 
 Installation
 ------------

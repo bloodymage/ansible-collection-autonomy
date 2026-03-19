@@ -20,39 +20,44 @@
     - ownca-host-dhparams
     - ownca-root
     - ownca-user-certs
+    - install-packages
 
 - name: "Install packages."
   ansible.builtin.package:
     pkg: "{{ autonomy_ownca_packages }}"
     state: present
+  run_once: true
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
   become: true
   register: result
-  delegate_to: localhost
-  run_once: true
+  tags:
+    - ownca_host_certs
+    - ownca-host-certs
+    - ownca_host_certificates
+    - ownca-host-certificates
+    - ownca_host_certs_debug
+    - ownca-host-certs-debug
+    - ownca_host_certificates_debug
+    - ownca-host-certificates-debug
+    - install-packages
+    - ownca-all
 
-- name: "Create OwnCA: Root CA."
-  include_tasks: "rootca.yml"
+- name: "Setup OwnCA Certificate Authority."
+  include_tasks: "cert_auth.yml"
   when:
     - __ownca_tasks == "ownca"
   tags:
     - ownca
     - ownca-root
 
-# - name: "Create OwnCA: Intermediate CAs."
-#   include_tasks: "intermediateca.yml"
-#   when:
-#     - __ownca_tasks == "ownca"
-#   tags:
-#     - ownca
-
 - name: "Create Host Certificates."
   include_tasks: "host_certs.yml"
   when:
     - __ownca_tasks == "hostcerts"
+    - autonomy_ownca_generate_certificate
   tags:
     - ownca
     - ownca-host-certs
-
 
 - name: "Create User Certificates."
   include_tasks: "user_certs.yml"
@@ -62,19 +67,20 @@
     - ownca
     - ownca-user-certs
 
-- name: "Create OwnCA: CRLs."
-  include_tasks: "crls.yml"
-  when:
-    - __ownca_tasks == "crls"
-  tags:
-    - ownca
-    - ownca-crls
+# - name: "Create OwnCA: CRLs."
+#   include_tasks: "crls.yml"
+#   when:
+#     - __ownca_tasks == "crls"
+#   tags:
+#     - ownca
+#     - ownca-crls
 
 - name: "Create Host Diffie-Hellman Parameters."
   include_tasks: "host_dhparams.yml"
   when:
     - __ownca_tasks == "dhparams"
     - inventory_hostname not in groups["vendor_managed"]
+    - autonomy_ownca_generate_certificate
   tags:
     - ownca
     - ownca-host-dhparams

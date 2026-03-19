@@ -23,7 +23,7 @@
   register: running_processes
   failed_when:
     - running_processes.stderr is truthy
-  become: yes
+  become: true
   when:
     - __samba_recreate_realm
 
@@ -31,8 +31,8 @@
   ansible.builtin.command:
     cmd: "kill {{ item }}"
   loop: "{{ running_processes.stdout_lines }}"
-  become: yes
-  ignore_errors: yes
+  become: true
+  ignore_errors: true
   when:
     - __samba_recreate_realm
 
@@ -41,9 +41,9 @@
     path: "/proc/{{ item }}/status"
     state: absent
   loop: "{{ running_processes.stdout_lines }}"
-  ignore_errors: yes
+  ignore_errors: true
   register: killed_processes
-  become: yes
+  become: true
   when:
     - __samba_recreate_realm
 
@@ -51,8 +51,8 @@
   ansible.builtin.command:
     cmd: "kill -9 {{ item }}"
   loop: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"
-  become: yes
-  ignore_errors: yes
+  become: true
+  ignore_errors: true
   when:
     - __samba_recreate_realm
 
@@ -71,7 +71,7 @@
       tr -s "[:blank:]"
     executable: "/bin/bash"
   register: __config_file
-  become: no
+  become: false
   when:
     - __samba_recreate_realm
 
@@ -102,7 +102,7 @@
     - "/var/lib/samba"
     - "/var/cache/samba"
     - "/var/lib/samba/private"
-  become: yes
+  become: true
   register: __database
   when:
     - __samba_recreate_realm
@@ -120,6 +120,6 @@
   ansible.builtin.file:
     path: "/usr/lib/samba/sysvol"
     state: absent
-  become: yes
+  become: true
   when:
     - __samba_recreate_realm

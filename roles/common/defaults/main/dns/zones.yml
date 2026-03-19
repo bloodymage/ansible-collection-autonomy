@@ -1,0 +1,41 @@
+---
+# Zone Definitions
+autonomy_common_zone_name: "{{ autonomy_common_org_unit_name | lower }}"
+autonomy_common_zone_domain: "{{ autonomy_common_zone_name }}.{{ autonomy_common_root_domain }}"
+autonomy_common_zone_type: "internal"
+
+autonomy_common_zone_tld: "com"
+autonomy_common_root_zone_name: "{{ autonomy_common_org_name | lower }}"
+autonomy_common_root_domain: "{{ autonomy_common_root_zone_name }}.{{ autonomy_common_zone_tld }}"
+
+autonomy_common_internal_zone_name: "{{ autonomy_common_org_unit_name | lower }}"
+autonomy_common_internal_zone_domain: "{{ autonomy_common_internal_zone_name | lower }}.{{ autonomy_common_root_domain }}"
+autonomy_common_internal_zone_type: "{{ autonomy_common_zone_type }}"
+
+autonomy_common_dmz_zone_name: "dmz"
+autonomy_common_dmz_zone_domain: "{{ autonomy_common_dmz_zone_name }}.{{ autonomy_common_root_domain }}"
+autonomy_common_dmz_zone_type: "dmz"
+
+autonomy_common_public_zone_name: "{{ autonomy_common_root_zone_name }}"
+autonomy_common_public_zone_domain: "{{ autonomy_common_root_domain }}"
+autonomy_common_public_zone_type: "public"
+
+autonomy_common_internal_zone:
+  name: "{{ autonomy_common_internal_zone_name }}"
+  type: "{{ autonomy_common_internal_zone_type }}"
+  domain: "{{ autonomy_common_internal_zone_domain }}"
+
+autonomy_common_dmz_zone:
+  name: "{{ autonomy_common_dmz_zone_name }}"
+  type: "{{ autonomy_common_dmz_zone_type }}"
+  domain: "{{ autonomy_common_dmz_zone_domain }}"
+
+autonomy_common_public_zone:
+  name: "{{ autonomy_common_public_zone_name }}"
+  type: "{{ autonomy_common_public_zone_type }}"
+  domain: "{{ autonomy_common_public_zone_domain }}"
+
+autonomy_common_zones:
+  - "{{ autonomy_common_internal_zone }}"
+  - "{{ autonomy_common_dmz_zone }}"
+  - "{{ autonomy_common_public_zone }}"

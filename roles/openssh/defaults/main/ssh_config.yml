@@ -1,0 +1,242 @@
+---
+# ==================================================================================================
+#
+# ssh_config options
+#
+# ==================================================================================================
+# Default Host aka "*"
+# Values changed from default
+
+autonomy_openssh_ssh_conf_includes:
+  - "{{ autonomy_openssh_ssh_conf_d_dir }}/*.conf"
+
+autonomy_openssh_ssh_conf_hash_known_hosts: "yes"
+
+# Values Not changed from default
+autonomy_openssh_ssh_conf_add_keys_to_agent: "{{ __autonomy_openssh_ssh_conf_add_keys_to_agent }}"
+autonomy_openssh_ssh_conf_address_family: "{{ __autonomy_openssh_ssh_conf_address_family }}"
+autonomy_openssh_ssh_conf_batch_mode: "{{ __autonomy_openssh_ssh_conf_batch_mode }}"
+autonomy_openssh_ssh_conf_bind_address: ""
+autonomy_openssh_ssh_conf_bind_interface: ""
+autonomy_openssh_ssh_conf_canonical_domains: []
+autonomy_openssh_ssh_conf_canonicalize_fallback_local: "{{ __autonomy_openssh_ssh_conf_canonicalize_fallback_local }}"
+autonomy_openssh_ssh_conf_canonicalize_hostname: "{{ __autonomy_openssh_ssh_conf_canonicalize_hostname }}"
+autonomy_openssh_ssh_conf_canonicalize_max_dots: "{{ __autonomy_openssh_ssh_conf_canonicalize_max_dots }}"
+autonomy_openssh_ssh_conf_canonicalize_permitted_cnames: []
+autonomy_openssh_ssh_conf_ca_signature_algorithms: "{{ __autonomy_openssh_ssh_conf_ca_signature_algorithms }}"
+autonomy_openssh_ssh_conf_certificate_file: []
+autonomy_openssh_ssh_conf_channel_timeout: "{{ __autonomy_openssh_ssh_conf_channel_timeout }}"
+autonomy_openssh_ssh_conf_check_host_ip: "{{ __autonomy_openssh_ssh_conf_check_host_ip }}"
+autonomy_openssh_ssh_conf_ciphers: "{{ __autonomy_openssh_ssh_conf_ciphers }}"
+autonomy_openssh_ssh_conf_clear_all_forwardings: "{{ __autonomy_openssh_ssh_conf_clear_all_forwardings }}"
+autonomy_openssh_ssh_conf_compression: "{{ __autonomy_openssh_ssh_conf_compression }}"
+autonomy_openssh_ssh_conf_connection_attempts: "{{ __autonomy_openssh_ssh_conf_connection_attempts }}"
+autonomy_openssh_ssh_conf_connect_timeout: ""
+autonomy_openssh_ssh_conf_control_master: "{{ __autonomy_openssh_ssh_conf_control_master }}"
+autonomy_openssh_ssh_conf_control_path: ""
+autonomy_openssh_ssh_conf_control_persist: "{{ __autonomy_openssh_ssh_conf_control_persist }}"
+autonomy_openssh_ssh_conf_dynamic_forward: ""
+autonomy_openssh_ssh_conf_enable_escape_commandline: ""
+autonomy_openssh_ssh_conf_enable_ssh_keysign: "{{ __autonomy_openssh_ssh_conf_enable_ssh_keysign }}"
+autonomy_openssh_ssh_conf_escape_char: "{{ __autonomy_openssh_ssh_conf_escape_char }}"
+autonomy_openssh_ssh_conf_exit_on_forward_failure: "{{ __autonomy_openssh_ssh_conf_exit_on_forward_failure }}"
+autonomy_openssh_ssh_conf_fingerprint_hash: "{{ __autonomy_openssh_ssh_conf_fingerprint_hash }}"
+autonomy_openssh_ssh_conf_fork_after_authentication: "{{ __autonomy_openssh_fork_after_authentication }}"
+autonomy_openssh_ssh_conf_forward_agent: "{{ __autonomy_openssh_ssh_conf_forward_agent }}"
+autonomy_openssh_ssh_conf_forward_x11: "{{ __autonomy_openssh_ssh_conf_forward_x11 }}"
+autonomy_openssh_ssh_conf_forward_x11_timeout: "{{ __autonomy_openssh_ssh_conf_forward_x11_timeout }}"
+autonomy_openssh_ssh_conf_forward_x11_trusted: "{{ __autonomy_openssh_ssh_conf_forward_x11_trusted }}"
+autonomy_openssh_ssh_conf_gateway_ports: "{{ __autonomy_openssh_ssh_conf_gateway_ports }}"
+autonomy_openssh_ssh_conf_global_known_hosts_file: "{{ __autonomy_openssh_ssh_conf_global_known_hosts_file }}"
+autonomy_openssh_ssh_conf_gssapi_authentication: "{{ __autonomy_openssh_ssh_conf_gssapi_authentication }}"
+autonomy_openssh_ssh_conf_gssapi_client_identity: ""
+autonomy_openssh_ssh_conf_gssapi_delegate_credentials: "{{ __autonomy_openssh_ssh_conf_gssapi_delegate_credentials }}"
+autonomy_openssh_ssh_conf_gssapi_key_exchange: "{{ __autonomy_openssh_ssh_conf_gssapi_key_exchange }}"
+autonomy_openssh_ssh_conf_gssapi_renewal_forces_rekey: "{{ __autonomy_openssh_ssh_conf_gssapi_renewal_forces_rekey }}"
+autonomy_openssh_ssh_conf_gssapi_server_identity: ""
+autonomy_openssh_ssh_conf_gssapi_trust_dns: "{{ __autonomy_openssh_ssh_conf_gssapi_trust_dns }}"
+autonomy_openssh_ssh_conf_gssapi_kex_algorithems: "{{ __autonomy_openssh_ssh_conf_gssapi_kex_algorithems }}"
+autonomy_openssh_ssh_conf_hostbased_accepted_algorithms: "{{ __autonomy_openssh_ssh_conf_hostbased_accepted_algorithms }}"
+autonomy_openssh_ssh_conf_hostbased_authentication: "{{ __autonomy_openssh_ssh_conf_hostbased_authentication }}"
+autonomy_openssh_ssh_conf_host_key_algorithms: "{{ __autonomy_openssh_ssh_conf_host_key_algorithms }}"
+#autonomy_openssh_ssh_conf_host_key_alias:
+#autonomy_openssh_ssh_conf_hostname:
+autonomy_openssh_ssh_conf_identities_only: "{{ __autonomy_openssh_ssh_conf_identities_only }}"
+autonomy_openssh_ssh_conf_identity_agent: ""
+autonomy_openssh_ssh_conf_identity_file: ""
+autonomy_openssh_ssh_conf_ignore_unknown: []
+# autonomy_openssh_ssh_conf_ip_qos:
+autonomy_openssh_ssh_conf_kbd_interactive_authentication: "{{ __autonomy_openssh_ssh_conf_kbd_interactive_authentication }}"
+# autonomy_openssh_ssh_conf_kbd_interactive_devices:
+autonomy_openssh_ssh_conf_kex_algorithms: "{{ __autonomy_openssh_ssh_conf_kex_algorithms }}"
+# autonomy_openssh_ssh_conf_known_hosts_command:
+# autonomy_openssh_ssh_conf_local_command:
+# autonomy_openssh_ssh_conf_local_forward:
+# autonomy_openssh_ssh_conf_log_level:
+# autonomy_openssh_ssh_conf_log_verbose:
+# autonomy_openssh_ssh_conf_macs:
+autonomy_openssh_ssh_conf_no_host_authentication_for_localhost: "{{ __autonomy_openssh_ssh_conf_no_host_authentication_for_localhost }}"
+autonomy_openssh_ssh_conf_number_of_password_promts: "{{ __autonomy_openssh_ssh_conf_number_of_password_promts }}"
+# autonomy_openssh_ssh_conf_obscure_keystroke_timing:
+autonomy_openssh_ssh_conf_password_authentication: "{{ __autonomy_openssh_ssh_conf_password_authentication }}"
+# autonomy_openssh_ssh_conf_permit_local_command:
+# autonomy_openssh_ssh_conf_permit_remote_open:
+autonomy_openssh_ssh_conf_pkcs11_provider: "{{ __autonomy_openssh_ssh_conf_pkcs11_provider }}"
+autonomy_openssh_ssh_conf_port: "{{ __autonomy_openssh_ssh_conf_port }}"
+# autonomy_openssh_ssh_conf_preferred_authentications:
+# autonomy_openssh_ssh_conf_proxy_command:
+# autonomy_openssh_ssh_conf_proxy_jump:
+# autonomy_openssh_ssh_conf_proxy_use_fdpass:
+# autonomy_openssh_ssh_conf_pubkey_accepted_algorithms:
+# autonomy_openssh_ssh_conf_pubkey_authentication:
+# autonomy_openssh_ssh_conf_rekey_limit:
+# autonomy_openssh_ssh_conf_remote_command:
+# autonomy_openssh_ssh_conf_remote_forward:
+# autonomy_openssh_ssh_conf_request_tty:
+# autonomy_openssh_ssh_conf_required_rsa_size:
+# autonomy_openssh_ssh_conf_revoked_host_keys:
+# autonomy_openssh_ssh_conf_security_key_provider:
+autonomy_openssh_ssh_conf_send_env: []
+# autonomy_openssh_ssh_conf_server_alive_count_max:
+# autonomy_openssh_ssh_conf_server_alive_interval:
+# autonomy_openssh_ssh_conf_session_type:
+# autonomy_openssh_ssh_conf_set_env:
+# autonomy_openssh_ssh_conf_stdin_null:
+# autonomy_openssh_ssh_conf_stream_local_bind_mask:
+# autonomy_openssh_ssh_conf_stream_local_bind_unlink:
+autonomy_openssh_ssh_conf_strict_host_key_checking: "{{ __autonomy_openssh_ssh_conf_strict_host_key_checking }}"
+# autonomy_openssh_ssh_conf_syslog_facility:
+# autonomy_openssh_ssh_conf_tcp_keep_alive:
+# autonomy_openssh_ssh_conf_tag:
+# autonomy_openssh_ssh_conf_tunnel:
+# autonomy_openssh_ssh_conf_tunnel_device:
+# autonomy_openssh_ssh_conf_update_host_keys:
+# autonomy_openssh_ssh_conf_user:
+autonomy_openssh_ssh_conf_user_known_hosts_file: "{{ __autonomy_openssh_ssh_conf_user_known_hosts_file }}"
+# autonomy_openssh_ssh_conf_verify_host_key_dns:
+# autonomy_openssh_ssh_conf_version_addendum:
+# autonomy_openssh_ssh_conf_visual_host_key:
+# autonomy_openssh_ssh_conf_x_auth_location:
+
+# ==================================================================================================
+#
+# Default ssh_config options
+#
+# ==================================================================================================
+__autonomy_openssh_ssh_conf_add_keys_to_agent: "no"
+__autonomy_openssh_ssh_conf_address_family: "any"
+__autonomy_openssh_ssh_conf_batch_mode: "no"
+__autonomy_openssh_ssh_conf_canonicalize_fallback_local: "yes"
+__autonomy_openssh_ssh_conf_canonicalize_hostname: "no"
+__autonomy_openssh_ssh_conf_canonicalize_max_dots: 1
+__autonomy_openssh_ssh_conf_ca_signature_algorithms:
+  - ssh-ed25519
+  - ecdsa-sha2-nistp256
+  - ecdsa-sha2-nistp384
+  - ecdsa-sha2-nistp521
+  - sk-ssh-ed25519@openssh.com
+  - sk-ecdsa-sha2-nistp256@openssh.com
+  - rsa-sha2-512
+  - rsa-sha2-256
+__autonomy_openssh_ssh_conf_channel_timeout: []
+__autonomy_openssh_ssh_conf_check_host_ip: "no"
+__autonomy_openssh_ssh_conf_ciphers:
+  - chacha20-poly1305@openssh.com
+  - aes128-gcm@openssh.com
+  - aes256-gcm@openssh.com
+  - aes128-ctr
+  - aes192-ctr
+  - aes256-ctr
+__autonomy_openssh_ssh_conf_clear_all_forwardings: "no"
+__autonomy_openssh_ssh_conf_compression: "no"
+__autonomy_openssh_ssh_conf_connection_attempts: 1
+__autonomy_openssh_ssh_conf_control_master: "no"
+__autonomy_openssh_ssh_conf_control_persist: "no"
+__autonomy_openssh_ssh_conf_enable_ssh_keysign: "no"
+__autonomy_openssh_ssh_conf_escape_char: "~"
+__autonomy_openssh_ssh_conf_exit_on_forward_failure: "no"
+__autonomy_openssh_ssh_conf_fingerprint_hash: "sha256"
+__autonomy_openssh_ssh_conf_fork_after_authentication: "no"
+__autonomy_openssh_ssh_conf_forward_agent: "no"
+__autonomy_openssh_ssh_conf_forward_x11: "no"
+__autonomy_openssh_ssh_conf_forward_x11_timeout: ""
+__autonomy_openssh_ssh_conf_forward_x11_trusted: "no"
+__autonomy_openssh_ssh_conf_gateway_ports: "no"
+__autonomy_openssh_ssh_conf_global_known_hosts_file:
+  - "{{ autonomy_common_openssh_sysconf_dir }}/{{ autonomy_openssh_ssh_known_hosts_file }}"
+  - "{{ autonomy_common_openssh_sysconf_dir }}/{{ autonomy_openssh_ssh_known_hosts_file }}2"
+__autonomy_openssh_ssh_conf_gssapi_authentication: "no"
+__autonomy_openssh_ssh_conf_gssapi_delegate_credentials: "no"
+__autonomy_openssh_ssh_conf_gssapi_key_exchange: "no"
+__autonomy_openssh_ssh_conf_gssapi_renewal_forces_rekey: "no"
+__autonomy_openssh_ssh_conf_gssapi_trust_dns: "no"
+__autonomy_openssh_ssh_conf_gssapi_kex_algorithems:
+  - gss-group14-sha256-
+  - gss-group16-sha512-
+  - gss-nistp256-sha256-
+  - gss-curve25519-sha256-
+  - gss-gex-sha1-
+  - gss-group14-sha1-
+__autonomy_openssh_ssh_conf_hash_known_hosts: "no"
+__autonomy_openssh_ssh_conf_hostbased_accepted_algorithms:
+  - ssh-ed25519-cert-v01@openssh.com
+  - ecdsa-sha2-nistp256-cert-v01@openssh.com
+  - ecdsa-sha2-nistp384-cert-v01@openssh.com
+  - ecdsa-sha2-nistp521-cert-v01@openssh.com
+  - sk-ssh-ed25519-cert-v01@openssh.com
+  - sk-ecdsa-sha2-nistp256-cert-v01@openssh.com
+  - rsa-sha2-512-cert-v01@openssh.com
+  - rsa-sha2-256-cert-v01@openssh.com
+  - ssh-ed25519
+  - ecdsa-sha2-nistp256
+  - ecdsa-sha2-nistp384
+  - ecdsa-sha2-nistp521
+  - sk-ssh-ed25519@openssh.com
+  - sk-ecdsa-sha2-nistp256@openssh.com
+  - rsa-sha2-512
+  - rsa-sha2-256
+__autonomy_openssh_ssh_conf_hostbased_authentication: "no"
+__autonomy_openssh_ssh_conf_host_key_algorithms:
+  - ssh-ed25519-cert-v01@openssh.com
+  - ecdsa-sha2-nistp256-cert-v01@openssh.com
+  - ecdsa-sha2-nistp384-cert-v01@openssh.com
+  - ecdsa-sha2-nistp521-cert-v01@openssh.com
+  - sk-ssh-ed25519-cert-v01@openssh.com
+  - sk-ecdsa-sha2-nistp256-cert-v01@openssh.com
+  - rsa-sha2-512-cert-v01@openssh.com
+  - rsa-sha2-256-cert-v01@openssh.com
+  - ssh-ed25519
+  - ecdsa-sha2-nistp256
+  - ecdsa-sha2-nistp384
+  - ecdsa-sha2-nistp521
+  - sk-ecdsa-sha2-nistp256@openssh.com
+  - sk-ssh-ed25519@openssh.com
+  - rsa-sha2-512
+  - rsa-sha2-256
+__autonomy_openssh_ssh_conf_identities_only: "no"
+__autonomy_openssh_ssh_conf_identity_agent: ""
+__autonomy_openssh_ssh_conf_kbd_interactive_authentication: "yes"
+__autonomy_openssh_ssh_conf_kex_algorithms:
+  - mlkem768x25519-sha256
+  - sntrup761x25519-sha512
+  - sntrup761x25519-sha512@openssh.com
+  - curve25519-sha256
+  - curve25519-sha256@libssh.org
+  - ecdh-sha2-nistp256
+  - ecdh-sha2-nistp384
+  - ecdh-sha2-nistp521
+  - diffie-hellman-group-exchange-sha256
+  - diffie-hellman-group16-sha512
+  - diffie-hellman-group18-sha512
+  - diffie-hellman-group14-sha256
+__autonomy_openssh_ssh_conf_no_host_authentication_for_localhost: "no"
+__autonomy_openssh_ssh_conf_number_of_password_promts: 3
+__autonomy_openssh_ssh_password_authentication: "yes"
+__autonomy_openssh_ssh_conf_pkcs11_provider: "none"
+__autonomy_openssh_ssh_conf_port: 22
+__autonomy_openssh_ssh_conf_strict_host_key_checking: "ask"
+__autonomy_openssh_ssh_conf_user_known_hosts_file:
+  - "~/.ssh/known_hosts"
+  - "~/.ssh/known_hosts2"
+
+#  LocalWords:  diffie hellman

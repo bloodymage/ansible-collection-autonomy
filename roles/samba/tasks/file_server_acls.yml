@@ -4,12 +4,12 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
-    recurse: yes
+    recurse: true
     follow: no
-    owner: "{{ autonomy_org_unit_name | upper }}\\unixadmin"
-    group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
+    owner: "{{ autonomy_common_org_unit_name | upper }}\\unixadmin"
+    group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "{{ item.mode | default('0770') }}"
-  become: yes
+  become: true
   loop: "{{ samba_shares }}"
   when:
     item.name != "Users"
@@ -20,10 +20,10 @@
     state: directory
     recurse: no
     follow: no
-    owner: "{{ autonomy_org_unit_name | upper }}\\unixadmin"
-    group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
+    owner: "{{ autonomy_common_org_unit_name | upper }}\\unixadmin"
+    group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "{{ item.mode | default('0770') }}"
-  become: yes
+  become: true
   loop: "{{ samba_shares }}"
   when:
     - item.name == "Users"
@@ -32,12 +32,12 @@
   ansible.builtin.file:
     path: "/srv/samba/home/{{ item.username }}"
     state: directory
-    recurse: yes
+    recurse: true
     follow: no
-    owner: "{{ autonomy_org_unit_name | upper }}\\{{ item.username }}"
-    group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
+    owner: "{{ autonomy_common_org_unit_name | upper }}\\{{ item.username }}"
+    group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "{{ item.mode | default('0770') }}"
-  become: yes
+  become: true
   loop: "{{ __realm_users }}"
   when:
     - item.id_number is defined
@@ -62,28 +62,28 @@
 # ==================================================================================================
 # - name: "Set ACLs on User Home Folders"
 #   ansible.windows.win_acl:
-#     path: "\\\\{{ autonomy_fqdn }}\\Users"
-#     user: "{{ autonomy_org_unit_name }}\\Domain Admins"
+#     path: "\\\\{{ inventory_hostname }}\\Users"
+#     user: "{{ autonomy_common_org_unit_name }}\\Domain Admins"
 #     type: allow
 #     rights: "FullControl"
 
 # - name: "Set ACLs on User Home Folders"
 #   ansible.windows.win_acl:
-#     path: "\\\\{{ autonomy_fqdn }}\\Users"
-#     user: "{{ autonomy_org_unit_name }}\\unixadmins"
+#     path: "\\\\{{ inventory_hostname }}\\Users"
+#     user: "{{ autonomy_common_org_unit_name }}\\unixadmins"
 #     type: allow
 #     rights: "FullControl"
 
 # - name: "Set ACLs on User Home Folders"
 #   ansible.windows.win_acl:
-#     path: "\\\\{{ autonomy_fqdn }}\\Users"
-#     user: "{{ autonomy_org_unit_name }}\\Domain Users"
+#     path: "\\\\{{ inventory_hostname }}\\Users"
+#     user: "{{ autonomy_common_org_unit_name }}\\Domain Users"
 #     type: allow
 #     rights: "ReadAndExecute"
 
 # - name: "Set ACLs on User Home Folders"
 #   ansible.windows.win_acl:
-#     path: "\\\\{{ autonomy_fqdn }}\\Users"
+#     path: "\\\\{{ inventory_hostname }}\\Users"
 #     user: "CREATOR OWNER"
 #     type: allow
 #     rights: "FullControl"

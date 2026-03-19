@@ -13,25 +13,28 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
   tags:
     - install-packages
+    - ntp
 
 - name: "Remove conflicting packages."
   ansible.builtin.package:
     name: "{{ autonomy_ntp_conflicts }}"
     state: absent
-  become: yes
+  become: true
   tags:
     - install-packages
+    - ntp
 
 - name: "Install packages."
   ansible.builtin.package:
     name: "{{ autonomy_ntp_packages }}"
     state: present
-  become: yes
+  become: true
   tags:
     - install-packages
+    - ntp
 
 - name: "Ensure we have proper permissions set for samba socket directory."
   ansible.builtin.file:
@@ -40,9 +43,11 @@
     owner: root
     group: "{{ autonomy_ntp_group }}"
     mode: "0750"
-  become: yes
+  become: true
   when:
     - inventory_hostname in groups['samba_domain_controllers']
+  tags:
+    - ntp
 
 - name: "Ensure we have the proper directory for statistics."
   ansible.builtin.file:
@@ -51,18 +56,22 @@
     owner: "{{ autonomy_ntp_user }}"
     group: "{{ autonomy_ntp_group }}"
     mode: "0750"
-  become: yes
+  become: true
   when:
     - autonomy_ntp_enable_statistics
+  tags:
+    - ntp
 
 - name: "Install Configuration files."
   ansible.builtin.template:
-    src: "{{ item.name }}.j2"
-    dest: "/{{ item.name }}"
+    src: "{{ item['name'] }}.j2"
+    dest: "/{{ item['name'] }}"
     owner: root
     group: root
-    mode: "{{ item.mode | default('0644') }}"
-    backup: yes
-  become: yes
+    mode: "{{ item['mode'] | default('0644') }}"
+    backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
+  become: true
   loop: "{{ autonomy_ntp_config_files }}"
   notify: restart ntp
+  tags:
+    - ntp

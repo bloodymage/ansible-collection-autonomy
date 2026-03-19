@@ -4,8 +4,9 @@
 # This playbook configures database servers.
 #
 # ==================================================================================================
+# TODO: Check the hosts, should this only be database servers?
 - name: "Configure environment for database server configuration."
-  hosts: all:!wifi_access_points:!routers:!switches:!printers
+  hosts: all:!vendor_managed
   roles:
     - role: bloodymage.autonomy.autoconfig
       tags:

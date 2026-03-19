@@ -1,0 +1,14 @@
+---
+autonomy_bind_dyndns_force_key_change: false
+
+autonomy_bind_dyndns_password_store_id: "{{ autonomy_common_password_hosts }}/{{ autonomy_common_dns_primary_server_hostname }}/bind_dyndns_secret"
+autonomy_bind_dyndns_password_store_length: "length={{ autonomy_common_password_length }}"
+autonomy_bind_dyndns_password_store_overwrite: "overwrite={{ autonomy_bind_dyndns_force_key_change }} backup={{ autonomy_bind_dyndns_force_key_change }}"
+autonomy_bind_dyndns_password_store_create: "create=true"
+autonomy_bind_dyndns_password_store_symbols: "nosymbols={{ autonomy_common_password_no_symbols }}"
+autonomy_bind_dyndns_password_store_lookup: >-
+  {{ autonomy_bind_dyndns_password_store_id }}
+  {{ autonomy_bind_dyndns_password_store_length }}
+  {{ autonomy_bind_dyndns_password_store_overwrite }}
+  {{ autonomy_bind_dyndns_password_store_create }}
+  {{ autonomy_bind_dyndns_password_store_symbols }}

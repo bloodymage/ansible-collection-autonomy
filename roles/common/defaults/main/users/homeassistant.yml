@@ -1,0 +1,20 @@
+---
+# ==================================================================================================
+#
+# Home Assistant
+#
+# ==================================================================================================
+autonomy_common_users_homeassistant:
+  username: homeassistant
+  name: "Home Assistant"
+  groups: []
+  id_number: "{{ autonomy_common_users_homeassistant_id_number }}"
+  unix_home: /home/homeassistant
+  ssh_access_cert:
+    - homeassistant
+  ssh_cert:
+    - None
+
+autonomy_common_users_homeassistant_group:
+  name: homeassistant
+  gid: "{{ autonomy_common_users_homeassistant_id_number }}"

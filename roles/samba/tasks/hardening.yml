@@ -8,22 +8,22 @@
 # - name: "Disallow any user to join host to AD"
 #   shell: "{{ item }}"
 #   register: success
-#   become: yes
+#   become: true
 #   loop:
 #     - "samba-tool domain settings account_machine_join_quota 0"
-#   when: autonomy_fqdn == __samba_schema_master
-#   ignore_errors: yes
+#   when: inventory_hostname == __samba_schema_master
+#   ignore_errors: true
 
 - name: "Disable Guest Account."
   ansible.builtin.command:
     cmd: "{{ item }}"
   register: success
-  become: yes
+  become: true
   loop:
     - "samba-tool user disable Guest"
-  ignore_errors: yes
+  ignore_errors: true
   when:
-    - autonomy_fqdn == __samba_schema_master
+    - inventory_hostname == __samba_schema_master
 
 # ==================================================================================================
 #
@@ -37,7 +37,7 @@
   ansible.builtin.command:
     cmd: "samba-tool domain passwordsettings set --max-pwd-age={{ samba_domain_password_expiration }}"
   register: success
-  become: yes
+  become: true
   when:
-    - autonomy_fqdn == __samba_schema_master
-  ignore_errors: yes
+    - inventory_hostname == __samba_schema_master
+  ignore_errors: true

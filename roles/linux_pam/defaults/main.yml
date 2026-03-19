@@ -1,5 +1,0 @@
----
-# defaults file for linux-pam
-autonomy_packages:
-  - libpam-runtime
-  - libpam-modules

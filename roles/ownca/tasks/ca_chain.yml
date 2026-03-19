@@ -1,0 +1,67 @@
+---
+# ==================================================================================================
+#
+# Create PEM Bundles
+#
+# ==================================================================================================
+- name: "Find root certificate for issuing CA chain."
+  community.crypto.certificate_complete_chain:
+    input_chain: "{{ lookup('file', __input_chain_path) }}"
+    intermediate_certificates:
+      - "{{ __intermediate_cert_path }}"
+    root_certificates:
+      - "{{ autonomy_ownca_ca_certs_directory }}/{{ autonomy_common_org_name }}-root-ca.crt"
+  vars:
+    __intermediate_cert_file: "{{ autonomy_common_org_name }}-{{ item.name.split('-')[0] }}-ca.crt"
+    __intermediate_cert_path: "{{ autonomy_ownca_ca_certs_directory }}/{{ __intermediate_cert_file }}"
+    __input_chain_file: "{{ autonomy_common_org_name }}-{{ item.name }}-ca.crt"
+    __input_chain_path: "{{ autonomy_ownca_ca_certs_directory }}/{{ __input_chain_file }}"
+  loop: "{{ ownca_certificate_authorities }}"
+  register: parent_cert_authorities
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
+  when:
+    - item.ca_id != "root"
+    - item.ca_id != "intermediate"
+ 
+- name: "Find root certificate for intermediate CA chain."
+  community.crypto.certificate_complete_chain:
+    input_chain: "{{ lookup('file', __input_chain_path) }}"
+    root_certificates:
+      - "{{ autonomy_ownca_ca_certs_directory }}/{{ autonomy_common_org_name }}-root-ca.crt"
+  vars:
+    __input_chain_file: "{{ autonomy_common_org_name }}-{{ item.name }}-ca.crt"
+    __input_chain_path: "{{ autonomy_ownca_ca_certs_directory }}/{{ __input_chain_file }}"
+  loop: "{{ ownca_certificate_authorities }}"
+  register: root_cert_authorities
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
+  when:
+    - item.ca_id == "intermediate"
+
+- name: "Write complete chain to disk."
+  ansible.builtin.copy:
+    dest: "{{ autonomy_ownca_ca_certs_directory }}/{{ autonomy_common_org_name }}-{{ item.item.name }}-ca-chain.crt"
+    content: "{{ ''.join(item.complete_chain) }}"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0644"
+  loop: "{{ parent_cert_authorities.results }}"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
+  when:
+    - item.complete_chain is defined
+
+- name: "Write root chain (intermediates and root) to disk."
+  ansible.builtin.copy:
+    dest: "{{ autonomy_ownca_ca_certs_directory }}/{{ autonomy_common_org_name }}-{{ item.item.name }}-ca-chain.crt"
+    content: "{{ ''.join(item.complete_chain) }}"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0644"
+  loop: "{{ root_cert_authorities.results }}"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
+  when:
+    - item.complete_chain is defined
+

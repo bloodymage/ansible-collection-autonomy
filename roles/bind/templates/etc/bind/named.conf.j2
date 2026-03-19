@@ -14,7 +14,7 @@ include "{{ autonomy_bind_local_path }}";
 {% if autonomy_bind_forwarders is falsy or autonomy_bind_forward == "first" -%}
   include "{{ autonomy_bind_default_zone_path }}";
 {% endif %}
-{% if autonomy_bind_rpz_enabled -%}
+{% if autonomy_common_dns_rpz_enabled -%}
 {% if groups['samba_domain_controllers'] is not defined or inventory_hostname not in groups['samba_domain_controllers'] -%}
   include "{{ autonomy_bind_rpz_path }}";
 {% endif %}

@@ -26,13 +26,13 @@
   ansible.builtin.file:
     path: "{{ ownca_directory }}/users/{{ item.name }}"
     state: directory
-    owner: "{{ autonomy_user }}"
-    group: "{{ autonomy_group }}"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
     mode: "{{ item.mode }}"
   loop: "{{ ownca_user_directories }}"
-  become: no
-  delegate_to: localhost
-  run_once: yes
+  run_once: true
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
 
 # ==================================================================================================
 #
@@ -57,10 +57,10 @@
     state: directory
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}_g"
-    #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
+    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     #mode: "{{ item[1].mode }}"
     mode: "0750"
-  become: yes
+  become: true
   loop: "{{ __realm_users | product(ownca_user_pki_dirs) | list }}"
   vars:
     __username: "{{ item[0].username }}"
@@ -85,16 +85,16 @@
     passphrase: "{{ lookup('community.general.passwordstore', __password_store_id) }}"
     owner: "{{ item.username }}"
     group: "{{ item.username }}_g"
-    #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
+    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "0640"
     state: present
     force: no
-    backup: yes
-  become: yes
+    backup: true
+  become: true
   loop: "{{ __realm_users }}"
   vars:
     __size: "{% if ownca_privatekey_type == 'RSA' and ownca_privatekey_size > ownca_max_user_privatekey_size %}{{ ownca_max_user_privatekey_size }}{% else %}{{ ownca_privatekey_size }}{% endif %}"
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/domain_users/{{ item.username }}/password"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/domain_users/{{ item.username }}/password"
     __username: "{{ item.username }}"
     __user_home_dir: "{{ ownca_home_dir }}/{{ item.username }}"
     __user_private_dir: "{{ __user_home_dir }}/{{ ownca_user_private_dir }}"
@@ -115,18 +115,18 @@
     country_name: "{{ autonomy_country | default(omit) }}"
     state_or_province_name: "{{ autonomy_region | default (omit) }}"
     locality_name: "{{ autonomy_city | default(omit) }}"
-    organization_name: "{{ autonomy_org_name }}"
-    organizational_unit_name: "{{ autonomy_org_unit_name }}"
+    organization_name: "{{ autonomy_common_org_name }}"
+    organizational_unit_name: "{{ autonomy_common_org_unit_name }}"
     common_name: "{{ item[0]['display_name'] }}"
     email_address: "{{ __email }}"
     key_usage: "{{ item[1].key_usage }}"
-    key_usage_critical: yes
+    key_usage_critical: true
     extended_key_usage: "{{ item[1].extended_key_usage }}"
     privatekey_path: "{{ __user_private_dir }}/{{ __username }}.key"
     privatekey_passphrase: "{{ __password }}"
     subject_alt_name: "{{ __san }}"
     crl_distribution_points:
-      - full_name: "URI:{{ ownca_crl_distribution_point }}/{{ __crl_file }}"
+      - full_name: "URI:{{ autonomy_common_ownca_crl_distribution_point }}/{{ __crl_file }}"
         reasons:
           - key_compromise
           - ca_compromise
@@ -139,32 +139,32 @@
     path: "{{ __user_csr_dir }}/{{ __username }}_{{ item[1].name }}.csr"
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}_g"
-    #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
+    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "0640"
     state: present
-    backup: yes
+    backup: true
     force: "{{ __user_cert_force_regeneration }}"
-  become: yes
+  become: true
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
   vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/domain_users/{{ item[0].username }}/password"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/domain_users/{{ item[0].username }}/password"
     __password: "{{ lookup('community.general.passwordstore', __password_store_id) }}"
     __username: "{{ item[0].username }}"
-    __public_email: "{{ item[0].username }}@{{ autonomy_root_domain }}"
+    __public_email: "{{ item[0].username }}@{{ autonomy_common_root_domain }}"
     __given_name: "{{ item[0].given_name | default(item[0].username) | title }}"
     __surname: "{% if item[0].surname is defined %} {{ item[0].surname }}{% else %}{% endif %}"
     __user_home_dir: "{{ ownca_home_dir }}/{{ __username }}"
     __user_private_dir: "{{ __user_home_dir }}/{{ ownca_user_private_dir }}"
     __user_csr_dir: "{{ __user_home_dir }}/{{ ownca_user_csr_dir }}"
     __id_number: "{{ item[0].id_number }}"
-    __user_principal_name: "{{ item[0].username }}@{{ autonomy_domain }}"
+    __user_principal_name: "{{ item[0].username }}@{{ autonomy_common_zone_domain }}"
     __email: "{{ __public_email }}"
     __san_auth: "otherName:{{ ownca_msupn_oid }};UTF8:{{ __user_principal_name }}"
     __san_other_mail: "{% if item[0].email_aliases is defined %}{{ item[0].email_aliases | map('regex_replace', '^', 'email:') | list }}{% else %}[]{% endif %}"
     __san_mail: "email:{{ __email }}"
     __san_email: "{{ [__san_mail] + __san_other_mail }}"
     __san: "{% if item[1].name == 'authentication' %}{{ __san_mail }},{{ __san_auth }}{% else %}{{ __san_email }}{%endif %}"
-    __crl_file: "{{ autonomy_org_name }}-{{ autonomy_org_unit_name }}-identity.crl"
+    __crl_file: "{{ autonomy_common_org_name }}-{{ autonomy_common_org_unit_name }}-identity.crl"
   when:
     - item[0].id_number is defined
     - item[0].spns is not defined
@@ -178,8 +178,8 @@
   ansible.builtin.fetch:
     src: "{{ ownca_home_dir }}/{{ __username }}/.pki/csr/{{ __username }}_{{ item[1].name }}.csr"
     dest: "{{ ownca_directory }}/users/csr/{{ __username }}_{{ item[1].name }}.csr"
-    flat: yes
-  become: yes
+    flat: true
+  become: true
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
   vars:
     __username: "{{ item[0].username }}"
@@ -190,16 +190,16 @@
 - name: "Get identity certificate information."
   community.crypto.x509_certificate_info:
     path: "{{ ownca_identity_ca_cert_path }}"
-  become: no
+  become: false
   register: identity_cert
-  delegate_to: localhost
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
 
 - name: "Check if user cert exists."
   ansible.builtin.stat:
     path: "{{ ownca_directory }}/users/certs/{{ __username}}/{{ __username }}_{{ item[1].name }}.crt"
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
-  delegate_to: localhost
-  become: no
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
   register: cert_file
   vars:
     __username: "{{ item[0].username }}"
@@ -209,8 +209,8 @@
 
 - name: "Check if we are regenerating user certs."
   ansible.builtin.set_fact:
-    __user_cert_force_regeneration: yes
-  become: no
+    __user_cert_force_regeneration: true
+  become: false
   changed_when: __user_cert_force_regeneration
   tags:
     - never
@@ -224,18 +224,18 @@
     ownca_privatekey_path: "{{ ownca_identity_ca_key_path }}"
     ownca_privatekey_passphrase: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
     provider: ownca
-    backup: yes
-    owner: "{{ autonomy_user }}"
-    group: "{{ autonomy_group }}"
+    backup: true
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
     mode: "0644"
     state: present
     force: "{{ __user_cert_force_regeneration }}"
-  become: no
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
-  delegate_to: localhost
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  become: false
   register: result
   vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/ownca/ownca_identity_password"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/ownca/ownca_identity_password"
     __password_lookup: "{{ __password_store_id }}"
     __username: "{{ item[0].username }}"
   when:
@@ -253,7 +253,7 @@
 
 # - name: Add serial number to crl database
 #   ansible.builtin.blockinfile:
-#     dest: "{{ ownca_ca_directory }}/db/{{ autonomy_org_name }}-{{ rebeldrream_org_unit_name }}-identity-ca.crl.srl"
+#     dest: "{{ autonomy_ownca_ca_directory }}/db/{{ autonomy_common_org_name }}-{{ rebeldrream_org_unit_name }}-identity-ca.crl.srl"
 #     block: |
 #       - serial_number: {{ item.serial_number }}
 #         revocation_date: "{{ lookup('pipe','date --utc +%Y%m%d%H%M%S') }}Z"
@@ -274,9 +274,9 @@
     dest: "{{ __user_cert_dir }}/{{ __username }}_{{ item[1].name }}.crt"
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}_g"
-    #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
+    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "0640"
-  become: yes
+  become: true
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
   vars:
     __username: "{{ item[0].username }}"
@@ -287,7 +287,7 @@
     - item[0].id_number is defined
     - item[0].spns is not defined
 
-- name: Generate PKCS#12 files
+- name: "Generate PKCS#12 files."
   community.crypto.openssl_pkcs12:
     action: export
     friendly_name: "{{ __given_name }}{{ __surname }} ({{ item[1].name | title }})"
@@ -296,20 +296,20 @@
     privatekey_passphrase: "{{ lookup('community.general.passwordstore', __password_store_id) }}"
     certificate_path: "{{ __pki_cert_file }}"
     other_certificates:
-      - "/usr/local/share/ca-certificates/{{ autonomy_org_name }}-{{ autonomy_org_unit_name }}-identity-ca.crt"
-      - "/usr/local/share/ca-certificates/{{ autonomy_org_name }}-{{ autonomy_org_unit_name }}-ca.crt"
-      - "/usr/local/share/ca-certificates/{{ autonomy_org_name }}-root-ca.crt"
+      - "/usr/local/share/ca-certificates/{{ autonomy_common_org_name }}-{{ autonomy_common_org_unit_name }}-identity-ca.crt"
+      - "/usr/local/share/ca-certificates/{{ autonomy_common_org_name }}-{{ autonomy_common_org_unit_name }}-ca.crt"
+      - "/usr/local/share/ca-certificates/{{ autonomy_common_org_name }}-root-ca.crt"
     state: present
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}_g"
-    #group: "{{ autonomy_org_unit_name | upper }}\\unixadmins"
+    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "0640"
-    backup: yes
+    backup: true
     force: no
-  become: yes
+  become: false
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
   vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/domain_users/{{ item[0].username }}/password"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/domain_users/{{ item[0].username }}/password"
     __username: "{{ item[0].username }}"
     __id_number: "{{ item[0].id_number }}"
     __given_name: "{{ item[0].given_name | default(item[0].username) | title }}"
@@ -331,17 +331,17 @@
   community.crypto.x509_certificate_convert:
     src_path: "{{ __pki_cert_dir }}/{{ item[0].username }}_{{ __cert_purpose }}-ca.crt"
     dest_path: "{{ __pki_cert_dir }}/{{ item[0].username }}_{{ __cert_purpose }}-ca.der"
-    owner: "{{ autonomy_user }}"
-    group: "{{ autonomy_group }}"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
     mode: "0644"
     format: "der"
-    backup: true
+    backup: false
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
   vars:
     __pki_cert_dir: "{{ ownca_directory }}/users/certs/{{ item[0].username }}"
     __cert_purpose: "{{ item[1].name }}"
   become: false
-  delegate_to: localhost
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
   when:
     - item[0].id_number is defined
     - item[0].spns is not defined

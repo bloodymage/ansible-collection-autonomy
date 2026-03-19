@@ -3,5 +3,6 @@
   ansible.builtin.package_facts:
     manager: auto
   when:
-    - autonomy_virtual_host is falsy
+    - autonomy_common_virtual_host is falsy
+    - inventory_hostname not in groups["vendor_managed"]
     - ansible_connection != "local"

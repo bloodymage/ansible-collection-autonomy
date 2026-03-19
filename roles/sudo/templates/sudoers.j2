@@ -1,4 +1,4 @@
-# {{ansible_managed|comment}}
+# {{ ansible_managed }}
 
 #
 # This file MUST be edited with the 'visudo' command as root.
@@ -25,7 +25,7 @@ root	ALL=(ALL:ALL) ALL
 %sudo	ALL=(ALL:ALL) ALL
 
 # Allow members of group sudo to execute any command without a password
-%wheel	ALL=(ALL:ALL) NOPASSWD: ALL
+%wheel	ALL=(ALL:ALL) NOPASSWD:ALL
 
 #AD Domain Groups and Users
 %unix\ admins ALL=(ALL:ALL) NOPASSWD:ALL
@@ -33,3 +33,6 @@ root	ALL=(ALL:ALL) ALL
 # See sudoers(5) for more information on "#include" directives:
 
 #includedir /etc/sudoers.d
+
+{# LocalWords:  env
+#}

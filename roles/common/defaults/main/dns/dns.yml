@@ -1,0 +1,18 @@
+---
+autonomy_common_dns_only: false
+
+autonomy_common_bind_primary_zone: "primary"
+autonomy_common_bind_secondary_zone: "secondary"
+
+autonomy_common_dns_primary_server_hostname: "ns01"
+autonomy_common_dns_primary_server_ip: ""
+autonomy_common_dns_primary_server_fqdn: "{{ autonomy_common_dns_primary_server_hostname }}.{{ autonomy_common_zone_domain }}"
+
+autonomy_common_dns_reversezone_domain: "{{ autonomy_common_zone_domain }}"
+
+autonomy_common_dns_ipv4_reverse_zone: "{{ autonomy_common_ipv4_address.split('.')[0] }}.{{ autonomy_common_ipv4_address.split('.')[1] }}"
+autonomy_common_dns_ipv4_reverse_zone_formatted: "{{ autonomy_common_dns_ipv4_reverse_zone.split('.')[1] }}.{{ autonomy_common_dns_ipv4_reverse_zone.split('.')[0] }}"
+
+autonomy_common_dns_reversezone_primary_server_hostname: "{{ autonomy_common_dns_primary_server_hostname }}"
+autonomy_common_dns_reversezone_primary_server_ip: "{{ autonomy_common_dns_primary_server_ip }}"
+autonomy_common_dns_reversezone_primary_server_fqdn: "{{ autonomy_common_dns_reversezone_primary_server_hostname }}.{{ autonomy_common_dns_reversezone_domain }}"

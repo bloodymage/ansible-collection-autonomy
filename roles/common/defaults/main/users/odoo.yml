@@ -1,0 +1,13 @@
+---
+# ==================================================================================================
+#
+# odoo
+#
+# ==================================================================================================
+autonomy_common_users_odoo:
+  username: odoo
+  groups: []
+  id_number: "{{ autonomy_common_users_odoo_id_number }}"
+  unix_home: /home/odoo
+  ssh_access_cert:
+    - odoo

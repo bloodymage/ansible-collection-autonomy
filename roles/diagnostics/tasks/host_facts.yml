@@ -56,9 +56,9 @@
   ansible.builtin.debug:
     msg:
       - "System {{ inventory_hostname }}"
-      - "    IPv6 Addr:    {{ autonomy_ipv6_address | default(none) }}"
-      - "    PTR      :    {{ autonomy_ipv6_address | ansible.utils.ipaddr('revdns') }}"
-      - "    IPv6 Zone:    {{ autonomy_ipv6_address | ansible.utils.ipcut(64) }}"
+      - "    IPv6 Addr:    {{ autonomy_common_ipv6_address | default(none) }}"
+      - "    PTR      :    {{ autonomy_common_ipv6_address | ansible.utils.ipaddr('revdns') }}"
+      - "    IPv6 Zone:    {{ autonomy_common_ipv6_address | ansible.utils.ipcut(64) }}"
   tags:
     - host-info
     - host-ipv6

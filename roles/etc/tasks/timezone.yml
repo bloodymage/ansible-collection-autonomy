@@ -3,5 +3,5 @@
 - name: Set timezone
   community.general.timezone:
     name: "America/New_York"
-  become: yes
+  become: true
   notify: restart timesync

@@ -1,0 +1,18 @@
+---
+autonomy_common_users_gitrepo_emacs_dir: ".emacs.d"
+autonomy_common_users_gitrepo_emacs_url: ""
+autonomy_common_users_gitrepo_emacs_version: "main"
+autonomy_common_users_gitrepo_emacs_remote: "origin"
+autonomy_common_users_gitrepo_emacs_update: true
+
+autonomy_common_users_gitrepos_emacsd:
+  - repo: "{{ autonomy_common_users_gitrepo_emacs_url }}"
+    dest: "{{ autonomy_common_users_gitrepo_emacs_dir }}"
+    update: "{{ autonomy_common_users_gitrepo_emacs_update }}"
+    remote: "{{ autonomy_common_users_gitrepo_emacs_remote }}"
+    version: "{{ autonomy_common_users_gitrepo_emacs_version }}"
+
+autonomy_common_users_gitrepos:
+  - "{{ autonomy_common_users_gitrepos_emacsd }}"
+
+#  LocalWords:  gitrepos

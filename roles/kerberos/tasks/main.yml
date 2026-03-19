@@ -12,13 +12,13 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
 
 - name: "Install packages"
   ansible.builtin.package:
     name: "{{ autonomy_kerberos_packages }}"
     state: present
-  become: yes
+  become: true
 
 - name: "Update /etc/krb5.conf"
   ansible.builtin.template:
@@ -27,7 +27,7 @@
     owner: root
     group: root
     mode: 0644
-  become: yes
+  become: true
   notify: restart krb5
   tags:
     - krb5-client-config

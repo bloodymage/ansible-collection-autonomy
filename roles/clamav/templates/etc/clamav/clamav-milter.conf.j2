@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-MilterSocket {{ clamav_milter_socket }}
+MilterSocket {{ autonomy_clamav_milter_socket }}
 FixStaleSocket true
 User clamav
 ReadTimeout 120
@@ -9,11 +9,11 @@ PidFile /var/run/clamav/clamav-milter.pid
 ClamdSocket unix:/var/spool/postfix/clamav/clamav-milter.ctl
 OnClean Accept
 #OnInfected Quarantine
-OnInfected {{ clamav_on_infected }}
+OnInfected {{ autonomy_clamav_on_infected }}
 OnFail Defer
 AddHeader Replace
 LogSyslog false
-LogFacility {{ clamav_log_facility }}
+LogFacility {{ autonomy_clamav_log_facility }}
 LogVerbose false
 LogInfected Off
 LogClean Off

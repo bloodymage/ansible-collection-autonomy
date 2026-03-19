@@ -1,0 +1,18 @@
+---
+- name: "Create required directories."
+  ansible.builtin.file:
+    path: "{{ item['path'] }}"
+    state: directory
+    owner: "{{ item['owner'] }}"
+    group: "{{ item['group'] }}"
+    mode: "{{ item['mode'] }}"
+  loop: "{{ autonomy_acmeca_user_dirs }}"
+  become: true
+  delegate_to: localhost
+  run_once: true
+  tags:
+    - acmeca
+    - acmeca-account
+    - acmeca-dns
+    - acmeca-http
+    - acmeca-test

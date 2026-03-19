@@ -6,10 +6,10 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
 
 - name: "Install packages"
   ansible.builtin.package:
     name: "{{ autonomy_man_packages }}"
     state: present
-  become: yes
+  become: true

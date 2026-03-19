@@ -1,19 +1,19 @@
 ---
 # defaults file for sssd
-autonomy_packages:
+autonomy_sssd_packages:
   - adcli
   - libnss-sss
   - libpam-sss
   - realmd
   - packagekit
-  - sssd
+  - "{{ autonomy_common_sssd_package }}"
   - sssd-tools
 
 sssd_pam_pwd_expiration_warning: 10
 sssd_debug_level: 0x4000
 
 # Really need a way to test for this
-sssd_systemd: yes
+sssd_systemd: true
 sssd_services: "nss, pam"
 
 # settings for /usr/share/pam-configs/sss"

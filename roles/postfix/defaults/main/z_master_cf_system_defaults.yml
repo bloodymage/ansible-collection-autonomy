@@ -173,8 +173,8 @@ __postfix_master_dovecot_service_args:
   - "flags=DRhu user=vmail:vmail argv=/usr/lib/dovecot/deliver"
   - "-f ${sender} -d ${user}@${nexthop} -a ${original_recipient}"
 
-__postfix_master_default_service_private: yes
-__postfix_master_default_service_run_unprivileged: yes
+__postfix_master_default_service_private: true
+__postfix_master_default_service_run_unprivileged: true
 __postfix_master_default_service_run_chroot: no
 __postfix_master_default_service_wakeup_time: "0"
 __postfix_master_default_service_process_limit: "$default_process_limit"

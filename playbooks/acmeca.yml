@@ -1,2 +1,4 @@
 ---
 # Configure Hosts that require acmeca
+- import_playbook: acmeca_account.yml
+- import_playbook: acmeca_certs.yml

@@ -3,20 +3,18 @@
 autonomy_bind_packages:
   - python3-netaddr
   - python3-dnspython
-  - bind9
+  - "{{ autonomy_common_bind_package }}"
   - bind9utils
-
-autonomy_bind_service: bind9
 
 #autonomy_bind_ipv6_reversezones: []
 
 autonomy_bind_zone_samba_controlled: false
 
 # Directories
-autonomy_bind_conf_dir: "/etc/bind"
+autonomy_bind_conf_dir: "{{ autonomy_common_sysconf_dir }}/bind"
 autonomy_bind_key_dir: "{{ autonomy_bind_conf_dir }}/keys"
-autonomy_bind_log_dir: "/var/log/bind"
-autonomy_bind_cache_dir: "/var/cache/bind"
+autonomy_bind_log_dir: "{{ autonomy_common_log_dir }}/bind"
+autonomy_bind_cache_dir: "{{ autonomy_common_cache_dir }}/bind"
 # autonomy_bind_geoip-directory ( <quoted_string> | none );
 # autonomy_bind_key-directory <quoted_string>;
 # autonomy_bind_managed-keys-directory <quoted_string>;
@@ -32,8 +30,8 @@ autonomy_bind_options_file: "named.conf.options"
 autonomy_bind_rpz_file: "named.conf.rpz"
 autonomy_bind_log: "data/named.run"
 autonomy_bind_session_key_file: "session.key"
-autonomy_bind_pid_file: "/run/named/named.pid"
-autonomy_bind_bindkeys_file: "/etc/named.iscdlv.key"
+autonomy_bind_pid_file: "{{ autnoomy_common_run_dir }}/named/named.pid"
+autonomy_bind_bindkeys_file: "{{ autonomy_common_sysconf_dir }}/named.iscdlv.key"
 # autonomy_bind_dump-file <quoted_string>;
 # autonomy_bind_memstatistics-file <quoted_string>;
 # autonomy_bind_statistics-file <quoted_string>;
@@ -50,8 +48,8 @@ autonomy_bind_logging_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_loggi
 autonomy_bind_options_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_options_file }}"
 autonomy_bind_rpz_path: "{{ autonomy_bind_conf_dir }}/{{ autonomy_bind_rpz_file }}"
 autonomy_bind_root_zone_path: "{{ autonomy_bind_cache_dir }}/db.root"
-autonomy_bind_root_hints_path: "/usr/share/dns/root.hints"
-autonomy_bind_session_key_path: "/run/named/{{ autonomy_bind_session_key_file }}"
+autonomy_bind_root_hints_path: "{{ autonomy_common_data_dir }}/dns/root.hints"
+autonomy_bind_session_key_path: "{{ autonomy_common_run_dir }}/named/{{ autonomy_bind_session_key_file }}"
 
 # URLs
 autonomy_bind_root_hints_url: "https://www.internic.net/domain/named.root"
@@ -59,7 +57,7 @@ autonomy_bind_root_zone_url: "https://www.internic.net/domain/root.zone"
 
 
 autonomy_bind_dir_mode: "0755"
-autonomy_bind_zone_dir_mode: "0775"
+autonomy_common_bind_zone_dir_mode: "0775"
 autonomy_bind_log_dir_mode: "0770"
 
 autonomy_bind_file_mode: "0644"
@@ -73,13 +71,11 @@ autonomy_bind_config_files:
   - "{{ autonomy_bind_options_file }}"
 
 # Commands
-autonomy_bind_ddns_confgen: "/usr/sbin/ddns-confgen"
+autonomy_bind_ddns_confgen: "{{ autonomy_common_syscmd_dir }}/ddns-confgen"
 
 autonomy_bind_dyndns_secret: "secret"
 autonomy_bind_ddns_algorithm: "hmac-sha512"
 
-autonomy_bind_primary_zone: "primary"
-autonomy_bind_secondary_zone: "secondary"
 
 # Key bindings
 autonomy_bind_dns_keys: []
@@ -98,7 +94,6 @@ autonomy_bind_statistics_allow:
 autonomy_bind_extra_include_files: []
 
 # File mode for master zone files (needs to be something like 0660 for dynamic updates)
-
 
 autonomy_bind9_bogusnet_acl:
   name: "bogusnet"
@@ -129,11 +124,11 @@ __complete_bind_dns_zones: []
 __bind_dns_zone_samba_domain: no
 __tmp_keyfiles: []
 
-__bind_zone_directories:
-  - name: "{{ autonomy_bind_zone_dir }}"
-    mode: "{{ autonomy_bind_zone_dir_mode }}"
+__autonomy_bind_zone_directories:
+  - name: "{{ autonomy_common_bind_zone_dir }}"
+    mode: "{{ autonomy_common_bind_zone_dir_mode }}"
   - name: "{{ autonomy_bind_cache_dir }}"
-    mode: "{{ autonomy_bind_zone_dir_mode }}"
+    mode: "{{ autonomy_common_bind_zone_dir_mode }}"
   - name: "{{ autonomy_bind_log_dir }}"
     mode: "{{ autonomy_bind_log_dir_mode }}"
 

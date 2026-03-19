@@ -1,34 +1,22 @@
 ---
 # defaults file for uptimed
-autonomy_packages:
+autonomy_uptimed_packages:
   - uptimed
 
 # Email address to mail milestones/records to.
 # Assumes sendmail compatible MTA installed as /usr/lib/sendmail.
 # You can enable this below or with the -e option on the commandline.
-uptimed_email_address: "{{ autonomy_sysadmin_email_address }}"
+autonomy_uptimed_email_address: "{{ autonomy_common_sysadmin_email_address }}"
 
 # Send email? (0 = no way, 1 = yes please!, 2 = only for milestones, 3 = only for records)
-uptimed_send_email: "{{ __uptimed_send_email }}"
+autonomy_uptimed_send_email: "{{ __uptimed_send_email }}"
 
 # Milestones are configurable now.
 # Syntax is pretty easy: MILESTONE=time:description
 # Default time is in seconds, but it can be postfixed with "d", "w" or "y"
 # for days/weeks/years.
 # Keep in mind that the description needs to fit in the window.
-uptimed_milestones: "{{ __uptimed_milestones }}"
-
-
-
-
-
-
-
-
-
-
-
-
+autonomy_uptimed_milestones: "{{ __uptimed_milestones }}"
 
 
 # ==================================================================================================

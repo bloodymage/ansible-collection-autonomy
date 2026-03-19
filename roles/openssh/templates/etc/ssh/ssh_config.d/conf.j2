@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+
+Host {{ item['host'] }}
+{% if item['pkcs11_provider'] is defined and item['pkcs11_provider'] is truthy and autonomy_common_opensc_enabled %}
+  PKCS11Provider {{ item['pkcs11_provider'] }}
+{% endif %}
+{% if item['certificate_file'] is defined and item['certificate_file'] is truthy %}
+  CertificateFile {{ item['certificate_file'] }}
+{% endif %}
+{% if item['identity_file'] is defined and item['identity_file'] is truthy %}
+  IdentitiesOnly yes
+  IdentityFile {{ item['identity_file'] }}
+{% endif %}
+{% if item['send_env'] is defined %}
+  SendEnv
+  {%- for var in item['send_env'] -%}
+    {{ " " }}{{ var }}
+  {%- endfor %}
+{% endif %}
+{% if item['forward_agent'] is defined and item['forward_agent'] is truthy and item['forward_agent'] != __autonomy_openssh_ssh_conf_forward_agent -%}
+  ForwardAgent {{ item['forward_agent'] }}
+{% endif %}

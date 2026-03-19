@@ -1,0 +1,2 @@
+---
+autonomy_common_apt_sysconf_dir: "{{ autonomy_common_sysconf_dir }}/apt"

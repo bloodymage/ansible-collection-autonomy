@@ -12,7 +12,7 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
   tags:
     - sshca
     - sshca-host-certs
@@ -31,6 +31,7 @@
   when:
     - __sshca_tasks == "hostcerts"
   tags:
+    - sshca
     - sshca-host-certs
 
 - name: "Configure SshCA User Certs."
@@ -38,4 +39,5 @@
   when:
     - __sshca_tasks == "usercerts"
   tags:
+    - sshca
     - sshca-user-certs

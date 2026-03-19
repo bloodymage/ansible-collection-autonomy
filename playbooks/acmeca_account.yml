@@ -1,0 +1,12 @@
+---
+- name: "Configure ACME CA."
+  hosts: localhost
+  tasks:
+    - ansible.builtin.include_role:
+        name: bloodymage.autonomy.acmeca
+      vars:
+        __acmeca_tasks: "account"
+      tags:
+        - acmeca
+        - acmeca-test
+        - acmeca-account

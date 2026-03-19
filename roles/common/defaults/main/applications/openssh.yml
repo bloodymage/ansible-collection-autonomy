@@ -1,0 +1,16 @@
+---
+autonomy_common_openssh_host_key_type: "{{ autonomy_common_sshca_key_type }}"
+
+autonomy_common_openssh_sysconf_dir: "{{ autonomy_common_sysconf_dir }}/ssh"
+autonomy_common_openssh_ca_dir: "{{ autonomy_common_openssh_sysconf_dir }}/ca"
+autonomy_common_openssh_authorized_principals_dir: "{{ autonomy_common_openssh_sysconf_dir }}/auth_principals"
+
+
+autonomy_common_openssh_host_key_file: "ssh_host_{{ autonomy_common_openssh_host_key_type }}_key"
+autonomy_common_openssh_host_pub_file: "{{ autonomy_common_openssh_host_key_file }}.pub"
+autonomy_common_openssh_host_cert_file: "{{ autonomy_common_openssh_host_key_file }}-cert.pub"
+
+
+autonomy_common_openssh_host_pub_path: "{{ autonomy_common_openssh_sysconf_dir }}/{{ autonomy_common_openssh_host_pub_file }}"
+autonomy_common_openssh_host_cert_path: "{{ autonomy_common_openssh_sysconf_dir }}/{{ autonomy_common_openssh_host_cert_file }}"
+

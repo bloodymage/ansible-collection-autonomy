@@ -16,7 +16,7 @@
 
 - name: "Install packages."
   ansible.builtin.package:
-    name: "{{ autonomy_packages }}"
+    name: "{{ autonomy_sssd_packages }}"
     state: present
   become: true
   notify:
@@ -28,7 +28,7 @@
     samba_administrator_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   become: false
   vars:
-    __password_store_id: "{{ autonomy_passdb }}/{{ autonomy_domain }}/domain_users/administrator/password"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/domain_users/administrator/password"
     __password_lookup: "{{ __password_store_id }}"
   when:
     - samba_administrator_password == "password"
@@ -50,8 +50,8 @@
   ansible.builtin.set_fact:
     sssd_ldap_user_certificate: "userCertificate;binary"
     sssd_pam_cert_auth: true
-    #sssd_soft_crl: yes
-    #sssd_soft_ocsp: yes
+    #sssd_soft_crl: true
+    #sssd_soft_ocsp: true
     sssd_certificate_verification: "{{ sssd_certificate_verification | default(__sssd_certificate_verification) }}"
     sssd_pkinit_pool: "DIR:/etc/ssl/certs/"
     sssd_pkinit_identities: "PKCS11:opensc-pkcs11.so:slotid=0:certid=01"
@@ -128,7 +128,7 @@
 
 - name: "Join Realm."
   ansible.builtin.expect:
-    command: /bin/bash -c "/usr/sbin/realm join {{ autonomy_domain }} --user=Administrator"
+    command: /bin/bash -c "/usr/sbin/realm join {{ autonomy_common_zone_domain }} --user=Administrator"
     responses:
       (?i)Password: "{{ samba_administrator_password }}"
   ignore_errors: true

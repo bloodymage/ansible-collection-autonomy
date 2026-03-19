@@ -6,24 +6,24 @@
       files: "{{ __os_variables_files }}"
       paths:
         - "vars"
-  become: no
+  become: false
 
 - name: "Configure System Users."
-  include_tasks: "users.yml"
+  include_tasks: "users_local.yml"
   when:
-    - __user_tasks == "sysusers"
+    - __user_tasks == "local_users"
 
 - name: "Configure User Password Store."
-  include_tasks: "password_store.yml"
+  include_tasks: "config_password_store.yml"
   when:
     - __user_tasks == "passwordstore"
 
 - name: "Configure User Dotfiles."
-  include_tasks: "dotfiles.yml"
+  include_tasks: "config_dotfiles.yml"
   when:
     - __user_tasks == "dotfiles"
 
 - name: "Configure Realm Users."
-  include_tasks: "realm_users.yml"
+  include_tasks: "users_realm.yml"
   when:
     - __user_tasks == "realm_users"

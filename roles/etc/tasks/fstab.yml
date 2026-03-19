@@ -8,7 +8,7 @@
 #     group: "{{ item.group | default('root') }}"
 #     mode: "0755"
 #   loop: "{{ autonomy_fstab }}"
-#   become: yes
+#   become: true
 
 # - name: "Add custom mount points to fstab."
 #   ansible.posix.mount:
@@ -20,6 +20,6 @@
 #     passno: "{{ item.passno | default(omit) }}"
 #     boot: "{{ item.boot | default(omit) }}"
 #     state: present
-#     backup: yes
+#     backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
 #   loop: "{{ autonomy_fstab }}"
-#   become: yes
+#   become: true

@@ -31,15 +31,11 @@
 # depends on an ACME CA working, the next group may depend on an ACME CA working.
 #
 # ==================================================================================================
-- name: "Configure ACME CA."
+- import_playbook: acmeca_certs.yml
+
+- name: "Configure CRL Distribution Points."
   hosts: web_servers:&public_zone
   roles:
-    - role: bloodymage.autonomy.acmeca
-      vars:
-        __acmeca_tasks: "account"
-    - role: bloodymage.autonomy.acmeca
-      vars:
-        __acmeca_tasks: "certs"
     - role: bloodymage.autonomy.ownca
       vars:
         __ownca_tasks: "crl_distribution"

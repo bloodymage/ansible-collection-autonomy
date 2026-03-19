@@ -1,0 +1,40 @@
+---
+# ==================================================================================================
+#
+# Convert these certificate from PEM to DER format.
+#
+# This is done because Windows frequently needs DER format.
+#
+# Currently split into two tasks.  The 'root' ca does not have a chain file.  Need a way to make
+# this idempotent.
+#
+# ==================================================================================================
+- name: "Convert CA Certificates to DER format."
+  community.crypto.x509_certificate_convert:
+    src_path: "{{ autonomy_ownca_ca_certs_directory }}/{{ autonomy_common_org_name }}-{{ item.name }}-ca.crt"
+    dest_path: "{{ autonomy_ownca_ca_certs_directory }}/{{ autonomy_common_org_name }}-{{ item.name }}-ca.der"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0644"
+    format: "der"
+    backup: true
+  become: false
+  loop: "{{ ownca_certificate_authorities }}"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  run_once: true
+
+- name: "Convert CA Certificates to DER format."
+  community.crypto.x509_certificate_convert:
+    src_path: "{{ autonomy_ownca_ca_certs_directory }}/{{ autonomy_common_org_name }}-{{ item.name }}-ca-chain.crt"
+    dest_path: "{{ autonomy_ownca_ca_certs_directory }}/{{ autonomy_common_org_name }}-{{ item.name }}-ca-chain.der"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0644"
+    format: "der"
+    backup: true
+  become: false
+  loop: "{{ ownca_certificate_authorities }}"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  run_once: true
+  when:
+    - item.name != "root"

@@ -4,11 +4,11 @@
 - name: "Add SPN for Samba Users."
   ansible.builtin.shell: >
     samba-tool spn add "{{ item.spn }}/{{ item.host }}" "{{ user.username }}"
-  become: yes
+  become: true
   loop: "{{ user.spns }}"
   delegate_to: "{{ __samba_schema_master }}"
-  ignore_errors: yes
-  run_once: yes
+  ignore_errors: true
+  run_once: true
   when:
     - __samba_schema_master is defined
     - item.spn is defined
@@ -19,21 +19,21 @@
     samba-tool domain exportkeytab
     --principal "{{ item.spn }}/{{ item.host }}"
     "/tmp/{{ user.username }}-{{ item.spn }}-{{ item.host }}.keytab"
-  become: yes
+  become: true
   loop: "{{ user.spns }}"
   when:
     - __samba_schema_master is defined
     - item.spn is defined
     - item.host is defined
   delegate_to: "{{ __samba_schema_master }}"
-  run_once: yes
+  run_once: true
 
 - name: "Fetch keytab."
   ansible.builtin.fetch:
     src: "/tmp/{{ user.username }}-{{ item.spn }}-{{ item.host }}.keytab"
     dest: "/tmp/{{ user.username }}-{{ item.spn }}-{{ item.host }}.keytab"
-    flat: yes
-  become: yes
+    flat: true
+  become: true
   loop: "{{ user.spns }}"
   when:
     - __samba_schema_master is defined
@@ -47,9 +47,9 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  become: yes
+  become: true
   loop: "{{ user.spns }}"
   when:
-    - autonomy_fqdn == item.host
+    - inventory_hostname == item.host
     - item.spn is defined
   notify: restart keytab

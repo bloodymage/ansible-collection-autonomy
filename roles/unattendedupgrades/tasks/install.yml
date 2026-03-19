@@ -1,0 +1,17 @@
+---
+- name: "Install packages."
+  ansible.builtin.package:
+    name: "{{ autonomy_unattendedupgrades_packages }}"
+    state: present
+  become: true
+
+- name: "Install Configuration files."
+  ansible.builtin.template:
+    src: "{{ autonomy_unattendedupgrades_sysconf_file }}.j2"
+    dest: "{{ autonomy_unattendedupgrades_sysconf_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
+  become: true
+  notify: restart unattended-upgrades

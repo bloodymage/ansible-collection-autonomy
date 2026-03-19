@@ -1,0 +1,79 @@
+---
+# - name: "Print CA Info."
+#   ansible.builtin.debug:
+#     msg:
+#       - "Name: {{ item['name'] }}"
+#       - "Domain: {{ item['domain'] }}"
+#       - "Type: {{ item['type'] }}"
+#   loop: "{{ autonomy_common_zones }}"
+
+# - name: "Add Intermediate Certificate Authorities."
+#   ansible.builtin.set_fact:
+#     autonomy_ownca_certificate_authorities: "{{ autonomy_ownca_certificate_authorities + [__certificate_authority] }}"
+#   loop: "{{ autonomy_common_zones }}"
+#   vars:
+#     autonomy_ownca_intermediate_ca_key_file: "{{ autonomy_common_org_name }}-{{ item['name'] }}-ca.key"
+#     __certificate_authority:
+#       name: "{{ item['name'] }}"
+#       common_name: "{{ autonomy_common_org_name | title }} {{ item['name'] | title }} CA"
+#       ownca: "root"
+#       provider: "ownca"
+#       ca_id: "intermediate"
+#       zone_name: "{{ item['name'] }}."
+#       keyusage:
+#         - keyCertSign
+#         - cRLSign
+#       keyusage_critical: true
+#       basic_constraints:
+#         - 'CA:TRUE'
+#       private_key_path: "{{ autonomy_ownca_ca_private_key_dir }}/{{ autonomy_ownca_intermediate_ca_key_file }}"
+#       org_unit_name: "{{ item['name'] }}"
+#       domain: "{{ item['domain'] }}"
+#   when:
+#     - item['type'] != "public"
+#     - item['type'] != "overlay"
+
+# - name: "Add Issuing Certificate Authorities."
+#   ansible.builtin.set_fact:
+#     autonomy_ownca_certificate_authorities: "{{ autonomy_ownca_certificate_authorities + [__certificate_authority] }}"
+#   loop: "{{ autonomy_common_zones | product(autonomy_ownca_issuing_authorities) }}"
+#   vars:
+#     autonomy_ownca_issuing_ca_key_file: "{{ autonomy_common_org_name }}-{{ item[0]['name'] }}-{{ item[1] }}-ca.key"
+#     __certificate_authority:
+#       name: "{{ item[0]['name'] }}-{{ item[1] }}"
+#       common_name: "{{ autonomy_common_org_name | title }} {{ item[0].name | title }} {{ item[1] | title }} CA"
+#       ownca: "intermediate"
+#       provider: "ownca"
+#       ca_id: "{{ item[1] }}"
+#       zone_name: "{{ item[0]['name'] }}."
+#       keyusage:
+#         - keyCertSign
+#         - cRLSign
+#       keyusage_critical: true
+#       basic_constraints:
+#         - 'CA:TRUE'
+#       private_key_path: "{{ autonomy_ownca_ca_private_key_dir }}/{{ autonomy_ownca_issuing_ca_key_file }}"
+#       org_unit_name: "{{ item[0]['name'] }}"
+#       domain: "{{ item[0]['domain'] }}"
+#   when:
+#     - item[0]['type'] != "public"
+#     - item[0]['type'] != "overlay"
+
+# ==================================================================================================
+#
+# Tasks: Create Directories
+#
+#
+#
+# ==================================================================================================
+- name: "Create Certificate Authority Directories."
+  ansible.builtin.file:
+    path: "{{ item['name'] }}"
+    owner: "{{ item['owner'] }}"
+    group: "{{ item['group'] }}"
+    state: directory
+    mode: "{{ item['mode'] }}"
+  loop: "{{ autonomy_ownca_ca_dirs }}"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  run_once: true
+  become: false

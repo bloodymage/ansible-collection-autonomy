@@ -19,7 +19,7 @@
 #     force: false
 #   become: true
 #   when:
-#     - autonomy_virtual_host is falsy
+#     - autonomy_common_virtual_host is falsy
 #     - autonomy_bind_dyndns_secret is defined
 #     - inventory_hostname not in groups['public_zone'] | default([])
 
@@ -33,8 +33,11 @@
     force: false
   become: true
   when:
-    - autonomy_virtual_host is falsy
+    - autonomy_common_virtual_host is falsy
     - inventory_hostname not in groups['public_zone'] | default([])
+  tags:
+    - bind
+    - bind-zones
 
 # ==================================================================================================
 #
@@ -46,51 +49,60 @@
 - name: "Installing Forward Zone files."
   ansible.builtin.template:
     src: "var/lib/bind/forwardzone.j2"
-    dest: "{{ autonomy_bind_zone_dir }}/db.{{ autonomy_domain }}"
-    owner: "{{ autonomy_bind_owner }}"
-    group: "{{ autonomy_bind_group }}"
+    dest: "{{ autonomy_common_bind_zone_dir }}/db.{{ autonomy_common_zone_domain }}"
+    owner: "{{ autonomy_common_bind_owner }}"
+    group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
     force: no
     #validate: "{{ __bind_named_checkzone }} {{ item['domain'] }} %s"
-  become: yes
+  become: true
   register: forwardzone_refresh
   when:
     - not autonomy_bind_zone_samba_controlled
     - inventory_hostname not in groups['samba_domain_controllers'] | default([])
   notify: restart bind
+  tags:
+    - bind
+    - bind-zones
 
 - name: "Installing Reverse Zone files."
   ansible.builtin.template:
     src: "var/lib/bind/reversezone.j2"
-    dest: "{{ autonomy_bind_zone_dir }}/db.{{ item['name'] }}"
-    owner: "{{ autonomy_bind_owner }}"
-    group: "{{ autonomy_bind_group }}"
+    dest: "{{ autonomy_common_bind_zone_dir }}/db.{{ item['name'] }}"
+    owner: "{{ autonomy_common_bind_owner }}"
+    group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
     force: no
     #validate: "{{ __bind_named_checkzone }} {{ item.name }} %s"
   loop: "{{ autonomy_bind_reversezones }}"
-  become: yes
+  become: true
   register: reversezone_refresh
   when:
     - autonomy_bind_reversezones is defined
     - inventory_hostname not in groups['samba_domain_controllers'] | default([])
     - item['type'] == "primary"
   notify: restart bind
+  tags:
+    - bind
+    - bind-zones
 
 - name: "Installing IPv6 Reverse Zone files."
   ansible.builtin.template:
     src: "var/lib/bind/reversezonev6.j2"
-    dest: "{{ autonomy_bind_zone_dir }}/db.{{ item['name'] | replace(':', '') }}"
-    owner: "{{ autonomy_bind_owner }}"
-    group: "{{ autonomy_bind_group }}"
+    dest: "{{ autonomy_common_bind_zone_dir }}/db.{{ item['name'] | replace(':', '') }}"
+    owner: "{{ autonomy_common_bind_owner }}"
+    group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
     force: no
     #validate: "{{ __bind_named_checkzone }} {{ item.name }} %s"
   loop: "{{ autonomy_bind_ipv6_reversezones }}"
-  become: yes
+  become: true
   register: reversezone_refresh
   when:
     - autonomy_bind_ipv6_reversezones is defined
     - inventory_hostname not in groups['samba_domain_controllers'] | default([])
     - item['type'] == "primary"
   notify: restart bind
+  tags:
+    - bind
+    - bind-zones

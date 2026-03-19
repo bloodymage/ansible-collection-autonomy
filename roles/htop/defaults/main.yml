@@ -1,4 +1,6 @@
 ---
 # defaults file for htop
-autonomy_packages:
+autonomy_htop_packages:
   - htop
+
+autonomy_htop_enabled: false

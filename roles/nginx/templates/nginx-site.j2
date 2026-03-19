@@ -3,17 +3,17 @@
 server {
 	listen 80{% if autonomy_nginx_default_server %} default_server{% endif %};
 	listen [::]:80{% if autonomy_nginx_default_server %} default_server{% endif %};
-  server_name {{ autonomy_fqdn }} {{ autonomy_hostname }};
-  return 301 https://{{ autonomy_fqdn }}/$request_uri;
+  server_name {{ inventory_hostname }} {{ inventory_hostname_short }};
+  return 301 https://{{ inventory_hostname }}/$request_uri;
 }
 
 server {
 	listen 443 ssl{% if autonomy_nginx_default_server %} default_server{% endif %};
   listen [::]:443 ssl{% if autonomy_nginx_default_server %} default_server{% endif %};
 
-  include snippets/{{ autonomy_fqdn }}.conf;
+  include snippets/{{ inventory_hostname }}.conf;
 
-	root /srv/www/{{ autonomy_fqdn }};
+	root /srv/www/{{ inventory_hostname }};
 
   server_name _;
 

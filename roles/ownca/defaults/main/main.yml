@@ -1,0 +1,108 @@
+---
+autonomy_ownca_packages:
+  - python3-cryptography
+  - python3-openssl
+  - rng-tools
+  - ca-certificates
+
+autonomy_ownca_generate_locally: false
+autonomy_ownca_generate_certificate: true
+autonomy_ownca_certificate_authority_host: "localhost"
+autonomy_ownca_user: "{{ autonomy_common_user }}"
+autonomy_ownca_group: "{{ autonomy_common_group }}"
+
+# ==================================================================================================
+#
+# Files and Directories
+#
+# ==================================================================================================
+autonomy_ownca_dir: "{{ autonomy_common_user_pki_dir }}/ownca"
+
+autonomy_ownca_sysconf_dir: "{{ autonomy_common_sysconf_dir }}/ssl"
+autonomy_ownca_sysconf_certs_dir: "{{ autonomy_ownca_sysconf_dir }}/certs"
+autonomy_ownca_sysconf_csr_dir: "{{ autonomy_ownca_sysconf_dir }}/csr"
+autonomy_ownca_sysconf_private_key_dir: "{{ autonomy_ownca_sysconf_dir }}/private"
+autonomy_ownca_sysconf_crl_dir: "{{ autonomy_ownca_sysconf_dir }}/crl"
+autonomy_ownca_sysconf_pkcs12_dir: "{{ autonomy_ownca_sysconf_dir }}/pkcs12"
+autonomy_ownca_sysconf_dir_owner: "root"
+autonomy_ownca_sysconf_dir_group: "root"
+
+autonomy_ownca_data_dir: "{{ autonomy_common_local_data_dir }}/ca-certificates"
+
+autonomy_ownca_pki_host: "pki.{{ autonomy_common_root_domain }}"
+autonomy_ownca_ocsp_host: "ocsp.{{ autonomy_common_root_domain }}"
+autonomy_ownca_crl_distribution_point: "https://{{ autonomy_ownca_pki_host }}"
+
+autonomy_ownca_password_length: "{{ autonomy_common_password_length }}"
+
+# File
+autonomy_ownca_format: 'pem'
+autonomy_ownca_privatekey_type: "{{ autonomy_common_pki_key_type | upper }}"
+autonomy_ownca_privatekey_size: "{{ autonomy_common_pki_key_size }}"
+
+# Currently testing smart cards, most documentation recommends 2048.  Until smart cards are fully
+# functional, we will use 2048.
+#ownca_max_user_privatekey_size: "3072"
+autonomy_ownca_user_max_privatekey_size: "2048"
+
+# ==================================================================================================
+#
+# Certificate Authority Configuration:
+#
+# ==================================================================================================
+# autonomy_ownca_certificate_authorities:
+#   - "{{ __autonomy_ownca_root_ca }}"
+
+autonomy_ownca_issuing_authorities:
+  - component
+  - identity
+  - codesign
+
+# ==================================================================================================
+#
+# OIDs
+#
+#===================================================================================================
+# OwnCA OIDs
+autonomy_ownca_mskdc: "msKDC"
+autonomy_ownca_mskdc_oid: "1.3.6.1.5.2.3.5"
+autonomy_ownca_msadguid: "msADGUID"
+autonomy_ownca_msadguid_oid: "1.3.6.1.4.1.311.25.1"
+autonomy_ownca_scardLogin: "msSmartcardLogin"
+autonomy_ownca_scardlogin_oid: "1.3.6.1.4.1.311.20.2.2"
+autonomy_ownca_msupn: "msUPN"
+autonomy_ownca_msupn_oid: "1.3.6.1.4.1.311.20.2.3"
+
+# LDAP OIDs
+autonomy_oid_ssh_public_key: "1.3.6.1.4.1.24552.500.1.1.1.13"
+autonomy_oid_ldap_public_key: "1.3.6.1.4.1.24552.500.1.1.2.0"
+
+# ==================================================================================================
+#
+# Do not modify
+#
+# The following variables are defaults that can be modified via tags (eg, the
+# 'regenerate-private-key' will change '__acmeca_regenerate_private_key' to 'yes') or they are
+# constants that if changed will  cause this playbook to fail.
+#
+# ==================================================================================================
+
+__autonomy_ownca_regenerate: no
+__autonomy_ownca_regenerate_csr: no
+__autonomy_ownca_force_regenerate_intermediate_ca: no
+__autonomy_ownca_force_regenerate_issuing_ca: no
+
+# ==================================================================================================
+#
+# The following variables are modified based on system information (host groups, OS Family, etc).
+#
+# These variables are not designed for user configuration.
+#
+# ==================================================================================================
+# __ownca_private_key_dir_mode: "0700"
+# __ownca_private_key_dir_group: "root"
+
+# __ownca_certificate_authorities_id:
+#   - "ca"
+#   - "component-ca"
+#   - "identity-ca"

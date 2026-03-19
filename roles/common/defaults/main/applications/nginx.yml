@@ -1,0 +1,3 @@
+---
+autonomy_common_nginx_package: "nginx"
+autonomy_common_nginx_daemon: "nginx"

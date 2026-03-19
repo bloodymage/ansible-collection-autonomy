@@ -1,0 +1,63 @@
+---
+# defaults file for users
+autonomy_users_packages: []
+
+autonomy_users_groups:
+  - name: ssl-cert
+    system: true
+
+autonomy_users_group_ansible_managed: "ansiblemanaged"
+autonomy_users_managed_min_id: 1000
+autonomy_users_managed_max_id: 10000
+
+users_sudoers_options:
+  - application: "screen"
+    options:
+      - entity: "Default"
+        value: "env_keep += WINDOW"
+
+autonomy_users_password_hash_seed: "{{ inventory_hostname }}"
+
+# ==================================================================================================
+#
+# User Dotfiles settings
+#
+# ==================================================================================================
+
+# Misc
+autonomy_users_dotfiles_users: "{{ autonomy_common_users }}"
+autonomy_users_dotfiles_home: "{{ autonomy_common_home_dir }}"
+autonomy_users_dotfiles_mode: "0700"
+
+# ===================================================================================================
+#
+# Emacs Settings
+#
+# ==================================================================================================
+autonomy_users_dotfiles_emacsd_repo: ""
+autonomy_users_dotfiles_emacsd_repo_remote: "origin"
+autonomy_users_dotfiles_emacsd_repo_version: "main"
+
+# ==================================================================================================
+#
+#
+#
+# ==================================================================================================
+__user_groups:
+  - name: "{{ autonomy_users_group_ansible_managed }}"
+    system: true
+  - name: users
+    system: true
+  - name: wheel
+    system: true
+
+__users: "{{ autonomy_common_users }}"
+
+__default_mikrotik_device_user: "admin"
+
+__username_list: []
+
+__samba_domain_groups:
+  - groupname: ansiblemanaged
+
+__realm_user_dn_list: []

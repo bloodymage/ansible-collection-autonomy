@@ -1,26 +1,6 @@
 ---
 autonomy_bind_rpz_break_dnssec: "yes"
 
-autonomy_bind_rpz_default_policy: "given"
-
-# RPZ Zones
-# Mozilla
-autonomy_bind_rpz_mozilla_name: "mozilla.rpz"
-autonomy_bind_rpz_mozilla_policy: "{{ autonomy_bind_rpz_default_policy }}"
-autonomy_bind_rpz_mozilla_zone_file: "db.{{ autonomy_bind_rpz_mozilla_name }}"
-autonomy_bind_rpz_mozilla_zone_path: "{{ autonomy_bind_zone_dir }}/{{ autonomy_bind_rpz_mozilla_zone_file }}"
-autonomy_bind_rpz_mozilla_allow_query: "{{ autonomy_bind_allow_query }}"
-
-autonomy_bind_rpz_mozilla_zone:
-  name: "{{ autonomy_bind_rpz_mozilla_name }}"
-  type: "primary"
-  file: "{{ autonomy_bind_rpz_mozilla_zone_file }}"
-  policy: "{{ autonomy_bind_rpz_mozilla_policy }}"
-  path: "{{ autonomy_bind_rpz_mozilla_zone_path }}"
-  allow_query: "{{ autonomy_bind_rpz_mozilla_allow_query }}"
-  definition: "fixed"
-
-
 # RPZ / RPS
 # autonomy_bind_dnsrps-enable <boolean>; // obsolete
 # autonomy_bind_dnsrps-library <quoted_string>; // obsolete

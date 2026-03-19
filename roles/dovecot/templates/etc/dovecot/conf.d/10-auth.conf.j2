@@ -2,7 +2,7 @@
 
 {% if autonomy_realm_identity_management_system == "ad" %}
 auth_gssapi_hostname = "$ALL"
-auth_krb5_keytab = "{{ autonomy_dovecot_etc }}/dovecot.keytab"
+auth_krb5_keytab = "{{ autonomy_common_dovecot_keytab_path }}"
 {% endif %}
 
 {% if autonomy_dovecot_auth_use_winbind is truthy -%}

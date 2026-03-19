@@ -1,0 +1,9 @@
+---
+autonomy_common_sshca_key_type: "{{ autonomy_common_pki_key_type }}"
+
+autonomy_common_sshca_hostca_pub_file: "{{ autonomy_sshca_domain }}_host_key.pub"
+autonomy_common_sshca_userca_pub_file: "{{ autonomy_sshca_domain }}_user_key.pub"
+
+autonomy_common_sshca_hostca_openssh_pub_path: "{{ autonomy_common_openssh_ca_dir }}/{{ autonomy_common_sshca_hostca_pub_file }}"
+autonomy_common_sshca_userca_openssh_pub_path: "{{ autonomy_common_openssh_ca_dir }}/{{ autonomy_common_sshca_userca_pub_file }}"
+

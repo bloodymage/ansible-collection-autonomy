@@ -3,10 +3,10 @@
 - name: "Restart Systemd-Networkd."
   ansible.builtin.service:
     name: "{{ item }}"
-    enabled: yes
+    enabled: true
     state: restarted
   loop:
     - systemd-networkd
-  become: yes
+  become: true
   listen:
     - "restart systemd-networkd"

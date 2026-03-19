@@ -6,43 +6,34 @@
 #  
 #
 # ======================================================================
-- name: "Pre-tasks"
-  block:
-    - name: Include OS-specific variables.
-      include_vars: "{{ lookup('first_found', params) }}"
-      vars:
-        params:
-          files: "{{ __os_variables_files }}"
-          paths:
-            - "vars"
-      become: no
-      tags:
-        - screen
-        - screen
-        - screen_debug
-        - screen-debug
-        - install-packages
+- name: Include OS-specific variables.
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files: "{{ __os_variables_files }}"
+      paths:
+        - "vars"
+  become: false
+  tags:
+    - screen
+    - install-packages
 
-    - name: "Install packages"
-      ansible.builtin.package:
-        name: "{{ autonomy_packages }}"
-        state: present
-      become: yes
-      tags:
-        - screen
-        - screen_debug
-        - screen-debug
-        - install-packages
+- name: "Install packages"
+  ansible.builtin.package:
+    name: "{{ autonomy_screen_packages }}"
+    state: present
+  become: true
+  tags:
+    - screen
+    - install-packages
 
 - name: "Install config file"
   ansible.builtin.template:
     src: "screenrc.j2"
-    dest: "/etc/screenrc"
+    dest: "{{ autonomy_common_sysconf_dir }}/screenrc"
     owner: "root"
     group: "root"
     mode: "0644"
-  become: yes
+  become: true
   tags:
-        - screen
-        - screen_debug
-        - screen-debug
+    - screen

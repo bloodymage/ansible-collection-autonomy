@@ -3,4 +3,4 @@
   ansible.builtin.package:
     name: "{{ autonomy_git_packages }}"
     state: present
-  become: yes
+  become: true

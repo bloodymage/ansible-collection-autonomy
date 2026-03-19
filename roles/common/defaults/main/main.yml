@@ -7,20 +7,8 @@
 #
 # ==================================================================================================
 # Ansible User Definitions
-autonomy_user: "ansible_autonomy"
-autonomy_group: "{{ autonomy_user }}"
-autonomy_home_dir: "/home"
-autonomy_user_home_dir: "{{ autonomy_home_dir }}/{{ autonomy_user }}"
-
-# ==================================================================================================
-#
-# Files, Directories, and URLs
-#
-# ==================================================================================================
-# Directories
-autonomy_sysconf_dir: "/etc"
-sysconf_dir: "{{ autonomy_sysconf_dir }}"
-
+autonomy_common_user: "ansible_autonomy"
+autonomy_common_group: "{{ autonomy_common_user }}"
 
 # ==================================================================================================
 #
@@ -48,14 +36,14 @@ __domain_system_users: []
 # configuration.
 #
 # ==================================================================================================
-__distribution: "{{ ansible_distribution | default(none) }}"
+__distribution: "{{ ansible_distribution | default('None') }}"
 __distribution_short: "{{ __distribution.split(' ')[0] }}"
-__distribution_release: "{{ ansible_distribution_release | default(none) }}"
-__major_version: "{{ ansible_distribution_major_version | default(none) }}"
-__lsb_id: "{{ ansible_lsb.id | default(none) }}"
-__network_os: "{{ ansible_network_os | default(none) }}"
-__os_family: "{{ ansible_os_family | default(none) }}"
-__system: "{{ ansible_system | default(none) }}"
+__distribution_release: "{{ ansible_distribution_release | default('None') }}"
+__major_version: "{{ ansible_distribution_major_version | default('None') }}"
+__lsb_id: "{{ ansible_lsb.id | default('None') }}"
+__network_os: "{{ ansible_network_os | default('None') }}"
+__os_family: "{{ ansible_os_family | default('None') }}"
+__system: "{{ ansible_system | default('None') }}"
 
 __os_variables_files:
   - "{{ __network_os }}.yml"

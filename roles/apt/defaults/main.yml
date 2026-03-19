@@ -5,14 +5,91 @@ autonomy_apt_packages:
   - python3-apt
   - debian-archive-keyring
 
-system_upgrade_deb_src: false
-system_upgrade_distribution_release: "{{ ansible_distribution_release }}"
-system_upgrade_raspberrypi_distribution_release: "{{ ansible_distribution_release }}"
+# Set this variable to upgrade distribution release.
+autonomy_apt_distribution_release: "{{ ansible_distribution_release }}"
 
-autonomy_apt_debian_repo_backports: false
-autonomy_apt_debian_repo_security_upgrades: false
-autonomy_apt_use_source_code_repos: false
+# Directories
+autonomy_apt_sourcesd_dir: "{{ autonomy_common_apt_sysconf_dir }}/sources.list.d"
 
-# Linux Repo Settings
-autonomy_use_source_code_repos: false
-autonomy_raspberrypi_distribution_release: "{{ ansible_distribution_release }}"
+# Files
+autonomy_apt_dist_sources_file: "debian.sources"
+autonomy_apt_rpi_sources_file: "raspi.sources"
+
+# Paths
+autonomy_apt_dist_sources_path: "{{ autonomy_apt_sourcesd_dir }}/{{ autonomy_apt_dist_sources_file }}"
+autonomy_apt_rpi_sources_path: "{{ autonomy_apt_sourcesd_dir }}/{{ autonomy_apt_rpi_sources_file }}"
+
+# ==================================================================================================
+#
+# Repository Definitions
+#
+# ==================================================================================================
+# Base Repository
+autonomy_apt_dist_base_repo_types:
+  - "deb"
+  - "deb-src"
+autonomy_apt_dist_base_repo_uris: "http://deb.debian.org/debian"
+autonomy_apt_dist_base_repo_suites:
+  - "{{ autonomy_apt_distribution_release }}"
+  - "{{ autonomy_apt_distribution_release }}-updates"
+  - "{{ autonomy_apt_distribution_release }}-backports"
+autonomy_apt_dist_base_repo_components:
+  - main
+  - contrib
+  - non-free
+  - non-free-firmware
+autonomy_apt_dist_base_repo_architectures: []
+autonomy_apt_dist_base_repo_signing_key: "/usr/share/keyrings/debian-archive-keyring.gpg"
+autonomy_apt_dist_base_repo_enabled: "yes"
+
+# Security
+autonomy_apt_dist_security_repo_types: "{{ autonomy_apt_dist_base_repo_types }}"
+autonomy_apt_dist_security_repo_uris: "{{ autonomy_apt_dist_base_repo_uris }}-security"
+autonomy_apt_dist_security_repo_suites:
+  - "{{ autonomy_apt_distribution_release }}-security"
+autonomy_apt_dist_security_repo_components: "{{ autonomy_apt_dist_base_repo_components }}"
+autonomy_apt_dist_security_repo_architectures: "{{ autonomy_apt_dist_base_repo_architectures }}"
+autonomy_apt_dist_security_repo_signing_key: "{{ autonomy_apt_dist_base_repo_signing_key }}"
+autonomy_apt_dist_security_repo_enabled: "{{ autonomy_apt_dist_base_repo_enabled }}"
+
+# Raspberry Pi
+autonomy_apt_rpi_repo_types:
+  - "deb"
+autonomy_apt_rpi_repo_uris: "http://archive.raspberrypi.com/debian"
+autonomy_apt_rpi_repo_suites:
+  - "trixie"
+autonomy_apt_rpi_repo_components:
+  - "main"
+autonomy_apt_rpi_repo_architectures: []
+autonomy_apt_rpi_repo_signing_key: "/usr/share/keyrings/raspberrypi-archive-keyring.pgp"
+autonomy_apt_rpi_repo_enabled: "yes"
+
+autonomy_apt_dist_repos:
+  - types: "{{ autonomy_apt_dist_base_repo_types }}"
+    uris: "{{ autonomy_apt_dist_base_repo_uris }}/"
+    suites: "{{ autonomy_apt_dist_base_repo_suites }}"
+    components: "{{ autonomy_apt_dist_base_repo_components }}"
+    architectures: "{{ autonomy_apt_dist_base_repo_architectures }}"
+    signing_key: "{{ autonomy_apt_dist_base_repo_signing_key }}"
+    enabled: "{{ autonomy_apt_dist_base_repo_enabled }}"
+
+  - types: "{{ autonomy_apt_dist_security_repo_types }}"
+    uris: "{{ autonomy_apt_dist_security_repo_uris }}/"
+    suites: "{{ autonomy_apt_dist_security_repo_suites }}"
+    components: "{{ autonomy_apt_dist_security_repo_components }}"
+    architectures: "{{ autonomy_apt_dist_security_repo_architectures }}"
+    signing_key: "{{ autonomy_apt_dist_security_repo_signing_key }}"
+    enabled: "{{ autonomy_apt_dist_security_repo_enabled }}"
+
+autonomy_apt_rpi_repos:
+  - types: "{{ autonomy_apt_rpi_repo_types }}"
+    uris: "{{ autonomy_apt_rpi_repo_uris }}/"
+    suites: "{{ autonomy_apt_rpi_repo_suites }}"
+    components: "{{ autonomy_apt_rpi_repo_components }}"
+    architectures: "{{ autonomy_apt_rpi_repo_architectures }}"
+    signing_key: "{{ autonomy_apt_rpi_repo_signing_key }}"
+    enabled: "{{ autonomy_apt_rpi_repo_enabled }}"
+
+autonomy_apt_source_file_remove:
+  - /etc/apt/sources.list
+  - /etc/apt/sources.list.d/raspi.list

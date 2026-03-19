@@ -1,0 +1,11 @@
+---
+- name: "Include Host Prep Tasks."
+  include_tasks: "cert_routeros_pkcs12.yml"
+  when:
+    - ansible_network_os is defined
+    - ansible_network_os == "community.routeros.routeros"
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs

@@ -8,16 +8,25 @@
 - name: "PAM Auth Update."
   ansible.builtin.command:
     cmd: "/usr/sbin/pam-auth-update --package"
-  become: yes
+  become: true
   listen:
     - "update pam"
   when:
     - inventory_hostname in groups['linux'] | default([])
 
+# - name: "RNDC Reload."
+#   ansible.builtin.command:
+#     cmd: "/usr/sbin/pam-auth-update --package"
+#   become: true
+#   listen:
+#     - "update pam"
+#   when:
+#     - inventory_hostname in groups['linux'] | default([])
+
 - name: "Reset Samba ACLs on Sysvol for New Controller."
   ansible.builtin.command:
     cmd: "samba-tool ntacl sysvolreset"
-  become: yes
+  become: true
   listen:
     - "sysvolreset"
   when:
@@ -27,8 +36,8 @@
 - name: "Force systemd to reread configs."
   ansible.builtin.systemd:
     scope: system
-    daemon_reload: yes
-  become: yes
+    daemon_reload: true
+  become: true
   listen:
     - "daemon reload"
   when:
@@ -50,8 +59,8 @@
 # ==================================================================================================
 - name: "Update System CA Certificates."
   ansible.builtin.command:
-    cmd: "/usr/sbin/update-ca-certificates"
-  become: yes
+    cmd: "{{ autonomy_common_syscmd_dir }}/update-ca-certificates"
+  become: true
   listen:
     - "update system ca certificates"
     - "update ca-certificates"
@@ -60,7 +69,7 @@
     - "reload tls"
   when:
     - ansible_network_os is not defined
-    - autonomy_virtual_host is falsy
+    - autonomy_common_virtual_host is falsy
     - inventory_hostname in groups['linux'] | default([])
 
 - name: "Update nextcloud certificates."
@@ -85,8 +94,8 @@
 #     owner: root
 #     group: root
 #     mode: "0644"
-#     remote_src: yes
-#   become: yes
+#     remote_src: true
+#   become: true
 #   notify: reload postfix
 #   listen:
 #     - "update system ca certificates"
@@ -104,9 +113,9 @@
 - name: "Enable Keycloak."
   ansible.builtin.service:
     name: keycloak
-    enabled: yes
+    enabled: true
     state: started
-  become: yes
+  become: true
   listen:
     - "enable keycloak"
   when:
@@ -115,13 +124,13 @@
 - name: "Enable SSSD Services."
   ansible.builtin.service:
     name: "{{ item }}"
-    enabled: yes
+    enabled: true
     state: started
   loop:
     - sssd-pam
     - sssd-nss
     - sssd
-  become: yes
+  become: true
   listen:
     - "enable sssd"
   when:
@@ -135,27 +144,22 @@
 # ==================================================================================================
 - name: "Reload Apache."
   ansible.builtin.service:
-    name: apache2
+    name: "{{ autonomy_common_apache_daemon }}"
     state: reloaded
-  become: yes
+  become: true
   listen:
     - "reload all"
     - "reload tls"
     - "reload apache"
+    - "reload {{ autonomy_common_apache_daemon }}"
   when:
     - inventory_hostname in groups['apache_servers'] | default([])
-
-# - name: reload bind
-#   service:
-#     name: bind9
-#     state: reloaded
-#   become: yes
 
 - name: "reload nginx"
   ansible.builtin.service:
     name: nginx
     state: reloaded
-  become: yes
+  become: true
   listen:
     - "reload all"
     - "reload tls"
@@ -168,7 +172,7 @@
   ansible.builtin.service:
     name: postfix
     state: reloaded
-  become: yes
+  become: true
   listen:
     - "reload all"
     - "reload tls"
@@ -181,7 +185,7 @@
   ansible.builtin.service:
     name: samba-ad-dc
     state: reloaded
-  become: yes
+  become: true
   listen:
     - "reload all"
     - "reload tls"
@@ -199,7 +203,7 @@
   ansible.builtin.service:
     name: apache2
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -224,11 +228,11 @@
 # However, bind can be configured to use tls at which point this will be needed.
 #
 # ==================================================================================================
-- name: "Restart Bind9."
+- name: "Restart {{ autonomy_common_bind_daemon }}."
   ansible.builtin.service:
-    name: "{{ autonomy_bind9_daemon }}"
+    name: "{{ autonomy_common_bind_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart bind"
@@ -236,26 +240,25 @@
     - "restart tls"
     - "restart named"
   when:
-    - inventory_hostname in groups['bind9_servers'] | default([])
+    - inventory_hostname in groups['bind_servers'] | default([])
     - ansible_facts.packages is defined
-    - autonomy_bind9_package in ansible_facts.packages
+    - autonomy_common_bind_package in ansible_facts.packages
 
 - name: "Restart cron."
   ansible.builtin.service:
-    name: "{{ autonomy_cron_daemon }}"
+    name: "{{ autonomy_common_cron_daemon }}"
     state: restarted
   listen:
-    - "restart cron"
+    - "restart {{ autonomy_common_cron_daemon }}"
   when:
-    - cron_daemon is defined
-    - cron_daemon
+    - autonomy_cron_enabled
     - inventory_hostname in groups['linux'] | default([])
 
 - name: "Restart DDclient."
   service:
     name: "{{ autonomy_ddclient_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart ddclient"
@@ -267,7 +270,7 @@
   ansible.builtin.service:
     name: "{{ autonomy_dovecot_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -279,21 +282,21 @@
 
 - name: "Restart etckeeper."
   ansible.builtin.service:
-    name: etckeeper
+    name: "{{ autonomy_common_etckeeper_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart etckeeper"
   when:
     - inventory_hostname in groups['linux'] | default([])
-    - autonomy_etckeeper_package in ansible_facts.packages
+    - autonomy_common_etckeeper_package in ansible_facts.packages
 
 - name: "Restart Freeradius."
   ansible.builtin.service:
     name: freeradius
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -305,7 +308,7 @@
   ansible.builtin.service:
     name: keycloak
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -318,7 +321,7 @@
   ansible.builtin.service:
     name: mosquitto
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -331,7 +334,7 @@
   ansible.builtin.service:
     name: mysql
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -344,7 +347,7 @@
   ansible.builtin.service:
     name: nginx
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -381,7 +384,7 @@
   ansible.builtin.service:
     name: opendkim
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart opendkim"
@@ -390,9 +393,9 @@
 
 - name: "Restart Postfix."
   ansible.builtin.service:
-    name: postfix
+    name: "{{ autonomy_common_postfix_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -400,6 +403,7 @@
     - "restart keytab"
     - "restart postfix"
     - "restart acmeca"
+    - "restart ownca"
   when:
     - inventory_hostname in groups['postfix_servers'] | default([])
     - ansible_facts.packages is defined
@@ -407,9 +411,9 @@
 
 - name: "Restart Samba Domain Controller."
   ansible.builtin.service:
-    name: samba-ad-dc
+    name: "{{ autonomy_common_samba_dc_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -421,13 +425,14 @@
 
 - name: "Restart SMBD Server."
   ansible.builtin.service:
-    name: smbd
+    name: "{{ autonomy_common_samba_smbd_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
     - "restart krb5"
+    - "restart smbd"
     - "restart samba file server"
     - "restart samba"
   when:
@@ -435,15 +440,16 @@
 
 - name: "Restart NMBD Server."
   ansible.builtin.service:
-    name: nmbd
+    name: "{{ autonomy_common_samba_nmbd_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
     - "restart krb5"
     - "restart samba file server"
     - "restart samba"
+    - "restart nmbd"
   when:
     - inventory_hostname in groups['samba_file_servers'] | default([])
 
@@ -451,7 +457,7 @@
   ansible.builtin.service:
     name: ssh
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart ssh"
@@ -461,9 +467,9 @@
 
 - name: "Restart Winbind Server."
   ansible.builtin.service:
-    name: winbind
+    name: "{{ autonomy_common_samba_winbind_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -476,9 +482,9 @@
 
 - name: "Restart System Security Services Daemon."
   ansible.builtin.service:
-    name: sssd
+    name: "{{ autonomy_common_sssd_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart tls"
@@ -491,7 +497,7 @@
   ansible.builtin.service:
     name: unattended-upgrades
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart unattended-upgrades"
@@ -500,24 +506,26 @@
 
 - name: "Restart Spamassassin."
   ansible.builtin.service:
-    name: "{{ autonomy_spamassassin_daemon }}"
+    name: "{{ autonomy_common_spamassassin_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
+    - "restart spamd"
     - "restart spamassassin"
   when:
     - inventory_hostname in groups['mail_servers'] | default([])
 
 - name: "Restart Spamass-Milter."
   ansible.builtin.service:
-    name: spamass-milter
+    name: "{{ autonomy_common_spamassassin_milter_daemon }}"
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
-    - "restart spamassassin"
+    - "restart spamd"
     - "restart spamass-milter"
+    - "restart spamassassin"
   when:
     - inventory_hostname in groups['mail_servers'] | default([])
 
@@ -525,7 +533,7 @@
   ansible.builtin.service:
     name: uptimed
     state: restarted
-  become: yes
+  become: true
   listen:
     - "restart all"
     - "restart uptimed"
@@ -541,7 +549,7 @@
   ansible.builtin.service:
     name: samba-ad-dc
     state: started
-  become: yes
+  become: true
   listen:
     - "start samba-ad-dc"
   when:
@@ -551,7 +559,7 @@
   ansible.builtin.service:
     name: sssd
     state: started
-  become: yes
+  become: true
   listen:
     - "start sssd"
   when:
@@ -569,9 +577,9 @@
 - name: "Enable User emacs daemon."
   ansible.builtin.systemd:
     name: emacs.service
-    enabled: yes
+    enabled: true
     scope: user
-  become: yes
+  become: true
   become_user: "{{ item.username }}"
   become_method: machinectl
   loop: "{{ users }}"
@@ -604,7 +612,7 @@
     msg: "Rebooting {{ inventory_hostname }} (Pretend)"
   when:
     - reboot_required_file.stat.exists
-  become: no
+  become: false
   listen:
     - "reboot"
 
@@ -615,32 +623,32 @@
 # ==================================================================================================
 - name: "Regenerate intermediate CA certificate."
   ansible.builtin.set_fact:
-    __ownca_force_regenerate_intermediate_ca: yes
-  become: no
+    __ownca_force_regenerate_intermediate_ca: true
+  become: false
   listen:
     - "regenerate certificates"
     - "regenerate intermediate ca certificates"
 
 - name: "Regenerate issuing CA certificate."
   ansible.builtin.set_fact:
-    __ownca_force_regenerate_issuing_ca: yes
-  become: no
+    __ownca_force_regenerate_issuing_ca: true
+  become: false
   listen:
     - "regenerate certificates"
     - "regenerate issuing ca certificates"
 
 - name: "Regenerate user certificates."
   ansible.builtin.set_fact:
-    __user_cert_force_regeneration: yes
-  become: no
+    __user_cert_force_regeneration: true
+  become: false
   listen:
     - "regenerate certificates"
     - "regenerate user certificates"
 
 - name: "Regenerate host certificates."
   ansible.builtin.set_fact:
-    __host_cert_force_regeneration: yes
-  become: no
+    __host_cert_force_regeneration: true
+  become: false
   listen:
     - "regenerate certificates"
     - "regenerate host certificates"
@@ -649,37 +657,37 @@
 #   service:
 #     name: samba-ad-dc
 #     state: started
-#   become: yes
+#   become: true
 
 # - name: restart samba-ad-dc
 #   service:
 #     name: samba-ad-dc
 #     state: restarted
-#   become: yes
+#   become: true
 
 # - name: start smbd
 #   service:
 #     name: smbd
 #     state: started
-#   become: yes
+#   become: true
 
 # - name: restart smbd
 #   service:
 #     name: smbd
 #     state: restarted
-#   become: yes
+#   become: true
 
 # - name: start nmbd
 #   service:
 #     name: nmbd
 #     state: started
-#   become: yes
+#   become: true
 
 # - name: restart nmbd
 #   service:
 #     name: rmbd
 #     state: restarted
-#   become: yes
+#   become: true
 
 # - name: restart samba-fileserver
 #   service:
@@ -689,5 +697,5 @@
 #     - smbd
 #     - nmbd
 #     - winbindd
-#   become: yes
+#   become: true
 

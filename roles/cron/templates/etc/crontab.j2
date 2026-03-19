@@ -8,8 +8,8 @@
 
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-MAILTO={{ autonomy_sysadmin_email_address }}
-MAILFROM=root@{{ autonomy_fqdn }}
+MAILTO={{ autonomy_common_sysadmin_email_address }}
+MAILFROM=root@{{ inventory_hostname }}
 
 # Example of job definition:
 # .---------------------- minute (0 - 59)
@@ -19,7 +19,7 @@ MAILFROM=root@{{ autonomy_fqdn }}
 # |  |  |   |   .-------- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
 # |  |  |   |   |
 # *  *  *   *   * user-name command to be executed
-{% for entry in cron_entries -%}
+{% for entry in autonomy_cron_entries -%}
   {{ entry.minute.rjust(3) }}{{ entry.hour.rjust(3) }}{{ entry.day_of_month.rjust(3) }}{{ entry.month.rjust(4) }}{{ entry.day_of_week.rjust(4) }}{{ " " }}{{ entry.user.ljust(10) }}{{ entry.command }}
 {% endfor %}
 

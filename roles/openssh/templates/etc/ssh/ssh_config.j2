@@ -1,0 +1,111 @@
+# {{ ansible_managed }}
+{# ============================================================================================== #}
+{#                                                                                                #}
+{# This is the ssh client system-wide configuration file.  See                                    #}
+{# ssh_config(5) for more information.  This file provides defaults for                           #}
+{# users, and the values can be changed in per-user configuration files                           #}
+{# or on the command line.                                                                        #}
+{#                                                                                                #}
+{# Configuration data is parsed as follows:                                                       #}
+{#  1. command line options                                                                       #}
+{#  2. user-specific file                                                                         #}
+{#  3. system-wide file                                                                           #}
+{# Any configuration value is only changed the first time it is set.                              #}
+{# Thus, host-specific definitions should be at the beginning of the                              #}
+{# configuration file, and defaults at the end.                                                   #}
+{#                                                                                                #}
+{# Site-wide defaults for some commonly used options.  For a comprehensive                        #}
+{# list of available options, their meanings and defaults, please see the                         #}
+{# ssh_config(5) man page.                                                                        #}
+{#                                                                                                #}
+{# ============================================================================================== #}
+
+{% if autonomy_openssh_ssh_conf_includes is truthy -%}
+  {% for item in autonomy_openssh_ssh_conf_includes -%}
+  Include {{ item }}
+{% endfor %}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_enable_ssh_keysign != __autonomy_openssh_ssh_conf_enable_ssh_keysign -%}
+  EnableSSHKeysign {{ autonomy_openssh_ssh_conf_enable_ssh_keysign }}
+{% endif %}
+
+Host *
+{% if autonomy_openssh_ssh_conf_add_keys_to_agent != __autonomy_openssh_ssh_conf_add_keys_to_agent %}
+    AddKeysToAgent {{ autonomy_openssh_ssh_conf_add_keys_to_agent }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_canonical_domains is truthy %}
+    CanonicalDomains {{ autonomy_openssh_ssh_conf_canonical_domains }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_canonicalize_fallback_local != __autonomy_openssh_ssh_conf_canonicalize_fallback_local %}
+    CanonicalizeFallbackLocal {{ autonomy_openssh_ssh_conf_canonicalize_fallback_local }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_canonicalize_hostname != __autonomy_openssh_ssh_conf_canonicalize_hostname %}
+    CanonicalizeHostname {{ autonomy_openssh_ssh_conf_canonicalize_hostname }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_ca_signature_algorithms != __autonomy_openssh_ssh_conf_ca_signature_algorithms %}
+    CASignatureAlgorithms{{ " " }}
+  {%- for item in autonomy_openssh_ssh_conf_ca_signature_algorithms -%}{{ item }}{{ "," if not loop.last else "" }}
+  {%- endfor %}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_check_host_ip != __autonomy_openssh_ssh_conf_check_host_ip %}
+    CheckHostIP {{ autonomy_openssh_ssh_conf_check_host_ip }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_ciphers != __autonomy_openssh_ssh_conf_ciphers %}
+    Ciphers
+  {%- for item in autonomy_openssh_ssh_conf_ciphers -%}{{ item }}{{ "," if not loop.last else "" }}
+  {%- endfor %}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_compression != __autonomy_openssh_ssh_conf_compression %}
+    Compression {{ autonomy_openssh_ssh_conf_compression }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_connection_attempts != __autonomy_openssh_ssh_conf_connection_attempts %}
+    ConnectionAttempts {{ autonomy_openssh_ssh_conf_connection_attempts }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_connect_timeout is truthy %}
+    ConnectTimout {{ autonomy_openssh_ssh_conf_connect_timeout }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_control_path is truthy %}
+{% if autonomy_openssh_ssh_conf_control_master != __autonomy_openssh_ssh_conf_control_master %}
+    ControlMaster {{ autonomy_openssh_ssh_conf_control_master }}
+{% endif %}
+    ControlPath {{ autonomy_openssh_ssh_conf_control_path }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_forward_agent != __autonomy_openssh_ssh_conf_forward_agent %}
+    ForwardAgent {{ autonomy_openssh_ssh_conf_forward_agent }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_forward_x11 != __autonomy_openssh_ssh_conf_forward_x11 %}
+    ForwardX11 {{ autonomy_openssh_ssh_conf_forward_x11 }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_forward_x11_timeout != __autonomy_openssh_ssh_conf_forward_x11_timeout %}
+    ForwardX11Timeout {{ autonomy_openssh_ssh_conf_forward_x11_timeout }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_forward_x11_trusted != __autonomy_openssh_ssh_conf_forward_x11_trusted %}
+    ForwardX11Trusted {{ autonomy_openssh_ssh_conf_forward_x11_trusted }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_gateway_ports != __autonomy_openssh_ssh_conf_gateway_ports %}
+    GatewayPorts {{ autonomy_openssh_ssh_conf_gateway_ports }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_global_known_hosts_file != __autonomy_openssh_ssh_conf_global_known_hosts_file %}
+    GlobalKnownHostsFile
+  {%- for item in autonomy_openssh_ssh_conf_global_known_hosts_file -%}{{ item }}{{ " " if not loop.last else "" }}
+  {%- endfor %}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_gssapi_authentication != __autonomy_openssh_ssh_conf_gssapi_authentication %}
+    GSSAPIAuthentication {{ autonomy_openssh_ssh_conf_gssapi_authentication }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_gssapi_delegate_credentials != __autonomy_openssh_ssh_conf_gssapi_delegate_credentials %}
+    GSSAPIDelegateCredentials {{ autonomy_openssh_ssh_conf_gssapi_delegate_credentials }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_hash_known_hosts != __autonomy_openssh_ssh_conf_hash_known_hosts %}
+    HashKnownHosts {{ autonomy_openssh_ssh_conf_hash_known_hosts }}
+{% endif %}
+{% if autonomy_openssh_ssh_conf_hostbased_authentication != __autonomy_openssh_ssh_conf_hostbased_authentication %}
+    HostbasedAuthentication {{ autonomy_openssh_ssh_conf_hostbased_authentication }}
+{% endif %}
+{# {% if autonomy_openssh_ssh_conf_strict_host_key_checking != __autonomy_openssh_ssh_conf_strict_host_key_checking %} #}
+{#   StrictHostKeyChecking {{ autonomy_openssh_ssh_conf_strict_host_key_checking }} #}
+{# {% endif %} #}
+
+{# LocalWords:  HashKnownHosts HostbasedAuthentication GSSAPIDelegateCredentials ControlMaster
+{# LocalWords:  GSSAPIAuthentication GlobalKnownHostsFile ControlPath EnableSSHKeysign
+#}

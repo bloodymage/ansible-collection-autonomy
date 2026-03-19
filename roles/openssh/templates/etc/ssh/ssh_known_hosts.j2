@@ -1,0 +1,7 @@
+{% if autonomy_common_sshca_hostca_openssh_pub_path is defined -%}
+{% if autonomy_sshca_hostca_known_hosts is truthy %}
+{% for item in autonomy_sshca_hostca_known_hosts -%}
+  {{ item }}
+{% endfor %}
+{% endif %}
+{% endif %}

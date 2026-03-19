@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+Types:{% for type in item['types'] %} {{ type }}{% endfor +%}
+URIs: {{ item['uris'] }}
+Suites:{% for suite in item['suites'] %} {{ suite }}{% endfor +%}
+Components:{% for component in item['components'] %} {{ component }}{% endfor +%}
+Enabled: {{ item['enabled'] }}
+{% if item['architectures'] is truthy %}
+Architectures: {% for arch in item['chitectures'] %} {{ arch }}{% endfor %}
+{% endif %}
+Signed-By: {{ item['signing_key'] }}

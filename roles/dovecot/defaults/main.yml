@@ -1,7 +1,7 @@
 ---
 # defaults file for mail-server
 autonomy_dovecot_packages:
-  - dovecot-core
+  - "{{ autonomy_common_dovecot_package }}"
   - dovecot-imapd
   - dovecot-lmtpd
   - dovecot-managesieved
@@ -9,19 +9,28 @@ autonomy_dovecot_packages:
 
 # ==================================================================================================
 #
+# Namespaces
+#
+# ==================================================================================================
+autonomy_dovecot_use_inboxzero_namespace: no
+autonomy_dovecot_inboxzero_namespace_name: "inboxzero"
+autonomy_dovecot_junk_mail_folder: "Junk"
+autonomy_dovecot_infected_mail_folder: "Infected"
+autonomy_dovecot_bounce_folder_name: ""
+autonomy_dovecot_advertisements_folder_name: ""
+
+# ==================================================================================================
+#
 # Directories
 #
 # ==================================================================================================
-autonomy_dovecot_etc: "/etc/dovecot"
-autonomy_dovecot_confd: "{{ autonomy_dovecot_etc }}/conf.d"
-autonomy_dovecot_sieve_dir: "{{ autonomy_dovecot_etc }}/sieve"
+autonomy_dovecot_lib_dir: "{{ autonomy_common_lib_dir }}/dovecot"
+autonomy_dovecot_confd_dir: "{{ autonomy_common_dovecot_sysconf_dir }}/conf.d"
+autonomy_dovecot_sieve_dir: "{{ autonomy_common_dovecot_sysconf_dir }}/sieve"
 autonomy_dovecot_sieve_global_dir: "{{ autonomy_dovecot_sieve_dir }}/global"
-autonomy_dovecot_sieve_pipe_bin_dir: "/usr/lib/dovecot/sieve"
-autonomy_dovecot_virtual_dir: "{{ autonomy_dovecot_etc }}/virtual"
-autonomy_vmail_dir: "/var/mail/vmail"
-autonomy_dovecot_use_inboxzero_namespace: no
-autonomy_dovecot_inboxzero_namespace_name: "inboxzero"
-autonomy_dovecot_inboxzero_dir: "{{ autonomy_dovecot_etc }}/{{ autonomy_dovecot_inboxzero_namespace_name }}"
+autonomy_dovecot_sieve_pipe_bin_dir: "{{ autonomy_dovecot_lib_dir }}/sieve"
+autonomy_dovecot_virtual_dir: "{{ autonomy_common_dovecot_sysconf_dir }}/virtual"
+autonomy_dovecot_inboxzero_dir: "{{ autonomy_common_dovecot_sysconf_dir }}/{{ autonomy_dovecot_inboxzero_namespace_name }}"
 
 autonomy_dovecot_log_path: syslog
 autonomy_dovecot_log_dir: ""
@@ -51,16 +60,6 @@ autonomy_dovecot_conf_files:
   - auth-master.conf.ext
   - auth-static.conf.ext
   - auth-vpopmail.conf.ext
-
-# ==================================================================================================
-#
-# Namespaces
-#
-# ==================================================================================================
-autonomy_dovecot_junk_mail_folder: "Junk"
-autonomy_dovecot_infected_mail_folder: "Infected"
-autonomy_dovecot_bounce_folder_name: ""
-autonomy_dovecot_advertisements_folder_name: ""
 
 autonomy_dovecot_private_namespace_mailboxes:
   - name: "Sent"
@@ -234,7 +233,7 @@ autonomy_dovecot_sieve_files:
   - name: "sort"
     priority: "99"
     type: "global"
-    archive: yes
+    archive: true
 
 autonomy_dovecot_sieve_plugins: "sieve_imapsieve sieve_extprograms"
 # ==================================================================================================
@@ -470,7 +469,7 @@ autonomy_dovecot_auth_deny:
   name: "deny"
   passdb:
     - driver: passwd-file
-      deny: yes
+      deny: true
       args: "{{ autonomy_dovecot_etc }}/deny-users"
 
 autonomy_dovecot_password_file: "{{ autonomy_dovecot_etc }}/passwd.db"

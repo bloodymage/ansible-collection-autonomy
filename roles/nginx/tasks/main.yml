@@ -13,14 +13,16 @@
         - main.yml
       paths:
         - "vars"
-  become: no
+  become: false
   tags:
+    - install-packages
     - nginx
 
 - name: "Install packages."
   ansible.builtin.package:
-    name: "{{ autonomy_packages }}"
+    name: "{{ autonomy_nginx_packages }}"
     state: present
+  become: true
   tags:
-    - nginx
     - install-packages
+    - nginx

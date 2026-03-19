@@ -7,4 +7,4 @@ autonomy_kerberos_packages:
   #-libpam-krb5
 
 autonomy_kerberos_logging: no
-autonomy_kerberos_domain_realm: yes
+autonomy_kerberos_domain_realm: true

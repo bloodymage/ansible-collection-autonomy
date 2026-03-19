@@ -1,0 +1,28 @@
+---
+autonomy_common_sysadmin_user: "admin"
+autonomy_common_sysadmin_email_address: "{{ autonomy_common_sysadmin_user }}@{{ autonomy_common_root_domain }}"
+
+autonomy_common_users_ssh_key_type: "{{ autonomy_common_sshca_key_type }}"
+
+# System User Names
+autonomy_common_users_mythtv_username: "mythtv"
+autonomy_common_users_minidlna_username: "minidlna"
+autonomy_common_users_git_username: "git"
+autonomy_common_users_homeassistant_username: "homeassistant"
+autonomy_common_users_vmail_username:  "vmail"
+autonomy_common_users_odoo_username: "odoo"
+autonomy_common_users_keycloak_username: "keycloak"
+
+# System User Id Numbers
+autonomy_common_users_mythtv_id_number: 500
+autonomy_common_users_minidlna_id_number: 501
+autonomy_common_users_git_id_number: 502
+autonomy_common_users_homeassistant_id_number: 503
+autonomy_common_users_vmail_id_number:  504
+autonomy_common_users_odoo_id_number: 505
+autonomy_common_users_keycloak_id_number: 506
+
+autonomy_common_users:
+  - "{{ autonomy_common_users_user1 }}"
+  - "{{ autonomy_common_users_user2 }}"
+  - "{{ autonomy_common_users_user3 }}"

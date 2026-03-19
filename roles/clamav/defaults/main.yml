@@ -1,14 +1,10 @@
 ---
 # defaults file for clamav
-autonomy_packages:
-  #- lha
-  #- rar
-  #- unrar
+autonomy_clamav_packages:
   - arj
   - bzip2
   - cabextract
   - clamav
-  - clamav-milter
   - clamav-milter
   - cpio
   - file
@@ -22,6 +18,6 @@ autonomy_packages:
   - zip
   - zoo
 
-clamav_milter_socket: "/var/spool/postfix/clamav/clamav-milter.ctl"
-clamav_on_infected: "Quarantine"
-clamav_log_facility: "LOG_MAIL"
+autonomy_clamav_milter_socket: "/var/spool/postfix/clamav/clamav-milter.ctl"
+autonomy_clamav_on_infected: "Quarantine"
+autonomy_clamav_log_facility: "LOG_MAIL"

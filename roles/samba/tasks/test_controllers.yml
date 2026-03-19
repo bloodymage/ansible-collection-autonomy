@@ -12,25 +12,25 @@
 - name: "(Tests) Verify Sysvol Replication."
   ansible.builtin.command:
     cmd: "samba-tool drs showrepl"
-  become: yes
+  become: true
   when:
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master
   notify: restart bind
 
 - name: "(Tests) List all shares provided by the Domain Controller."
   ansible.builtin.command:
     cmd: "smbclient -L localhost -U%"
   register: shares
-  become: yes
+  become: true
   when:
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master
 
 # - name: Verify SMB Authentication
 #   shell: "smbclient //localhost/netlogon -UAdministrator -c 'ls' --password={{ samba_administrator_password }}"
 #   register: success
-#   become: yes
-#   when: autonomy_fqdn != __samba_schema_master
-#   ignore_errors: yes
+#   become: true
+#   when: inventory_hostname != __samba_schema_master
+#   ignore_errors: true
 
 #- debug:
 #    var: success
@@ -40,13 +40,13 @@
   ansible.builtin.command:
     cmd: "host -t A {{ ansible_fqdn }}."
   register: success
-  become: yes
+  become: true
 
 - name: "(Tests) udp-based _kerberos SRV resource record in the domain."
   ansible.builtin.command:
-    cmd: "host -t SRV _kerberos._udp.{{ autonomy_domain }}."
+    cmd: "host -t SRV _kerberos._udp.{{ autonomy_common_zone_domain }}."
   register: success
-  become: yes
+  become: true
 
 - name: "(Tests) KDC get tickets."
   expect:
@@ -54,14 +54,14 @@
     responses:
       (?i)password: "{{ samba_administrator_password }}"
   no_log: true
-  become: no
+  become: false
   when:
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master
 
 - name: "(Tests) KDC list tickets."
   ansible.builtin.command:
     cmd: "klist"
   register: success
-  become: no
+  become: false
   when:
-    - autonomy_fqdn != __samba_schema_master
+    - inventory_hostname != __samba_schema_master

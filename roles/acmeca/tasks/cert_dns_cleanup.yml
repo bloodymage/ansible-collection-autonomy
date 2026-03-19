@@ -1,0 +1,21 @@
+---
+- name: "Clean up dns-01 challenge DNS entries."
+  community.general.cloudflare_dns:
+    api_token: "{{ __cloudflare_key }}"
+    zone: "{{ autonomy_common_root_domain }}"
+    record: "{{ item.key }}"
+    type: TXT
+    value: "{{ item.value[0] }}"
+    state: "absent"
+  with_dict: "{{ __autonomy_acmeca_challenge['challenge_data_dns'] }}"
+  become: false
+  delegate_to: localhost
+  vars:
+    __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_root_domain }}/external/cloudflare/dns"
+    __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+  tags:
+    - acmeca
+    - acmeca-test
+    - acmeca-cert
+    - acmeca-certs
+    - acmeca-dns

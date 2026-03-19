@@ -1,0 +1,2 @@
+---
+autonomy_common_opensc_enabled: "{{ autonomy_smart_card_login }}"

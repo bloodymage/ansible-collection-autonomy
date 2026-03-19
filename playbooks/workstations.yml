@@ -1,5 +1,5 @@
 - name: "Prepare playbook environment."
-  hosts: all:!wifi_access_points:!routers:!switches:!printers
+  hosts: all:!vendor_managed
   roles:
     - role: bloodymage.autonomy.autoconfig
       tags:
@@ -13,10 +13,10 @@
         - cups
     - role: bloodymage.autonomy.opensc
       when:
-        - autonomy_smart_card_login
+        - autonomy_common_opensc_enabled
       tags:
         - opensc
-    - role: bloodymage.autonomy.libnss3_tools
+    - role: bloodymage.autonomy.libnss3tools
       tags:
         - nssdb
     - role: bloodymage.autonomy.devilspie2

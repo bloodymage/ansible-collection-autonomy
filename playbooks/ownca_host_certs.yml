@@ -1,0 +1,12 @@
+---
+- name: "Install certificates on all hosts."
+  hosts: all:!localhost:!public_zone:!dns_only:!vendor_managed
+  roles:
+    - role: bloodymage.autonomy.ownca
+      vars:
+        __ownca_tasks: "hostcerts"
+      tags:
+        - regenerate-ownca
+        - ownca
+        - ownca-host-certs
+        - ownca-host-certificates

@@ -1,0 +1,110 @@
+---
+# ==================================================================================================
+#
+# Task: Generate CA Private Key
+#
+# ==================================================================================================
+- name: "Generate Root CA Private Key."
+  community.crypto.openssl_privatekey:
+    path: "{{ autonomy_ownca_rootca_key_path }}"
+    passphrase: "{{ __password }}"
+    type: "{{ autonomy_ownca_privatekey_type }}"
+    size: "{{ autonomy_ownca_privatekey_size }}"
+    cipher: "auto"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0400"
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  run_once: true
+  become: false
+  vars:
+    __password: >-
+      {% if autonomy_ownca_rootca_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_ownca_rootca_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_ownca_rootca_password }}
+      {%- endif %}
+
+- name: "Generate Root CA Certificate Signing Requests (CSR)."
+  community.crypto.openssl_csr:
+    path: "{{ autonomy_ownca_rootca_csr_path }}"
+    privatekey_path: "{{ autonomy_ownca_rootca_key_path }}"
+    privatekey_passphrase: "{{ __password }}"
+    common_name: "{{ autonomy_ownca_rootca_common_name }}"
+    country_name: "{{ autonomy_common_pki_loc_country_name | default(omit) }}"
+    email_address: "{{ autonomy_ownca_rootca_email_address | default(omit) }}"
+    organization_name: "{{ autonomy_ownca_rootca_org_name }}"
+    state_or_province_name: "{{ autonomy_common_pki_loc_region | default(omit) }}"
+    key_usage: "{{ autonomy_ownca_rootca_keyusage }}"
+    key_usage_critical: "{{ autonomy_ownca_rootca_keyusage_critical }}"
+    basic_constraints: "{{ autonomy_ownca_rootca_basic_constraints }}"
+    basic_constraints_critical: "{{ autonomy_ownca_rootca_basic_constraints_critical }}"
+    create_subject_key_identifier: "{{ autonomy_ownca_rootca_create_subject_key_identifier }}"
+    crl_distribution_points:
+      - full_name: "URI:{{ autonomy_ownca_rootca_crl_distribution_point_url }}"
+        reasons: "{{ autonomy_ownca_rootca_crl_distribution_points_reasons }}"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0400"
+    backup: "{{ autonomy_ownca_rootca_csr_backup }}"
+    state: present
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  run_once: true
+  become: false
+  vars:
+    __password: >-
+      {% if autonomy_ownca_rootca_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_ownca_rootca_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_ownca_rootca_password }}
+      {%- endif %}
+
+- name: "Generate Root CA Selfsigned Certificate."
+  community.crypto.x509_certificate:
+    path: "{{ autonomy_ownca_rootca_cert_path }}"
+    privatekey_path: "{{ autonomy_ownca_rootca_key_path }}"
+    privatekey_passphrase: "{{ __password }}"
+    csr_path: "{{ autonomy_ownca_rootca_csr_path }}"
+    ownca_not_after: "{{ autonomy_ownca_rootca_not_after }}"
+    provider: "selfsigned"
+    owner: "{{ autonomy_ownca_user }}"
+    group: "{{ autonomy_ownca_group }}"
+    mode: "0644"
+    backup: true
+    state: present
+    #force: "{{ __autonomy_ownca_regenerate }}"
+    return_content: true
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  run_once: true
+  become: false
+  vars:
+    __password: >-
+      {% if autonomy_ownca_rootca_password == "password" -%}
+      {{ lookup('community.general.passwordstore', autonomy_ownca_rootca_password_store_lookup) }}
+      {%- else -%}
+      {{ autonomy_ownca_rootca_password }}
+      {%- endif %}
+  notify:
+    - "regenerate certificates"
+  register: __autonomy_ownca_rootca_cert
+
+- name: "Run handlers now."
+  ansible.builtin.meta: flush_handlers
+
+- name: "Get Root CA Cert information."
+  community.crypto.x509_certificate_info:
+    path: "{{ autonomy_ownca_ca_certs_dir }}/{{ autonomy_common_org_name }}-root-ca.crt"
+  register: __autonomy_ownca_rootca_cert_info
+  delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
+  run_once: true
+  become: false
+
+# - name: "Print Root CA cert."
+#   ansible.builtin.debug:
+#     msg:
+#       - "{{ __autonomy_ownca_rootca_cert }}"
+
+# - name: "Print Root CA cert info."
+#   ansible.builtin.debug:
+#     msg:
+#       - "{{ __autonomy_ownca_rootca_cert_info }}"

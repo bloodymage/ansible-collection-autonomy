@@ -1,0 +1,31 @@
+---
+# ==================================================================================================
+#
+# DNS Settings
+#
+# ==================================================================================================
+# Options are: "cloudflare", ...
+autonomy_dns_protocol: ""
+
+autonomy_common_dns_cname_records: []
+autonomy_dns_mx_record_priority: 1
+
+autonomy_dns_spf_mail_servers: "mx"
+autonomy_dns_spf_record_includes: ""
+autonomy_dns_spf_record_fail: "-all"
+
+autonomy_dns_dmarc_policy: "reject"
+autonomy_dns_dmarc_percent: 100
+autonomy_dns_dmarc_local_email: "postmaster@{{ autonomy_common_root_domain }}"
+
+# 's' for strict, 'r' for relaxed
+autonomy_dns_dmarc_aspf: "s"
+autonomy_dns_dmarc_adkim: "s"
+
+autonomy_dns_nsupdate_remove_a_records: []
+autonomy_dns_nsupdate_remove_aaaa_records: []
+
+# FIXME: The cloudflare dmarc email should only be an entry if it is truthy
+autonomy_dns_dmarc_email:
+  - "{{ autonomy_dns_dmarc_local_email }}"
+  - "{{ autonomy_dns_dmarc_cloudflare_email }}"

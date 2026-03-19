@@ -8,117 +8,117 @@
 #
 # ==================================================================================================
 # Services status, enabled or disabled
-postfix_master_input_smtp_service_enabled: yes
-postfix_master_smtpd_service_enabled: yes
-postfix_master_dnsblog_service_enabled: yes
-postfix_master_tlsproxy_service_enabled: yes
-postfix_master_submission_service_enabled: yes
-postfix_master_smtps_service_enabled: yes
+postfix_master_input_smtp_service_enabled: true
+postfix_master_smtpd_service_enabled: true
+postfix_master_dnsblog_service_enabled: true
+postfix_master_tlsproxy_service_enabled: true
+postfix_master_submission_service_enabled: true
+postfix_master_smtps_service_enabled: true
 postfix_master_628_service_enabled: no
-postfix_master_pickup_service_enabled: yes
-postfix_master_cleanup_service_enabled: yes
-postfix_master_qmgr_service_enabled: yes
-postfix_master_tlsmgr_service_enabled: yes
-postfix_master_rewrite_service_enabled: yes
-postfix_master_bounce_service_enabled: yes
-postfix_master_defer_service_enabled: yes
-postfix_master_trace_service_enabled: yes
-postfix_master_verify_service_enabled: yes
-postfix_master_flush_service_enabled: yes
-postfix_master_proxymap_service_enabled: yes
-postfix_master_proxywrite_service_enabled: yes
-postfix_master_output_smtp_service_enabled: yes
-postfix_master_relay_service_enabled: yes
-postfix_master_showq_service_enabled: yes
-postfix_master_error_service_enabled: yes
-postfix_master_retry_service_enabled: yes
-postfix_master_discard_service_enabled: yes
-postfix_master_local_service_enabled: yes
-postfix_master_virtual_service_enabled: yes
-postfix_master_lmtp_service_enabled: yes
-postfix_master_anvil_service_enabled: yes
-postfix_master_scache_service_enabled: yes
-postfix_master_postlog_service_enabled: yes
-postfix_master_maildrop_service_enabled: yes
-postfix_master_uucp_service_enabled: yes
-postfix_master_ifmail_service_enabled: yes
-postfix_master_bsmtp_service_enabled: yes
-postfix_master_scalemail_backend_service_enabled: yes
-postfix_master_mailman_service_enabled: yes
-postfix_master_dovecot_service_enabled: yes
+postfix_master_pickup_service_enabled: true
+postfix_master_cleanup_service_enabled: true
+postfix_master_qmgr_service_enabled: true
+postfix_master_tlsmgr_service_enabled: true
+postfix_master_rewrite_service_enabled: true
+postfix_master_bounce_service_enabled: true
+postfix_master_defer_service_enabled: true
+postfix_master_trace_service_enabled: true
+postfix_master_verify_service_enabled: true
+postfix_master_flush_service_enabled: true
+postfix_master_proxymap_service_enabled: true
+postfix_master_proxywrite_service_enabled: true
+postfix_master_output_smtp_service_enabled: true
+postfix_master_relay_service_enabled: true
+postfix_master_showq_service_enabled: true
+postfix_master_error_service_enabled: true
+postfix_master_retry_service_enabled: true
+postfix_master_discard_service_enabled: true
+postfix_master_local_service_enabled: true
+postfix_master_virtual_service_enabled: true
+postfix_master_lmtp_service_enabled: true
+postfix_master_anvil_service_enabled: true
+postfix_master_scache_service_enabled: true
+postfix_master_postlog_service_enabled: true
+postfix_master_maildrop_service_enabled: true
+postfix_master_uucp_service_enabled: true
+postfix_master_ifmail_service_enabled: true
+postfix_master_bsmtp_service_enabled: true
+postfix_master_scalemail_backend_service_enabled: true
+postfix_master_mailman_service_enabled: true
+postfix_master_dovecot_service_enabled: true
 
 # Variables we are changing from the internal defaults
-postfix_master_input_smtp_service_run_chroot: yes
+postfix_master_input_smtp_service_run_chroot: true
 postfix_master_input_smtp_service_process_limit: "1"
 postfix_master_input_smtp_service_command: "postscreen"
 
-postfix_master_smtpd_service_run_chroot: yes
+postfix_master_smtpd_service_run_chroot: true
 
-postfix_master_dnsblog_service_run_chroot: yes
+postfix_master_dnsblog_service_run_chroot: true
 postfix_master_dnsblog_service_process_limit: "0"
 
-postfix_master_tlsproxy_service_run_chroot: yes
+postfix_master_tlsproxy_service_run_chroot: true
 postfix_master_tlsproxy_service_process_limit: "0"
 
-postfix_master_submission_service_run_chroot: yes
+postfix_master_submission_service_run_chroot: true
 postfix_master_submission_service_args:
   - "-o syslog_name=postfix/$service_name"
   - "-o smtpd_tls_security_level=encrypt"
 
-postfix_master_smtps_service_run_chroot: yes
+postfix_master_smtps_service_run_chroot: true
 
-postfix_master_628_service_run_chroot: yes
+postfix_master_628_service_run_chroot: true
 
 postfix_master_pickup_service_private: no
-postfix_master_pickup_service_run_chroot: yes
+postfix_master_pickup_service_run_chroot: true
 postfix_master_pickup_service_wakeup_time: "60"
 postfix_master_pickup_service_process_limit: "1"
 
 postfix_master_cleanup_service_private: no
-postfix_master_cleanup_service_run_chroot: yes
+postfix_master_cleanup_service_run_chroot: true
 postfix_master_cleanup_service_process_limit: "0"
 
 postfix_master_qmgr_service_private: no
 postfix_master_qmgr_service_wakeup_time: "300"
 postfix_master_qmgr_service_process_limit: "1"
 
-postfix_master_tlsmgr_service_run_chroot: yes
+postfix_master_tlsmgr_service_run_chroot: true
 postfix_master_tlsmgr_service_wakeup_time: "1000?"
 postfix_master_tlsmgr_service_process_limit: "1"
 
-postfix_master_rewrite_service_run_chroot: yes
+postfix_master_rewrite_service_run_chroot: true
 
-postfix_master_bounce_service_run_chroot: yes
+postfix_master_bounce_service_run_chroot: true
 postfix_master_bounce_service_process_limit: "0"
 
-postfix_master_defer_service_run_chroot: yes
+postfix_master_defer_service_run_chroot: true
 postfix_master_defer_service_process_limit: "0"
 
-postfix_master_trace_service_run_chroot: yes
+postfix_master_trace_service_run_chroot: true
 postfix_master_trace_service_process_limit: "0"
 
-postfix_master_verify_service_run_chroot: yes
+postfix_master_verify_service_run_chroot: true
 postfix_master_verify_service_process_limit: "1"
 
 postfix_master_flush_service_private: no
-postfix_master_flush_service_run_chroot: yes
+postfix_master_flush_service_run_chroot: true
 postfix_master_flush_service_wakeup_time: "1000?"
 postfix_master_flush_service_process_limit: "0"
 
 postfix_master_proxywrite_service_process_limit: "1"
 
-postfix_master_output_smtp_service_run_chroot: yes
+postfix_master_output_smtp_service_run_chroot: true
 
-postfix_master_relay_service_run_chroot: yes
+postfix_master_relay_service_run_chroot: true
 
 postfix_master_showq_service_private: no
-postfix_master_showq_service_run_chroot: yes
+postfix_master_showq_service_run_chroot: true
 
-postfix_master_error_service_run_chroot: yes
+postfix_master_error_service_run_chroot: true
 
-postfix_master_retry_service_run_chroot: yes
+postfix_master_retry_service_run_chroot: true
 
-postfix_master_discard_service_run_chroot: yes
+postfix_master_discard_service_run_chroot: true
 
 postfix_master_local_service_run_unprivileged: no
 postfix_master_local_service_run_chroot: no
@@ -126,12 +126,12 @@ postfix_master_local_service_run_chroot: no
 postfix_master_virtual_service_run_unprivileged: no
 postfix_master_virtual_service_run_chroot: no
 
-postfix_master_lmtp_service_run_chroot: yes
+postfix_master_lmtp_service_run_chroot: true
 
-postfix_master_anvil_service_run_chroot: yes
+postfix_master_anvil_service_run_chroot: true
 postfix_master_anvil_service_process_limit: "1"
 
-postfix_master_scache_service_run_chroot: yes
+postfix_master_scache_service_run_chroot: true
 postfix_master_scache_service_process_limit: "1"
 
 postfix_master_postlog_service_private: no

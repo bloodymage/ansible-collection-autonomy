@@ -1,7 +1,12 @@
 ---
 # Host Definitions
-autonomy_hostname: "{{ inventory_hostname_short }}"
-autonomy_fqdn: "{{ autonomy_hostname }}.{{ autonomy_domain }}"
-autonomy_ipv4_address: "{{ ansible_host }}"
-autonomy_ipv6_address: "{{ ansible_default_ipv6.address | default(None) }}"
-autonomy_virtual_host: false
+autonomy_common_hostname: "{{ inventory_hostname_short }}"
+autonomy_common_fqdn: "{{ autonomy_common_hostname }}.{{ autonomy_common_zone_domain }}"
+autonomy_common_ipv4_address: "{{ ansible_host }}"
+autonomy_common_ipv4_ptr_record: "{{ autonomy_common_ipv4_address | community.dns.reverse_pointer }}"
+autonomy_common_ipv6_address: "{{ ansible_default_ipv6['address'] | default(None) }}"
+
+autonomy_common_virtual_host: false
+
+autonomy_common_use_password_logon: false
+

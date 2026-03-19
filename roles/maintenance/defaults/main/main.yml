@@ -1,0 +1,12 @@
+---
+# defaults file for dns_forwardzones
+autonomy_maintenance_dns_packages:
+  - python3-dnspython
+  - python3-apt
+
+# ==================================================================================================
+#
+# Do NOT use these variables.
+#
+# ==================================================================================================
+__databases_to_create: []
