@@ -7,15 +7,16 @@
 # SPDX-License-Identifier: MIT
 #
 # ==================================================================================================
-namespace: bloodymage
-name: autonomy
-version: 0.11.0
+namespace: "bloodymage"
+name: "autonomy"
+version: "0.14.0"
 readme: "README.md"
 authors:
-  - G Derber <gd.github@bloodymage.org>
+  - "G Derber <gd.github@bloodymage.org>"
 description: Installs your own self-hosted network services.
 license_file: "LICENSE.md"
 tags:
+  - collection
   - selfhosted
   - autonomy
   - bloodymage
@@ -24,13 +25,13 @@ tags:
   - email
   - dovecot
   - postfix
-dependencies:
-  - community.crypto
-  - community.network
+# dependencies:
+#   - "community.crypto": "*"
+#   - "community.network": "*"
 repository: https://github.com/bloodymage/ansible-collection-autonomy
 documentation: http://docs.bloodymage.org
 homepage: https://bloodymage.org
 issues: https://github.com/bloodymage/ansible-collection-autonomy/issues
 build_ignore:
-  - .gitignore
-  - *.tar.gz
+  - ".gitignore"
+  - "*.tar.gz"
