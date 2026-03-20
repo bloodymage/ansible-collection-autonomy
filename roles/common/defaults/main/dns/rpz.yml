@@ -7,7 +7,7 @@ autonomy_common_dns_rpz_dir: "{{ autonomy_common_bind_cache_dir }}"
 
 # Allow List
 autonomy_common_dns_rpz_allowlist_name: "allowlist"
-autonomy_common_dns_rpz_allowlist_policy: "disabled"
+autonomy_common_dns_rpz_allowlist_policy: "{{ autonomy_common_dns_rpz_default_policy }}"
 autonomy_common_dns_rpz_allowlist_zone_file: "db.{{ autonomy_common_dns_rpz_allowlist_name }}.rpz"
 autonomy_common_dns_rpz_allowlist_zone_path: "{{ autonomy_common_dns_rpz_dir }}/{{ autonomy_common_dns_rpz_allowlist_zone_file }}"
 autonomy_common_dns_rpz_allowlist_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -18,7 +18,7 @@ autonomy_dns_allowlist_records_absent: []
 
 # Redirect List
 autonomy_common_dns_rpz_redirectlist_name: "redirectlist"
-autonomy_common_dns_rpz_redirectlist_policy: "disabled"
+autonomy_common_dns_rpz_redirectlist_policy: "{{ autonomy_common_dns_rpz_default_policy }}"
 autonomy_common_dns_rpz_redirectlist_zone_file: "db.{{ autonomy_common_dns_rpz_redirectlist_name }}.rpz"
 autonomy_common_dns_rpz_redirectlist_zone_path: "{{ autonomy_common_dns_rpz_dir }}/{{ autonomy_common_dns_rpz_redirectlist_zone_file }}"
 autonomy_common_dns_rpz_redirectlist_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -29,7 +29,7 @@ autonomy_dns_redirectlist_records_absent: []
 
 # Blocklist
 autonomy_common_dns_rpz_blocklist_name: "blocklist"
-autonomy_common_dns_rpz_blocklist_policy: "disabled"
+autonomy_common_dns_rpz_blocklist_policy: "{{ autonomy_common_dns_rpz_default_policy }}"
 autonomy_common_dns_rpz_blocklist_zone_file: "db.{{ autonomy_common_dns_rpz_blocklist_name }}.rpz"
 autonomy_common_dns_rpz_blocklist_zone_path: "{{ autonomy_common_dns_rpz_dir }}/{{ autonomy_common_dns_rpz_blocklist_zone_file }}"
 autonomy_common_dns_rpz_blocklist_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -101,18 +101,32 @@ autonomy_common_dns_rpz_basic_zones:
 
 autonomy_common_dns_rpz_zones: "{{ autonomy_common_dns_rpz_basic_zones + autonomy_common_dns_rpz_hagezi_zones }}"
 
+# Example Allowlist
+# autonomy_dns_allowlist_records_present:
+#   - domain: "*.doubleclick.net"
+#     alias:  "rpz-passthru."
+
+# Example Redirectlist
+# autonomy_dns_redirectlist_records_present:
+#   - domain: "*.doubleclick.net"
+#     alias:  "example.com"
+#   - domain: "*.pubmatic.com"
+#     ipv4:   "127.0.0.1"
+#   - domain: "*.mopub.com"
+#     ipv6:   "::1"
+
 # Example Blocklist
 # autonomy_dns_blocklist_records_present:
-#   - "*.doubleclick.net"
-#   - "*.pubmatic.com"
-#   - "*.mopub.com"
-#   - "*.eskimi.com"
-#   - "*.adcolony.xyz"
-#   - "*.adsrvr.org"
-#   - "*.adsymptotic.com"
-#   - "*.servedby-buysellads.com"
-#   - "srv.buysellads.com"
-#   - "*.powerinboxedge.com"
-#   - "*.defof.com"
-#   - "*.licasd.com"
-#   - "*.liadm.com"
+#   - domain: "*.doubleclick.net"
+#   - domain: "*.pubmatic.com"
+#   - domain: "*.mopub.com"
+#   - domain: "*.eskimi.com"
+#   - domain: "*.adcolony.xyz"
+#   - domain: "*.adsrvr.org"
+#   - domain: "*.adsymptotic.com"
+#   - domain: "*.servedby-buysellads.com"
+#   - domain: "srv.buysellads.com"
+#   - domain: "*.powerinboxedge.com"
+#   - domain: "*.defof.com"
+#   - domain: "*.licasd.com"
+#   - domain: "*.liadm.com"

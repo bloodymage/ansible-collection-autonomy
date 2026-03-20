@@ -1,15 +1,15 @@
 ---
-- name: "Download Hagezi RPZ files."
-  ansible.builtin.get_url:
-    url: "{{ item['url'] }}"
-    dest: "{{ item['path'] }}"
-    owner: "{{ autonomy_common_bind_owner }}"
-    group: "{{ autonomy_common_bind_group }}"
-    mode: "0644"
-    #force: false
-  loop: "{{ autonomy_common_dns_rpz_hagezi_zones }}"
-  become: true
-  when:
-    - autonomy_common_virtual_host is falsy
-    - item['type'] == "primary"
-  notify: restart bind
+# - name: "Download Hagezi RPZ files."
+#   ansible.builtin.get_url:
+#     url: "{{ item['url'] }}"
+#     dest: "{{ item['path'] }}"
+#     owner: "{{ autonomy_common_bind_owner }}"
+#     group: "{{ autonomy_common_bind_group }}"
+#     mode: "0644"
+#     #force: false
+#   loop: "{{ autonomy_common_dns_rpz_hagezi_zones }}"
+#   become: true
+#   when:
+#     - autonomy_common_virtual_host is falsy
+#     - item['type'] == "primary"
+#   notify: restart bind

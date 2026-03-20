@@ -10,6 +10,7 @@ autonomy_common_dns_rpz_hagezi_base_url: "https://cdn.jsdelivr.net/gh/hagezi/dns
 autonomy_common_dns_rpz_hagezi_zone_type: "{{ autonomy_common_dns_rpz_zone_type }}"
 autonomy_common_dns_rpz_hagezi_primary_nameservers: "{{ autonomy_common_dns_rpz_primary_nameservers }}"
 autonomy_common_dns_rpz_hagezi_dir: "{{ autonomy_common_dns_rpz_dir }}"
+autonomy_common_dns_rpz_hagezi_default_policy: "{{ autonomy_common_dns_rpz_default_policy }}"
 
 # Example
 # autonomy_common_dns_rpz_hagezi_zones:
@@ -23,7 +24,7 @@ autonomy_common_dns_rpz_hagezi_zones: []
 
 # Multi Light
 autonomy_common_dns_rpz_hagezi_light_name: "light"
-autonomy_common_dns_rpz_hagezi_light_policy: "given"
+autonomy_common_dns_rpz_hagezi_light_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_light_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_light_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_light_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_light_zone_file }}"
 autonomy_common_dns_rpz_hagezi_light_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -43,7 +44,7 @@ autonomy_common_dns_rpz_hagezi_light_zone:
 
 # Multi Normal
 autonomy_common_dns_rpz_hagezi_normal_name: "multi"
-autonomy_common_dns_rpz_hagezi_normal_policy: "given"
+autonomy_common_dns_rpz_hagezi_normal_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_normal_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_normal_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_normal_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_normal_zone_file }}"
 autonomy_common_dns_rpz_hagezi_normal_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -63,7 +64,7 @@ autonomy_common_dns_rpz_hagezi_normal_zone:
 
 # Multi Pro
 autonomy_common_dns_rpz_hagezi_pro_name: "pro"
-autonomy_common_dns_rpz_hagezi_pro_policy: "given"
+autonomy_common_dns_rpz_hagezi_pro_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_pro_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_pro_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_pro_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_pro_zone_file }}"
 autonomy_common_dns_rpz_hagezi_pro_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -83,7 +84,7 @@ autonomy_common_dns_rpz_hagezi_pro_zone:
 
 # Multi Proplus
 autonomy_common_dns_rpz_hagezi_proplus_name: "proplus"
-autonomy_common_dns_rpz_hagezi_proplus_policy: "given"
+autonomy_common_dns_rpz_hagezi_proplus_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_proplus_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_proplus_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_proplus_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_proplus_zone_file }}"
 autonomy_common_dns_rpz_hagezi_proplus_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -103,7 +104,7 @@ autonomy_common_dns_rpz_hagezi_proplus_zone:
 
 # Multi Ultimate
 autonomy_common_dns_rpz_hagezi_ultimate_name: "ultimate"
-autonomy_common_dns_rpz_hagezi_ultimate_policy: "given"
+autonomy_common_dns_rpz_hagezi_ultimate_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_ultimate_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_ultimate_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_ultimate_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_ultimate_zone_file }}"
 autonomy_common_dns_rpz_hagezi_ultimate_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -123,7 +124,7 @@ autonomy_common_dns_rpz_hagezi_ultimate_zone:
 
 # Multi Fake
 autonomy_common_dns_rpz_hagezi_fake_name: "fake"
-autonomy_common_dns_rpz_hagezi_fake_policy: "given"
+autonomy_common_dns_rpz_hagezi_fake_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_fake_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_fake_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_fake_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_fake_zone_file }}"
 autonomy_common_dns_rpz_hagezi_fake_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -143,7 +144,7 @@ autonomy_common_dns_rpz_hagezi_fake_zone:
 
 # Multi Popupads
 autonomy_common_dns_rpz_hagezi_popupads_name: "popupads"
-autonomy_common_dns_rpz_hagezi_popupads_policy: "given"
+autonomy_common_dns_rpz_hagezi_popupads_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_popupads_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_popupads_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_popupads_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_popupads_zone_file }}"
 autonomy_common_dns_rpz_hagezi_popupads_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -163,7 +164,7 @@ autonomy_common_dns_rpz_hagezi_popupads_zone:
 
 # Multi Threat_Intelligence_Feeds
 autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_name: "tif"
-autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_policy: "given"
+autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_zone_file }}"
 autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -183,7 +184,7 @@ autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_zone:
 
 # DOH, VPN, TOR, and Proxy Bypass
 autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_name: "doh-vpn-proxy-bypass"
-autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_policy: "given"
+autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_zone_file }}"
 autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -203,7 +204,7 @@ autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_zone:
 
 # DOH
 autonomy_common_dns_rpz_hagezi_doh_name: "doh"
-autonomy_common_dns_rpz_hagezi_doh_policy: "given"
+autonomy_common_dns_rpz_hagezi_doh_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_doh_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_doh_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_doh_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_doh_zone_file }}"
 autonomy_common_dns_rpz_hagezi_doh_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -223,7 +224,7 @@ autonomy_common_dns_rpz_hagezi_doh_zone:
 
 # Search Engines that do not support Safesearch
 autonomy_common_dns_rpz_hagezi_safesearch_name: "nosafesearch"
-autonomy_common_dns_rpz_hagezi_safesearch_policy: "given"
+autonomy_common_dns_rpz_hagezi_safesearch_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_safesearch_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_safesearch_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_safesearch_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_safesearch_zone_file }}"
 autonomy_common_dns_rpz_hagezi_safesearch_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -243,7 +244,7 @@ autonomy_common_dns_rpz_hagezi_safesearch_zone:
 
 # Multi Dyndns
 autonomy_common_dns_rpz_hagezi_dyndns_name: "dyndns"
-autonomy_common_dns_rpz_hagezi_dyndns_policy: "given"
+autonomy_common_dns_rpz_hagezi_dyndns_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_dyndns_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_dyndns_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_dyndns_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_dyndns_zone_file }}"
 autonomy_common_dns_rpz_hagezi_dyndns_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -263,7 +264,7 @@ autonomy_common_dns_rpz_hagezi_dyndns_zone:
 
 # Multi Badware
 autonomy_common_dns_rpz_hagezi_badware_name: "hoster"
-autonomy_common_dns_rpz_hagezi_badware_policy: "given"
+autonomy_common_dns_rpz_hagezi_badware_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_badware_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_badware_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_badware_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_badware_zone_file }}"
 autonomy_common_dns_rpz_hagezi_badware_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -283,7 +284,7 @@ autonomy_common_dns_rpz_hagezi_badware_zone:
 
 # Multi Url_Shortener
 autonomy_common_dns_rpz_hagezi_url_shortener_name: "urlshortener"
-autonomy_common_dns_rpz_hagezi_url_shortener_policy: "given"
+autonomy_common_dns_rpz_hagezi_url_shortener_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_url_shortener_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_url_shortener_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_url_shortener_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_url_shortener_zone_file }}"
 autonomy_common_dns_rpz_hagezi_url_shortener_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -303,7 +304,7 @@ autonomy_common_dns_rpz_hagezi_url_shortener_zone:
 
 # Multi Tlds
 autonomy_common_dns_rpz_hagezi_tlds_name: "spam-tlds"
-autonomy_common_dns_rpz_hagezi_tlds_policy: "given"
+autonomy_common_dns_rpz_hagezi_tlds_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_tlds_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_tlds_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_tlds_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_tlds_zone_file }}"
 autonomy_common_dns_rpz_hagezi_tlds_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -323,7 +324,7 @@ autonomy_common_dns_rpz_hagezi_tlds_zone:
 
 # Multi Tlds_Aggressive
 autonomy_common_dns_rpz_hagezi_tlds_aggressive_name: "spam-tlds-aggressive"
-autonomy_common_dns_rpz_hagezi_tlds_aggressive_policy: "given"
+autonomy_common_dns_rpz_hagezi_tlds_aggressive_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_tlds_aggressive_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_tlds_aggressive_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_tlds_aggressive_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_tlds_aggressive_zone_file }}"
 autonomy_common_dns_rpz_hagezi_tlds_aggressive_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -343,7 +344,7 @@ autonomy_common_dns_rpz_hagezi_tlds_aggressive_zone:
 
 # Multi Antipiracy
 autonomy_common_dns_rpz_hagezi_antipiracy_name: "antipiracy"
-autonomy_common_dns_rpz_hagezi_antipiracy_policy: "given"
+autonomy_common_dns_rpz_hagezi_antipiracy_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_antipiracy_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_antipiracy_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_antipiracy_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_antipiracy_zone_file }}"
 autonomy_common_dns_rpz_hagezi_antipiracy_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -363,7 +364,7 @@ autonomy_common_dns_rpz_hagezi_antipiracy_zone:
 
 # Multi Gambling
 autonomy_common_dns_rpz_hagezi_gambling_name: "gambling"
-autonomy_common_dns_rpz_hagezi_gambling_policy: "given"
+autonomy_common_dns_rpz_hagezi_gambling_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_gambling_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_gambling_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_gambling_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_gambling_zone_file }}"
 autonomy_common_dns_rpz_hagezi_gambling_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -383,7 +384,7 @@ autonomy_common_dns_rpz_hagezi_gambling_zone:
 
 # Multi Gambling_Medium
 autonomy_common_dns_rpz_hagezi_gambling_medium_name: "gambling-medium"
-autonomy_common_dns_rpz_hagezi_gambling_medium_policy: "given"
+autonomy_common_dns_rpz_hagezi_gambling_medium_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_gambling_medium_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_gambling_medium_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_gambling_medium_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_gambling_medium_zone_file }}"
 autonomy_common_dns_rpz_hagezi_gambling_medium_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -403,7 +404,7 @@ autonomy_common_dns_rpz_hagezi_gambling_medium_zone:
 
 # Multi Social
 autonomy_common_dns_rpz_hagezi_social_name: "social"
-autonomy_common_dns_rpz_hagezi_social_policy: "given"
+autonomy_common_dns_rpz_hagezi_social_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_social_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_social_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_social_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_social_zone_file }}"
 autonomy_common_dns_rpz_hagezi_social_allow_query: "{{ autonomy_common_bind_allow_query }}"
@@ -423,7 +424,7 @@ autonomy_common_dns_rpz_hagezi_social_zone:
 
 # Multi Nsfw
 autonomy_common_dns_rpz_hagezi_nsfw_name: "nsfw"
-autonomy_common_dns_rpz_hagezi_nsfw_policy: "given"
+autonomy_common_dns_rpz_hagezi_nsfw_policy: "{{ autonomy_common_dns_rpz_hagezi_default_policy }}"
 autonomy_common_dns_rpz_hagezi_nsfw_zone_file: "db.hagezi_{{ autonomy_common_dns_rpz_hagezi_nsfw_name }}.rpz"
 autonomy_common_dns_rpz_hagezi_nsfw_zone_path: "{{ autonomy_common_dns_rpz_hagezi_dir }}/{{ autonomy_common_dns_rpz_hagezi_nsfw_zone_file }}"
 autonomy_common_dns_rpz_hagezi_nsfw_allow_query: "{{ autonomy_common_bind_allow_query }}"

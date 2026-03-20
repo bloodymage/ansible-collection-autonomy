@@ -6,8 +6,8 @@
     key_algorithm: "{{ autonomy_common_dyndns_key_algorithm }}"
     server: "{{ autonomy_common_dns_primary_server_ip }}"
     zone: "{{ rpz['name'] }}"
-    record: "{{ item }}.{{ rpz['name'] }}"
-    value: "."
+    record: "{{ item['domain'] }}"
+    value: "{{ item['alias'] | default('.') }}"
     type: "CNAME"
     state: present
   loop: "{{ rpz['records_present'] }}"
@@ -21,6 +21,8 @@
   delegate_to: localhost
   when:
     - rpz['records_present'] is defined
+    - item['ipv4'] is not defined
+    - item['ipv6'] is not defined
   tags:
     - dns
     - dns-nsupdate
@@ -32,13 +34,15 @@
     key_algorithm: "{{ autonomy_common_dyndns_key_algorithm }}"
     server: "{{ autonomy_common_dns_primary_server_ip }}"
     zone: "{{ rpz['name'] }}"
-    record: "{{ item }}.{{ rpz['name'] }}"
-    value: "."
+    record: "{{ item['domain'] }}"
+    value: "{{ item['alias'] | default('.') }}"
     type: "CNAME"
     state: absent
   loop: "{{ rpz['records_absent'] }}"
   when:
     - rpz['records_present'] is defined
+    - item['ipv4'] is not defined
+    - item['ipv6'] is not defined
   become: false
   vars:
     __nameserver: "{{ autonomy_common_dns_primary_server_hostname }}"

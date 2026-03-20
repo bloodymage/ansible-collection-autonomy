@@ -29,3 +29,5 @@ autonomy_dns_nsupdate_remove_aaaa_records: []
 autonomy_dns_dmarc_email:
   - "{{ autonomy_dns_dmarc_local_email }}"
   - "{{ autonomy_dns_dmarc_cloudflare_email }}"
+
+autonomy_maintenance_dns_url_data_dir: "{{ autonomy_common_user_dir }}/.ansible/data"

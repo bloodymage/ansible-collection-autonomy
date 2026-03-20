@@ -1,0 +1,108 @@
+---
+# WARNING: This gets slow with large files
+- name: "Identify domain changes for '{{ rpz['item']['name'] }}' (WARNING: SLOW)."
+  ansible.builtin.set_fact:
+    __removed_domains: "{{ __old_domains_list | difference(__new_domains_list) }}"
+    __added_domains: "{{ __new_domains_list | difference(__old_domains_list) }}"
+  become: false
+  register: new_domains
+  vars:
+    __old_domains_list: "{{ __old_domains_hash_filter | select('match', '^[^;]') | select('match', '^[^@]') | list }}"
+    __new_domains_list: "{{ __new_domains_hash_filter | select('match', '^[^;]') | select('match', '^[^@]') | list }}"
+    __old_domains_hash_filter: "{{ __old_domains_split | select('match', '^[^#]') | list }}"
+    __new_domains_hash_filter: "{{ __new_domains_split | select('match', '^[^#]') | list }}"
+    __old_domains_split: "{{ __old_domains_content.splitlines() }}"
+    __new_domains_split: "{{ __new_domains_content.splitlines() }}"
+    __new_domains_content: "{{ lookup('file', __new_domains_path) }}"
+    __old_domains_content: "{{ lookup('file', __old_domains_path) }}"
+    __new_domains_path: "{{ autonomy_maintenance_dns_url_data_dir }}/{{ rpz['item']['name'] }}.txt"
+    __old_domains_path: "{{ autonomy_maintenance_dns_url_data_dir }}/{{ rpz['item']['name'] }}.txt.old"
+  tags:
+    - dns
+    - dns-file
+
+# - name: "Print Removed Domains."
+#   ansible.builtin.debug:
+#     msg:
+#       - "Zone: {{ rpz['item']['name'] }}"
+#       - "Record: {{ __domain }}.{{ rpz['item']['name'] }}"
+#       - "Alias: {{ __alias }}"
+#   loop: "{{ __removed_domains }}"
+#   vars:
+#     __domain: "{{ item.split(' ')[0] }}"
+#     __alias: "{{ item.split(' ')[2] }}"
+#   tags:
+#     - dns
+#     - dns-file
+
+# - name: "Print Added Domains."
+#   ansible.builtin.debug:
+#     msg:
+#       - "Zone: {{ rpz['item']['name'] }}"
+#       - "Record: {{ __domain }}.{{ rpz['item']['name'] }}"
+#       - "Alias: {{ __alias }}"
+#   loop: "{{ __added_domains }}"
+#   vars:
+#     __domain: "{{ item.split(' ')[0] }}"
+#     __alias: "{{ item.split(' ')[2] }}"
+#   tags:
+#     - dns
+#     - dns-file
+
+- name: "NSUPDATE: Add RPZ records."
+  community.general.nsupdate:
+    key_name: "{{ autonomy_common_zone_name }}"
+    key_secret: "{{ __key_secret }}"
+    key_algorithm: "{{ autonomy_common_dyndns_key_algorithm }}"
+    server: "{{ autonomy_common_dns_primary_server_ip }}"
+    zone: "{{ rpz['item']['name'] }}"
+    record: "{{ __domain }}"
+    value: "{{ __alias }}"
+    type: "{{ __type }}"
+    state: present
+  loop: "{{ __added_domains }}"
+  become: false
+  vars:
+    __domain: "{{ item.split(' ')[0] }}"
+    #__type: "{{ item.split(' ')[1] }}"
+    #__alias: "{{ item.split(' ')[2] }}"
+    __type: "CNAME"
+    __alias: "."
+    __nameserver: "{{ autonomy_common_dns_primary_server_hostname }}"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/hosts/{{ __nameserver }}/bind_dyndns_secret"
+    __password_lookup: "{{ __password_store_id }}"
+    __key_secret: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+    __dns_servers: "{{ autonomy_common_zone_name }}_dns_servers"
+  delegate_to: localhost
+  tags:
+    - dns
+    - dns-file
+
+- name: "NSUPDATE: Remove RPZ records."
+  community.general.nsupdate:
+    key_name: "{{ autonomy_common_zone_name }}"
+    key_secret: "{{ __key_secret }}"
+    key_algorithm: "{{ autonomy_common_dyndns_key_algorithm }}"
+    server: "{{ autonomy_common_dns_primary_server_ip }}"
+    zone: "{{ rpz['item']['name'] }}"
+    record: "{{ __domain }}"
+    value: "{{ __alias }}"
+    type: "{{ __type }}"
+    state: absent
+  loop: "{{ __removed_domains }}"
+  become: false
+  vars:
+    __domain: "{{ item.split(' ')[0] }}"
+    #__type: "{{ item.split(' ')[1] }}"
+    #__alias: "{{ item.split(' ')[2] }}"
+    __type: "CNAME"
+    __alias: "."
+    __nameserver: "{{ autonomy_common_dns_primary_server_hostname }}"
+    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/hosts/{{ __nameserver }}/bind_dyndns_secret"
+    __password_lookup: "{{ __password_store_id }}"
+    __key_secret: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+    __dns_servers: "{{ autonomy_common_zone_name }}_dns_servers"
+  delegate_to: localhost
+  tags:
+    - dns
+    - dns-nsupdate

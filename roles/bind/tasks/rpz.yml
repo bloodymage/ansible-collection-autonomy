@@ -43,18 +43,46 @@
     - autonomy_common_virtual_host is falsy
     - item['type'] == "primary"
 
+- name: "Check if URL sourced RPZ zonefiles exist."
+  ansible.builtin.stat:
+    path: "{{ item['path'] }}"
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  become: false
+  delegate_to: localhost
+  run_once: true
+  register: rpz_zone_files
+  when:
+    - item['url'] is defined
+  tags:
+    - dns
+    - dns-file
+
+- name: "Print ."
+  ansible.builtin.debug:
+    msg:
+      - "Path: {{ item['item']['path'] }}"
+      - "Url: {{ item['item']['url'] }}"
+      - "Exists: {{ item['stat']['exists'] }}"
+  loop: "{{ rpz_zone_files.results }}"
+  when:
+    - item['stat'] is defined
+  tags:
+    - dns
+    - dns-file
+
 - name: "Download Hagezi RPZ files."
   ansible.builtin.get_url:
-    url: "{{ item['url'] }}"
-    dest: "{{ item['path'] }}"
+    url: "{{ item['item']['url'] }}"
+    dest: "{{ item['item']['path'] }}"
     owner: "{{ autonomy_common_bind_owner }}"
     group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
     force: false
-  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  loop: "{{ rpz_zone_files.results }}"
   become: true
   when:
     - autonomy_common_virtual_host is falsy
-    - item['type'] == "primary"
-    - item['url'] is defined
+    - item['item']['type'] == "primary"
+    - item['item']['url'] is defined
+    - item['stat'] is not defined
   notify: restart bind

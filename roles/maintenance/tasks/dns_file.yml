@@ -1,26 +1,120 @@
 ---
-- name: "Download Hagezi RPZ files."
+- name: "Ensure Persistent data directory exists."
   ansible.builtin.file:
-    path: "{{ item['path'] }}"
-    state: absent
-  loop: "{{ autonomy_common_dns_rpz_hagezi_zones }}"
-  become: true
+    path: "{{ autonomy_maintenance_dns_url_data_dir }}"
+    owner: "{{ autonomy_common_user }}"
+    group: "{{ autonomy_common_group }}"
+    mode: "0755"
+    state: "directory"
+  become: false
+  delegate_to: localhost
+  run_once: true
   tags:
     - dns
     - dns-file
 
-- name: "Download Hagezi RPZ files."
+- name: "Check if URL sourced RPZ persistent data exists."
+  ansible.builtin.stat:
+    path: "{{ autonomy_maintenance_dns_url_data_dir }}/{{ item['name'] }}.txt.old"
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  become: false
+  delegate_to: localhost
+  run_once: true
+  register: rpz_data
+  when:
+    - item['url'] is defined
+  tags:
+    - dns
+    - dns-file
+
+# - name: "Print RPZ_Data."
+#   ansible.builtin.debug:
+#     msg:
+#       - "Path: {{ item['item']['path'] }}"
+#       - "Url: {{ item['item']['url'] }}"
+#       - "Exists: {{ item['stat']['exists'] }}"
+#   loop: "{{ rpz_data.results }}"
+#   when:
+#     - item['stat'] is defined
+#   tags:
+#     - dns
+#     - dns-file
+
+- name: "Download URL sourced RPZ files."
   ansible.builtin.get_url:
     url: "{{ item['url'] }}"
-    dest: "{{ item['path'] }}"
-    #checksum: "sha512:AAA"
+    dest: "{{ autonomy_maintenance_dns_url_data_dir }}/{{ item['name'] }}.txt"
+    owner: "{{ autonomy_common_user }}"
+    group: "{{ autonomy_common_group }}"
+    mode: "0644"
+    force: true
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  become: false
+  delegate_to: localhost
+  run_once: true
+  when:
+    - item['url'] is defined
+  tags:
+    - dns
+    - dns-file
+
+- name: "Update URL source RPZ."
+  include_tasks: "dns_file_records.yml"
+  loop: "{{ rpz_data.results }}"
+  loop_control:
+    loop_var: rpz
+    index_var: rpz_index
+  when:
+    - rpz['stat'] is defined
+    - rpz['stat']['exists']
+  tags:
+    - dns
+    - dns-file
+
+- name: "Install URL source RPZ."
+  ansible.builtin.copy:
+    src: "{{ autonomy_maintenance_dns_url_data_dir }}/{{ item['item']['name'] }}.txt"
+    dest: "{{ item['item']['path'] }}"
     owner: "{{ autonomy_common_bind_owner }}"
     group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    force: true
-  loop: "{{ autonomy_common_dns_rpz_hagezi_zones }}"
+  loop: "{{ rpz_data.results }}"
   become: true
+  when:
+    - item['stat'] is defined
+    - not item['stat']['exists']
   notify: restart bind
+  tags:
+    - dns
+    - dns-file
+
+- name: "Backup URL sourced RPZ files."
+  ansible.builtin.copy:
+    src: "{{ autonomy_maintenance_dns_url_data_dir }}/{{ item['name'] }}.txt"
+    dest: "{{ autonomy_maintenance_dns_url_data_dir }}/{{ item['name'] }}.txt.old"
+    owner: "{{ autonomy_common_user }}"
+    group: "{{ autonomy_common_group }}"
+    mode: "0644"
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  become: false
+  delegate_to: localhost
+  run_once: true
+  when:
+    - item['url'] is defined
+  tags:
+    - dns
+    - dns-file
+
+- name: "Remove URL sourced RPZ files."
+  ansible.builtin.file:
+    path: "{{ autonomy_maintenance_dns_url_data_dir }}/{{ item['name'] }}.txt"
+    state: "absent"
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  become: false
+  delegate_to: localhost
+  run_once: true
+  when:
+    - item['url'] is defined
   tags:
     - dns
     - dns-file
