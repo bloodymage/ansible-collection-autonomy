@@ -10,6 +10,13 @@
 {% if rpz['definition'] == 'dynamic' %}
   allow-transfer { any; };
   allow-update { key {{ autonomy_common_zone_name }};  };
+{% if rpz['also_notify'] is defined and rpz['also_notify'] is truthy %}
+  also-notify {
+  {% for host in rpz['also_notify'] %}
+    {{ host }};
+  {% endfor %}
+  };
+{% endif %}
 {% endif %}
 {% if rpz['path'] is defined %}
   file "{{ rpz['path'] }}";

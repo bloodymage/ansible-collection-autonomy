@@ -4,6 +4,7 @@ autonomy_common_dns_rpz_primary_nameservers: []
 autonomy_common_dns_rpz_zone_type: "{{ autonomy_common_bind_primary_zone }}"
 autonomy_common_dns_rpz_default_policy: "given"
 autonomy_common_dns_rpz_dir: "{{ autonomy_common_bind_cache_dir }}"
+autonomy_common_dns_rpz_also_notify: []
 
 # Allow List
 autonomy_common_dns_rpz_allowlist_name: "allowlist"
@@ -13,6 +14,7 @@ autonomy_common_dns_rpz_allowlist_zone_path: "{{ autonomy_common_dns_rpz_dir }}/
 autonomy_common_dns_rpz_allowlist_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_allowlist_zone_type: "{{ autonomy_common_dns_rpz_zone_type }}"
 autonomy_common_dns_rpz_allowlist_nameservers: "{{ autonomy_common_dns_rpz_primary_nameservers }}"
+autonomy_common_dns_rpz_allowlist_also_notify: "{{ autonomy_common_dns_rpz_also_notify }}"
 autonomy_dns_allowlist_records_present: []
 autonomy_dns_allowlist_records_absent: []
 
@@ -24,6 +26,7 @@ autonomy_common_dns_rpz_redirectlist_zone_path: "{{ autonomy_common_dns_rpz_dir 
 autonomy_common_dns_rpz_redirectlist_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_redirectlist_zone_type: "{{ autonomy_common_dns_rpz_zone_type }}"
 autonomy_common_dns_rpz_redirectlist_nameservers: "{{ autonomy_common_dns_rpz_primary_nameservers }}"
+autonomy_common_dns_rpz_redirectlist_also_notify:  "{{ autonomy_common_dns_rpz_also_notify }}"
 autonomy_dns_redirectlist_records_present: []
 autonomy_dns_redirectlist_records_absent: []
 
@@ -35,6 +38,7 @@ autonomy_common_dns_rpz_blocklist_zone_path: "{{ autonomy_common_dns_rpz_dir }}/
 autonomy_common_dns_rpz_blocklist_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_blocklist_zone_type: "{{ autonomy_common_dns_rpz_zone_type }}"
 autonomy_common_dns_rpz_blocklist_nameservers: "{{ autonomy_common_dns_rpz_primary_nameservers }}"
+autonomy_common_dns_rpz_blocklist_also_notify: "{{ autonomy_common_dns_rpz_also_notify }}"
 autonomy_dns_blocklist_records_present: []
 autonomy_dns_blocklist_records_absent: []
 
@@ -66,6 +70,7 @@ autonomy_common_dns_rpz_allowlist_zone:
   allow_query: "{{ autonomy_common_dns_rpz_allowlist_allow_query }}"
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_allowlist_nameservers }}"
+  also_notify: "{{ autonomy_common_dns_rpz_allowlist_also_notify }}"
   records_present: "{{ autonomy_dns_allowlist_records_present }}"
   records_absent: "{{ autonomy_dns_allowlist_records_absent }}"
 
@@ -78,6 +83,7 @@ autonomy_common_dns_rpz_redirectlist_zone:
   allow_query: "{{ autonomy_common_dns_rpz_redirectlist_allow_query }}"
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_redirectlist_nameservers }}"
+  also_notify: "{{ autonomy_common_dns_rpz_redirectlist_also_notify }}"
   records_present: "{{ autonomy_dns_redirectlist_records_present }}"
   records_absent: "{{ autonomy_dns_redirectlist_records_absent }}"
 
@@ -90,6 +96,7 @@ autonomy_common_dns_rpz_blocklist_zone:
   allow_query: "{{ autonomy_common_dns_rpz_blocklist_allow_query }}"
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_blocklist_nameservers }}"
+  also_notify: "{{ autonomy_common_dns_rpz_blocklist_also_notify }}"
   records_present: "{{ autonomy_dns_blocklist_records_present }}"
   records_absent: "{{ autonomy_dns_blocklist_records_absent }}"
 

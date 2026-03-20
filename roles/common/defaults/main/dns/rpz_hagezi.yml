@@ -11,6 +11,7 @@ autonomy_common_dns_rpz_hagezi_zone_type: "{{ autonomy_common_dns_rpz_zone_type 
 autonomy_common_dns_rpz_hagezi_primary_nameservers: "{{ autonomy_common_dns_rpz_primary_nameservers }}"
 autonomy_common_dns_rpz_hagezi_dir: "{{ autonomy_common_dns_rpz_dir }}"
 autonomy_common_dns_rpz_hagezi_default_policy: "{{ autonomy_common_dns_rpz_default_policy }}"
+autonomy_common_dns_rpz_hagezi_also_notify:  "{{ autonomy_common_dns_rpz_also_notify }}"
 
 # Example
 # autonomy_common_dns_rpz_hagezi_zones:
@@ -30,6 +31,7 @@ autonomy_common_dns_rpz_hagezi_light_zone_path: "{{ autonomy_common_dns_rpz_hage
 autonomy_common_dns_rpz_hagezi_light_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_light_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_light_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_light_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_light_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_light_name }}"
@@ -41,6 +43,7 @@ autonomy_common_dns_rpz_hagezi_light_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_light_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_light_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_light_also_notify }}"
 
 # Multi Normal
 autonomy_common_dns_rpz_hagezi_normal_name: "multi"
@@ -50,6 +53,7 @@ autonomy_common_dns_rpz_hagezi_normal_zone_path: "{{ autonomy_common_dns_rpz_hag
 autonomy_common_dns_rpz_hagezi_normal_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_normal_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_normal_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_normal_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_normal_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_normal_name }}"
@@ -61,6 +65,7 @@ autonomy_common_dns_rpz_hagezi_normal_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_normal_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_normal_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_normal_also_notify }}"
 
 # Multi Pro
 autonomy_common_dns_rpz_hagezi_pro_name: "pro"
@@ -70,6 +75,7 @@ autonomy_common_dns_rpz_hagezi_pro_zone_path: "{{ autonomy_common_dns_rpz_hagezi
 autonomy_common_dns_rpz_hagezi_pro_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_pro_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_pro_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_pro_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_pro_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_pro_name }}"
@@ -81,6 +87,7 @@ autonomy_common_dns_rpz_hagezi_pro_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_pro_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_pro_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_pro_also_notify }}"
 
 # Multi Proplus
 autonomy_common_dns_rpz_hagezi_proplus_name: "proplus"
@@ -90,6 +97,7 @@ autonomy_common_dns_rpz_hagezi_proplus_zone_path: "{{ autonomy_common_dns_rpz_ha
 autonomy_common_dns_rpz_hagezi_proplus_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_proplus_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_proplus_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_proplus_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_proplus_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_proplus_name }}"
@@ -101,6 +109,7 @@ autonomy_common_dns_rpz_hagezi_proplus_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_proplus_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/pro.plus.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_proplus_also_notify }}"
 
 # Multi Ultimate
 autonomy_common_dns_rpz_hagezi_ultimate_name: "ultimate"
@@ -110,6 +119,7 @@ autonomy_common_dns_rpz_hagezi_ultimate_zone_path: "{{ autonomy_common_dns_rpz_h
 autonomy_common_dns_rpz_hagezi_ultimate_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_ultimate_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_ultimate_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_ultimate_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_ultimate_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_ultimate_name }}"
@@ -121,6 +131,7 @@ autonomy_common_dns_rpz_hagezi_ultimate_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_ultimate_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_ultimate_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_ultimate_also_notify }}"
 
 # Multi Fake
 autonomy_common_dns_rpz_hagezi_fake_name: "fake"
@@ -130,6 +141,7 @@ autonomy_common_dns_rpz_hagezi_fake_zone_path: "{{ autonomy_common_dns_rpz_hagez
 autonomy_common_dns_rpz_hagezi_fake_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_fake_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_fake_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_fake_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_fake_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_fake_name }}"
@@ -141,6 +153,7 @@ autonomy_common_dns_rpz_hagezi_fake_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_fake_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_fake_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_fake_also_notify }}"
 
 # Multi Popupads
 autonomy_common_dns_rpz_hagezi_popupads_name: "popupads"
@@ -150,6 +163,7 @@ autonomy_common_dns_rpz_hagezi_popupads_zone_path: "{{ autonomy_common_dns_rpz_h
 autonomy_common_dns_rpz_hagezi_popupads_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_popupads_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_popupads_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_popupads_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_popupads_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_popupads_name }}"
@@ -161,6 +175,7 @@ autonomy_common_dns_rpz_hagezi_popupads_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_popupads_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_popupads_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_popupads_also_notify }}"
 
 # Multi Threat_Intelligence_Feeds
 autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_name: "tif"
@@ -170,6 +185,7 @@ autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_zone_path: "{{ autonomy
 autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_name }}"
@@ -181,6 +197,7 @@ autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_threat_intelligence_feeds_also_notify }}"
 
 # DOH, VPN, TOR, and Proxy Bypass
 autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_name: "doh-vpn-proxy-bypass"
@@ -190,6 +207,7 @@ autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_zone_path: "{{ autonomy_common_dns_
 autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_name }}"
@@ -201,6 +219,7 @@ autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_doh_vpn_proxy_also_notify }}"
 
 # DOH
 autonomy_common_dns_rpz_hagezi_doh_name: "doh"
@@ -210,6 +229,7 @@ autonomy_common_dns_rpz_hagezi_doh_zone_path: "{{ autonomy_common_dns_rpz_hagezi
 autonomy_common_dns_rpz_hagezi_doh_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_doh_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_doh_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_doh_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_doh_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_doh_name }}"
@@ -221,6 +241,7 @@ autonomy_common_dns_rpz_hagezi_doh_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_doh_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_doh_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_doh_also_notify }}"
 
 # Search Engines that do not support Safesearch
 autonomy_common_dns_rpz_hagezi_safesearch_name: "nosafesearch"
@@ -230,6 +251,7 @@ autonomy_common_dns_rpz_hagezi_safesearch_zone_path: "{{ autonomy_common_dns_rpz
 autonomy_common_dns_rpz_hagezi_safesearch_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_safesearch_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_safesearch_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_safesearch_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_safesearch_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_safesearch_name }}"
@@ -241,6 +263,7 @@ autonomy_common_dns_rpz_hagezi_safesearch_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_safesearch_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_safesearch_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_safesearch_also_notify }}"
 
 # Multi Dyndns
 autonomy_common_dns_rpz_hagezi_dyndns_name: "dyndns"
@@ -250,6 +273,7 @@ autonomy_common_dns_rpz_hagezi_dyndns_zone_path: "{{ autonomy_common_dns_rpz_hag
 autonomy_common_dns_rpz_hagezi_dyndns_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_dyndns_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_dyndns_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_dyndns_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_dyndns_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_dyndns_name }}"
@@ -261,6 +285,7 @@ autonomy_common_dns_rpz_hagezi_dyndns_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_dyndns_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_dyndns_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_dyndns_also_notify }}"
 
 # Multi Badware
 autonomy_common_dns_rpz_hagezi_badware_name: "hoster"
@@ -270,6 +295,7 @@ autonomy_common_dns_rpz_hagezi_badware_zone_path: "{{ autonomy_common_dns_rpz_ha
 autonomy_common_dns_rpz_hagezi_badware_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_badware_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_badware_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_badware_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_badware_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_badware_name }}"
@@ -281,6 +307,7 @@ autonomy_common_dns_rpz_hagezi_badware_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_badware_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_badware_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_badware_also_notify }}"
 
 # Multi Url_Shortener
 autonomy_common_dns_rpz_hagezi_url_shortener_name: "urlshortener"
@@ -290,6 +317,7 @@ autonomy_common_dns_rpz_hagezi_url_shortener_zone_path: "{{ autonomy_common_dns_
 autonomy_common_dns_rpz_hagezi_url_shortener_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_url_shortener_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_url_shortener_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_url_shortener_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_url_shortener_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_url_shortener_name }}"
@@ -301,6 +329,7 @@ autonomy_common_dns_rpz_hagezi_url_shortener_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_url_shortener_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_url_shortener_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_url_shortener_also_notify }}"
 
 # Multi Tlds
 autonomy_common_dns_rpz_hagezi_tlds_name: "spam-tlds"
@@ -310,6 +339,7 @@ autonomy_common_dns_rpz_hagezi_tlds_zone_path: "{{ autonomy_common_dns_rpz_hagez
 autonomy_common_dns_rpz_hagezi_tlds_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_tlds_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_tlds_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_tlds_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_tlds_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_tlds_name }}"
@@ -321,6 +351,7 @@ autonomy_common_dns_rpz_hagezi_tlds_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_tlds_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/spam-tlds-rpz.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_tlds_also_notify }}"
 
 # Multi Tlds_Aggressive
 autonomy_common_dns_rpz_hagezi_tlds_aggressive_name: "spam-tlds-aggressive"
@@ -330,6 +361,7 @@ autonomy_common_dns_rpz_hagezi_tlds_aggressive_zone_path: "{{ autonomy_common_dn
 autonomy_common_dns_rpz_hagezi_tlds_aggressive_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_tlds_aggressive_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_tlds_aggressive_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_tlds_aggressive_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_tlds_aggressive_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_tlds_aggressive_name }}"
@@ -341,6 +373,7 @@ autonomy_common_dns_rpz_hagezi_tlds_aggressive_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_tlds_aggressive_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/spam-tlds-rpz-aggressive.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_tlds_aggressive_also_notify }}"
 
 # Multi Antipiracy
 autonomy_common_dns_rpz_hagezi_antipiracy_name: "antipiracy"
@@ -350,6 +383,7 @@ autonomy_common_dns_rpz_hagezi_antipiracy_zone_path: "{{ autonomy_common_dns_rpz
 autonomy_common_dns_rpz_hagezi_antipiracy_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_antipiracy_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_antipiracy_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_antipiracy_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_antipiracy_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_antipiracy_name }}"
@@ -361,6 +395,7 @@ autonomy_common_dns_rpz_hagezi_antipiracy_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_antipiracy_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/anti.piracy.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_antipiracy_also_notify }}"
 
 # Multi Gambling
 autonomy_common_dns_rpz_hagezi_gambling_name: "gambling"
@@ -370,6 +405,7 @@ autonomy_common_dns_rpz_hagezi_gambling_zone_path: "{{ autonomy_common_dns_rpz_h
 autonomy_common_dns_rpz_hagezi_gambling_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_gambling_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_gambling_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_gambling_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_gambling_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_gambling_name }}"
@@ -381,6 +417,7 @@ autonomy_common_dns_rpz_hagezi_gambling_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_gambling_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_gambling_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_gambling_also_notify }}"
 
 # Multi Gambling_Medium
 autonomy_common_dns_rpz_hagezi_gambling_medium_name: "gambling-medium"
@@ -390,6 +427,7 @@ autonomy_common_dns_rpz_hagezi_gambling_medium_zone_path: "{{ autonomy_common_dn
 autonomy_common_dns_rpz_hagezi_gambling_medium_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_gambling_medium_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_gambling_medium_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_gambling_medium_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_gambling_medium_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_gambling_medium_name }}"
@@ -401,6 +439,7 @@ autonomy_common_dns_rpz_hagezi_gambling_medium_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_gambling_medium_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/gambling-medium.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_gambling_medium_also_notify }}"
 
 # Multi Social
 autonomy_common_dns_rpz_hagezi_social_name: "social"
@@ -410,6 +449,7 @@ autonomy_common_dns_rpz_hagezi_social_zone_path: "{{ autonomy_common_dns_rpz_hag
 autonomy_common_dns_rpz_hagezi_social_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_social_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_social_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_social_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_social_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_social_name }}"
@@ -421,6 +461,7 @@ autonomy_common_dns_rpz_hagezi_social_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_social_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_social_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_social_also_notify }}"
 
 # Multi Nsfw
 autonomy_common_dns_rpz_hagezi_nsfw_name: "nsfw"
@@ -430,6 +471,7 @@ autonomy_common_dns_rpz_hagezi_nsfw_zone_path: "{{ autonomy_common_dns_rpz_hagez
 autonomy_common_dns_rpz_hagezi_nsfw_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_hagezi_nsfw_zone_type: "{{ autonomy_common_dns_rpz_hagezi_zone_type }}"
 autonomy_common_dns_rpz_hagezi_nsfw_nameservers: "{{ autonomy_common_dns_rpz_hagezi_primary_nameservers }}"
+autonomy_common_dns_rpz_hagezi_nsfw_also_notify: "{{ autonomy_common_dns_rpz_hagezi_also_notify }}"
 
 autonomy_common_dns_rpz_hagezi_nsfw_zone:
   name: "{{ autonomy_common_dns_rpz_hagezi_nsfw_name }}"
@@ -441,3 +483,4 @@ autonomy_common_dns_rpz_hagezi_nsfw_zone:
   definition: "dynamic"
   nameservers: "{{ autonomy_common_dns_rpz_hagezi_nsfw_nameservers }}"
   url: "{{ autonomy_common_dns_rpz_hagezi_base_url }}/{{ autonomy_common_dns_rpz_hagezi_nsfw_name }}.txt"
+  also_notify: "{{ autonomy_common_dns_rpz_hagezi_nsfw_also_notify }}"
