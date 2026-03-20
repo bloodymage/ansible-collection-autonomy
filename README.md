@@ -11,12 +11,16 @@
 - [Contributing](#contributing)
 - [License](#license)
 
+## Announcement
+
+I have reduced the number of roles in this collection for ease of maintenance.  Some I plan on re-adding at some point.  Some I may ditch entirely.  What I had was too much for me to manage.  So I decided to reduce the scope and focus on quality.
+
 ## Description
 This collection is a set of ansible playbooks that you can use to build and maintain your own personal self-hosted services.
 Initial services are:
-1. [Certificate Authorities](docs/CERTIFICATE_AUTHORITIES.md) (Internal and ACME)
-2. An SSH Certificate Authority
-3. DNS (Bind9 / CloudFlare)
+1. [Certificate Authorities](docs/CERTIFICATE_AUTHORITIES.md) (Internal, ACME (Letsencrypt), and an SSH CA)
+2. DNS (Bind9 / CloudFlare)
+3. NTP (NTPSEC and Systemd-timesyncd)
 4. Identity Management (Samba Active Directory)
 5. Email (Postfix and Dovecot)
 6. Address Book and Calendars (Nextcloud)
