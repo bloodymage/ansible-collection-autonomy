@@ -23,6 +23,6 @@
   notify:
     - restart tls
   when:
-    - ownca_privatekey_type in ['DSA','RSA']
+    - autonomy_ownca_privatekey_type in ['DSA','RSA']
     - ansible_connection != "local"
     - inventory_hostname not in groups["vendor_managed"]

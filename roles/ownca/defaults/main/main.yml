@@ -24,6 +24,8 @@ autonomy_ownca_sysconf_csr_dir: "{{ autonomy_ownca_sysconf_dir }}/csr"
 autonomy_ownca_sysconf_private_key_dir: "{{ autonomy_ownca_sysconf_dir }}/private"
 autonomy_ownca_sysconf_crl_dir: "{{ autonomy_ownca_sysconf_dir }}/crl"
 autonomy_ownca_sysconf_pkcs12_dir: "{{ autonomy_ownca_sysconf_dir }}/pkcs12"
+autonomy_ownca_sysconf_dhparams_dir: "{{ autonomy_ownca_sysconf_dir }}/dhparams"
+
 autonomy_ownca_sysconf_dir_owner: "root"
 autonomy_ownca_sysconf_dir_group: "root"
 

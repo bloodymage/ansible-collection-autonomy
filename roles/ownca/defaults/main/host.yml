@@ -40,6 +40,10 @@ autonomy_ownca_data_dir_owner: "{{ autonomy_ownca_sysconf_dir_owner }}"
 autonomy_ownca_data_dir_group: "{{ autonomy_ownca_sysconf_dir_group }}"
 autonomy_ownca_data_dir_mode: "0755"
 
+autonomy_ownca_host_dhparams_dir_owner: "{{ autonomy_ownca_sysconf_dir_owner }}"
+autonomy_ownca_host_dhparams_dir_group: "{{ autonomy_ownca_sysconf_dir_group }}"
+autonomy_ownca_host_dhparams_dir_mode: "0755"
+
 
 autonomy_ownca_host_dirs:
   - name: "{{ autonomy_ownca_sysconf_certs_dir }}"
@@ -66,6 +70,10 @@ autonomy_ownca_host_dirs:
     owner: "{{ autonomy_ownca_data_dir_owner }}"
     group: "{{ autonomy_ownca_data_dir_group }}"
     mode: "{{ autonomy_ownca_data_dir_mode }}"
+  - name: "{{ autonomy_ownca_sysconf_dhparams_dir }}"
+    owner: "{{ autonomy_ownca_host_dhparams_dir_owner }}"
+    group: "{{ autonomy_ownca_host_dhparams_dir_group }}"
+    mode: "{{ autonomy_ownca_host_dhparams_dir_mode }}"
 
 autonomy_ownca_host_private_key_owner: "{{ autonomy_ownca_host_private_dir_owner }}"
 autonomy_ownca_host_private_key_group: "{{ autonomy_ownca_host_private_dir_group }}"
