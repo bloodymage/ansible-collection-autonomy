@@ -1,6 +1,6 @@
 ---
 - name: Include OS-specific variables.
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"
@@ -9,6 +9,6 @@
   become: false
 
 - name: "Include OS Specific Tasks."
-  include_tasks: "{{ ansible_system | lower }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_system | lower }}.yml"
   when:
     - ansible_system is truthy

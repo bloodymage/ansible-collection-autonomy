@@ -44,7 +44,6 @@ autonomy_ownca_privatekey_size: "{{ autonomy_common_pki_key_size }}"
 
 # Currently testing smart cards, most documentation recommends 2048.  Until smart cards are fully
 # functional, we will use 2048.
-#ownca_max_user_privatekey_size: "3072"
 autonomy_ownca_user_max_privatekey_size: "2048"
 
 # ==================================================================================================
@@ -64,7 +63,7 @@ autonomy_ownca_issuing_authorities:
 #
 # OIDs
 #
-#===================================================================================================
+# ==================================================================================================
 # OwnCA OIDs
 autonomy_ownca_mskdc: "msKDC"
 autonomy_ownca_mskdc_oid: "1.3.6.1.5.2.3.5"
@@ -88,11 +87,10 @@ autonomy_oid_ldap_public_key: "1.3.6.1.4.1.24552.500.1.1.2.0"
 # constants that if changed will  cause this playbook to fail.
 #
 # ==================================================================================================
-
-__autonomy_ownca_regenerate: no
-__autonomy_ownca_regenerate_csr: no
-__autonomy_ownca_force_regenerate_intermediate_ca: no
-__autonomy_ownca_force_regenerate_issuing_ca: no
+__autonomy_ownca_regenerate: false
+__autonomy_ownca_regenerate_csr: false
+__autonomy_ownca_force_regenerate_intermediate_ca: false
+__autonomy_ownca_force_regenerate_issuing_ca: false
 
 # ==================================================================================================
 #

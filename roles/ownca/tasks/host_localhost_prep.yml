@@ -23,7 +23,7 @@
     owner: "{{ autonomy_ownca_user }}"
     group: "{{ autonomy_ownca_group }}"
     mode: "{{ autonomy_ownca_hosts_private_key_mode }}"
-    force: no
+    force: false
   become: false
   delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
   tags:
@@ -37,7 +37,7 @@
   community.crypto.openssl_csr:
     path: "{{ autonomy_ownca_hosts_csr_path }}"
     privatekey_path: "{{ autonomy_ownca_hosts_private_key_path }}"
-    country_name: "{{ autonomy_common_pki_loc_country_code | default(omit)}}"
+    country_name: "{{ autonomy_common_pki_loc_country_code | default(omit) }}"
     state_or_province_name: "{{ autonomy_common_pki_loc_region | default(omit) }}"
     locality_name: "{{ autonomy_common_pki_loc_city | default(omit) }}"
     organization_name: "{{ autonomy_common_org_name | title }}"

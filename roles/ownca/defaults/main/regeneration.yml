@@ -14,6 +14,5 @@
 # autonomy_ownca_intermediateca_private_key_force_regeneration: "{{ autonomy_ownca_private_key_force_regeneration }}"
 
 
-
 # autonomy_ownca_issuingca_private_key_force_regeneration: "{{ autonomy_ownca_private_key_force_regeneration }}"
 # autonomy_ownca_host_private_key_force_regeneration: "{{ autonomy_ownca_private_key_force_regeneration }}"

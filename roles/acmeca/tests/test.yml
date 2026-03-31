@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: "Test acmeca role."
+  hosts: localhost
   remote_user: root
   roles:
-    - acmeca_challenge_site
+    - acmeca

@@ -7,7 +7,7 @@
 #
 # ======================================================================
 - name: "Include OS-specific variables."
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"
@@ -16,11 +16,11 @@
   become: false
 
 - name: "Install and Configure Unattended Upgrades."
-  include_tasks: "install.yml"
+  ansible.builtin.include_tasks: "install.yml"
   when:
     - autonomy_unattendedupgrades_enabled
 
 - name: "Remove Unattended Upgrades."
-  include_tasks: "remove_{{ ansible_os_family | lower }}.yml"
+  ansible.builtin.include_tasks: "remove_{{ ansible_os_family | lower }}.yml"
   when:
     - autonomy_unattendedupgrades_enabled is falsy

@@ -3,7 +3,7 @@
 #
 # Hagezi DNS Block lists
 #
-# https://github.com/hagezi/dns-blocklists 
+# https://github.com/hagezi/dns-blocklists
 #
 # ==================================================================================================
 autonomy_common_dns_rpz_hagezi_base_url: "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/rpz"
@@ -11,7 +11,7 @@ autonomy_common_dns_rpz_hagezi_zone_type: "{{ autonomy_common_dns_rpz_zone_type 
 autonomy_common_dns_rpz_hagezi_primary_nameservers: "{{ autonomy_common_dns_rpz_primary_nameservers }}"
 autonomy_common_dns_rpz_hagezi_dir: "{{ autonomy_common_dns_rpz_dir }}"
 autonomy_common_dns_rpz_hagezi_default_policy: "{{ autonomy_common_dns_rpz_default_policy }}"
-autonomy_common_dns_rpz_hagezi_also_notify:  "{{ autonomy_common_dns_rpz_also_notify }}"
+autonomy_common_dns_rpz_hagezi_also_notify: "{{ autonomy_common_dns_rpz_also_notify }}"
 
 # Example
 # autonomy_common_dns_rpz_hagezi_zones:

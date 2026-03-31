@@ -30,7 +30,7 @@
 #     - regenerate-issuing-ca
 
 - name: "Setup OwnCA: Definitions."
-  include_tasks: "ca_definitions.yml"
+  ansible.builtin.include_tasks: "ca_definitions.yml"
   tags:
     - ownca
     - ownca-root
@@ -38,14 +38,14 @@
     - ownca-issuing
 
 - name: "Create OwnCA: Root CA."
-  include_tasks: "ca_root.yml"
+  ansible.builtin.include_tasks: "ca_root.yml"
   tags:
     - ownca
     - ownca-root
 
 # TODO: There has got to be a better way to only run on one host per zone.
 - name: "Create OwnCA: Intermediate CAs."
-  include_tasks: "ca_intermediate.yml"
+  ansible.builtin.include_tasks: "ca_intermediate.yml"
   when:
     - inventory_hostname in groups['certificate_authority_proxies']
   tags:
@@ -54,7 +54,7 @@
     - ownca-intermediate
 
 - name: "Create OwnCA: Issuing CAs."
-  include_tasks: "ca_issuing.yml"
+  ansible.builtin.include_tasks: "ca_issuing.yml"
   when:
     - inventory_hostname in groups['certificate_authority_proxies']
   tags:

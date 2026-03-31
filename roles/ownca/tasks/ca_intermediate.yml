@@ -1,5 +1,5 @@
 ---
-- name: "Generate Intermediate CA Private Key."
+- name: "Generate Intermediate CA Private Key." # noqa: jinja[spacing]
   community.crypto.openssl_privatekey:
     path: "{{ autonomy_ownca_intermediateca_key_path }}"
     passphrase: "{{ __password }}"
@@ -19,7 +19,7 @@
       {{ autonomy_ownca_intermediateca_password }}
       {%- endif %}
 
-- name: "Generate Intermediate CA Certificate Signing Requests (CSR)."
+- name: "Generate Intermediate CA Certificate Signing Requests (CSR)." # noqa: jinja[spacing]
   community.crypto.openssl_csr:
     path: "{{ autonomy_ownca_intermediateca_csr_path }}"
     privatekey_path: "{{ autonomy_ownca_intermediateca_key_path }}"
@@ -46,7 +46,6 @@
     backup: "{{ autonomy_ownca_intermediateca_csr_backup }}"
     state: present
   delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
-  #run_once: true
   become: false
   vars:
     __password: >-
@@ -56,7 +55,7 @@
       {{ autonomy_ownca_intermediateca_password }}
       {%- endif %}
 
-- name: "Generate Intermediate CA Certificate."
+- name: "Generate Intermediate CA Certificate." # noqa: jinja[spacing]
   community.crypto.x509_certificate:
     path: "{{ autonomy_ownca_intermediateca_cert_path }}"
     csr_path: "{{ autonomy_ownca_intermediateca_csr_path }}"
@@ -70,10 +69,9 @@
     mode: "0644"
     backup: true
     state: present
-    #force: "{{ __autonomy_ownca_regenerate }}"
+    # force: "{{ __autonomy_ownca_regenerate }}"
     return_content: true
   delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
-  #run_once: true
   become: false
   register: __autonomy_ownca_intermediateca_cert
   vars:
@@ -94,7 +92,6 @@
     path: "{{ autonomy_ownca_intermediateca_cert_path }}"
   register: __autonomy_ownca_intermediateca_cert_info
   delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
-  #run_once: true
   become: false
 
 # - name: "Print intermediate cert."

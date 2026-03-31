@@ -13,4 +13,3 @@ autonomy_common_openssh_host_cert_file: "{{ autonomy_common_openssh_host_key_fil
 
 autonomy_common_openssh_host_pub_path: "{{ autonomy_common_openssh_sysconf_dir }}/{{ autonomy_common_openssh_host_pub_file }}"
 autonomy_common_openssh_host_cert_path: "{{ autonomy_common_openssh_sysconf_dir }}/{{ autonomy_common_openssh_host_cert_file }}"
-

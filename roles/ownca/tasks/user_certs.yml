@@ -57,8 +57,8 @@
     state: directory
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}_g"
-    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
-    #mode: "{{ item[1].mode }}"
+    # group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
+    # mode: "{{ item[1].mode }}"
     mode: "0750"
   become: true
   loop: "{{ __realm_users | product(ownca_user_pki_dirs) | list }}"
@@ -85,10 +85,10 @@
     passphrase: "{{ lookup('community.general.passwordstore', __password_store_id) }}"
     owner: "{{ item.username }}"
     group: "{{ item.username }}_g"
-    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
+    # group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "0640"
     state: present
-    force: no
+    force: false
     backup: true
   become: true
   loop: "{{ __realm_users }}"
@@ -110,10 +110,10 @@
 # mode is '0770' to key the samba file server happy with 'ADS' authentication.
 #
 # ==================================================================================================
-- name: "Generate User CSRs."
+- name: "Generate User CSRs." # noqa: jinja[invalid]
   community.crypto.openssl_csr:
     country_name: "{{ autonomy_country | default(omit) }}"
-    state_or_province_name: "{{ autonomy_region | default (omit) }}"
+    state_or_province_name: "{{ autonomy_region | default(omit) }}"
     locality_name: "{{ autonomy_city | default(omit) }}"
     organization_name: "{{ autonomy_common_org_name }}"
     organizational_unit_name: "{{ autonomy_common_org_unit_name }}"
@@ -139,7 +139,7 @@
     path: "{{ __user_csr_dir }}/{{ __username }}_{{ item[1].name }}.csr"
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}_g"
-    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
+    # group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "0640"
     state: present
     backup: true
@@ -194,7 +194,7 @@
   register: identity_cert
   delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
 
-- name: "Check if user cert exists."
+- name: "Check if user cert exists." # noqa: jinja[spacing]
   ansible.builtin.stat:
     path: "{{ ownca_directory }}/users/certs/{{ __username}}/{{ __username }}_{{ item[1].name }}.crt"
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
@@ -274,7 +274,7 @@
     dest: "{{ __user_cert_dir }}/{{ __username }}_{{ item[1].name }}.crt"
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}_g"
-    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
+    # group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "0640"
   become: true
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
@@ -302,10 +302,10 @@
     state: present
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}_g"
-    #group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
+    # group: "{{ autonomy_common_org_unit_name | upper }}\\unixadmins"
     mode: "0640"
     backup: true
-    force: no
+    force: false
   become: false
   loop: "{{ __realm_users | product(ownca_user_cert_purposes) | list }}"
   vars:

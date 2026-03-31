@@ -16,7 +16,7 @@
     owner: root
     group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    #validate: "{{ __bind_named_checkconf }} %s"
+    # validate: "{{ __bind_named_checkconf }} %s"
   become: true
   loop: "{{ autonomy_bind_config_files }}"
   when:

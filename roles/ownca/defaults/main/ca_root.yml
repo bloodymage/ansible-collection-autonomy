@@ -3,8 +3,8 @@ autonomy_ownca_rootca_common_name: "{{ autonomy_common_org_name | title }} Root 
 autonomy_ownca_rootca_email_address: ""
 autonomy_ownca_rootca_org_name: "{{ autonomy_common_org_name | title }}"
 autonomy_ownca_rootca_keyusage:
-    - "keyCertSign"
-    - "cRLSign"
+  - "keyCertSign"
+  - "cRLSign"
 autonomy_ownca_rootca_keyusage_critical: true
 autonomy_ownca_rootca_basic_constraints:
   - 'CA:TRUE'
@@ -62,18 +62,3 @@ autonomy_ownca_rootca_password_store_lookup: >-
   {{ autonomy_ownca_rootca_password_store_overwrite }}
   {{ autonomy_ownca_rootca_password_store_create }}
   {{ autonomy_ownca_rootca_password_store_symbols }}
-
-# __autonomy_ownca_root_ca:
-#   name: "root"
-#   common_name: "{{ autonomy_common_org_name | title }} {{ 'root' | title }} CA"
-#   password: "{{ autonomy_ownca_root_password }}"
-
-#   authority_key_identifier: "keyid:always"
-#   ownca: "root"
-#   ownca_privatekey_passphrase: "{{ autonomy_ownca_root_password }}"
-#   provider: "selfsigned"
-#   private_key_path: "{{ autonomy_ownca_ca_private_key_dir }}/{{ autonomy_common_org_name | lower }}-root-ca.key"
-#   password_store_id_base: "{{ autonomy_common_password_db }}/{{ autonomy_common_root_domain }}"
-#   ca_id: "root"
-#   zone_name: ""
-#   domain: "{{ autonomy_common_root_domain }}"

@@ -18,7 +18,7 @@
     group: "root"
     mode: "0644"
     backup: true
-    #force: "{{ __autonomy_common_ownca_regenerate_csr }}"
+    # force: "{{ __autonomy_common_ownca_regenerate_csr }}"
   become: true
   notify:
     - restart tls

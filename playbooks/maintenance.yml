@@ -4,24 +4,6 @@
 # This playbook is for running maintenance tasks.
 #
 # ==================================================================================================
-- hosts: all
-  gather_facts: false
-  serial: 1
-  roles:
-    - role: bloodymage.autonomy.maintenance
-      vars:
-        __maintenance_tasks: "wakeonlan"
-      tags:
-        - never
-        - wakeonlan
-        - wake-on-lan
-    - role: bloodymage.autonomy.maintenance
-      vars:
-        __maintenance_tasks: "reboot"
-      tags:
-        - never
-        - reboot
-
 - name: "Gather facts for Mikrotik devices."
   gather_facts: false
   hosts: mikrotik
@@ -42,22 +24,23 @@
       tags:
         - always
 
-- hosts: all
+- name: "Autoconfig All hosts."
+  hosts: all
   ignore_unreachable: true
   roles:
     - role: bloodymage.autonomy.autoconfig
       tags:
         - always
 
-- name: "Import Daily Maintenance Playbook."
+- name: "Run Daily Maintenance Playbook."
   import_playbook: "maintenance_daily.yml"
 
-- name: "Import Weekly Playbook."
+- name: "Run Weekly Maintenance Playbook."
   import_playbook: "maintenance_weekly.yml"
   when:
     - ansible_date_time.weekday == "Monday"
 
-- name: "Import Monthly Playbook."
+- name: "Run Monthly Maintenance Playbook."
   import_playbook: "maintenance_monthly.yml"
   when:
     - ansible_date_time.day == "01"

@@ -6,8 +6,6 @@ autonomy_bind_packages:
   - "{{ autonomy_common_bind_package }}"
   - bind9utils
 
-#autonomy_bind_ipv6_reversezones: []
-
 autonomy_bind_zone_samba_controlled: false
 
 # Directories
@@ -121,7 +119,7 @@ autonomy_bind9_myipv6_acl:
 # ==================================================================================================
 __bind_ddns_zones: []
 __complete_bind_dns_zones: []
-__bind_dns_zone_samba_domain: no
+__bind_dns_zone_samba_domain: false
 __tmp_keyfiles: []
 
 __autonomy_bind_zone_directories:

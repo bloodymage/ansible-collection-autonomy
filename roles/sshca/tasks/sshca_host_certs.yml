@@ -50,7 +50,7 @@
     identifier: "{{ autonomy_sshca_hostca_key_comment }}"
     type: "host"
     principals: "{{ autonomy_sshca_host_principals }}"
-    #serial_number:
+    # serial_number:
     valid_at: "{{ autonomy_sshca_host_valid_at }}"
     valid_from: "{{ autonomy_sshca_host_valid_from }}"
     valid_to: "{{ autonomy_sshca_host_valid_to }}"

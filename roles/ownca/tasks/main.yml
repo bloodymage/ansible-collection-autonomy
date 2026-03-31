@@ -6,7 +6,7 @@
 #
 # ==================================================================================================
 - name: "Include OS-specific variables."
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"
@@ -43,7 +43,7 @@
     - ownca-all
 
 - name: "Setup OwnCA Certificate Authority."
-  include_tasks: "cert_auth.yml"
+  ansible.builtin.include_tasks: "cert_auth.yml"
   when:
     - __ownca_tasks == "ownca"
   tags:
@@ -51,7 +51,7 @@
     - ownca-root
 
 - name: "Create Host Certificates."
-  include_tasks: "host_certs.yml"
+  ansible.builtin.include_tasks: "host_certs.yml"
   when:
     - __ownca_tasks == "hostcerts"
     - autonomy_ownca_generate_certificate
@@ -60,7 +60,7 @@
     - ownca-host-certs
 
 - name: "Create User Certificates."
-  include_tasks: "user_certs.yml"
+  ansible.builtin.include_tasks: "user_certs.yml"
   when:
     - __ownca_tasks == "usercerts"
   tags:
@@ -68,7 +68,7 @@
     - ownca-user-certs
 
 # - name: "Create OwnCA: CRLs."
-#   include_tasks: "crls.yml"
+#   ansible.builtin.include_tasks: "crls.yml"
 #   when:
 #     - __ownca_tasks == "crls"
 #   tags:
@@ -76,7 +76,7 @@
 #     - ownca-crls
 
 - name: "Create Host Diffie-Hellman Parameters."
-  include_tasks: "host_dhparams.yml"
+  ansible.builtin.include_tasks: "host_dhparams.yml"
   when:
     - __ownca_tasks == "dhparams"
     - inventory_hostname not in groups["vendor_managed"]

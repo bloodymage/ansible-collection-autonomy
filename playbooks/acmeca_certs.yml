@@ -3,7 +3,8 @@
   hosts: acmeca_hosts
   serial: 3
   tasks:
-    - ansible.builtin.include_role:
+    - name: "Include ACME CA role."
+      ansible.builtin.include_role:
         name: bloodymage.autonomy.acmeca
       vars:
         __acmeca_tasks: "certs"

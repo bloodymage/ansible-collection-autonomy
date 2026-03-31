@@ -26,7 +26,7 @@ autonomy_common_dns_rpz_redirectlist_zone_path: "{{ autonomy_common_dns_rpz_dir 
 autonomy_common_dns_rpz_redirectlist_allow_query: "{{ autonomy_common_bind_allow_query }}"
 autonomy_common_dns_rpz_redirectlist_zone_type: "{{ autonomy_common_dns_rpz_zone_type }}"
 autonomy_common_dns_rpz_redirectlist_nameservers: "{{ autonomy_common_dns_rpz_primary_nameservers }}"
-autonomy_common_dns_rpz_redirectlist_also_notify:  "{{ autonomy_common_dns_rpz_also_notify }}"
+autonomy_common_dns_rpz_redirectlist_also_notify: "{{ autonomy_common_dns_rpz_also_notify }}"
 autonomy_dns_redirectlist_records_present: []
 autonomy_dns_redirectlist_records_absent: []
 

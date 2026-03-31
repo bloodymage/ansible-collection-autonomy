@@ -1,2 +1,19 @@
 ---
-    
+- name: "Basic host configuration for all hosts."
+  hosts: all:!localhost:!public_zone:!virtual_hosts:!dns_only:!vendor_managed
+  strategy: linear
+  roles:
+    - role: bloodymage.autonomy.users
+      vars:
+        autonomy_user_dotfiles_users:
+          - "{{ autonomy_common_users }}"
+        __user_tasks: "local_users"
+      tags:
+        - users
+
+    - role: bloodymage.autonomy.sshca
+      vars:
+        __sshca_tasks: "usercerts"
+      tags:
+        - sshca
+        - sshca-user-certs

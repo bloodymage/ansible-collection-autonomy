@@ -12,29 +12,29 @@
       tags:
         - always
 
-- name: "Configure Samba Fileservers."
-  hosts: samba_file_servers
-  roles:
-    - role: bloodymage.autonomy.samba
-      when:
-        - groups['samba_domain_controllers'] is not defined
-      tags:
-        - samba
-    - role: bloodymage.autonomy.samba
-      vars:
-        - __samba_tasks: acls
-      when:
-        - groups['samba_domain_controllers'] is defined
-      tags:
-        - samba-acls
-        - samba
-    - role: bloodymage.autonomy.cups
-      tags:
-        - cups
+# - name: "Configure Samba Fileservers."
+#   hosts: samba_file_servers
+#   roles:
+#     - role: bloodymage.autonomy.samba
+#       when:
+#         - groups['samba_domain_controllers'] is not defined
+#       tags:
+#         - samba
+#     - role: bloodymage.autonomy.samba
+#       vars:
+#         - __samba_tasks: acls
+#       when:
+#         - groups['samba_domain_controllers'] is defined
+#       tags:
+#         - samba-acls
+#         - samba
+#     - role: bloodymage.autonomy.cups
+#       tags:
+#         - cups
 
-- name: "Configure NFS Servers"
-  hosts: nfs_file_servers
-  roles:
-    - role: bloodymage.autonomy.nfsserver
-      tags:
-        - nfsserver
+# - name: "Configure NFS Servers"
+#   hosts: nfs_file_servers
+#   roles:
+#     - role: bloodymage.autonomy.nfsserver
+#       tags:
+#         - nfsserver

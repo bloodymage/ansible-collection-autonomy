@@ -53,8 +53,8 @@
     owner: "{{ autonomy_common_bind_owner }}"
     group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    force: no
-    #validate: "{{ __bind_named_checkzone }} {{ item['domain'] }} %s"
+    force: false
+    # validate: "{{ __bind_named_checkzone }} {{ item['domain'] }} %s"
   become: true
   register: forwardzone_refresh
   when:
@@ -72,8 +72,8 @@
     owner: "{{ autonomy_common_bind_owner }}"
     group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    force: no
-    #validate: "{{ __bind_named_checkzone }} {{ item.name }} %s"
+    force: false
+    # validate: "{{ __bind_named_checkzone }} {{ item.name }} %s"
   loop: "{{ autonomy_bind_reversezones }}"
   become: true
   register: reversezone_refresh
@@ -93,8 +93,8 @@
     owner: "{{ autonomy_common_bind_owner }}"
     group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    force: no
-    #validate: "{{ __bind_named_checkzone }} {{ item.name }} %s"
+    force: false
+    # validate: "{{ __bind_named_checkzone }} {{ item.name }} %s"
   loop: "{{ autonomy_bind_ipv6_reversezones }}"
   become: true
   register: reversezone_refresh

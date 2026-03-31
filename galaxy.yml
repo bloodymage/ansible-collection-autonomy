@@ -25,9 +25,13 @@ tags:
   - email
   - dovecot
   - postfix
-# dependencies:
-#   - "community.crypto": "*"
-#   - "community.network": "*"
+  - linux
+  - windows
+  - infrastructure
+dependencies:
+  "community.crypto": "*"
+  "community.network": "*"
+  "community.routeros": "*"
 repository: https://github.com/bloodymage/ansible-collection-autonomy
 documentation: http://docs.bloodymage.org
 homepage: https://bloodymage.org

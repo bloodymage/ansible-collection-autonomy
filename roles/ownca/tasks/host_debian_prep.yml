@@ -52,12 +52,12 @@
     group: "{{ autonomy_ownca_host_private_key_group }}"
     mode: "{{ autonomy_ownca_host_private_key_mode }}"
     backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
-    #force: false
+    # force: false
   become: true
 
 - name: "Generate Host CSR."
   community.crypto.openssl_csr:
-    country_name: "{{ autonomy_common_pki_loc_country_code | default(omit)}}"
+    country_name: "{{ autonomy_common_pki_loc_country_code | default(omit) }}"
     state_or_province_name: "{{ autonomy_common_pki_loc_region | default(omit) }}"
     locality_name: "{{ autonomy_common_pki_loc_city | default(omit) }}"
     organization_name: "{{ autonomy_common_org_name | title }}"

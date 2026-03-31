@@ -8,21 +8,21 @@
 # will have their ssh public key copied to github.
 #
 # ==================================================================================================
-- name: "Authorize key with GitHub."
-  community.general.github_key:
-    #api_url: "https://api.github.com/{{ autonomy_github_user }}/keys"
-    name: "{{ item.username | lower }}@{{ inventory_hostname }}"
-    pubkey: "{{ lookup('file', __ssh_pubkey) }}"
-    token: '{{ autonomy_github_oauth_token }}'
-    state: present
-    force: true
-  loop: "{{ autonomy_users_dotfiles_users }}"
-  delegate_to: localhost
-  become: false
-  vars:
-    __ssh_pubkey: "{{ autonomy_sshca_user_dir }}/{{ inventory_hostname }}/{{ item['username'] }}.pub"
-  when:
-    - autonomy_github_oauth_token is truthy
-    - item['id_number'] is defined
+# - name: "Authorize key with GitHub."
+#   community.general.github_key:
+#     # api_url: "https://api.github.com/{{ autonomy_github_user }}/keys"
+#     name: "{{ item.username | lower }}@{{ inventory_hostname }}"
+#     pubkey: "{{ lookup('file', __ssh_pubkey) }}"
+#     token: '{{ autonomy_github_oauth_token }}'
+#     state: present
+#     force: true
+#   loop: "{{ autonomy_users_dotfiles_users }}"
+#   delegate_to: localhost
+#   become: false
+#   vars:
+#     __ssh_pubkey: "{{ autonomy_sshca_user_dir }}/{{ inventory_hostname }}/{{ item['username'] }}.pub"
+#   when:
+#     - autonomy_github_oauth_token is truthy
+#     - item['id_number'] is defined
 
 #  LocalWords:  api

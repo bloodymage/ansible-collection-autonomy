@@ -19,7 +19,7 @@
 
 - name: "Configure the environment for basic host configuration."
   hosts: all:!localhost:!vendor_managed:!dns_only
-  ignore_unreachable: yes
+  ignore_unreachable: true
   roles:
     - role: bloodymage.autonomy.autoconfig
       tags:

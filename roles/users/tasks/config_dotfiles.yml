@@ -72,13 +72,13 @@
     - (item.id_number | int) >= autonomy_users_managed_min_id or __dotfiles_autostart_dir
 
 - name: "Configure User SSH."
-  include_tasks: "config_dotfiles_ssh.yml"
+  ansible.builtin.include_tasks: "config_dotfiles_ssh.yml"
 
 # - name: "Configure User GnuPG."
-#   include_tasks: "config_dotfiles_gnupg.yml"
+#   ansible.builtin.include_tasks: "config_dotfiles_gnupg.yml"
 
 - name: "Configure User Git Repos."
-  include_tasks: "config_git_repos.yml"
+  ansible.builtin.include_tasks: "config_git_repos.yml"
   loop: "{{ autonomy_users_dotfiles_users }}"
   loop_control:
     loop_var: user

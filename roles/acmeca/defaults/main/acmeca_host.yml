@@ -72,3 +72,10 @@ autonomy_acmeca_host_pkcs12_password_store_lookup: >-
   {{ autonomy_acmeca_host_pkcs12_password_store_overwrite }}
   {{ autonomy_acmeca_host_pkcs12_password_store_create }}
   {{ autonomy_acmeca_host_pkcs12_password_store_symbols }}
+
+__autonomy_acmeca_host_key_type: >
+  {%- if autonomy_acmeca_host_key_type.lower() in ['ed25519','ed448'] -%}
+  {{ autonomy_acmeca_host_key_type | capitalize }}
+  {%- else -%}
+  {{ autonomy_acmeca_host_key_type | upper }}
+  {%- endif %}"

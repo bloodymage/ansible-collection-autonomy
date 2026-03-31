@@ -1,1 +1,8 @@
 ---
+- name: "Run Autoconfig."
+  hosts: all:!localhost:!vendor_managed:!dns_only
+  gather_facts: false
+  roles:
+    - role: bloodymage.autonomy.autoconfig
+      tags:
+        - always

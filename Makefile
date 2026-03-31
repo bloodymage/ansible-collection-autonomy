@@ -53,11 +53,36 @@ dev: ##@dev Prepare development environment
 
 install: bootstrap
 
-lintplaylist: ##@lint Delint Playlists
-	ansible-lint --offline playbooks/site.yml
+lint: lint-basic ##@lint Delint Collection
 
-lint: lintplaylist ##@lint Delint Collection
+lint-min: ##@lint Min Profile
+	@ansible-lint --profile=min --offline
+	@find . -empty -type d -delete
+
+lint-basic: ##@lint Basic Profile
+	@ansible-lint --profile=basic --offline
+	@find . -empty -type d -delete
+
+lint-moderate: ##@lint Moderate Profile
+	@ansible-lint --profile=moderate --offline
+	@find . -empty -type d -delete
+
+lint-safety: ##@lint Safety Profile
+	@ansible-lint --profile=safety --offline
+	@find . -empty -type d -delete
+
+lint-shared: ##@lint Shared Profile
+	@ansible-lint --profile=shared --offline
+	@find . -empty -type d -delete
+
+lint-production: ##@lint Production Profile
+	@ansible-lint --profile=production --offline
+	@find . -empty -type d -delete
 
 all: bootstrap
+
+clean: ##@clean Cleans directories
+	@echo "Delete empty directories."
+	@find . -empty -type d -delete
 
 .PHONY: all bootstrap install

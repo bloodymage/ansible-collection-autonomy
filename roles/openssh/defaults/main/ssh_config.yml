@@ -59,8 +59,8 @@ autonomy_openssh_ssh_conf_gssapi_kex_algorithems: "{{ __autonomy_openssh_ssh_con
 autonomy_openssh_ssh_conf_hostbased_accepted_algorithms: "{{ __autonomy_openssh_ssh_conf_hostbased_accepted_algorithms }}"
 autonomy_openssh_ssh_conf_hostbased_authentication: "{{ __autonomy_openssh_ssh_conf_hostbased_authentication }}"
 autonomy_openssh_ssh_conf_host_key_algorithms: "{{ __autonomy_openssh_ssh_conf_host_key_algorithms }}"
-#autonomy_openssh_ssh_conf_host_key_alias:
-#autonomy_openssh_ssh_conf_hostname:
+# autonomy_openssh_ssh_conf_host_key_alias:
+# autonomy_openssh_ssh_conf_hostname:
 autonomy_openssh_ssh_conf_identities_only: "{{ __autonomy_openssh_ssh_conf_identities_only }}"
 autonomy_openssh_ssh_conf_identity_agent: ""
 autonomy_openssh_ssh_conf_identity_file: ""

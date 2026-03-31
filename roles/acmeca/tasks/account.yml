@@ -1,5 +1,5 @@
 ---
-- name: "Generate ACMECA Account private key."
+- name: "Generate ACMECA Account private key." # noqa: jinja[spacing]
   community.crypto.openssl_privatekey:
     path: "{{ autonomy_acmeca_account_key_path }}"
     type: "{{ __type }}"
@@ -23,14 +23,18 @@
       {%- else -%}
       {{ autonomy_acmca_account_password }}
       {%- endif %}
-    __tmp_type: "{{ autonomy_acmeca_account_key_type }}"
-    __type: "{% if __tmp_type.lower() in ['ed25519','ed448'] %}{{ __tmp_type | capitalize }}{% else %}{{ __tmp_type | upper }}{% endif %}"
+    __type: >-
+      {% if autonomy_acmeca_account_key_type.lower() in ['ed25519','ed448'] -%}
+      {{ autonomy_acmeca_account_key_type | capitalize }}
+      {%- else -%}
+      {{ autonomy_acmeca_account_key_type | upper }}
+      {%- endif %}
   tags:
     - acmeca
     - acmeca-test
     - acmeca-account
 
-- name: "Make sure account exists and has given contacts. We agree to TOS."
+- name: "Make sure account exists and has given contacts. We agree to TOS." # noqa: jinja[spacing]
   community.crypto.acme_account:
     account_key_src: "{{ autonomy_acmeca_account_key_path }}"
     account_key_passphrase: "{{ __password }}"
@@ -55,4 +59,3 @@
     - acmeca
     - acmeca-test
     - acmeca-account
-

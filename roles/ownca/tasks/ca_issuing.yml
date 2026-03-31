@@ -1,5 +1,5 @@
 ---
-- name: "Generate Issuing CAs Private Key."
+- name: "Generate Issuing CAs Private Key." # noqa: jinja[spacing]
   community.crypto.openssl_privatekey:
     path: "{{ item['key_path'] }}"
     passphrase: "{{ __password }}"
@@ -29,7 +29,7 @@
 #   Authorities.  The 'Root' CA does not have an organizational unit.  It is the organization.
 #
 # ==================================================================================================
-- name: "Generate Issuing Certificate Authority Certificate Signing Requests (CSR)."
+- name: "Generate Issuing CA Certificate Signing Requests (CSR)." # noqa: jinja[spacing]
   community.crypto.openssl_csr:
     path: "{{ item['csr_path'] }}"
     privatekey_path: "{{ item['key_path'] }}"
@@ -66,7 +66,7 @@
       {{ item['password'] }}
       {%- endif %}
 
-- name: "Generate Issuing CA Signed Certificate."
+- name: "Generate Issuing CA Signed Certificate." # noqa: jinja[spacing]
   community.crypto.x509_certificate:
     path: "{{ item['cert_path'] }}"
     csr_path: "{{ item['csr_path'] }}"
@@ -77,7 +77,7 @@
     backup: true
     owner: "{{ autonomy_ownca_user }}"
     group: "{{ autonomy_ownca_group }}"
-    #force: "{{ __autonomy_ownca_force_regenerate_issuing_ca }}"
+    # force: "{{ __autonomy_ownca_force_regenerate_issuing_ca }}"
   loop: "{{ autonomy_ownca_issuingcas }}"
   delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
   become: false

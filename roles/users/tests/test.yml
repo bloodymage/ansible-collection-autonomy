@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: "Test user role."
+  hosts: localhost
   remote_user: root
   roles:
-    - linux-users
+    - bloodymage.autonomy.users

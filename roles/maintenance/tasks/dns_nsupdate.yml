@@ -224,7 +224,7 @@
     - dns-nsupdate
 
 - name: "Add RPZ records."
-  include_tasks: "dns_nsupdate_rpz.yml"
+  ansible.builtin.include_tasks: "dns_nsupdate_rpz.yml"
   loop: "{{ autonomy_common_dns_rpz_basic_zones }}"
   loop_control:
     loop_var: rpz

@@ -4,20 +4,22 @@
 # Set Group membership
 #
 # ==================================================================================================
-- name: "Get Group Membership for {{ group.groupname }} (Group {{ group_index + 1 }} of {{ domain_groups | length }})."
+- name: "Get Group Membership for: {{ __task_details }}"
   ansible.builtin.command:
     cmd: >
-      samba-tool group listmembers "{{ group.groupname }}"
+      samba-tool group listmembers "{{ group['groupname'] }}"
       --username Administrator
       --password "{{ samba_administrator_password }}"
   register: existing_group_list
   delegate_to: "{{ __samba_schema_master }}"
   become: true
   run_once: true
+  vars:
+    __task_details: "{{ group.groupname }} (Group {{ group_index + 1 }} of {{ domain_groups | length }})."
   when:
     - group.groupname is defined
 
-- name: "Add new members to {{ group.groupname }} (Group {{ group_index + 1 }} of {{ domain_groups | length }})."
+- name: "Add new members to: {{ __task_details }}"
   ansible.builtin.command:
     cmd: >
       samba-tool group addmembers "{{ group.groupname }}" "{{ item }}"
@@ -27,17 +29,21 @@
   delegate_to: "{{ __samba_schema_master }}"
   become: true
   run_once: true
+  vars:
+    __task_details: "{{ group.groupname }} (Group {{ group_index + 1 }} of {{ domain_groups | length }})."
   when:
     - item not in existing_group_list.stdout_lines
 
-- name: "Identify members no longer part of {{ group.groupname }} (Group {{ group_index + 1 }} of {{ domain_groups | length }})."
+- name: "Identify members no longer part of: {{ __task_details }}"
   ansible.builtin.set_fact:
     removed_members: "{{ existing_group_list.stdout_lines | difference(group.group_members) }}"
   run_once: true
   delegate_to: "{{ __samba_schema_master }}"
+  vars:
+    __task_details: "{{ group.groupname }} (Group {{ group_index + 1 }} of {{ domain_groups | length }})."
   become: false
 
-- name: "List members no longer part of {{ group.groupname }} (Group {{ group_index + 1  }} of {{ domain_groups | length }})."
+- name: "List members no longer part of {{ __task_details }}"
   ansible.builtin.debug:
     msg:
       - "{{ item }}"
@@ -46,11 +52,13 @@
   delegate_to: "{{ __samba_schema_master }}"
   become: false
   run_once: true
+  vars:
+    __task_details: "{{ group.groupname }} (Group {{ group_index + 1 }} of {{ domain_groups | length }})."
   tags:
     - never
     - debug
 
-- name: "Remove members from group {{ group.groupname }} (Group {{ group_index + 1 }} of {{ domain_groups | length }})."
+- name: "Remove members from group {{ __task_details }}"
   ansible.builtin.command:
     cmd: >
       samba-tool group removemembers "{{ group.groupname }}" "{{ item }}"
@@ -60,5 +68,7 @@
   run_once: true
   delegate_to: "{{ __samba_schema_master }}"
   become: true
+  vars:
+    __task_details: "{{ group.groupname }} (Group {{ group_index + 1 }} of {{ domain_groups | length }})."
   when:
     - removed_members is truthy

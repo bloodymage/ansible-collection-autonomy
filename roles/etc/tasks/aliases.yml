@@ -2,7 +2,7 @@
 # tasks file for aliases
 - name: "Ensure we have users required by host role."
   ansible.builtin.set_fact:
-    autonomy_users: "{{ autonomy_users + [ item.user ] }}"
+    autonomy_users: "{{ autonomy_users + [item['user']] }}"
   loop:
     - name: "mythtv"
       user: "{{ user_mythtv }}"

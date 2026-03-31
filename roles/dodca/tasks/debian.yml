@@ -21,9 +21,9 @@
     dest: "{{ autonomy_dodca_dir }}/"
     extra_opts:
       - "-j"
-    #owner: root
-    #group: root
-    #mode: "0644"
+    # owner: root
+    # group: root
+    # mode: "0644"
   loop: "{{ autonomy_dodca_url }}"
   become: true
   notify:

@@ -41,7 +41,17 @@
     - systemd
     - systemd-networkd
 
-- name: "Disable networking."
+# ==================================================================================================
+#
+# FIXME: ignore-errors ansible-lint.
+#
+# This fails if the service doesn't exist.  For example, if distribution changing the service name,
+# and the old one is still listed.
+#
+# This is fine since I want it disabled if it does exist.
+#
+# ==================================================================================================
+- name: "Disable old networking services."
   ansible.builtin.systemd:
     name: "{{ item }}"
     enabled: false
@@ -49,7 +59,7 @@
   loop: "{{ autonomy_systemd_old_networking_services }}"
   become: true
   when: (autonomy_systemd_netdev is defined) or (autonomy_systemd_network is defined)
-  ignore_errors: true
+  ignore_errors: true # noqa: ignore-errors
   tags:
     - systemd
     - systemd-networkd
@@ -73,7 +83,8 @@
 # This last section cleans up anything leftover from old networking config.
 #
 # ==================================================================================================
-- include_tasks: "networkd_{{ ansible_os_family | lower }}.yml"
+- name: "Run tasks for: {{ ansible_os_family }}"
+  ansible.builtin.include_tasks: "networkd_{{ ansible_os_family | lower }}.yml"
 
 - name: "Remove unnecessary folders."
   ansible.builtin.file:
@@ -88,3 +99,5 @@
   tags:
     - systemd
     - systemd-networkd
+
+#  LocalWords:  networkd

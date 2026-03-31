@@ -21,7 +21,7 @@ autonomy_ansible_stdout_callback: "default"
 autonomy_ansible_interpreter_python: ""
 autonomy_ansible_log_path: ""
 autonomy_ansible_vault_password_file: ""
-autonomy_ansible_nocows: no
+autonomy_ansible_nocows: false
 autonomy_ansible_cow_selection: "default"
 autonomy_ansible_cowsay_enabled_stencils:
   - bud-frogs
@@ -59,7 +59,7 @@ autonomy_ansible_cowsay_enabled_stencils:
   - vader
   - www
 
-autonomy_ansible_nocolor: no
+autonomy_ansible_nocolor: false
 
 autonomy_ansible_inventory_plugins:
   - host_list

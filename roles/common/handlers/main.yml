@@ -73,7 +73,7 @@
     - inventory_hostname in groups['linux'] | default([])
 
 - name: "Update nextcloud certificates."
-  include_tasks: nextcloud_certificates.yml
+  ansible.builtin.include_tasks: nextcloud_certificates.yml
   listen:
     - "update nextcloud certificates"
   when:
@@ -155,7 +155,7 @@
   when:
     - inventory_hostname in groups['apache_servers'] | default([])
 
-- name: "reload nginx"
+- name: "Reload nginx"
   ansible.builtin.service:
     name: nginx
     state: reloaded
@@ -255,7 +255,7 @@
     - inventory_hostname in groups['linux'] | default([])
 
 - name: "Restart DDclient."
-  service:
+  ansible.builtin.service:
     name: "{{ autonomy_ddclient_daemon }}"
     state: restarted
   become: true
@@ -580,8 +580,8 @@
     enabled: true
     scope: user
   become: true
-  become_user: "{{ item.username }}"
-  become_method: machinectl
+  become_user: "{{ item['username'] }}"
+  become_method: community.general.machinectl
   loop: "{{ users }}"
   listen:
     - "enable emacs"
@@ -607,9 +607,9 @@
 #
 # ==================================================================================================
 - name: "Reboot Hosts."
-  #ansible.builtin.reboot:
+  # ansible.builtin.reboot:
   ansible.builtin.debug:
-    msg: "Rebooting {{ inventory_hostname }} (Pretend)"
+    msg: "[Pretend] Rebooting {{ inventory_hostname }}"
   when:
     - reboot_required_file.stat.exists
   become: false
@@ -698,4 +698,3 @@
 #     - nmbd
 #     - winbindd
 #   become: true
-

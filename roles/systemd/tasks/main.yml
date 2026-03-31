@@ -1,7 +1,7 @@
 ---
 # tasks file for systemd
 - name: Include OS-specific variables.
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"
@@ -14,7 +14,7 @@
     - systemd-timesyncd
 
 - name: "Configure Systemd-Networkd."
-  include_tasks: "networkd.yml"
+  ansible.builtin.include_tasks: "networkd.yml"
   when:
     - __systemd_tasks == "networkd"
   tags:
@@ -22,16 +22,17 @@
     - systemd-networkd
 
 - name: "Configure Systemd-Resolved."
-  include_tasks: "resolved.yml"
-  when:
-    - (__systemd_tasks == "networkd" or __systemd_tasks == "resolved") 
+  ansible.builtin.include_tasks: "resolved.yml"
+  when: >
+    __systemd_tasks == "networkd" or
+    __systemd_tasks == "resolved"
   tags:
     - systemd
     - systemd-networkd
     - systemd-resolved
 
 - name: "Configure Systemd-Timesyncd."
-  include_tasks: "timesyncd.yml"
+  ansible.builtin.include_tasks: "timesyncd.yml"
   when:
     - __systemd_tasks == "timesyncd"
   tags:

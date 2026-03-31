@@ -1,0 +1,9 @@
+---
+offline: true
+profile: basic
+
+skip_list:
+  - var-naming
+  - var-naming[no-role-prefix]
+  - yaml[line-length]
+var_naming_pattern: "^(__)?autonomy_[a-z_][a-z0-9_]*$"

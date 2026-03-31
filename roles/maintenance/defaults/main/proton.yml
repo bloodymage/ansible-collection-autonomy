@@ -1,0 +1,101 @@
+---
+autonomy_maintenance_proton_hostname: "{{ inventory_hostname_short }}"
+autonomy_maintenance_proton_domainkey_lead: "."
+
+autonomy_maintenance_proton_mail_hostname: "{{ autonomy_maintenance_proton_hostname }}"
+autonomy_maintenance_proton_mail_verification: "password"
+__autonomy_maintenance_proton_mail_verification: ""
+autonomy_maintenance_proton_mail_dkim_code: "password"
+
+autonomy_maintenance_proton_mail_dmarc_record: "{{ autonomy_maintenance_dns_dmarc_record }}"
+autonomy_maintenance_proton_mail_spf_record: "{{ autonomy_maintenance_dns_spf_record }}"
+autonomy_maintenance_proton_mail_verification_record: '"protonmail-verification={{ __autonomy_maintenance_proton_mail_verification }}"'
+
+autonomy_maintenance_proton_mail_verification_password_store_id: "{{ autonomy_common_password_host_ext_services }}/proton/verification"
+autonomy_maintenance_proton_mail_verification_password_store_lookup: >-
+  {{ autonomy_maintenance_proton_mail_verification_password_store_id }}
+
+autonomy_maintenance_proton_mail_dkim_password_store_id: "{{ autonomy_common_password_host_ext_services }}/proton/dkim"
+autonomy_maintenance_proton_mail_dkim_password_store_lookup: >-
+  {{ autonomy_maintenance_proton_mail_dkim_password_store_id }}
+
+__autonomy_maintenance_proton_mail_dkim_code: ""
+__autonomy_maintenance_proton_mail_hostname: >-
+  {% if autonomy_maintenance_proton_mail_hostname is falsy -%}
+  @
+  {%- else -%}
+  {{ autonomy_maintenance_proton_mail_hostname }}
+  {%- endif %}
+
+autonomy_maintenance_proton_mail_cname_records:
+  - record: "protonmail._domainkey{{ autonomy_maintenance_proton_domainkey_lead }}{{ autonomy_maintenance_proton_mail_hostname }}"
+    value: "protonmail.domainkey.{{ __autonomy_maintenance_proton_mail_dkim_code }}.domains.proton.ch"
+    proxied: false
+  - record: "protonmail2._domainkey{{ autonomy_maintenance_proton_domainkey_lead }}{{ autonomy_maintenance_proton_mail_hostname }}"
+    value: "protonmail2.domainkey.{{ __autonomy_maintenance_proton_mail_dkim_code }}.domains.proton.ch"
+    proxied: false
+  - record: "protonmail3._domainkey{{ autonomy_maintenance_proton_domainkey_lead }}{{ autonomy_maintenance_proton_mail_hostname }}"
+    value: "protonmail3.domainkey.{{ __autonomy_maintenance_proton_mail_dkim_code }}.domains.proton.ch"
+    proxied: false
+
+autonomy_maintenance_proton_mail_mx_records:
+  - record: "{{ __autonomy_maintenance_proton_mail_hostname }}"
+    value: "mail.protonmail.ch"
+    priority: 10
+  - record: "{{ __autonomy_maintenance_proton_mail_hostname }}"
+    value: "mailsec.protonmail.ch"
+    priority: 20
+
+autonomy_maintenance_proton_mail_txt_records:
+  - record: "_dmarc{{ autonomy_maintenance_proton_domainkey_lead }}{{ autonomy_maintenance_proton_mail_hostname }}"
+    value: "{{ autonomy_maintenance_proton_mail_dmarc_record }}"
+  - record: "{{ inventory_hostname_short }}"
+    value: "{{ autonomy_maintenance_proton_mail_spf_record }}"
+  # - record: "{{ inventory_hostname_short }}"
+  #   value: "{{ autonomy_maintenance_proton_mail_verification_record }}"
+
+autonomy_maintenance_proton_alias_hostname: "{{ autonomy_maintenance_proton_hostname }}"
+autonomy_maintenance_proton_alias_verification: "password"
+__autonomy_maintenance_proton_alias_verification: ""
+
+autonomy_maintenance_proton_alias_dmarc_record: "{{ autonomy_maintenance_dns_dmarc_record }}"
+autonomy_maintenance_proton_alias_spf_record: "{{ autonomy_maintenance_dns_spf_record }}"
+autonomy_maintenance_proton_alias_verification_record: '"pm-verification={{ __autonomy_maintenance_proton_alias_verification }}"'
+
+autonomy_maintenance_proton_alias_verification_password_store_id: "{{ autonomy_common_password_host_ext_services }}/proton/verification"
+autonomy_maintenance_proton_alias_verification_password_store_lookup: >-
+  {{ autonomy_maintenance_proton_alias_verification_password_store_id }}
+
+autonomy_maintenance_proton_alias_cname_records:
+  - record: "dkim._domainkey{{ autonomy_maintenance_proton_domainkey_lead }}{{ autonomy_maintenance_proton_alias_hostname }}"
+    value: "dkim._domainkey.alias.proton.me"
+    proxied: false
+  - record: "dkim02._domainkey{{ autonomy_maintenance_proton_domainkey_lead }}{{ autonomy_maintenance_proton_alias_hostname }}"
+    value: "dkim02._domainkey.alias.proton.me"
+    proxied: false
+  - record: "dkim03._domainkey{{ autonomy_maintenance_proton_domainkey_lead }}{{ autonomy_maintenance_proton_alias_hostname }}"
+    value: "dkim03._domainkey.alias.proton.me"
+    proxied: false
+
+__autonomy_maintenance_proton_alias_hostname: >-
+  {% if autonomy_maintenance_proton_alias_hostname is falsy -%}
+  @
+  {%- else -%}
+  {{ autonomy_maintenance_proton_alias_hostname }}
+  {%- endif %}
+
+autonomy_maintenance_proton_alias_mx_records:
+  - record: "{{ __autonomy_maintenance_proton_alias_hostname }}"
+    value: "mx1.alias.proton.me"
+    priority: 10
+  - record: "{{ __autonomy_maintenance_proton_alias_hostname }}"
+    value: "mx2.alias.proton.me"
+    priority: 20
+
+autonomy_maintenance_proton_alias_txt_records:
+  - record: "_dmarc{{ autonomy_maintenance_proton_domainkey_lead }}{{ autonomy_maintenance_proton_alias_hostname }}"
+    value: "{{ autonomy_maintenance_proton_alias_dmarc_record }}"
+  - record: "{{ __autonomy_maintenance_proton_alias_hostname }}"
+    value: "{{ autonomy_maintenance_proton_alias_spf_record }}"
+  # - record: "{{ __autonomy_maintenance_proton_alias_hostname }}"
+  #   value: "{{ autonomy_maintenance_proton_alias_verification_record }}"

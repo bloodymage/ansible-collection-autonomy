@@ -22,4 +22,3 @@ autonomy_bind_zone_admin: "{{ autonomy_common_sysadmin_user }}.{{ autonomy_commo
 autonomy_bind_zone_serial_number: "{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}00"
 autonomy_bind_reverse_zone_serial_number: "{{ autonomy_bind_zone_serial_number }}"
 autonomy_bind_ipv6_reversezone_serial_number: "{{ autonomy_bind_reverse_zone_serial_number }}"
-

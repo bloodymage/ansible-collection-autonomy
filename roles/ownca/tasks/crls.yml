@@ -28,7 +28,7 @@
     owner: "{{ autonomy_ownca_ca_db_dir_owner }}"
     group: "{{ autonomy_ownca_ca_db_dir_group }}"
     mode: "0600"
-    force: no
+    force: false
   loop: "{{ autonomy_common_ownca_certificate_authorities }}"
   delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
   become: false

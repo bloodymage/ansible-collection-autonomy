@@ -3,8 +3,8 @@ autonomy_ownca_intermediateca_common_name: "{{ autonomy_common_org_name | title 
 autonomy_ownca_intermediateca_email_address: ""
 autonomy_ownca_intermediateca_org_name: "{{ autonomy_common_org_name | title }} {{ autonomy_common_org_unit_name | title }}"
 autonomy_ownca_intermediateca_keyusage:
-    - "keyCertSign"
-    - "cRLSign"
+  - "keyCertSign"
+  - "cRLSign"
 autonomy_ownca_intermediateca_keyusage_critical: true
 autonomy_ownca_intermediateca_basic_constraints:
   - 'CA:TRUE'

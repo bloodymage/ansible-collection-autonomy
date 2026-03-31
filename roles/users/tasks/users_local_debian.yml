@@ -12,7 +12,7 @@
 # ==================================================================================================
 - name: "Ensure we have user groups required by host role."
   ansible.builtin.set_fact:
-    __user_groups: "{{ __user_groups + autonomy_users_groups + [ item['group'] ] }}"
+    __user_groups: "{{ __user_groups + autonomy_users_groups + [item['group']] }}"
   loop:
     - name: "mythtv"
       group: "{{ autonomy_common_users_mythtv_group }}"
@@ -36,7 +36,7 @@
 
 - name: "Ensure we have users required by host role."
   ansible.builtin.set_fact:
-    __users: "{{ __users + [ item['user'] ] }}"
+    __users: "{{ __users + [item['user']] }}"
   loop:
     - name: "mythtv"
       user: "{{ autonomy_common_users_mythtv }}"
@@ -77,7 +77,7 @@
 # defined in the user definitions, then remove the user from the local system.
 #
 # ==================================================================================================
-- name: "Create users belonging to the 'ansiblemanaged' group."
+- name: "Create users belonging to the 'ansiblemanaged' group." # noqa: jinja[spacing]
   ansible.builtin.user:
     name: "{{ item['username'] }}"
     password: "{{ __user_password }}"
@@ -88,7 +88,7 @@
     create_home: true
     comment: "{{ item['name'] | default(omit) }}"
     home: "{{ item['unix_home'] | default('/nonexistent') }}"
-    uid:  "{{ item['id_number'] | default(omit) }}"
+    uid: "{{ item['id_number'] | default(omit) }}"
     update_password: "always"
     move_home: true
   loop: "{{ __users }}"
@@ -131,7 +131,7 @@
       {{ __password1 }}
       {%- endif %}
     __password_hash: >-
-      {{ __password | password_hash('sha512', 65534 | random(seed=autonomy_users_password_hash_seed) | string ) }}
+      {{ __password | password_hash('sha512', 65534 | random(seed=autonomy_users_password_hash_seed) | string) }}
     __user_password: >-
       {% if item['password'] is defined and item.password in ['!','*'] -%}
       {{ item['password'] }}
@@ -165,7 +165,7 @@
     comment: "{{ item['name'] | default(omit) }}"
     home: "{{ item['unix_home'] | default('/nonexistent') }}"
     move_home: true
-    uid:  "{{ item['id_number'] | default(omit) }}"
+    uid: "{{ item['id_number'] | default(omit) }}"
   loop: "{{ __users }}"
   loop_control:
     index_var: index
@@ -181,13 +181,12 @@
 # Post configuration
 #
 # ==================================================================================================
-- name: "Create User SSH Keys."
+- name: "Create User SSH Keys." # noqa: jinja[spacing]
   ansible.builtin.user:
     name: "{{ item['username'] }}"
     generate_ssh_key: true
     ssh_key_type: "{{ item['ssh_key_type'] | default(autonomy_common_users_ssh_key_type) }}"
     ssh_key_passphrase: "{{ __ssh_key_passphrase }}"
-    #force: true
   loop: "{{ __users }}"
   loop_control:
     index_var: index
@@ -293,7 +292,7 @@
 
 - name: "Get inventory defined users into a list."
   ansible.builtin.set_fact:
-    __username_list: "{{ __username_list + [ item.username ] }}"
+    __username_list: "{{ __username_list + [item['username']] }}"
   loop: "{{ __users }}"
 
 # This currently fails because it needs a straight list of users.  Currently "users" list each item

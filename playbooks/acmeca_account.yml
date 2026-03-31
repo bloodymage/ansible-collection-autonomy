@@ -1,8 +1,9 @@
 ---
-- name: "Configure ACME CA."
+- name: "ACME CA Account Playbook."
   hosts: localhost
   tasks:
-    - ansible.builtin.include_role:
+    - name: "Include ACMECA role."
+      ansible.builtin.include_role:
         name: bloodymage.autonomy.acmeca
       vars:
         __acmeca_tasks: "account"

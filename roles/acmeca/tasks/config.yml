@@ -100,7 +100,7 @@
     - acmeca-test
 
 - name: "Run ACME Account Tasks (Local Configuration)."
-  include_tasks: "config_local.yml"
+  ansible.builtin.include_tasks: "config_local.yml"
   tags:
     - acmeca
     - acmeca-account

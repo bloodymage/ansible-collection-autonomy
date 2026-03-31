@@ -11,7 +11,7 @@
   become: false
   delegate_to: localhost
   vars:
-    __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_root_domain }}/external/cloudflare/dns"
+    __password_lookup: "{{ autonomy_common_password_root_ext_services }}/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   tags:
     - acmeca
@@ -19,3 +19,5 @@
     - acmeca-cert
     - acmeca-certs
     - acmeca-dns
+
+#  LocalWords:  cloudflare

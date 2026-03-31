@@ -1,6 +1,6 @@
 ---
 # WARNING: This gets slow with large files
-- name: "Identify domain changes for '{{ rpz['item']['name'] }}' (WARNING: SLOW)."
+- name: "[WARNING: SLOW] Identify domain changes for: {{ rpz['item']['name'] }}"
   ansible.builtin.set_fact:
     __removed_domains: "{{ __old_domains_list | difference(__new_domains_list) }}"
     __added_domains: "{{ __new_domains_list | difference(__old_domains_list) }}"
@@ -64,8 +64,8 @@
   become: false
   vars:
     __domain: "{{ item.split(' ')[0] }}"
-    #__type: "{{ item.split(' ')[1] }}"
-    #__alias: "{{ item.split(' ')[2] }}"
+    # __type: "{{ item.split(' ')[1] }}"
+    # __alias: "{{ item.split(' ')[2] }}"
     __type: "CNAME"
     __alias: "."
     __nameserver: "{{ autonomy_common_dns_primary_server_hostname }}"
@@ -93,8 +93,8 @@
   become: false
   vars:
     __domain: "{{ item.split(' ')[0] }}"
-    #__type: "{{ item.split(' ')[1] }}"
-    #__alias: "{{ item.split(' ')[2] }}"
+    # __type: "{{ item.split(' ')[1] }}"
+    # __alias: "{{ item.split(' ')[2] }}"
     __type: "CNAME"
     __alias: "."
     __nameserver: "{{ autonomy_common_dns_primary_server_hostname }}"
@@ -105,4 +105,4 @@
   delegate_to: localhost
   tags:
     - dns
-    - dns-nsupdate
+    - dns-file

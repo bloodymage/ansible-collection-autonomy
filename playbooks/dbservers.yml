@@ -12,12 +12,12 @@
       tags:
         - always
 
-- name: "Configure MariaDB Servers."
-  hosts: mariadb_servers:!public_zone
-  roles:
-    - role: bloodymage.autonomy.mariadb
-      tags:
-        - mariadb
+# - name: "Configure MariaDB Servers."
+#   hosts: mariadb_servers:!public_zone
+#   roles:
+#     - role: bloodymage.autonomy.mariadb
+#       tags:
+#         - mariadb
 
 - name: "Configure Databases."
   hosts: mariadb_servers:postgresql_servers:mysql_servers

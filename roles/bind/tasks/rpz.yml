@@ -6,7 +6,7 @@
     owner: root
     group: "{{ autonomy_common_bind_group }}"
     mode: "0644"
-    #validate: "{{ __bind_named_checkconf }} %s"
+    # validate: "{{ __bind_named_checkconf }} %s"
   become: true
   when:
     - autonomy_common_virtual_host is falsy
@@ -42,6 +42,44 @@
     - item['definition'] == 'dynamic'
     - autonomy_common_virtual_host is falsy
     - item['type'] == "primary"
+
+- name: "Remove URL sourced RPZ persistent data."
+  ansible.builtin.file:
+    path: "{{ autonomy_maintenance_dns_url_data_dir }}/{{ item['name'] }}.txt.old"
+    state: absent
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  become: false
+  delegate_to: localhost
+  run_once: true
+  when:
+    - item['url'] is defined
+  tags:
+    - never
+    - dns-rpz-reset
+
+- name: "Remove URL sourced RPZ zone files."
+  ansible.builtin.file:
+    path: "{{ item['path'] }}"
+    state: absent
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  become: true
+  when:
+    - item['url'] is defined
+  tags:
+    - never
+    - dns-rpz-reset
+
+- name: "Remove URL sourced RPZ journal files."
+  ansible.builtin.file:
+    path: "{{ item['path'] }}.jnl"
+    state: absent
+  loop: "{{ autonomy_common_dns_rpz_zones }}"
+  become: true
+  when:
+    - item['url'] is defined
+  tags:
+    - never
+    - dns-rpz-reset
 
 - name: "Check if URL sourced RPZ zonefiles exist."
   ansible.builtin.stat:

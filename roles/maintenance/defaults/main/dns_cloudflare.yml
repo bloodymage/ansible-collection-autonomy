@@ -1,11 +1,38 @@
 ---
 # Cloudflare Settings
-autonomy_dns_cloudflare_proxied: true
-autonomy_dns_cloudflare_solo: true
-autonomy_dns_cloudflare_solo_mx: true
-autonomy_dns_cloudflare_timeout: 30
-autonomy_dns_cloudflare_ttl: 1
-autonomy_dns_cloudflare_cname_records: []
-autonomy_dns_cloudflare_mx_records: []
-autonomy_dns_cloudflare_txt_records: []
-autonomy_dns_dmarc_cloudflare_email: ""
+autonomy_maintenance_cloudflare_enabled: false
+autonomy_maintenance_cloudflare_password_store_id: "{{ autonomy_common_password_root_ext_services }}/cloudflare/dns"
+autonomy_maintenance_cloudflare_key: "{{ lookup('community.general.passwordstore', autonomy_maintenance_cloudflare_password_store_id) }}"
+autonomy_maintenance_cloudflare_dmarc_email: ""
+autonomy_maintenance_cloudflare_hostname: "{{ inventory_hostname_short }}"
+
+autonomy_maintenance_cloudflare_proxied: true
+autonomy_maintenance_cloudflare_solo: true
+autonomy_maintenance_cloudflare_timeout: 30
+autonomy_maintenance_cloudflare_ttl: 1
+
+# A Records
+autonomy_maintenance_cloudflare_a_record_enabled: false
+autonomy_maintenance_cloudflare_a_record_comment: ""
+autonomy_maintenance_cloudflare_a_record_solo: "{{ autonomy_maintenance_cloudflare_solo }}"
+autonomy_maintenance_cloudflare_a_record_proxied: "{{ autonomy_maintenance_cloudflare_proxied }}"
+
+# AAAA Records
+autonomy_maintenance_cloudflare_aaaa_record_enabled: false
+autonomy_maintenance_cloudflare_aaaa_record_comment: ""
+autonomy_maintenance_cloudflare_aaaa_record_solo: "{{ autonomy_maintenance_cloudflare_solo }}"
+autonomy_maintenance_cloudflare_aaaa_record_proxied: "{{ autonomy_maintenance_cloudflare_proxied }}"
+
+
+# CNAME Records
+autonomy_maintenance_cloudflare_cname_records: []
+autonomy_maintenance_cloudflare_cname_record_comment: ""
+
+# MX Records
+autonomy_maintenance_cloudflare_mx_records: []
+autonomy_maintenance_cloudflare_mx_record_solo: false
+autonomy_maintenance_cloudflare_mx_record_comment: ""
+
+# TXT Records
+autonomy_maintenance_cloudflare_txt_records: []
+autonomy_maintenance_cloudflare_txt_record_comment: ""

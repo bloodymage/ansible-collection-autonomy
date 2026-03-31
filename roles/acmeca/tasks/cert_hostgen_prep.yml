@@ -1,6 +1,6 @@
 ---
 - name: "Run ACME Account Tasks (Host Configuration)."
-  include_tasks: "config_host.yml"
+  ansible.builtin.include_tasks: "config_host.yml"
   when:
     - not autonomy_acmeca_generate_locally
   tags:
@@ -11,7 +11,7 @@
 - name: "Generate Let's Encrypt Certificate private key."
   community.crypto.openssl_privatekey:
     path: '{{ autonomy_acmeca_sysconf_key_path }}'
-    type: '{{ __type }}'
+    type: '{{ __autonomy_acmeca_host_key_type }}'
     size: "{{ autonomy_acmeca_host_key_size }}"
     owner: "{{ autonomy_acmeca_host_key_owner }}"
     group: "{{ autonomy_acmeca_host_key_group }}"
@@ -21,9 +21,6 @@
     state: "present"
     backup: "{{ autonomy_acmeca_sysconf_backup_keys }}"
   become: true
-  vars:
-    __tmp_type: "{{ autonomy_acmeca_host_key_type }}"
-    __type: "{% if __tmp_type.lower() in ['ed25519','ed448'] %}{{ __tmp_type | capitalize }}{% else %}{{ __tmp_type | upper }}{% endif %}"
   tags:
     - acmeca
     - acmeca-test

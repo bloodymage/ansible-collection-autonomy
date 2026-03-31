@@ -59,7 +59,7 @@
     - dns-file
 
 - name: "Update URL source RPZ."
-  include_tasks: "dns_file_records.yml"
+  ansible.builtin.include_tasks: "dns_file_records.yml"
   loop: "{{ rpz_data.results }}"
   loop_control:
     loop_var: rpz

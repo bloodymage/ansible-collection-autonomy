@@ -4,8 +4,8 @@ autonomy_ownca_codesignca_email_address: ""
 autonomy_ownca_codesignca_org_name: "{{ autonomy_common_org_name | title }}"
 autonomy_ownca_codesignca_org_unit_name: "{{ autonomy_common_org_unit_name | title }}"
 autonomy_ownca_codesignca_keyusage:
-    - "keyCertSign"
-    - "cRLSign"
+  - "keyCertSign"
+  - "cRLSign"
 autonomy_ownca_codesignca_keyusage_critical: true
 autonomy_ownca_codesignca_basic_constraints:
   - 'CA:TRUE'

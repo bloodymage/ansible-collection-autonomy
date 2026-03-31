@@ -1,7 +1,7 @@
 ---
 - name: "Identify User running ansible."
   ansible.builtin.set_fact:
-    autonomy_common_user: "{{ lookup('env','USER') }}"
+    autonomy_common_user: "{{ lookup('env', 'USER') }}"
   run_once: true
   delegate_to: localhost
   when:
@@ -17,21 +17,21 @@
     key: "{{ ansible_network_os.split('.')[2] | lower }}"
   when:
     - ansible_network_os is defined
-  changed_when: False
+  changed_when: false
 
 - name: "Create groups based on the OS Family"
   ansible.builtin.group_by:
     key: "{{ ansible_os_family | lower }}"
   when:
     - ansible_os_family is defined
-  changed_when: False
+  changed_when: false
 
 - name: "Create groups based on the System"
   ansible.builtin.group_by:
     key: "{{ ansible_system | lower }}"
   when:
     - ansible_system is defined
-  changed_when: False
+  changed_when: false
 
 # ==================================================================================================
 #
@@ -41,14 +41,14 @@
 - name: "Create group by zone type."
   ansible.builtin.group_by:
     key: "{{ autonomy_common_zone_type }}_zone"
-  changed_when: False
+  changed_when: false
 
 - name: "Create group by zone name."
   ansible.builtin.group_by:
     key: "{{ autonomy_common_zone_name }}_zone"
   when:
     - autonomy_common_zone_name is truthy
-  changed_when: False
+  changed_when: false
 
 # ==================================================================================================
 #
@@ -60,7 +60,7 @@
     key: "{{ autonomy_common_zone_name }}"
   when:
     - autonomy_common_zone_name is truthy
-  changed_when: False
+  changed_when: false
 
 # ==================================================================================================
 #
@@ -74,7 +74,7 @@
   when:
     - item['parent'] is defined
     - inventory_hostname in groups[item['name']] | default([])
-  changed_when: False
+  changed_when: false
 
 # ==================================================================================================
 #
@@ -95,7 +95,7 @@
     - item['parent'] is defined
     - inventory_hostname not in groups[item['parent']] | default([])
     - inventory_hostname in groups[item['name']] | default([])
-  changed_when: False
+  changed_when: false
 
 - name: "Create host groups based on zone name and role."
   ansible.builtin.group_by:
@@ -103,7 +103,7 @@
   loop: "{{ autonomy_common_parent_groups }}"
   when:
     - inventory_hostname in groups[item['name']] | default([])
-  changed_when: False
+  changed_when: false
 
 - name: "Create host groups based on zone type and role."
   ansible.builtin.group_by:
@@ -111,22 +111,22 @@
   loop: "{{ autonomy_common_parent_groups }}"
   when:
     - inventory_hostname in groups[item['name']] | default([])
-  changed_when: False
+  changed_when: false
 
 - name: "Create virtual_hosts group."
   ansible.builtin.group_by:
     key: "virtual_hosts"
   when:
     - autonomy_common_virtual_host
-  changed_when: False
+  changed_when: false
 
 - name: "Include Samba Domain Tasks"
-  include_tasks: "samba_domain.yml"
+  ansible.builtin.include_tasks: "samba_domain.yml"
   when:
     - groups['samba_domain_controllers'] is defined
 
 - name: "Include OS Based Tasks"
-  include_tasks: "{{ ansible_system | lower }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_system | lower }}.yml"
   vars:
     __ansible_system: "{{ ansible_system | lower }}"
   when:

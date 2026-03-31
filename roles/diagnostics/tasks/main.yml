@@ -1,13 +1,13 @@
 ---
 # tasks file for diagnostics
 - name: "Check connectivity."
-  include_tasks: "ping.yml"
+  ansible.builtin.include_tasks: "ping.yml"
   tags:
     - connectivity
     - ping
 
 - name: "Get host facts."
-  include_tasks: "host_facts.yml"
+  ansible.builtin.include_tasks: "host_facts.yml"
   when:
     - ansible_network_os is not defined
   tags:
@@ -22,7 +22,7 @@
     - host-vars
 
 - name: "Get Network OS facts."
-  include_tasks: "mikrotik_facts.yml"
+  ansible.builtin.include_tasks: "mikrotik_facts.yml"
   when:
     - ansible_network_os is defined
     - ansible_network_os == "community.routeros.routeros"
@@ -37,6 +37,6 @@
     - host-version
 
 - name: "Display host groups."
-  include_tasks: "host_groups.yml"
+  ansible.builtin.include_tasks: "host_groups.yml"
   tags:
     - host-groups

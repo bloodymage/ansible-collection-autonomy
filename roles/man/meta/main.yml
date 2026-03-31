@@ -7,12 +7,12 @@ galaxy_info:
 
   license: MIT
 
-  min_ansible_version: 2.10
+  min_ansible_version: "2.19"
 
   platforms:
     - name: Debian
       versions:
-        - 13
+        - "trixie"
 
   galaxy_tags:
     - bloodymage

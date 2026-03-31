@@ -1,9 +1,9 @@
 ---
-- name: "Generate PKCS#12 file."
+- name: "Generate PKCS#12 file." # noqa: jinja[spacing]
   community.crypto.openssl_pkcs12:
     action: export
     backup: true
-    path:  "{{ autonomy_acmceca_user_pkcs12_path }}"
+    path: "{{ autonomy_acmceca_user_pkcs12_path }}"
     friendly_name: "{{ inventory_hostname }}"
     passphrase: "{{ __password }}"
     privatekey_path: "{{ autonomy_acmeca_user_key_path }}"
@@ -15,7 +15,6 @@
     owner: "{{ autonomy_acmeca_user_owner }}"
     group: "{{ autonomy_acmeca_user_group }}"
     mode: "0600"
-    #force: true
   become: false
   delegate_to: localhost
   vars:

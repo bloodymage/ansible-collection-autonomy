@@ -38,7 +38,7 @@
     - always
 
 - name: "Create Samba Schema Master Group."
-  add_host:
+  ansible.builtin.add_host:
     name: "{{ __samba_schema_master }}"
     groups:
       - samba_schema_master
@@ -46,9 +46,9 @@
   tags:
     - always
 
-- name: "Add full details to realm users."
+- name: "Add full details to realm users." # noqa: jinja[spacing]
   ansible.builtin.set_fact:
-    __realm_users: "{{ __realm_users + [ __user ] }}"
+    __realm_users: "{{ __realm_users + [__user] }}"
   vars:
     __user:
       username: "{{ __username }}"
@@ -91,11 +91,11 @@
       # description:
       organization: "{{ item.organization | default(omit) }}"
       organizational_unit: "{{ item.organizational_unit | default(omit) }}"
-      #otherMobile:
-      #otherPager:
-      #otherTelephone:
-      #ou:
-      #pager:
+      # otherMobile:
+      # otherPager:
+      # otherTelephone:
+      # ou:
+      # pager:
       # postOfficeBox:
       # proxyAddresses:
       # streetAddress:
@@ -108,15 +108,24 @@
     __surname: "{{ item.surname | default(None) }}"
     __nickname: "{{ item.nickname | default(__given_name) }}"
     __callsign: "{{ item.callsign | default(None) }}"
-    __identified_initials: "{{ __given_name[0] }}{{ __middle_name[0] | default(None) }}{{ __surname[0] | default(None) }}"
+    __identified_initials: >-
+      {{ __given_name[0] }}{{ __middle_name[0] | default(None) }}{{ __surname[0] | default(None) }}
     __initials: "{{ item.initials | default(__identified_initials) }}"
     __middle_initial: "{{ __middle_name[0] | default(None) }}"
-    __full_middle_name: "{% if __middle_name is truthy %}{{ ' ' + __middle_name }}{% else %}{{ '' }}{% endif %}"
-    __full_middle_initial: "{% if __middle_initial is truthy %}{{ ' ' + __middle_initial }}{% else %}{{ '' }}{% endif %}"
+    __full_middle_name: >-
+      {% if __middle_name is truthy %}{{ ' ' }}{{ __middle_name }}{% else %}{{ '' }}{% endif %}
+    __full_middle_initial: >-
+      {% if __middle_initial is truthy %}{{ ' ' + __middle_initial }}{% else %}{{ '' }}{% endif %}
     __full_surname: "{% if __surname is truthy %} {{ __surname }}{% else %}{{ '' }}{% endif %}"
-    __full_callsign: '{% if __callsign is truthy %} "{{ __callsign }}"{% else %}{{ "" }}{% endif %}'
-    __full_middle_part: "{% if __callsign is truthy %}{{ __full_callsign }}{% else %}{{ __full_middle_name }}{% endif %}"
-    __display_middle_part: "{% if __callsign is truthy %}{{ __full_callsign }}{% else %}{{ __full_middle_initial }}{% endif %}"
+    __full_callsign: "{% if __callsign is truthy %} {{ __callsign }}{% else %}{{ '' }}{% endif %}"
+    __full_middle_part: >-
+      {% if __callsign is truthy %}
+      {{ __full_callsign }}
+      {% else %}
+      {{ __full_middle_name }}
+      {% endif %}
+    __display_middle_part: >-
+      {% if __callsign is truthy %}{{ __full_callsign }}{% else %}{{ __full_middle_initial }}{% endif %}
     __full_name: "{{ __given_name }}{{ __full_middle_part }}{{ __full_surname }}"
     __display_name: "{{ __nickname }}{{ __display_middle_part }}{{ __full_surname | default(None) }}"
     __autonomy_organization: "{{ autonomy_common_org_name | title }}"

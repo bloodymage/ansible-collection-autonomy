@@ -30,7 +30,7 @@
 #     - item[0]['repo'] is truthy
 #     - result is falsy
 
-- name: "Ensure Repo directory exists for {{ user['username'] }} (1st Pass)."
+- name: "[1st Pass] Ensure repo directory exists for: {{ user['username'] }}"
   ansible.builtin.file:
     path: "{{ __dest }}"
     owner: "{{ user['id_number'] }}"
@@ -46,18 +46,16 @@
     - item[0]['repo'] is truthy
     - (item[0]['second_pass'] is not defined) or (item[0]['second_pass'] is falsy)
 
-- name: "Update {{ user['username'] }}'s Repos (1st Pass)."
+- name: "[1st Pass] Update repos for: {{ user['username'] }}"
   ansible.builtin.git:
     repo: "{{ item[0]['repo'] }}"
     dest: "{{ __dest }}"
     update: "{{ item[0]['update'] }}"
     remote: "{{ item[0]['remote'] }}"
     version: "{{ item[0]['version'] | default('main') }}"
-    #key_file: "{{ user['unix_home'] }}/.ssh/id_{{ user['ssh_key_type'] }}"
     accept_newhostkey: true
     force: false
   loop: "{{ user['git_repos'] }}"
-  #become: false
   vars:
     ansible_user: "{{ user['username'] }}"
     __dest: "{{ user['unix_home'] }}/{{ item[0]['dest'] }}"
@@ -68,7 +66,7 @@
 
 # Allow a second pass for repos that are inside a folder in another repo
 # Useful for things like private config repos within a spacemacs repo.
-- name: "Ensure Repo directory exists for {{ user['username'] }} (2nd Pass)."
+- name: "[2nd Pass] Ensure repo directory exists for: {{ user['username'] }}"
   ansible.builtin.file:
     path: "{{ __dest }}"
     owner: "{{ user['id_number'] }}"
@@ -85,14 +83,13 @@
     - item[0]['second_pass'] is defined
     - item[0]['second_pass'] is truthy
 
-- name: "Update {{ user['username'] }}'s Repos (2nd Pass)."
+- name: "[2nd Pass] Update repos for: {{ user['username'] }}"
   ansible.builtin.git:
     repo: "{{ item[0]['repo'] }}"
     dest: "{{ __dest }}"
     update: "{{ item[0]['update'] }}"
     remote: "{{ item[0]['remote'] }}"
     version: "{{ item[0]['version'] | default('main') }}"
-    #key_file: "{{ item[0]['unix_home'] }}/.ssh/id_{{ item[0]['ssh_key_type'] }}"
     accept_newhostkey: true
     force: false
   loop: "{{ user['git_repos'] }}"

@@ -7,7 +7,7 @@ autonomy_common_vmail_dir: "{{ autonomy_common_mail_dir }}/vmail"
 mail_location: "maildir:{{ autonomy_common_vmail_dir }}/%d/%n/mail:LAYOUT=fs"
 mail_uid: "{{ user_vmail_id_number }}"
 mail_gid: "{{ user_vmail_id_number }}"
-mail_privileged_group:  mail
+mail_privileged_group: mail
 mail_recipient_delimiter: "{{ autonomy_mail_recipient_delimiter }}"
 mail_user: vmail
 mail_group: "{{ mail_user }}"

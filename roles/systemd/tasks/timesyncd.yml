@@ -21,4 +21,5 @@
     - systemd
     - systemd-timesyncd
 
-- include_tasks: "timesyncd_{{ ansible_os_family | lower }}.yml"
+- name: "Run tasks for: {{ ansible_os_family }}"
+  ansible.builtin.include_tasks: "timesyncd_{{ ansible_os_family | lower }}.yml"

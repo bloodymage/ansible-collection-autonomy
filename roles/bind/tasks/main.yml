@@ -1,6 +1,6 @@
 ---
 - name: "Include OS-specific variables."
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"
@@ -43,14 +43,14 @@
     - bind-rpz
 
 - name: "Configure Dynamic DNS Keys."
-  include_tasks: dynamic_dns.yml
+  ansible.builtin.include_tasks: dynamic_dns.yml
   tags:
     - bind
     - bind-dyndns
     - bind-dyndns-force-key-change
 
 - name: "Configure Dynamic RPZ Keys."
-  include_tasks: dynamic_rpz.yml
+  ansible.builtin.include_tasks: dynamic_rpz.yml
   when:
     - autonomy_common_dns_rpz_enabled
     - inventory_hostname not in groups['samba_domain_controllers'] | default([])
@@ -60,7 +60,7 @@
     - bind-dynrpz-force-key-change
 
 - name: "Configure RPZ."
-  include_tasks: "rpz.yml"
+  ansible.builtin.include_tasks: "rpz.yml"
   when:
     - autonomy_common_dns_rpz_enabled
     - inventory_hostname not in groups['samba_domain_controllers'] | default([])
@@ -69,7 +69,7 @@
     - bind-rpz
 
 - name: "Configure Bind."
-  include_tasks: config.yml
+  ansible.builtin.include_tasks: config.yml
   tags:
     - bind
     - bind-dyndns
@@ -88,7 +88,7 @@
   ansible.builtin.meta: flush_handlers
 
 - name: "Configure Zones."
-  include_tasks: "zones.yml"
+  ansible.builtin.include_tasks: "zones.yml"
   tags:
     - bind
     - bind-zones

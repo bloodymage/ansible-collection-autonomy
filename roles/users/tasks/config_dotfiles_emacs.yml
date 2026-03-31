@@ -44,7 +44,7 @@
   vars:
     __dotfiles_home: "{{ item.unix_home | default(autonomy_users_dotfiles_home + '/' + item.username) }}"
     __user: "{{ item.username }}"
-    __repo: "{{ autonomy_user_dotfiles_emacsd_repo }}"
+    __http_repo: "{{ autonomy_user_dotfiles_emacsd_repo }}"
     __ssh_repo: "{{ autonomy_user_dotfiles_emacsd_ssh_repo }}"
     __repo: "{% if __user in autonomy_github_users %}{{ __ssh_repo }}{% else %}{{ __http_repo }}{% endif %}"
   when:

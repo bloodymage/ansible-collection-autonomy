@@ -1,0 +1,19 @@
+---
+- name: "Run Miscellaneous Maintenance Actions."
+  hosts: all
+  gather_facts: false
+  serial: 1
+  roles:
+    - role: bloodymage.autonomy.maintenance
+      vars:
+        __maintenance_tasks: "wakeonlan"
+      tags:
+        - never
+        - wakeonlan
+        - wake-on-lan
+    - role: bloodymage.autonomy.maintenance
+      vars:
+        __maintenance_tasks: "reboot"
+      tags:
+        - never
+        - reboot

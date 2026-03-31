@@ -84,7 +84,7 @@
     __password_lookup: "{{ __password_store_id }} {{ __password_create }} {{ __password_length }} {{ __password_symbols }} {{ __password_overwrite }}"
     __login_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/services/mysql/{{ autonomy_common_zone_name }}"
     __login_lookup: "{{ __login_store_id }}"
-  #no_log: true
+  # no_log: true
   tags:
     - mysql_databases
     - mysql-databases

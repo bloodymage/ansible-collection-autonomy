@@ -1,6 +1,6 @@
 ---
 - name: Include OS-specific variables.
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"
@@ -13,7 +13,7 @@
     - upgrade
 
 - name: "Update distribution repos 'debian.sources' format."
-  include_tasks: "debian_sources.yml"
+  ansible.builtin.include_tasks: "debian_sources.yml"
   vars:
     __dist_major_version: "{{ ansible_distribution_major_version | int }}"
   when:
@@ -24,7 +24,7 @@
     - upgrade
 
 - name: "Update distribution repos 'sources.list' format."
-  include_tasks: "sources_list.yml"
+  ansible.builtin.include_tasks: "sources_list.yml"
   vars:
     __dist_major_version: "{{ ansible_distribution_major_version | int }}"
   when:

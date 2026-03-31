@@ -102,7 +102,7 @@
       name: "{{ autonomy_common_zone_name }}"
       domain: "{{ autonomy_common_zone_domain }}"
       existing_algorithm: "{{ algorithms['stdout'] | default(omit) }}"
-      keyfile_status: "{{ existing_ddns_keys['exists'] | default(false)}}"
+      keyfile_status: "{{ existing_ddns_keys['exists'] | default(false) }}"
       samba_domain: "{{ __bind_dns_zone_samba_domain }}"
   delegate_to: localhost
   become: false
@@ -187,7 +187,7 @@
     mode: "0640"
   become: true
   notify: restart bind
-  #no_log: true
+  # no_log: true
   vars:
     __password_userpass: "userpass={{ bind_ddns_keys['stdout'] }}"
     __password_lookup: "{{ autonomy_bind_dyndns_password_store_lookup }} {{ __password_userpass }}"

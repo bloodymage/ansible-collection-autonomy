@@ -1,9 +1,17 @@
 ---
+# ==================================================================================================
+#
+# FIXME: ansible-lint ingnore-errors
+#
+# This is done because it's used to check connectivity from one host to another.  If it fails, I
+# want to know about it, but I also want it to continue and run other diagnostic tests.
+#
+# ==================================================================================================
 - name: "Ping inventory hosts."
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: "ping -c 1 {{ hostvars[item]['ansible_host'] }}"
   loop: "{{ groups['all'] }}"
-  ignore_errors: true
+  ignore_errors: true # noqa: ignore-errors
   tags:
     - connectivity
     - ping

@@ -23,7 +23,7 @@
   when:
     - item.ca_id != "root"
     - item.ca_id != "intermediate"
- 
+
 - name: "Find root certificate for intermediate CA chain."
   community.crypto.certificate_complete_chain:
     input_chain: "{{ lookup('file', __input_chain_path) }}"
@@ -64,4 +64,3 @@
   become: false
   when:
     - item.complete_chain is defined
-

@@ -15,31 +15,31 @@
       tags:
         - aliases
 
-- name: "Exim Hosts"
-  hosts: linux:!localhost:!vendor_managed:!public_zone:!virtual_hosts:!postfix_servers
-  roles:
-    - role: bloodymage.autonomy.exim
-      tags:
-        - exim
+# - name: "Exim Hosts"
+#   hosts: linux:!localhost:!vendor_managed:!public_zone:!virtual_hosts:!postfix_servers
+#   roles:
+#     - role: bloodymage.autonomy.exim
+#       tags:
+#         - exim
 
-- name: "Configure mailservers."
-  hosts: postfix_servers:!public_zone
-  roles:
-    - role: bloodymage.autonomy.spamassassin
-      tags:
-        - spamassassin
-    # - role: bloodymage.autonomy.clamav
-    #   tags:
-    #     - clamav
+# - name: "Configure mailservers."
+#   hosts: postfix_servers:!public_zone
+#   roles:
+#     - role: bloodymage.autonomy.spamassassin
+#       tags:
+#         - spamassassin
+#     # - role: bloodymage.autonomy.clamav
+#     #   tags:
+#     #     - clamav
 
-- name: "Configure Dovecot Servers."
-  hosts: dovecot_servers:!public_zone
-  roles:
-    - role: bloodymage.autonomy.dovecot
+# - name: "Configure Dovecot Servers."
+#   hosts: dovecot_servers:!public_zone
+#   roles:
+#     - role: bloodymage.autonomy.dovecot
 
-- name: "Configure Postfix Servers."
-  hosts: postfix_servers:!public_zone
-  roles:
-    - role: bloodymage.autonomy.postfix
-      tags:
-        - postfix
+# - name: "Configure Postfix Servers."
+#   hosts: postfix_servers:!public_zone
+#   roles:
+#     - role: bloodymage.autonomy.postfix
+#       tags:
+#         - postfix

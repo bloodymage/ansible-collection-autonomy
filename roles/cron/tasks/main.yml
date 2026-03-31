@@ -1,7 +1,7 @@
 ---
 # tasks file for etc_crontab
 - name: Include OS-specific variables.
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"

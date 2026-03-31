@@ -11,7 +11,8 @@
   hosts: all:!localhost
   ignore_unreachable: true
   tasks:
-    - ansible.builtin.include_role:
+    - name: "Include maintenance role."
+      ansible.builtin.include_role:
         name: bloodymage.autonomy.maintenance
       vars:
         __maintenance_tasks: "dns"
@@ -45,4 +46,5 @@
         - user-dotfiles
         - user_dotfiles
 
-- import_playbook: acmeca_certs.yml
+- name: "Run AcmeCA Certificates Playbook."
+  import_playbook: acmeca_certs.yml

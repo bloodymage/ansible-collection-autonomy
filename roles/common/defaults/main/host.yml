@@ -9,4 +9,3 @@ autonomy_common_ipv6_address: "{{ ansible_default_ipv6['address'] | default(None
 autonomy_common_virtual_host: false
 
 autonomy_common_use_password_logon: false
-

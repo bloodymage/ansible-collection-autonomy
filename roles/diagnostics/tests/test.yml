@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: "Test diagnostics role."
+  hosts: localhost
   remote_user: root
   roles:
-    - diagnostics_ping
+    - diagnostics

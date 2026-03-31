@@ -5,40 +5,40 @@
       tags:
         - always
 
-- name: "Configure workstations."
-  hosts: workstations
-  roles:
-    - role: bloodymage.autonomy.cups
-      tags:
-        - cups
-    - role: bloodymage.autonomy.opensc
-      when:
-        - autonomy_common_opensc_enabled
-      tags:
-        - opensc
-    - role: bloodymage.autonomy.libnss3tools
-      tags:
-        - nssdb
-    - role: bloodymage.autonomy.devilspie2
-      tags:
-        - devilspie2
-        - devilspie
-    - role: bloodymage.autonomy.gpgsync
-      tags:
-        - gpgsync
-    - role: bloodymage.autonomy.evolution
-      tags:
-        - evolution
+# - name: "Configure workstations."
+#   hosts: workstations
+#   roles:
+#     - role: bloodymage.autonomy.cups
+#       tags:
+#         - cups
+#     - role: bloodymage.autonomy.opensc
+#       when:
+#         - autonomy_common_opensc_enabled
+#       tags:
+#         - opensc
+#     - role: bloodymage.autonomy.libnss3tools
+#       tags:
+#         - nssdb
+#     - role: bloodymage.autonomy.devilspie2
+#       tags:
+#         - devilspie2
+#         - devilspie
+#     - role: bloodymage.autonomy.gpgsync
+#       tags:
+#         - gpgsync
+#     - role: bloodymage.autonomy.evolution
+#       tags:
+#         - evolution
 
-- name: "Configure desktop systems."
-  hosts: workstations:mythtv_frontend
-  roles:
-    - role: bloodymage.autonomy.firefox
-      tags:
-        - firefox
-    - role: bloodymage.autonomy.chromium
-      tags:
-        - chromium
-    - role: bloodymage.autonomy.xscreensaver
-      tags:
-        - xscreensaver
+# - name: "Configure desktop systems."
+#   hosts: workstations:mythtv_frontend
+#   roles:
+#     - role: bloodymage.autonomy.firefox
+#       tags:
+#         - firefox
+#     - role: bloodymage.autonomy.chromium
+#       tags:
+#         - chromium
+#     - role: bloodymage.autonomy.xscreensaver
+#       tags:
+#         - xscreensaver

@@ -1,7 +1,7 @@
 ---
 # tasks file for maintenance
 - name: Include OS-specific variables.
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"
@@ -18,7 +18,7 @@
     - system-upgrade-debug
 
 - name: "Include DNS Tasks."
-  include_tasks: "dns.yml"
+  ansible.builtin.include_tasks: "dns.yml"
   when:
     __maintenance_tasks == "dns"
   tags:
@@ -29,17 +29,17 @@
     - dns-cloudflare
 
 - name: "Include Reboot Tasks."
-  include_tasks: "reboot.yml"
+  ansible.builtin.include_tasks: "reboot.yml"
   when:
     __maintenance_tasks == "reboot"
 
 - name: "Include Service Restart Tasks."
-  include_tasks: "service_restart.yml"
+  ansible.builtin.include_tasks: "service_restart.yml"
   when:
     __maintenance_tasks == "service restart"
 
 - name: "Include System Upgrade Tasks."
-  include_tasks: "upgrade.yml"
+  ansible.builtin.include_tasks: "upgrade.yml"
   when:
     __maintenance_tasks == "upgrade"
   tags:
@@ -47,11 +47,11 @@
     - upgrade
 
 - name: "Include Wake-on-LAN Tasks."
-  include_tasks: "wake_on_lan.yml"
+  ansible.builtin.include_tasks: "wake_on_lan.yml"
   when:
     __maintenance_tasks == "wakeonlan"
 
 - name: "Include Database Tasks."
-  include_tasks: "database.yml"
+  ansible.builtin.include_tasks: "database.yml"
   when:
     __maintenance_tasks == "database"

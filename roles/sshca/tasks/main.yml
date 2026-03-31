@@ -6,7 +6,7 @@
 #
 # ==================================================================================================
 - name: "Include OS-specific variables."
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"
@@ -20,14 +20,14 @@
     - install-packages
 
 - name: "Create SshCA."
-  include_tasks: "sshca.yml"
+  ansible.builtin.include_tasks: "sshca.yml"
   when:
     - __sshca_tasks == "sshca"
   tags:
     - sshca
 
 - name: "Configure SshCA Host Certs."
-  include_tasks: "sshca_host_certs.yml"
+  ansible.builtin.include_tasks: "sshca_host_certs.yml"
   when:
     - __sshca_tasks == "hostcerts"
   tags:
@@ -35,7 +35,7 @@
     - sshca-host-certs
 
 - name: "Configure SshCA User Certs."
-  include_tasks: "sshca_user_certs.yml"
+  ansible.builtin.include_tasks: "sshca_user_certs.yml"
   when:
     - __sshca_tasks == "usercerts"
   tags:

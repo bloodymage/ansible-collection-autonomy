@@ -2,7 +2,7 @@
 # ==================================================================================================
 #
 # Tasks: Copy Host Certificate back to Server.
-#  
+#
 #
 # ==================================================================================================
 - name: "Copy Host Certificate."
@@ -83,9 +83,9 @@
 #   loop: "{{ ownca_certificate_authorities }}"
 #   become: true
 
-- name: "Generate PKCS#12 file."
+- name: "Generate PKCS#12 file." # noqa: jinja[spacing]
   community.crypto.openssl_pkcs12:
-    path:  "{{ autonomy_ownca_host_sysconf_pkcs12_path }}"
+    path: "{{ autonomy_ownca_host_sysconf_pkcs12_path }}"
     certificate_path: "{{ autonomy_ownca_host_usr_cert_path }}"
     privatekey_path: "{{ autonomy_ownca_host_private_key_path }}"
     passphrase: "{{ __password }}"
@@ -100,7 +100,7 @@
     mode: "{{ autonomy_ownca_host_pkcs12_mode }}"
     state: present
     backup: "{{ 'false' if autonomy_common_etckeeper_enabled else 'true' }}"
-    #force: "{{ __autonomy_common_ownca_regenerate_csr }}"
+    # force: "{{ __autonomy_common_ownca_regenerate_csr }}"
   become: true
   vars:
     __password: >-

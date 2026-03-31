@@ -11,7 +11,7 @@
   ansible.builtin.apt:
     update_cache: true
     upgrade: safe
-    cache_valid_time: 86400 #One day
+    cache_valid_time: 86400 # One day
   become: true
   tags:
     - system_upgrade
@@ -23,7 +23,7 @@
   ansible.builtin.apt:
     update_cache: true
     upgrade: full
-    cache_valid_time: 86400 #One day
+    cache_valid_time: 86400 # One day
   become: true
   tags:
     - system_upgrade

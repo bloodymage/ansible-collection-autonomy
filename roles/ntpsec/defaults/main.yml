@@ -45,9 +45,7 @@ autonomy_ntp_tos_floor: 1
 #
 # ==================================================================================================
 autonomy_ntp_tos_minclock: >-
-  {%- if autonomy_ntp_server_address is string -%}
-  1
-  {%- elif autonomy_ntp_server_addresses is iterable -%}
+  {%- if autonomy_ntp_server_addresses is iterable -%}
   {{ autonomy_ntp_server_addresses | length }}
   {%- else -%}
   1

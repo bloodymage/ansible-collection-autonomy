@@ -1,6 +1,6 @@
 ---
 - name: "Include Host Generation Prep Tasks."
-  include_tasks: "cert_hostgen_prep.yml"
+  ansible.builtin.include_tasks: "cert_hostgen_prep.yml"
   when:
     - not autonomy_acmeca_generate_locally
   tags:
@@ -10,7 +10,7 @@
     - acmeca-certs
 
 - name: "Include Local Generation Prep Tasks."
-  include_tasks: "cert_localgen_prep.yml"
+  ansible.builtin.include_tasks: "cert_localgen_prep.yml"
   when:
     - autonomy_acmeca_generate_locally
   tags:
@@ -19,7 +19,7 @@
     - acmeca-cert
     - acmeca-certs
 
-- name: "Begin Let's Encrypt challenges."
+- name: "Begin Let's Encrypt challenges." # noqa: jinja[spacing]
   community.crypto.acme_certificate:
     dest: "{{ autonomy_acmeca_user_cert_path }}"
     chain_dest: "{{ autonomy_acmeca_user_chain_path }}"
@@ -69,7 +69,7 @@
     - acmeca-http
 
 # - name: "Run HTTP-01 Challenge Tasks."
-#   include_tasks: "http_challenge.yml"
+#   ansible.builtin.include_tasks: "http_challenge.yml"
 #   when:
 #     - autonomy_acmeca_challenge_type == "http-01"
 #     - acme_challenge is defined
@@ -80,7 +80,7 @@
 #     - acmeca-http
 
 - name: "Run DNS-01 Challenge Tasks."
-  include_tasks: "cert_dns_challenge.yml"
+  ansible.builtin.include_tasks: "cert_dns_challenge.yml"
   when:
     - autonomy_acmeca_challenge_type == "dns-01"
     - __autonomy_acmeca_challenge is defined
@@ -93,7 +93,7 @@
     - acmeca-certs
     - acmeca-dns
 
-- name: "Complete Let's Encrypt challenges."
+- name: "Complete Let's Encrypt challenges." # noqa: jinja[spacing]
   community.crypto.acme_certificate:
     dest: "{{ autonomy_acmeca_user_cert_path }}"
     chain_dest: "{{ autonomy_acmeca_user_chain_path }}"
@@ -129,7 +129,7 @@
     - acmeca-dns
 
 - name: "Include Host Final Tasks."
-  include_tasks: "cert_hostgen_final.yml"
+  ansible.builtin.include_tasks: "cert_hostgen_final.yml"
   when:
     - not autonomy_acmeca_generate_locally
   tags:
@@ -140,7 +140,7 @@
     - acmeca-dns
 
 - name: "Include Local Final Tasks."
-  include_tasks: "cert_localgen_final.yml"
+  ansible.builtin.include_tasks: "cert_localgen_final.yml"
   when:
     - autonomy_acmeca_generate_locally
   tags:
@@ -150,7 +150,7 @@
     - acmeca-certs
 
 # - name: "Run http-01 Clean-Up Tasks."
-#   include_tasks: "http_clean_up.yml"
+#   ansible.builtin.include_tasks: "http_clean_up.yml"
 #   when:
 #     - autonomy_acmeca_challenge_type == "http-01"
 #   tags:
@@ -161,7 +161,7 @@
 #     - acmeca-http
 
 - name: "Run DNS-01 clean up tasks."
-  include_tasks: "cert_dns_cleanup.yml"
+  ansible.builtin.include_tasks: "cert_dns_cleanup.yml"
   when:
     - __autonomy_acmeca_challenge is defined
     - __autonomy_acmeca_challenge['challenge_data_dns'] is defined

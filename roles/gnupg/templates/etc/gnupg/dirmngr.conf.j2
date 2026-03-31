@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
-{% if autonomy_gnupg_keyservers is truthy %}
-{% for server in autonomy_gnupg_keyservers %}
+{% if autonomy_common_gnupg_keyservers is truthy %}
+{% for server in autonomy_common_gnupg_keyservers %}
 keyserver {{ server.name }}
   {%- if server.options is defined -%}
     {%- for option in server.options -%}
@@ -12,6 +12,6 @@ keyserver {{ server.name }}
 {% endif %}
 
 # Tor
-{% if autonomy_gnupg_use_tor -%}
+{% if autonomy_common_gnupg_use_tor -%}
   use-tor
 {% endif %}

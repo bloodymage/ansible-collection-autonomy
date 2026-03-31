@@ -1,8 +1,8 @@
 ---
 - name: "Generate Let's Encrypt Certificate private key."
   community.crypto.openssl_privatekey:
-    path: '{{ autonomy_acmeca_user_key_path }}'
-    type: '{{ __type }}'
+    path: "{{ autonomy_acmeca_user_key_path }}"
+    type: "{{ __autonomy_acmeca_host_key_type }}"
     size: "{{ autonomy_acmeca_host_key_size }}"
     regenerate: "full_idempotence"
     owner: "{{ autonomy_acmeca_user_owner }}"
@@ -13,9 +13,6 @@
     force: "{{ autonomy_acmeca_regenerate_host_key }}"
   become: false
   delegate_to: localhost
-  vars:
-    __tmp_type: "{{ autonomy_acmeca_host_key_type }}"
-    __type: "{% if __tmp_type.lower() in ['ed25519','ed448'] %}{{ __tmp_type | capitalize }}{% else %}{{ __tmp_type | upper }}{% endif %}"
   tags:
     - acmeca
     - acmeca-test

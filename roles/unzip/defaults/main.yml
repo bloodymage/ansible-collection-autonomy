@@ -2,4 +2,3 @@
 # defaults file for unzip
 autonomy_unzip_packages:
   - unzip
-

@@ -113,7 +113,7 @@
     - inventory_hostname in groups[item.name] | default([])
 
 - name: "Setup OwnCA: Definitions."
-  include_tasks: "ca_definitions.yml"
+  ansible.builtin.include_tasks: "ca_definitions.yml"
 
 - name: "Get Component CA Cert information."
   community.crypto.x509_certificate_info:
@@ -123,7 +123,7 @@
   become: false
 
 - name: "Include OS Family Preparation Tasks."
-  include_tasks: "host_{{ ansible_os_family | lower }}_prep.yml"
+  ansible.builtin.include_tasks: "host_{{ ansible_os_family | lower }}_prep.yml"
   when:
     - ansible_network_os is not defined
     - ansible_os_family is defined
@@ -131,7 +131,7 @@
     - inventory_hostname not in groups["vendor_managed"]
 
 - name: "Include Localhost Preparation Tasks."
-  include_tasks: "host_localhost_prep.yml"
+  ansible.builtin.include_tasks: "host_localhost_prep.yml"
   when:
     - ansible_network_os is defined or autonomy_ownca_generate_locally or inventory_hostname in groups["vendor_managed"]
 
@@ -185,7 +185,7 @@
 #     - host_cert.authority_key_identifier is defined
 #     - host_cert.authority_key_identifier != component_cert.subject_key_identifier
 
-- name: "Generate Host Certificate."
+- name: "Generate Host Certificate." # noqa: jinja[spacing]
   community.crypto.x509_certificate:
     path: "{{ autonomy_ownca_hosts_cert_path }}"
     csr_path: "{{ autonomy_ownca_hosts_csr_path }}"
@@ -197,7 +197,7 @@
     group: "{{ autonomy_ownca_group }}"
     mode: "{{ autonomy_ownca_hosts_cert_mode }}"
     backup: "{{ autonomy_ownca_host_cert_backup }}"
-    #force: "{{ __host_cert_force_regeneration }}"
+    # force: "{{ __host_cert_force_regeneration }}"
   become: false
   delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
   vars:
@@ -238,7 +238,7 @@
     - parent_cert_authorities.complete_chain is defined
 
 - name: "Include OS Family Finalization Tasks."
-  include_tasks: "host_{{ ansible_os_family | lower }}_final.yml"
+  ansible.builtin.include_tasks: "host_{{ ansible_os_family | lower }}_final.yml"
   when:
     - ansible_network_os is not defined
     - ansible_os_family is defined
@@ -246,19 +246,19 @@
     - inventory_hostname not in groups["vendor_managed"]
 
 # - name: "Include NetworkOS Tasks."
-#   include_tasks: "hosts_{{ ansible_network_os.split('.')[2] | lower }}_final.yml"
+#   ansible.builtin.include_tasks: "hosts_{{ ansible_network_os.split('.')[2] | lower }}_final.yml"
 #   when:
 #     - ansible_network_os is defined
 #     - not ownca_generate_locally
 
 # - name: "Include Local tasks."
-#   include_tasks: "hosts_localhost_final.yml"
+#   ansible.builtin.include_tasks: "hosts_localhost_final.yml"
 #   when:
 #     - ownca_generate_locally
 #     - inventory_hostname in groups["vendor_managed"]
 
 # - name: "Copy to Samba File Server."
-#   include_tasks: "copy_to_samba.yml"
+#   ansible.builtin.include_tasks: "copy_to_samba.yml"
 #   when:
 #     - inventory_hostname == groups['samba_ownca_user_hosts'][0] | default([])
 

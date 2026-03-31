@@ -1,4 +1,17 @@
 ---
-- import_playbook: ownca_certificate_authorities.yml
-- import_playbook: ownca_host_certs.yml
-- import_playbook: ownca_user_certs.yml
+- name: "Run Autoconfig."
+  hosts: all:!localhost:!vendor_managed:!dns_only
+  gather_facts: false
+  roles:
+    - role: bloodymage.autonomy.autoconfig
+      tags:
+        - always
+
+- name: "Run OwnCA Certificate Authorities Playbook."
+  import_playbook: ownca_certificate_authorities.yml
+
+- name: "Run OwnCA Host Certificates Playbook."
+  import_playbook: ownca_host_certs.yml
+
+# - name: "Run OwnCA User Certificates Playbook."
+#   import_playbook: ownca_user_certs.yml

@@ -1,5 +1,7 @@
 ---
-- hosts: all
+- name: "Autoconfig All hosts."
+  hosts: all
+  ignore_unreachable: true
   roles:
     - role: bloodymage.autonomy.autoconfig
       tags:

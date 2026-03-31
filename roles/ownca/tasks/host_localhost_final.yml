@@ -25,7 +25,7 @@
   community.crypto.openssl_pkcs12:
     action: export
     backup: true
-    path:  "{{ ownca_hosts_directory }}/pkcs12/{{ inventory_hostname }}.pkcs12"
+    path: "{{ ownca_hosts_directory }}/pkcs12/{{ inventory_hostname }}.pkcs12"
     friendly_name: "{{ inventory_hostname }}"
     passphrase: "{{ __ownca_host_cert_pkcs12_password }}"
     privatekey_path: "{{ ownca_hosts_directory }}/private/{{ inventory_hostname }}.key"
@@ -39,7 +39,7 @@
     mode: '0600'
     owner: "{{ autonomy_ownca_user }}"
     group: "{{ autonomy_ownca_group }}"
-    #force: true
+    # force: true
   become: false
   delegate_to: "{{ autonomy_ownca_certificate_authority_host }}"
 

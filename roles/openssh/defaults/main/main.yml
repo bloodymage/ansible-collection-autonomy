@@ -35,7 +35,7 @@ autonomy_openssh_config_files:
   - name: "{{ autonomy_openssh_ssh_known_hosts_file }}"
     path: "{{ autonomy_openssh_ssh_known_hosts_path }}"
 
-#autonomy_openssh_authorized_keys: "authorized_keys"
+# autonomy_openssh_authorized_keys: "authorized_keys"
 autonomy_openssh_authorized_principals: "%u"
 
 autonomy_sshca_hostca_known_hosts:

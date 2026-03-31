@@ -32,14 +32,12 @@
     identifier: "{{ item['mail'] | default(__mail) }}"
     type: "user"
     principals: "{{ item['ssh_principals'] | default(None) }}"
-    #serial_number:
     valid_at: "{{ autonomy_sshca_user_valid_at }}"
     valid_from: "{{ autonomy_sshca_user_valid_from }}"
     valid_to: "{{ autonomy_sshca_user_valid_to }}"
     owner: "{{ autonomy_common_user }}"
     group: "{{ autonomy_common_group }}"
     mode: "0600"
-    #ignore_timestamps: "{{ autonomy_sshca_user_ignore_timestamps }}"
     regenerate: "{{ autonomy_sshca_user_regenerate }}"
     state: "present"
     force: "{{ autonomy_sshca_user_force }}"
@@ -62,14 +60,12 @@
     type: "user"
     principals: "{{ item['ssh_principals'] | default(None) }}"
     signature_algorithm: "{{ autonomy_sshca_userca_signature_algorithm }}"
-    #serial_number:
     valid_at: "{{ autonomy_sshca_user_valid_at }}"
     valid_from: "{{ autonomy_sshca_user_valid_from }}"
     valid_to: "{{ autonomy_sshca_user_valid_to }}"
     owner: "{{ autonomy_common_user }}"
     group: "{{ autonomy_common_group }}"
     mode: "0600"
-    #ignore_timestamps: "{{ autonomy_sshca_user_ignore_timestamps }}"
     regenerate: "{{ autonomy_sshca_user_regenerate }}"
     state: "present"
     force: "{{ autonomy_sshca_user_force }}"
@@ -90,7 +86,6 @@
     owner: "{{ item['id_number'] }}"
     group: "{{ item['id_number'] }}"
     mode: "0644"
-    #backup: true
   loop: "{{ autonomy_sshca_users }}"
   become: true
   when:

@@ -24,7 +24,7 @@ autonomy_openssh_sshd_conf_allow_groups: []
 autonomy_openssh_sshd_conf_allow_stream_local_forwarding: "{{ __autonomy_openssh_sshd_conf_allow_stream_local_forwarding }}"
 autonomy_openssh_sshd_conf_allow_tcp_forwarding: "{{ __autonomy_openssh_sshd_conf_allow_tcp_forwarding }}"
 autonomy_openssh_sshd_conf_allow_users: []
-#autonomy_openssh_sshd_conf_authentication_methods: "{{ __autonomy_openssh_sshd_conf_authentication_methods }}"
+# autonomy_openssh_sshd_conf_authentication_methods: "{{ __autonomy_openssh_sshd_conf_authentication_methods }}"
 autonomy_openssh_sshd_conf_authorized_keys_command: "{{ __autonomy_openssh_sshd_conf_authorized_keys_command }}"
 autonomy_openssh_sshd_conf_authorized_keys_command_user: "{{ __autonomy_openssh_sshd_conf_authorized_keys_command_user }}"
 autonomy_openssh_sshd_conf_authorized_keys_file: ""
@@ -32,7 +32,7 @@ autonomy_openssh_sshd_conf_authorized_principals_command: ""
 autonomy_openssh_sshd_conf_authorized_principals_command_user: ""
 autonomy_openssh_sshd_conf_banner: "{{ __autonomy_openssh_sshd_conf_banner }}"
 autonomy_openssh_sshd_conf_ca_signature_algorithms: "{{ __autonomy_openssh_sshd_conf_ca_signature_algorithms }}"
-#autonomy_openssh_sshd_conf_channel_timeout:
+# autonomy_openssh_sshd_conf_channel_timeout:
 autonomy_openssh_sshd_conf_chroot_dir: "{{ __autonomy_openssh_sshd_conf_chroot_dir }}"
 autonomy_openssh_sshd_conf_ciphers: "{{ __autonomy_openssh_sshd_conf_ciphers }}"
 autonomy_openssh_sshd_conf_client_alive_count_max: "{{ __autonomy_openssh_sshd_conf_client_alive_count_max }}"
@@ -44,19 +44,19 @@ autonomy_openssh_sshd_conf_deny_users: []
 autonomy_openssh_sshd_conf_disable_forwarding: "{{ __autonomy_openssh_sshd_conf_disable_forwarding }}"
 autonomy_openssh_sshd_conf_expose_auth_info: "{{ __autonomy_openssh_sshd_conf_expose_auth_info }}"
 autonomy_openssh_sshd_conf_fingerprint_hash: "{{ __autonomy_openssh_sshd_conf_fingerprint_hash }}"
-#autonomy_openssh_sshd_conf_force_command:
+# autonomy_openssh_sshd_conf_force_command:
 autonomy_openssh_sshd_conf_gateway_ports: "{{ __autonomy_openssh_sshd_conf_gateway_ports }}"
 autonomy_openssh_sshd_conf_gssapi_authentication: "{{ __autonomy_openssh_sshd_conf_gssapi_authentication }}"
 autonomy_openssh_sshd_conf_gssapi_cleanup_credentials: "{{ __autonomy_openssh_sshd_conf_gssapi_cleanup_credentials }}"
 autonomy_openssh_sshd_conf_gssapi_key_exchange: "{{ __autonomy_openssh_sshd_conf_gssapi_key_exchange }}"
 autonomy_openssh_sshd_conf_gssapi_store_credentials_on_rekey: "{{ __autonomy_openssh_sshd_conf_gssapi_store_credentials_on_rekey }}"
 autonomy_openssh_sshd_conf_gssapi_strict_accept_or_check: "{{ __autonomy_openssh_sshd_conf_gssapi_strict_accept_or_check }}"
-#autonomy_openssh_sshd_conf_gssapi_kex_algoritms:
-#autonomy_openssh_sshd_conf_host_based_accepted_algorithms:
-#autonomy_openssh_sshd_conf_host_based_authentication:
-#autonomy_openssh_sshd_conf_host_based_uses_name_from_packet_only:
+# autonomy_openssh_sshd_conf_gssapi_kex_algoritms:
+# autonomy_openssh_sshd_conf_host_based_accepted_algorithms:
+# autonomy_openssh_sshd_conf_host_based_authentication:
+# autonomy_openssh_sshd_conf_host_based_uses_name_from_packet_only:
 autonomy_openssh_sshd_conf_host_key_agent: ""
-#autonomy_openssh_sshd_conf_host_key_algorithms:
+# autonomy_openssh_sshd_conf_host_key_algorithms:
 autonomy_openssh_sshd_conf_ignore_rhosts: "{{ __autonomy_openssh_sshd_conf_ignore_rhosts }}"
 autonomy_openssh_sshd_conf_ignore_user_known_hosts: "{{ __autonomy_openssh_sshd_conf_ignore_user_known_hosts }}"
 autonomy_openssh_sshd_conf_ip_qos: "{{ __autonomy_openssh_sshd_conf_ip_qos }}"
@@ -69,42 +69,42 @@ autonomy_openssh_sshd_conf_listen_address: "{{ __autonomy_openssh_sshd_conf_list
 autonomy_openssh_sshd_conf_login_grace_time: "{{ __autonomy_openssh_sshd_conf_login_grace_time }}"
 autonomy_openssh_sshd_conf_log_level: "{{ __autonomy_openssh_sshd_conf_log_level }}"
 autonomy_openssh_sshd_conf_log_verbose: ""
-#autonomy_openssh_sshd_conf_macs:
+# autonomy_openssh_sshd_conf_macs:
 autonomy_openssh_sshd_conf_max_auth_tries: "{{ __autonomy_openssh_sshd_conf_max_auth_tries }}"
 autonomy_openssh_sshd_conf_max_sessions: "{{ __autonomy_openssh_sshd_conf_max_sessions }}"
 autonomy_openssh_sshd_conf_max_startups: "{{ __autonomy_openssh_sshd_conf_max_startups }}"
 autonomy_openssh_sshd_conf_pam_service_name: "{{ __autonomy_openssh_sshd_conf_pam_service_name }}"
 autonomy_openssh_sshd_conf_password_authentication: "{{ __autonomy_openssh_sshd_conf_password_authentication }}"
 autonomy_openssh_sshd_conf_permit_empty_passwords: "{{ __autonomy_openssh_sshd_conf_permit_empty_passwords }}"
-#autonomy_openssh_sshd_conf_permit_listen:
-#autonomy_openssh_sshd_conf_permit_open:
+# autonomy_openssh_sshd_conf_permit_listen:
+# autonomy_openssh_sshd_conf_permit_open:
 autonomy_openssh_sshd_conf_permit_tty: "{{ __autonomy_openssh_sshd_conf_permit_tty }}"
 autonomy_openssh_sshd_conf_permit_tunnel: "{{ __autonomy_openssh_sshd_conf_permit_tunnel }}"
 autonomy_openssh_sshd_conf_permit_user_environment: "{{ __autonomy_openssh_sshd_conf_permit_user_environment }}"
-#autonomy_openssh_sshd_conf_permit_user_rc:
+# autonomy_openssh_sshd_conf_permit_user_rc:
 autonomy_openssh_sshd_conf_per_source_max_startups: "{{ __autonomy_openssh_sshd_conf_per_source_max_startups }}"
 autonomy_openssh_sshd_conf_per_source_net_block_size: "{{ __autonomy_openssh_sshd_conf_per_source_net_block_size }}"
-#autonomy_openssh_sshd_conf_per_source_penalties:
-#autonomy_openssh_sshd_conf_per_source_penalty_exempt_list:
+# autonomy_openssh_sshd_conf_per_source_penalties:
+# autonomy_openssh_sshd_conf_per_source_penalty_exempt_list:
 autonomy_openssh_sshd_conf_port: "{{ __autonomy_openssh_sshd_conf_port }}"
 autonomy_openssh_sshd_conf_print_last_log: "{{ __autonomy_openssh_sshd_conf_print_last_log }}"
-#autonomy_openssh_sshd_conf_pubkey_accepted_algorithms:
-#autonomy_openssh_sshd_conf_pubkey_auth_options:
+# autonomy_openssh_sshd_conf_pubkey_accepted_algorithms:
+# autonomy_openssh_sshd_conf_pubkey_auth_options:
 autonomy_openssh_sshd_conf_pubkey_authentication: "{{ __autonomy_openssh_sshd_conf_pubkey_authentication }}"
-#autonomy_openssh_sshd_conf_refuse_connection:
-#autonomy_openssh_sshd_conf_rekey_limit:
-#autonomy_openssh_sshd_conf_required_ra_size:
-#autonomy_openssh_sshd_conf_revoked_keys:
-#autonomy_openssh_sshd_conf_security_key_provider:
-#autonomy_openssh_sshd_conf_set_env:
-#autonomy_openssh_sshd_conf_auth_path:
-#autonomy_openssh_sshd_conf_session_path:
-#autonomy_openssh_sshd_conf_stream_local_bind_mask:
-#autonomy_openssh_sshd_conf_stream_local_bind_unlink:
+# autonomy_openssh_sshd_conf_refuse_connection:
+# autonomy_openssh_sshd_conf_rekey_limit:
+# autonomy_openssh_sshd_conf_required_ra_size:
+# autonomy_openssh_sshd_conf_revoked_keys:
+# autonomy_openssh_sshd_conf_security_key_provider:
+# autonomy_openssh_sshd_conf_set_env:
+# autonomy_openssh_sshd_conf_auth_path:
+# autonomy_openssh_sshd_conf_session_path:
+# autonomy_openssh_sshd_conf_stream_local_bind_mask:
+# autonomy_openssh_sshd_conf_stream_local_bind_unlink:
 autonomy_openssh_sshd_conf_strict_modes: "{{ __autonomy_openssh_sshd_conf_strict_modes }}"
 autonomy_openssh_sshd_conf_syslog_facility: "{{ __autonomy_openssh_sshd_conf_syslog_facility }}"
 autonomy_openssh_sshd_conf_tcp_keep_alive: "{{ __autonomy_openssh_sshd_conf_tcp_keep_alive }}"
-#autonomy_openssh_sshd_conf_unused_connection_timeout:
+# autonomy_openssh_sshd_conf_unused_connection_timeout:
 autonomy_openssh_sshd_conf_use_dns: "{{ __autonomy_openssh_sshd_conf_use_dns }}"
 autonomy_openssh_sshd_conf_version_addendum: ""
 autonomy_openssh_sshd_conf_x11_display_offset: "{{ __autonomy_openssh_sshd_conf_x11_display_offset }}"
@@ -117,7 +117,7 @@ autonomy_openssh_sshd_conf_x_auth_location: "{{ __autonomy_openssh_sshd_conf_x_a
 # Default sshd_config options
 #
 # ==================================================================================================
-#__autonomy_openssh_sshd_conf_authentication_methods: []
+# __autonomy_openssh_sshd_conf_authentication_methods: []
 __autonomy_openssh_sshd_conf_address_family: "any"
 __autonomy_openssh_sshd_conf_allow_agent_forwarding: "yes"
 __autonomy_openssh_sshd_conf_allow_stream_local_forwarding: "yes"
@@ -203,7 +203,5 @@ __autonomy_openssh_sshd_conf_x11_display_offset: 10
 __autonomy_openssh_sshd_conf_x11_forwarding: "no"
 __autonomy_openssh_sshd_conf_x11_use_localhost: "yes"
 __autonomy_openssh_sshd_conf_x_auth_location: "/usr/bin/xauth"
-
-
 
 #  LocalWords:  sshd gcm chacha rekey ecdh kerberos

@@ -1,36 +1,45 @@
 ---
 - name: "Ensure user has their .ssh directory"
   ansible.builtin.file:
-    path: "/home/{{ autonomy_common_org_unit_name | upper }}/{{ item.username }}/.ssh"
+    path: "{{ __autonomy_user_ssh_dir }}"
     state: directory
-    owner: "{{ item.id_number }}"
-    group: "{{ item.id_number }}"
+    owner: "{{ item['id_number'] }}"
+    group: "{{ item['id_number'] }}"
     mode: "0700"
   loop: "{{ __realm_users }}"
   become: true
+  vars:
+    __autonomy_user_home_dir: "{{ autonomy_common_realm_home_dir }}/{{ item['username'] }}"
+    __autonomy_user_ssh_dir: "{{ __autonomy_user_home_dir }}/.ssh"
   when:
-    - item.id_number is defined
+    - item['id_number'] is defined
 
 
 - name: "Create user SSH public keys."
   community.crypto.openssl_publickey:
-    path: "/home/{{ autonomy_common_org_unit_name | upper }}/{{ item.username }}/.ssh/{{ item.username }}.pub"
-    privatekey_path: "{{ __user_private_dir }}/{{ item.username }}.key"
-    privatekey_passphrase: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+    path: "{{ __autonomy_user_ssh_pub_path }}"
+    privatekey_path: "{{ __autonomy_user_pki_private_key_path }}"
+    privatekey_passphrase: "{{ __autonomy_user_password }}"
     format: "OpenSSH"
-    owner: "{{ item.id_number }}"
-    group: "{{ item.id_number }}"
+    owner: "{{ item['id_number'] }}"
+    group: "{{ item['id_number'] }}"
     mode: "0600"
     state: "present"
     backup: true
     force: false
     return_content: true
   vars:
-    __password_store_id: "{{ autonomy_common_password_db }}/{{ autonomy_common_zone_domain }}/domain_users/{{ item.username }}/password"
-    __password_lookup: "{{ __password_store_id }}"
-    __user_home_dir: "{{ sshca_home_dir }}/{{ item.username }}"
-    __user_private_dir: "{{ __user_home_dir }}/{{ ownca_user_private_dir }}"
+    __autonomy_password_user_dir: "{{ autonomy_common_password_domain_users }}/{{ item['username'] }}"
+    __autonomy_password_lookup: "{{ __autonomy_password_user_dir }}/password"
+    __autonomy_user_password: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
+    __autonomy_user_home_dir: "{{ autonomy_common_realm_home_dir }}/{{ item['username'] }}"
+    __autonomy_user_ssh_dir: "{{ __autonomy_user_home_dir }}/.ssh"
+    __autonomy_user_ssh_pub_file: "{{ item['username'] }}.pub"
+    __autonomy_user_ssh_pub_path: "{{ __autonomy_user_ssh_dir }}/{{ __autonomy_user_ssh_pub_file }}"
+    __autonomy_user_pki_dir: "{{ __autonomy_user_home_dir }}/.pki"
+    __autonomy_user_pki_private_key_file: "{{ item['username'] }}.key"
+    __autonomy_user_pki_private_key_path: "{{ __autonomy_user_pki_dir }}/{{ __autonomy_user_pki_private_key_file }}"
   loop: "{{ __realm_users }}"
   become: true
   when:
-    - item.id_number is defined
+    - item['id_number'] is defined

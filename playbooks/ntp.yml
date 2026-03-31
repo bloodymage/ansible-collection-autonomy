@@ -15,4 +15,3 @@
         - autonomy_common_virtual_host is falsy
       vars:
         __systemd_tasks: "timesyncd"
-

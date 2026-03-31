@@ -1,7 +1,7 @@
 ---
 # tasks file for acmeca_challenge_site
 - name: "Include OS-specific variables."
-  include_vars: "{{ lookup('first_found', params) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
   vars:
     params:
       files: "{{ __os_variables_files }}"
@@ -30,14 +30,14 @@
     - acmeca-dns
 
 - name: "Configure Account Tasks."
-  include_tasks: "config.yml"
+  ansible.builtin.include_tasks: "config.yml"
   tags:
     - acmeca
     - acmeca-account
     - acmeca-test
 
 - name: "Run ACME Account Tasks."
-  include_tasks: "account.yml"
+  ansible.builtin.include_tasks: "account.yml"
   when:
     __acmeca_tasks == "account"
   tags:
@@ -46,7 +46,7 @@
     - acmeca-test
 
 - name: "Create Certificate."
-  include_tasks: "cert.yml"
+  ansible.builtin.include_tasks: "cert.yml"
   when:
     __acmeca_tasks == "certs"
   tags:

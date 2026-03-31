@@ -2,8 +2,8 @@
 - name: "Print acme_challenge DNS."
   ansible.builtin.debug:
     msg:
-      - record: "{{ item.key }}"
-      - value: "{{ item.value[0] }}"
+      - record: "{{ item['key'] }}"
+      - value: "{{ item['value'][0] }}"
     verbosity: 1
   become: false
   with_dict: "{{ __autonomy_acmeca_challenge['challenge_data_dns'] }}"
@@ -24,11 +24,11 @@
     solo: true
     state: "present"
     ttl: 60
-  with_dict:  "{{ __autonomy_acmeca_challenge['challenge_data_dns'] }}"
+  with_dict: "{{ __autonomy_acmeca_challenge['challenge_data_dns'] }}"
   become: false
   delegate_to: localhost
   vars:
-    __password_lookup: "{{ autonomy_common_password_db }}/{{ autonomy_common_root_domain }}/external/cloudflare/dns"
+    __password_lookup: "{{ autonomy_common_password_root_ext_services }}/cloudflare/dns"
     __cloudflare_key: "{{ lookup('community.general.passwordstore', __password_lookup) }}"
   tags:
     - acmeca

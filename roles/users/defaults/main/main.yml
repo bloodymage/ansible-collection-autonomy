@@ -18,15 +18,36 @@ users_sudoers_options:
 
 autonomy_users_password_hash_seed: "{{ inventory_hostname }}"
 
+# Directories
+autonomy_users_base_home_dir: "{{ autonomy_common_home_dir }}"
+autonomy_users_home_dir: "{{ autonomy_users_base_home_dir }}/{{ __autonomy_users_loopvar_username }}"
+autonomy_users_config_dir: "{{ autonomy_users_home_dir }}/.config"
+autonomy_users_data_dir: "{{ autonomy_users_home_dir }}/.local/share"
+autonomy_users_state_dir: "{{ autonomy_users_home_dir }}/.local/state"
+autonomy_users_cache_dir: "{{ autonomy_users_home_dir }}/.cache"
+
+autonomy_users_password_store_dir: >-
+  {% if autonomy_users_password_store_xdg_data_dir -%}
+  {{ autonomy_users_data_dir }}/password-store
+  {%- else -%}
+  {{ autonomy_users_home_dir }}/.password-store
+  {%- endif %}
+
+# Files
+autonomy_users_password_store_gpg_id_file: ".gpg-id"
+
+# Paths
+autonomy_users_password_store_gpg_id_path: "{{ autonomy_users_password_store_dir }}/{{ autonomy_users_password_store_gpg_id_file }}"
+
 # ==================================================================================================
 #
 # User Dotfiles settings
 #
 # ==================================================================================================
+autonomy_users_password_store_xdg_data_dir: false
 
 # Misc
 autonomy_users_dotfiles_users: "{{ autonomy_common_users }}"
-autonomy_users_dotfiles_home: "{{ autonomy_common_home_dir }}"
 autonomy_users_dotfiles_mode: "0700"
 
 # ===================================================================================================
@@ -61,3 +82,5 @@ __samba_domain_groups:
   - groupname: ansiblemanaged
 
 __realm_user_dn_list: []
+
+__autonomy_users_loopvar_username: ""
